@@ -43,7 +43,8 @@
 
         public static function connectToRealmDB($realmid)
         {
-            self::selectDB('webdb');
+            $conn = $this->connectToDB();
+            self::selectDB('webdb', $conn);
 
             if ($GLOBALS['realms'][$realmid]['mysqli_host'] != $GLOBALS['connection']['host'] || $GLOBALS['realms'][$realmid]['mysqli_user'] != $GLOBALS['connection']['user'] || $GLOBALS['realms'][$realmid]['mysqli_pass'] != $GLOBALS['connection']['password'])
             {
