@@ -30,7 +30,7 @@ AUTOMATIC WAY TO INSTALL:
 		But if you still encounter problems with your site, but no errors are returned, ask for help at the forum.
 		If you do find errors, check the date on them, are they fresh? If yes, read the error, try to solve it on your own if you can. Otherwise, ask for help at 		the forum. 
 6. If the website runs smoothly, you're good! Report your thoughts on the forum. Do you miss any small feature you want me to add? What were your opinions on the installation proccess? 
-7. (Bonus)Open up 'documents/termsofservice.php' and 'documents/refundpolicy.php'. Enable them, and edit the file if you wish to use those.
+7. (Bonus) Open up 'documents/termsofservice.php' and 'documents/refundpolicy.php'. Enable them, and edit the file if you wish to use those.
 
 MANUAL WAY TO INSTALL:
 If somehow, the automatic installation does not work. Try this one.

@@ -24,8 +24,6 @@
 ?>
 <!DOCTYPE>
 <html>
-    <!-- ATTENTION COPY-WHORES. THE TEMPLATE, HTML, CSS, JAVASCRIPT AND ALL ITS CODING BELONGS TO CRAFTEDWEB
-    YOU ARE NOT ALLOWED TO DISTRIBUTE ANYTHING WITHOUT APPROVAL FROM THE CREATOR. ILLEGAL DISTRIBUTION WILL RESULT IN LAW SUIT-->
     <head>
         <?php require('includes/template_loader.php'); ?>
         <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>

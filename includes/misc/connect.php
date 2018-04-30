@@ -43,7 +43,7 @@
 
         public static function connectToRealmDB($realmid)
         {
-            $conn = $this->connectToDB();
+            $conn = self::connectToDB();
             self::selectDB('webdb', $conn);
 
             if ($GLOBALS['realms'][$realmid]['mysqli_host'] != $GLOBALS['connection']['host'] || $GLOBALS['realms'][$realmid]['mysqli_user'] != $GLOBALS['connection']['user'] || $GLOBALS['realms'][$realmid]['mysqli_pass'] != $GLOBALS['connection']['password'])
@@ -100,8 +100,8 @@
     mysqli_select_db($conn, $connection['webdb']);
 
     //Realms
-    $getRealms = mysqli_query($conn, "SELECT * FROM realms ORDER BY id ASC");
-    while ($row       = mysqli_fetch_assoc($getRealms))
+    $getRealms = mysqli_query($conn, "SELECT * FROM realms ORDER BY id ASC;");
+    while ($row = mysqli_fetch_assoc($getRealms))
     {
         $realms[$row['id']]['id']          = $row['id'];
         $realms[$row['id']]['name']        = $row['name'];
@@ -124,8 +124,8 @@
     }
 
     //Service prices
-    $getServices = mysqli_query($conn, "SELECT enabled,price,currency,service FROM service_prices");
-    while ($row         = mysqli_fetch_assoc($getServices))
+    $getServices = mysqli_query($conn, "SELECT enabled, price, currency, service FROM service_prices;");
+    while ($row = mysqli_fetch_assoc($getServices))
     {
         $service[$row['service']]['status']   = $row['enabled'];
         $service[$row['service']]['price']    = $row['price'];
