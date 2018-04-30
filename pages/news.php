@@ -189,18 +189,18 @@
                                         $output .= nl2br($row['body']);
                                     }
 
-                                    $commentsNum = mysqli_query($conn, "SELECT COUNT(id) FROM news_comments WHERE newsid='" . $row['id'] . "'");
+                                    $commentsNum = mysqli_query($conn, "SELECT COUNT(id) AS comments FROM news_comments WHERE newsid='" . $row['id'] . "'");
 
                                     if ($GLOBALS['news']['enableComments'] == TRUE)
-                                        $comments = '| <a href="?p=news&amp;newsid=' . $row['id'] . '">Comments (' . mysqli_data_seek($commentsNum, 0) . ')</a>';
+                                        $comments = '| <a href="?p=news&amp;newsid=' . $row['id'] . '">Comments (' . mysqli_fetch_assoc($commentsNum)['comments'] . ')</a>';
                                     else
                                         $comments = NULL;
 
                                     echo '
-			<br/><br/><br/>
-			<i class="gray_text"> Written by ' . $row['author'] . ' | ' . $row['date'] . ' ' . $comments . '</i>
-			</td> 
-			</tr>
-			</table>';
+                            			<br/><br/><br/>
+                            			<i class="gray_text"> Written by ' . $row['author'] . ' | ' . $row['date'] . ' ' . $comments . '</i>
+                            			</td> 
+                            			</tr>
+                            			</table>';
                                 }
                             }

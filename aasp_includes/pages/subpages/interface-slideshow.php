@@ -29,9 +29,9 @@
     $status = 'Disabled';
     if ($GLOBALS['enableSlideShow']) $status = 'Enabled';
 
-    $count = mysqli_query($conn, "SELECT COUNT(*) FROM slider_images;");
+    $count = mysqli_query($conn, "SELECT COUNT(*) AS sliderImages FROM slider_images;");
 ?>
-The slideshow is <b><?php echo $status; ?></b>. You have <b><?php echo round(mysqli_data_seek($count, 0)); ?></b> images in the slideshow.
+The slideshow is <b><?php echo $status; ?></b>. You have <b><?php echo round(mysqli_fetch_assoc($count)['sliderImages']); ?></b> images in the slideshow.
 <hr/>
 <?php
     if (isset($_POST['addSlideImage']))

@@ -32,27 +32,27 @@
     {   
         $conn = $GameServer->connect();
         $GameServer->selectDB('webdb', $conn);
-        $inShop     = mysqli_query($conn, "SELECT COUNT(*) FROM shopitems;");
-        $purchToday = mysqli_query($conn, "SELECT COUNT(*) FROM shoplog WHERE date LIKE '%" . date('Y-m-d') . "%';");
+        $inShop     = mysqli_query($conn, "SELECT COUNT(*) AS items FROM shopitems;");
+        $purchToday = mysqli_query($conn, "SELECT COUNT(*) AS purchases FROM shoplog WHERE date LIKE '%" . date('Y-m-d') . "%';");
         $getAvg     = mysqli_query($conn, "SELECT AVG(*) AS priceAvg FROM shopitems;");
-        $totalPurch = mysqli_query($conn, "SELECT COUNT(*) FROM shoplog;");
+        $totalPurch = mysqli_query($conn, "SELECT COUNT(*) AS purchasesTotal FROM shoplog;");
 
         //Note: The round() function will return 0 if no value is set :)
         ?>
         <div class="box_right_title">Shop Overview</div>
         <table style="width: 100%;">
             <tr>
-                <td><span class='blue_text'>Items in shop</span></td><td><?php echo round(mysqli_data_seek($inShop, 0)); ?></td>
+                <td><span class='blue_text'>Items in shop</span></td><td><?php echo round(mysqli_fetch_assoc($inShop)['items']); ?></td>
             </tr>
             <tr>
                 <td><span class='blue_text'>Purchases today</span></td>
-                <td><?php echo round(mysqli_data_seek($purchToday, 0)); ?></td>
+                <td><?php echo round(mysqli_fetch_assoc($purchToday)['purchases']); ?></td>
                 <td><span class='blue_text'>Total purchases</span></td>
-                <td><?php echo round(mysqli_data_seek($totalPurch, 0)); ?></td>
+                <td><?php echo round(mysqli_fetch_assoc($totalPurch)['purchasesTotal']); ?></td>
             </tr>
             <tr>
                 <td><span class='blue_text'>Average item cost</span></td>
-                <td><?php echo round(mysqli_data_seek($getAvg, 0)); ?></td>
+                <td><?php echo round(mysqli_fetch_assoc($getAvg)['priceAvg']); ?></td>
             </tr>
         </table>
         <hr/>

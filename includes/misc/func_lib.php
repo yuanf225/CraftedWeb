@@ -53,20 +53,17 @@
             $time   = $time / 60;
             $string = 'Minutes';
         }
-        if ($time > 60)
+        elseif ($time > 60)
         {
             $string = 'Hours';
             $time   = $time / 60;
         }
-        if ($time > 24)
+        elseif ($time > 24)
         {
             $string = 'Days';
             $time   = $time / 24;
         }
-        else
-        {
-            $time = ceil($time);
-        }
-        return $time . " " . $string;
+        
+        return ceil($time) . " " . $string;
     }
     

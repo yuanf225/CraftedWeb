@@ -1,5 +1,5 @@
 # Dumping data for table item_icons: 43 483 rows
-INSERT IGNORE INTO `item_icons` (`displayid`, `icon`) VALUES
+INSERT INTO `item_icons` (`displayid`, `icon`) VALUES
 	(220, 'inv_robe_02'),
 	(222, 'inv_boots_01'),
 	(224, 'inv_jewelry_ring_03'),

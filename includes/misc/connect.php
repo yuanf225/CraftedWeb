@@ -46,9 +46,13 @@
             $conn = self::connectToDB();
             self::selectDB('webdb', $conn);
 
-            if ($GLOBALS['realms'][$realmid]['mysqli_host'] != $GLOBALS['connection']['host'] || $GLOBALS['realms'][$realmid]['mysqli_user'] != $GLOBALS['connection']['user'] || $GLOBALS['realms'][$realmid]['mysqli_pass'] != $GLOBALS['connection']['password'])
+            if ($GLOBALS['realms'][$realmid]['mysqli_host'] != $GLOBALS['connection']['host'] || 
+                $GLOBALS['realms'][$realmid]['mysqli_user'] != $GLOBALS['connection']['user'] || 
+                $GLOBALS['realms'][$realmid]['mysqli_pass'] != $GLOBALS['connection']['password'])
             {
-                $conn = mysqli_connect($GLOBALS['realms'][$realmid]['mysqli_host'], $GLOBALS['realms'][$realmid]['mysqli_user'], $GLOBALS['realms'][$realmid]['mysqli_pass'])
+                return mysqli_connect($GLOBALS['realms'][$realmid]['mysqli_host'], 
+                                    $GLOBALS['realms'][$realmid]['mysqli_user'], 
+                                        $GLOBALS['realms'][$realmid]['mysqli_pass'])
                         or
                         buildError("<b>Database Connection error:</b> A connection could not be established to Realm. Error: " . mysqli_error($conn), NULL);
             }
@@ -61,7 +65,7 @@
             self::$connectedTo = 'chardb';
         }
 
-        public static function selectDB($db, $conn)
+        public static function selectDB($db, $conn, $realmid = 1)
         {
             switch ($db)
             {
@@ -79,6 +83,10 @@
 
                 case('worlddb'):
                     mysqli_select_db($conn, $GLOBALS['connection']['worlddb']);
+                    break;
+
+                case('chardb'):
+                    mysqli_select_db($conn, $GLOBALS['realms'][$realmid]['chardb']);
                     break;
             }
             return TRUE;

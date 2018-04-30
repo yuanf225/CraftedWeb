@@ -37,7 +37,21 @@
         <?php
         if (isset($_POST['add_realm']))
         {
-            $GameServer->addRealm($_POST['realm_id'], $_POST['realm_name'], $_POST['realm_desc'], $_POST['realm_host'], $_POST['realm_port'], $_POST['realm_chardb'], $_POST['realm_sendtype'], $_POST['realm_rank_username'], $_POST['realm_rank_password'], $_POST['realm_ra_port'], $_POST['realm_soap_port'], $_POST['realm_a_host'], $_POST['realm_a_user'], $_POST['realm_a_pass']);
+            $GameServer->addRealm(
+                $_POST['realm_id'], 
+                $_POST['realm_name'], 
+                $_POST['realm_desc'], 
+                $_POST['realm_host'], 
+                $_POST['realm_port'], 
+                $_POST['realm_chardb'], 
+                $_POST['realm_sendtype'], 
+                $_POST['realm_rank_username'], 
+                $_POST['realm_rank_password'], 
+                $_POST['realm_ra_port'], 
+                $_POST['realm_soap_port'], 
+                $_POST['realm_a_host'], 
+                $_POST['realm_a_user'], 
+                $_POST['realm_a_pass']);
         }
         ?>
 
@@ -57,7 +71,7 @@
             <input type="text" name="realm_host" placeholder="Default: 127.0.0.1"/> <br/>
 
             <br/>
-            <b>Remote Console information</b> <i>(Vote- & Donation shop)</i><hr/>
+            <b>Remote Console information</b> <i>(Vote & Donation Shop)</i><hr/>
             Remote console <i>(You can always change this later)</i>: <br/>
             <select name="realm_sendtype">
                 <option value="ra">RA</option>

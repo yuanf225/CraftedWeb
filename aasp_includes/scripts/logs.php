@@ -23,16 +23,17 @@
     include('../../includes/misc/headers.php');
     include('../../includes/configuration.php');
     include('../functions.php');
-    global $Server, $Account, $conn;
+    global $GameServer, $GameAccount;
 
-    $Server->selectDB('webdb');
+    $conn = $GameServer->connect();
+    $GameServer->selectDB('webdb');
 
     #                                                                   #
         ############################################################
     #                                                                   #
     if ($_POST['action'] == "payments")
     {
-        $result = mysqli_query($conn, "SELECT paymentstatus,mc_gross,datecreation FROM payments_log WHERE userid='" . (int) $_POST['id'] . "';");
+        $result = mysqli_query($conn, "SELECT paymentstatus, mc_gross, datecreation FROM payments_log WHERE userid='" . (int) $_POST['id'] . "';");
         if (mysqli_num_rows($result) == 0)
         {
             echo "<b color='red'>No payments was found for this account.</b>";
@@ -64,7 +65,7 @@
     #                                                                   #	
         elseif ($_POST['action'] == 'dshop')
         {
-            $result = mysqli_query($conn, "SELECT entry,char_id,date,amount,realm_id FROM shoplog WHERE account='" . (int) $_POST['id'] . "' AND shop='donate';");
+            $result = mysqli_query($conn, "SELECT entry, char_id, date, amount, realm_id FROM shoplog WHERE account='" . (int) $_POST['id'] . "' AND shop='donate';");
             if (mysqli_num_rows($result) == 0)
             {
                 echo "<b color='red'>No logs was found for this account.</b>";
@@ -79,14 +80,17 @@
                         <th>Amount</th>
                     </tr>
             <?php while ($row = mysqli_fetch_assoc($result))
-            { ?>
-                        <tr>
-                            <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
-                <?php echo $Server->getItemName($row['entry']); ?></a></td>
-                            <td><?php echo $Account->getCharName($row['char_id'], $row['realm_id']); ?></td>
-                            <td><?php echo $row['date']; ?></td>   
-                            <td>x<?php echo $row['amount']; ?></td>
-                        </tr>
+                    { ?>
+                    <tr>
+                        <td>
+                            <a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
+                                <?php echo $GameServer->getItemName($row['entry']); ?>
+                            </a>
+                        </td>
+                        <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
+                        <td><?php echo $row['date']; ?></td>   
+                        <td>x<?php echo $row['amount']; ?></td>
+                    </tr>
                     <?php
                     }
                     echo '</table>';
@@ -97,7 +101,7 @@
     #                                                                   #	
             elseif ($_POST['action'] == 'vshop')
             {
-                $result = mysqli_query($conn, "SELECT entry,char_id,realm_id,date,amount FROM shoplog WHERE account='" . (int) $_POST['id'] . "' AND shop='vote';");
+                $result = mysqli_query($conn, "SELECT entry, char_id, realm_id, date, amount FROM shoplog WHERE account='" . (int) $_POST['id'] . "' AND shop='vote';");
                 if (mysqli_num_rows($result) == 0)
                 {
                     echo "<b color='red'>No logs was found for this account.</b>";
@@ -116,10 +120,10 @@
                             <tr>
                                 <td>
                                     <a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
-                                        <?php echo $Server->getItemName($row['entry']); ?>
+                                        <?php echo $GameServer->getItemName($row['entry']); ?>
                                     </a>
                                 </td>
-                                <td><?php echo $Account->getCharName($row['char_id'], $row['realm_id']); ?></td>
+                                <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
                                 <td><?php echo $row['date']; ?></td>
                                 <td>x<?php echo $row['amount']; ?></td>   
                             </tr>
@@ -151,23 +155,23 @@
                         $loopRealms = mysqli_query($conn, "SELECT id FROM realms;");
                         while ($row        = mysqli_fetch_assoc($loopRealms))
                         {
-                            $Server->connectToRealmDB($row['id']);
+                            $GameServer->connectToRealmDB($row['id']);
                             $result = mysqli_query($conn, "SELECT guid FROM characters WHERE name LIKE '%" . $input . "%';");
                             if (mysqli_num_rows($result) > 0)
                             {
                                 $row    = mysqli_fetch_assoc($result);
-                                $Server->selectDB('webdb');
+                                $GameServer->selectDB('webdb');
                                 $result = mysqli_query($conn, "SELECT * FROM shoplog WHERE shop='" . $shop . "' AND char_id='" . $row['guid'] . "';");
 
                                 while ($row = mysqli_fetch_assoc($result))
                                 {
                                     ?>
                                     <tr class="center">
-                                        <td><?php echo $Account->getAccName($row['account']); ?></td>
-                                        <td><?php echo $Account->getCharName($row['char_id'], $row['realm_id']); ?></td>
-                                        <td><?php echo $Server->getRealmName($row['realm_id']); ?></td>
+                                        <td><?php echo $GameAccount->getAccName($row['account']); ?></td>
+                                        <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
+                                        <td><?php echo $GameServer->getRealmName($row['realm_id']); ?></td>
                                         <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
-                                    <?php echo $Server->getItemName($row['entry']); ?></a></td>
+                                    <?php echo $GameServer->getItemName($row['entry']); ?></a></td>
                                         <td><?php echo $row['date']; ?></td>
                                         <td>x<?php echo $row['amount']; ?></td>   
                                     </tr><?php
@@ -175,23 +179,23 @@
                             }
                         }
                         //Search via account name
-                        $Server->selectDB('logondb');
+                        $GameServer->selectDB('logondb');
                         $result = mysqli_query($conn, "SELECT id FROM account WHERE username LIKE '%" . $input . "%';");
                         if (mysqli_num_rows($result) > 0)
                         {
                             $row    = mysqli_fetch_assoc($result);
-                            $Server->selectDB('webdb');
+                            $GameServer->selectDB('webdb');
                             $result = mysqli_query($conn, "SELECT * FROM shoplog WHERE shop='" . $shop . "' AND account='" . $row['id'] . "';");
 
                             while ($row = mysqli_fetch_assoc($result))
                             {
                                 ?>
                                 <tr class="center">
-                                    <td><?php echo $Account->getAccName($row['account']); ?></td>
-                                    <td><?php echo $Account->getCharName($row['char_id'], $row['realm_id']); ?></td>
-                                    <td><?php echo $Server->getRealmName($row['realm_id']); ?></td>
+                                    <td><?php echo $GameAccount->getAccName($row['account']); ?></td>
+                                    <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
+                                    <td><?php echo $GameServer->getRealmName($row['realm_id']); ?></td>
                                     <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
-                                <?php echo $Server->getItemName($row['entry']); ?></a></td>
+                                <?php echo $GameServer->getItemName($row['entry']); ?></a></td>
                                     <td><?php echo $row['date']; ?></td>
                                     <td>x<?php echo $row['amount']; ?></td>   
                                 </tr><?php
@@ -199,23 +203,23 @@
                         }
 
                         //Search via item name
-                        $Server->selectDB('worlddb');
+                        $GameServer->selectDB('worlddb');
                         $result = mysqli_query($conn, "SELECT entry FROM item_template WHERE name LIKE '%" . $input . "%';");
                         if (mysqli_num_rows($result) > 0)
                         {
                             $row    = mysqli_fetch_assoc($result);
-                            $Server->selectDB('webdb');
+                            $GameServer->selectDB('webdb');
                             $result = mysqli_query($conn, "SELECT * FROM shoplog WHERE shop='" . $shop . "' AND entry='" . $row['entry'] . "';");
 
                             while ($row = mysqli_fetch_assoc($result))
                             {
                                 ?>
                                 <tr class="center">
-                                    <td><?php echo $Account->getAccName($row['account']); ?></td>
-                                    <td><?php echo $Account->getCharName($row['char_id'], $row['realm_id']); ?></td>
-                                    <td><?php echo $Server->getRealmName($row['realm_id']); ?></td>
+                                    <td><?php echo $GameAccount->getAccName($row['account']); ?></td>
+                                    <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
+                                    <td><?php echo $GameServer->getRealmName($row['realm_id']); ?></td>
                                     <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
-                                <?php echo $Server->getItemName($row['entry']); ?></a></td>
+                                <?php echo $GameServer->getItemName($row['entry']); ?></a></td>
                                     <td><?php echo $row['date']; ?></td>
                                     <td>x<?php echo $row['amount']; ?></td>   
                                 </tr><?php
@@ -223,18 +227,18 @@
                         }
 
                         //Search via date
-                        $Server->selectDB('webdb');
+                        $GameServer->selectDB('webdb');
                         $result = mysqli_query($conn, "SELECT * FROM shoplog WHERE shop='" . $shop . "' AND date LIKE '%" . $input . "%';");
 
                         while ($row = mysqli_fetch_assoc($result))
                         {
                             ?>
                             <tr class="center">
-                                <td><?php echo $Account->getAccName($row['account']); ?></td>
-                                <td><?php echo $Account->getCharName($row['char_id'], $row['realm_id']); ?></td>
-                                <td><?php echo $Server->getRealmName($row['realm_id']); ?></td>
+                                <td><?php echo $GameAccount->getAccName($row['account']); ?></td>
+                                <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
+                                <td><?php echo $GameServer->getRealmName($row['realm_id']); ?></td>
                                 <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
-                            <?php echo $Server->getItemName($row['entry']); ?></a></td>
+                            <?php echo $GameServer->getItemName($row['entry']); ?></a></td>
                                 <td><?php echo $row['date']; ?></td>
                                 <td>x<?php echo $row['amount']; ?></td>   
                             </tr>	
@@ -245,18 +249,18 @@
         if ($input == "Search...")
         {
             //View last 10 logs
-            $Server->selectDB('webdb');
+            $GameServer->selectDB('webdb');
             $result = mysqli_query($conn, "SELECT * FROM shoplog WHERE shop='" . $shop . "' ORDER BY id DESC LIMIT 10;");
 
             while ($row = mysqli_fetch_assoc($result))
             {
                 ?>
                                 <tr class="center">
-                                    <td><?php echo $Account->getAccName($row['account']); ?></td>
-                                    <td><?php echo $Account->getCharName($row['char_id'], $row['realm_id']); ?></td>
-                                    <td><?php echo $Server->getRealmName($row['realm_id']); ?></td>
+                                    <td><?php echo $GameAccount->getAccName($row['account']); ?></td>
+                                    <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
+                                    <td><?php echo $GameServer->getRealmName($row['realm_id']); ?></td>
                                     <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
-                            <?php echo $Server->getItemName($row['entry']); ?></a></td>
+                            <?php echo $GameServer->getItemName($row['entry']); ?></a></td>
                                     <td><?php echo $row['date']; ?></td>
                                     <td>x<?php echo $row['amount']; ?></td>   
                                 </tr>	

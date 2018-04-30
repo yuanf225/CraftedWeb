@@ -31,12 +31,14 @@
 
     $Connect->connectToRealmDB($rid);
 
-    $count = mysqli_query($conn, "SELECT COUNT(*) FROM characters WHERE name!='' AND online=1");
+    $count = mysqli_query($conn, "SELECT COUNT(*) AS online FROM characters WHERE name!='' AND online=1");
 ?>
 <div class="box_two_title">Online Players - <?php echo $realmname; ?></div>
 <?php
     if (mysqli_data_seek($count, 0) == 0)
+    {
         echo '<b>No players are online right now!</b>';
+    }
     else
     {
         ?>
@@ -52,7 +54,7 @@
             <?php
             if ($GLOBALS['playersOnline']['pageResults'] > 0)
             {
-                $count = mysqli_data_seek($count, 0);
+                $count = mysqli_fetch_assoc($count)['online'];
                 if ($count > 10)
                     $count = $count - 10;
 
