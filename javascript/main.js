@@ -25,10 +25,10 @@ function vote(siteid, button)
 {
     $(button).attr("disabled", "true");
     $.post("includes/scripts/vote.php", {siteid: siteid},
-            function (data)
-            {
-                window.location = data;
-            });
+        function (data)
+        {
+            window.location = data;
+        });
 }
 
 function changeAmount(input, type)
@@ -41,11 +41,11 @@ function changeAmount(input, type)
     else
     {
         $.post("includes/scripts/misc.php", {'convertDonationList': input.value},
-                function (data)
-                {
-                    var amount = document.getElementById("amount");
-                    amount.value = data;
-                });
+            function (data)
+            {
+                var amount = document.getElementById("amount");
+                amount.value = data;
+            });
     }
 }
 
@@ -68,16 +68,16 @@ function buyShopItem(type, entry, last_page, account_name)
     $("#overlay").fadeIn("fast");
     $("#shopContent").html("<b class='yellow_text'>Proccessing...</b>");
     $.post("includes/scripts/sendReward.php", {item_entry: entry, character_realm: character.value, send_mode: type, last_page: last_page},
-            function (data)
-            {
-                popUp("Item Purchased", "The item was purchased and sent to your character via mail.");
-                $("#shopContent").html(data);
-                $.post("includes/scripts/misc.php", {element: type, account: account_name},
-                        function (data)
-                        {
-                            $("#" + type).html(data);
-                        });
-            });
+        function (data)
+        {
+            popUp("Item Purchased", "The item was purchased and sent to your character via mail.");
+            $("#shopContent").html(data);
+            $.post("includes/scripts/misc.php", {element: type, account: account_name},
+                function (data)
+                {
+                    $("#" + type).html(data);
+                });
+        });
 }
 
 function enableForumAcc()
@@ -208,20 +208,20 @@ function unstuck(guid, char_db)
 {
     popUp("Proccessing...", "Proccessing...");
     $.post("includes/scripts/character.php", {action: "unstuck", guid: guid, char_db: char_db},
-            function (data)
-            {
-                popUp("Unstucked!", "Your character was successfully unstucked!");
-            });
+        function (data)
+        {
+            popUp("Unstucked!", "Your character was successfully unstucked!");
+        });
 }
 
 function revive(guid, char_db)
 {
     popUp("Proccessing...", "Proccessing...");
     $.post("includes/scripts/character.php", {action: "revive", guid: guid, char_db: char_db},
-            function (data)
-            {
-                popUp("Revived!", "Your character was successfully revived!");
-            });
+        function (data)
+        {
+            popUp("Revived!", "Your character was successfully revived!");
+        });
 }
 
 function confirmService(guid, realm_id, service, title, name)
@@ -241,22 +241,22 @@ function service(guid, realm_id, service)
     popUp("Proccessing...", "Proccessing...");
 
     $.post("includes/scripts/character.php", {action: "service", guid: guid, realm_id: realm_id, service: service},
-            function (data)
-            {
-                if (data == true)
-                    window.location = '?p=service&s=' + service + '&service=applied'
-                else
-                    popUp("Information", data);
-            });
+        function (data)
+        {
+            if (data == true)
+                window.location = '?p=service&s=' + service + '&service=applied'
+            else
+                popUp("Information", data);
+        });
 }
 
 function removeItemFromCart(cart, entry)
 {
     $.post("includes/scripts/shop.php", {action: "removeFromCart", cart: cart, entry: entry},
-            function (data)
-            {
-                window.location = '?p=cart';
-            });
+        function (data)
+        {
+            window.location = '?p=cart';
+        });
 }
 
 function addCartItem(entry, cart, shop, button)
@@ -274,34 +274,34 @@ function addCartItem(entry, cart, shop, button)
     }
 
     $.post("includes/scripts/shop.php", {action: "addShopitem", cart: cart, entry: entry, shop: shop},
-            function (data)
+        function (data)
+        {
+            loadMiniCart(cart);
+            $("#status-" + entry).fadeIn(200).delay(1100).fadeOut(200);
+            setTimeout(function ()
             {
-                loadMiniCart(cart);
-                $("#status-" + entry).fadeIn(200).delay(1100).fadeOut(200);
-                setTimeout(function ()
-                {
-                    $(button).removeAttr("disabled");
-                    $("#cartArrow").fadeOut(400);
-                }, 1350);
-            });
+                $(button).removeAttr("disabled");
+                $("#cartArrow").fadeOut(400);
+            }, 1350);
+        });
 }
 
 function clearCart()
 {
     $.post("includes/scripts/shop.php", {action: "clear"},
-            function (data)
-            {
-                window.location = '?p=cart';
-            });
+        function (data)
+        {
+            window.location = '?p=cart';
+        });
 }
 
 function loadMiniCart(cart)
 {
     $.post("includes/scripts/shop.php", {action: "getMinicart", cart: cart},
-            function (data)
-            {
-                $("#cartHolder").html(data);
-            });
+        function (data)
+        {
+            $("#cartHolder").html(data);
+        });
 }
 
 function saveItemQuantityInCart(cart, entry)
@@ -309,10 +309,10 @@ function saveItemQuantityInCart(cart, entry)
     var quantity = document.getElementById(cart + "Quantity-" + entry).value;
 
     $.post("includes/scripts/shop.php", {action: "saveQuantity", cart: cart, entry: entry, quantity: quantity},
-            function (data)
-            {
-                window.location = '?p=cart'
-            });
+        function (data)
+        {
+            window.location = '?p=cart'
+        });
 }
 
 function checkout()
@@ -321,35 +321,35 @@ function checkout()
 
     popUp("Proccessing...", "Proccessing your payment & sending the items...");
     $.post("includes/scripts/shop.php", {action: "checkout", values: values},
-            function (data)
+        function (data)
+        {
+            if (data == true)
             {
-                if (data == true)
-                {
-                    window.location = '?p=cart&return=true'
-                }
-                else
-                {
-                    window.location = '?p=cart&return=' + data;
-                }
-            });
+                window.location = '?p=cart&return=true'
+            }
+            else
+            {
+                window.location = '?p=cart&return=' + data;
+            }
+        });
 }
 
 function viewTos()
 {
     $.post("includes/scripts/misc.php", {getTos: true},
-            function (data)
-            {
-                popUp("Terms of Service", data);
-            });
+        function (data)
+        {
+            popUp("Terms of Service", data);
+        });
 }
 
 function viewRefundPolicy()
 {
     $.post("includes/scripts/misc.php", {getRefundPolicy: true},
-            function (data)
-            {
-                popUp("Refund Policy", data);
-            });
+        function (data)
+        {
+            popUp("Refund Policy", data);
+        });
 }
 
 /* Teleportation system */
@@ -374,10 +374,10 @@ function selectChar(values, box)
 
 
     $.post("includes/scripts/character.php", {action: "getLocations", values: values},
-            function (data)
-            {
-                $("#teleport_to").html(data);
-            });
+        function (data)
+        {
+            $("#teleport_to").html(data);
+        });
 }
 
 function portTo(locationTo, char_db, character)
@@ -390,10 +390,10 @@ function portTo(locationTo, char_db, character)
 function portNow(character, location, char_db)
 {
     $.post("includes/scripts/character.php", {action: "teleport", character: character, location: location, char_db: char_db},
-            function (data)
-            {
-                popUp("Character Teleport", data);
-            });
+        function (data)
+        {
+            popUp("Character Teleport", data);
+        });
 }
 
 function removeNewsComment(id)
@@ -407,11 +407,11 @@ function removeNewsCommentNow(id)
 {
     popUp("Remove comment", "Removing...");
     $.post("includes/scripts/misc.php", {action: "removeComment", id: id},
-            function (data)
-            {
-                closePopup()
-                $("#comment-" + id).fadeOut();
-            });
+        function (data)
+        {
+            closePopup()
+            $("#comment-" + id).fadeOut();
+        });
 
 }
 
@@ -428,11 +428,11 @@ function removeShopItemNow(entry, shop)
 {
     popUp("Remove item", "Removing...");
     $.post("includes/scripts/shop.php", {action: "removeItem", entry: entry, shop: shop},
-            function (data)
-            {
-                closePopup()
-                $("#item-" + entry).fadeOut();
-            });
+        function (data)
+        {
+            closePopup()
+            $("#item-" + entry).fadeOut();
+        });
 }
 
 function editShopItem(entry, shop, price)
@@ -448,9 +448,9 @@ function editShopItemNow(entry, shop)
     popUp("Edit item", "Saving...");
 
     $.post("includes/scripts/shop.php", {action: "editItem", entry: entry, shop: shop, price: price},
-            function (data)
-            {
-                popUp("Edit item", "Saved! Refresh the page to see the result.");
-                $("#popup").css("top", mouseY - 150);
-            });
+        function (data)
+        {
+            popUp("Edit item", "Saved! Refresh the page to see the result.");
+            $("#popup").css("top", mouseY - 150);
+        });
 }

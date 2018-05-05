@@ -43,7 +43,7 @@
             <?php
             while ($row = mysqli_fetch_assoc($result))
             {
-                $comments = mysqli_query($conn, "SELECT COUNT(id) AS comments FROM news_comments WHERE newsid='" . $row['id'] . "'");
+                $comments = mysqli_query($conn, "SELECT COUNT(id) AS comments FROM news_comments WHERE newsid=". $row['id'] .";");
                 echo '<tr class="center">
                   			<td>' . $row['id'] . '</td>
                   			<td>' . $row['title'] . '</td>

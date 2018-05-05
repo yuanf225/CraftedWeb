@@ -31,7 +31,6 @@
     }
     else
     {
-
         echo "<div class='box_right_title'>Pages</div>";
 
         if (!isset($_GET['action']))
@@ -49,7 +48,7 @@
             while ($row    = mysqli_fetch_assoc($result))
             {
                 $disabled = true;
-                $check = mysqli_query($conn, "SELECT COUNT(filename) FROM disabled_pages WHERE filename='" . $row['filename'] . "';");
+                $check = mysqli_query($conn, "SELECT COUNT(filename) FROM disabled_pages WHERE filename='". $row['filename'] ."';");
                 if (mysqli_data_seek($check, 0) == 0)
                 {
                     $disabled = false;
@@ -145,7 +144,9 @@
                     }
                     else
                     {
-                        mysqli_query($conn, "UPDATE custom_pages SET name='" . $name . "', filename='" . $filename . "', content='" . $content . "' WHERE filename='" . mysqli_real_escape_string($conn, $_GET['filename']) . "';");
+                        mysqli_query($conn, "UPDATE custom_pages 
+                            SET name='". $name ."', filename='". $filename ."', content='". $content ."' 
+                            WHERE filename='". mysqli_real_escape_string($conn, $_GET['filename']) ."';");
 
                         echo "<h3>The page was successfully updated.</h3> <a href='" . $GLOBALS['website_domain'] . "?p=" . $filename . "' target='_blank'>View Page</a>";
                     }

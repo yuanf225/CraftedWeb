@@ -65,11 +65,11 @@
     #                                                                   #
     if ($_POST['action'] == 'edit')
     {
-        $id     = (int) $_POST['id'];
-        $new_id = (int) $_POST['new_id'];
+        $id     = mysqli_real_escape_string($conn, $_POST['id']);
+        $new_id = mysqli_real_escape_string($conn, $_POST['new_id']);
         $name   = mysqli_real_escape_string($conn, trim($_POST['name']));
         $host   = mysqli_real_escape_string($conn, trim($_POST['host']));
-        $port   = (int) $_POST['port'];
+        $port   = mysqli_real_escape_string($conn, $_POST['port']);
         $chardb = mysqli_real_escape_string($conn, trim($_POST['chardb']));
 
         if (empty($name) || empty($host) || empty($port) || empty($chardb))
@@ -77,7 +77,8 @@
 
         $GameServer->logThis("Updated realm information for " . $name);
 
-        mysqli_query($conn, "UPDATE realms SET id='" . $new_id . "',name='" . $name . "',host='" . $host . "',port='" . $port . "',char_db='" . $chardb . "' WHERE id='" . $id . "';");
+        mysqli_query($conn, "UPDATE realms SET id=". $new_id .", name='". $name ."', host='". $host ."', port='". $port ."', char_db='". $chardb ."' 
+            WHERE id=". $id .";");
         return TRUE;
     }
     
@@ -86,9 +87,9 @@
     #                                                                   #
     if ($_POST['action'] == 'delete')
     {
-        $id = (int) $_POST['id'];
+        $id = mysqli_real_escape_string($conn, $_POST['id']);
 
-        mysqli_query($conn, "DELETE FROM realms WHERE id='" . $id . "';");
+        mysqli_query($conn, "DELETE FROM realms WHERE id=". $id .";");
 
         $GameServer->logThis("Deleted a realm");
     }
@@ -98,7 +99,7 @@
     #                                                                   #
     if ($_POST['action'] == 'edit_console')
     {
-        $id   = (int) $_POST['id'];
+        $id   = mysqli_real_escape_string($conn, $_POST['id']);
         $type = mysqli_real_escape_string($conn, $_POST['type']);
         $user = mysqli_real_escape_string($conn, trim($_POST['user']));
         $pass = mysqli_real_escape_string($conn, trim($_POST['pass']));
@@ -110,7 +111,7 @@
 
         $GameServer->logThis("Updated console information for realm with ID: " . $id);
 
-        mysqli_query($conn, "UPDATE realms SET sendType='" . $type . "',rank_user='" . $user . "',rank_pass='" . $pass . "' WHERE id='" . $id . "';");
+        mysqli_query($conn, "UPDATE realms SET sendType='". $type ."', rank_user='". $user ."', rank_pass='". $pass ."' WHERE id=". $id . ";");
         return TRUE;
     }
     
@@ -119,7 +120,7 @@
     #                                                                   #
     if ($_POST['action'] == 'loadTickets')
     {
-        $offline = $_POST['offline'];
+        $offline = mysqli_real_escape_string($conn, $_POST['offline']);
         $realm   = mysqli_real_escape_string($conn, $_POST['realm']);
 
         $_SESSION['lastTicketRealm']        = $realm;
@@ -130,7 +131,7 @@
 
         $GameServer->selectDB($realm);
 
-        $result = mysqli_query($conn, "SELECT " . $ticketString . ",name,message,createtime," . $guidString . "," . $closedString . " FROM gm_tickets ORDER BY ticketId DESC;");
+        $result = mysqli_query($conn, "SELECT ". $ticketString .", name, message, createtime, ". $guidString .", ". $closedString ." FROM gm_tickets ORDER BY ticketId DESC;");
         if (mysqli_num_rows($result) == 0)
             die("<pre>No tickets were found!</pre>");
 
@@ -149,7 +150,7 @@
 
         while ($row = mysqli_fetch_assoc($result))
         {
-            $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid='" . $row[$guidString] . "' AND online='1';");
+            $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
             if (mysqli_data_seek($get, 0) == 0 && $offline == "on")
             {
                 echo '<tr>';
@@ -167,7 +168,7 @@
                     echo '<td><font color="green">Open</font></td>';
                 }
 
-                $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid='" . $row[$guidString] . "' AND online='1';");
+                $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
                 if (mysqli_data_seek($get, 0) > 0)
                 {
                     echo '<td><font color="green">Online</font></td>';
@@ -203,11 +204,11 @@
     #                                                                   #
     if ($_POST['action'] == 'deleteTicket')
     {
-        $id = (int) $_POST['id'];
+        $id = mysqli_real_escape_string($conn, $_POST['id']);
         $db = mysqli_real_escape_string($conn, $_POST['db']);
         mysqli_select_db($db);
 
-        mysqli_query($conn, "DELETE FROM gm_tickets WHERE " . $ticketString . "='" . $id . "'?");
+        mysqli_query($conn, "DELETE FROM gm_tickets WHERE ". $ticketString ."=". $id .";");
     }
     
     #                                                                   #
@@ -215,11 +216,11 @@
     #                                                                   #
     if ($_POST['action'] == 'closeTicket')
     {
-        $id = (int) $_POST['id'];
+        $id = mysqli_real_escape_string($conn, $_POST['id']);
         $db = mysqli_real_escape_string($conn, $_POST['db']);
         mysqli_select_db($db);
 
-        mysqli_query($conn, "UPDATE gm_tickets SET " . $closedString . "=1 WHERE " . $ticketString . "='" . $id . "';");
+        mysqli_query($conn, "UPDATE gm_tickets SET ". $closedString ."=1 WHERE ". $ticketString ."=". $id .";");
     }
     
     #                                                                   #
@@ -227,11 +228,11 @@
     #                                                                   #
     if ($_POST['action'] == 'openTicket')
     {
-        $id = (int) $_POST['id'];
+        $id = mysqli_real_escape_string($conn, $_POST['id']);
         $db = mysqli_real_escape_string($conn, $_POST['db']);
         mysqli_select_db($db);
 
-        mysqli_query($conn, "UPDATE gm_tickets SET " . $closedString . "=0 WHERE " . $ticketString . "='" . $id . "';");
+        mysqli_query($conn, "UPDATE gm_tickets SET ". $closedString ."=0 WHERE ". $ticketString ."=". $id .";");
     }
     
     #                                                                   #
@@ -242,7 +243,7 @@
         echo '<h3>Select a realm</h3><hr/>';
         $GameServer->selectDB('webdb', $conn);
 
-        $result = mysqli_query($conn, 'SELECT id, name, description FROM realms ORDER BY id ASC;');
+        $result = mysqli_query($conn, "SELECT id, name, description FROM realms ORDER BY id ASC;");
         while ($row = mysqli_fetch_assoc($result))
         {
             echo '<table width="100%">';
@@ -267,7 +268,7 @@
     
     if ($_POST['action'] == 'savePresetRealm')
     {
-        $rid = (int) $_POST['rid'];
+        $rid = mysqli_real_escape_string($conn, $_POST['rid']);
 
         if (isset($_COOKIE['presetRealmStatus']))
         {

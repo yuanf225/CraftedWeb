@@ -23,7 +23,7 @@
 
     include('documents/alert.php');
 
-    if ($alert_enabled == true)
+    if ($alert_enabled)
     {
         echo '<div id="alert"><b>Notice:</b> ';
         echo $alert_message;

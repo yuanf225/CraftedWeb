@@ -25,7 +25,7 @@
     $maintainance_allowIPs = array('herp.derp.13.37'); //Allow specific IP addresses to view the website even though you have maintainance mode enabled.
     //Example: '123.456.678', '987.654.321'
 
-    $website_title = '12'; //The title of your website, shown in the users browser.
+    $website_title = 'Infusion WoW'; //The title of your website, shown in the users browser.
 
     $default_email = 'asd@asd.com'; //The default email address from wich Emails will be sent.
 
@@ -36,7 +36,7 @@
     $showLoadTime = true;
     //Shows the page load time in the footer.
 
-    $footer_text = 'Copyright &copy; 12 2012<br/>
+    $footer_text = 'Copyright &copy; Infusion WoW '. date("Y") .'<br/>
 	All rights reserved'; //Set the footer text, displayed at the bottom.
     //Tips: &copy; = Copyright symbol. <br/> = line break.
 
@@ -130,9 +130,9 @@
     $connection['host']      = 'localhost';
     $connection['user']      = 'root';
     $connection['password']  = '';
-    $connection['logondb']   = '3_auth';
+    $connection['logondb']   = 'newauth';
     $connection['webdb']     = 'craftedweb';
-    $connection['worlddb']   = '3_world';
+    $connection['worlddb']   = 'newworld';
     $connection['realmlist'] = 'localhost';
 
     // host = Either an IP address or a DNS address

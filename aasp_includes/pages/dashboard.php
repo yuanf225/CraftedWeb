@@ -19,7 +19,8 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
-    global $GameServer, $GameAccount, $conn;
+    global $GameServer, $GameAccount;
+    $conn = $GameServer->connect();
 ?>
 <div class="box_right_title">Dashboard</div>
 <table style="width: 605px;">

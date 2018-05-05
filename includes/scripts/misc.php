@@ -23,7 +23,8 @@
 
     require('../ext_scripts_class_loader.php');
 
-    global $Account, $Connect, $Server, $conn;
+    global $Account, $Connect, $Server;
+    $conn = $Connect->connectToDB();
 
     if (isset($_POST['element']) && $_POST['element'] == 'vote')
     {
@@ -39,7 +40,7 @@
     if (isset($_POST['action']) && $_POST['action'] == 'removeComment')
     {
         $Connect->selectDB('webdb', $conn);
-        mysqli_query($conn, "DELETE FROM news_comments WHERE id='" . (int) $_POST['id'] . "';");
+        mysqli_query($conn, "DELETE FROM news_comments WHERE id=". mysqli_real_escape_string($conn, $_POST['id']) .";");
     }
 ##
 #   Terms Of Service
@@ -95,7 +96,7 @@
     {
         for ($row = 0; $row < count($GLOBALS['donationList']); $row++)
         {
-            $value = (int) $_POST['convertDonationList'];
+            $value = mysqli_real_escape_string($conn, $_POST['convertDonationList']);
             if ($value == $GLOBALS['donationList'][$row][1])
             {
                 echo $GLOBALS['donationList'][$row][2];

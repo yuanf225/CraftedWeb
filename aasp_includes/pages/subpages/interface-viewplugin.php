@@ -100,7 +100,7 @@ Author: <?php echo $author; ?> - <?php echo $created; ?>
     }
     
 //Plugins
-    $chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='" . mysqli_real_escape_string($conn, $filename) . "';");
+    $chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='". mysqli_real_escape_string($conn, $filename) ."';");
     if (mysqli_data_seek($chk, 1) > 0)
     {
         echo '<input type="submit" value="Enable Plugin" onclick="enablePlugin(\'' . $filename . '\')">';

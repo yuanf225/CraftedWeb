@@ -28,7 +28,8 @@
 
         public static function getNews()
         {
-            global $Cache, $Connect, $conn, $Website;
+            global $Cache, $Connect, $Website;
+            $conn = $Connect->connectToDB();
             if ($GLOBALS['news']['enable'] == true)
             {
                 echo '<div class="box_two_title">Latest News</div>';
@@ -41,7 +42,7 @@
                 {
                     $Connect->selectDB('webdb', $conn);
 
-                    $result = mysqli_query($conn, "SELECT * FROM news ORDER BY id DESC LIMIT " . $GLOBALS['news']['maxShown']);
+                    $result = mysqli_query($conn, "SELECT * FROM news ORDER BY id DESC LIMIT ". $GLOBALS['news']['maxShown'] .";");
                     if (mysqli_num_rows($result) == 0)
                     {
                         echo 'No news was found';
@@ -93,7 +94,7 @@
                                 echo nl2br($text);
                                 $output .= nl2br($row['body']);
                             }
-                            $result      = mysqli_query($conn, "SELECT COUNT(id) FROM news_comments WHERE newsid='" . $row['id'] . "'");
+                            $result      = mysqli_query($conn, "SELECT COUNT(id) FROM news_comments WHERE newsid=". $row['id'] .";");
                             $commentsNum = mysqli_fetch_row($result);
                             if ($GLOBALS['news']['enableComments'] == true)
                             {
@@ -122,7 +123,8 @@
 
         public static function getSlideShowImages()
         {
-            global $Cache, $Connect, $conn;
+            global $Cache, $Connect;
+            $conn = $Connect->connectToDB();
             if ($Cache->exists('slideshow') == true)
             {
                 $Cache->loadCache('slideshow');
@@ -130,8 +132,8 @@
             else
             {
                 $Connect->selectDB('webdb', $conn);
-                $result = mysqli_query($conn, "SELECT path, link FROM slider_images ORDER BY position ASC");
-                while ($row    = mysqli_fetch_assoc($result))
+                $result = mysqli_query($conn, "SELECT path, link FROM slider_images ORDER BY position ASC;");
+                while ($row = mysqli_fetch_assoc($result))
                 {
                     echo $outPutPT = '<a href="' . $row['link'] . '">
 								  <img border="none" src="' . $row['path'] . '" alt="" class="slideshow_image">
@@ -144,11 +146,13 @@
 
         public static function getSlideShowImageNumbers()
         {
-            global $Connect, $conn;
+            global $Connect;
+            $conn = $Connect->connectToDB();
             $Connect->selectDB('webdb', $conn);
-            $result = mysqli_query($conn, "SELECT position FROM slider_images ORDER BY position ASC");
+
+            $result = mysqli_query($conn, "SELECT position FROM slider_images ORDER BY position ASC;");
             $x      = 1;
-            while ($row    = mysqli_fetch_assoc($result))
+            while ($row = mysqli_fetch_assoc($result))
             {
                 echo '<a href="#" rel="' . $x . '">' . $x . '</a>';
                 $x++;
@@ -172,11 +176,15 @@
 
         public static function loadVotingLinks()
         {
-            global $Connect, $conn, $Account, $Website;
+            global $Connect, $Account, $Website;
+            $conn = $Connect->connectToDB();
             $Connect->selectDB('webdb', $conn);
-            $result = mysqli_query($conn, "SELECT * FROM votingsites ORDER BY id DESC");
+            $result = mysqli_query($conn, "SELECT * FROM votingsites ORDER BY id DESC;");
+
             if (mysqli_num_rows($result) == 0)
-                buildError("Couldnt fetch any voting links from the database. " . mysqli_error($conn));
+            {
+                buildError("Couldnt fetch any voting links from the database. ". mysqli_error($conn));
+            }
             else
             {
                 while ($row = mysqli_fetch_assoc($result))
@@ -197,9 +205,9 @@
                                     }
                                     else
                                     {
-                                        $getNext = mysqli_query($conn, "SELECT next_vote FROM " . $GLOBALS['connection']['webdb'] . ".votelog 
-														 WHERE userid='" . $Account->getAccountID($_SESSION['cw_user']) . "' 
-														 AND siteid='" . $row['id'] . "' ORDER BY id DESC LIMIT 1");
+                                        $getNext = mysqli_query($conn, "SELECT next_vote FROM ". $GLOBALS['connection']['webdb'] .".votelog 
+														 WHERE userid=". $Account->getAccountID($_SESSION['cw_user']) ." 
+														 AND siteid=". $row['id'] ." ORDER BY id DESC LIMIT 1;");
 
                                         $row  = mysqli_fetch_assoc($getNext);
                                         $time = $row['next_vote'] - time();
@@ -218,13 +226,15 @@
 
         public static function checkIfVoted($siteid)
         {
-            global $Account, $Connect, $conn;
-            $siteid  = (int) $siteid;
+            global $Account, $Connect;
+            $conn = $Connect->connectToDB();
+            $siteId  = mysqli_real_escape_string($conn, $siteid);
+
             $acct_id = $Account->getAccountID($_SESSION['cw_user']);
 
             $Connect->selectDB('webdb', $conn);
 
-            $result = mysqli_query($conn, "SELECT COUNT(id) FROM votelog WHERE userid='" . $acct_id . "' AND siteid='" . $siteid . "' AND next_vote > " . time());
+            $result = mysqli_query($conn, "SELECT COUNT(id) FROM votelog WHERE userid=". $acct_id ." AND siteid=". $siteId ." AND next_vote > ". time() .";");
 
             if (mysqli_data_seek($result, 0) == 0)
             {

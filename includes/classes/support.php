@@ -23,27 +23,27 @@
 # Unused class. #
 #################
 
-    class Support
+class Support
+{
+
+    public static function loadEmailForm()
     {
-
-        public static function loadEmailForm()
-        {
-            ?><br/>
-            <form action="?p=support&do=email" method="post">
-                Issue: <br/>
-                <select name="issue">
-                    <option>Technical Problems</option>
-                    <option>Violation</option>
-                    <option>Other...</option>       
-                </select>
-                <br/>
-                Describe your problem: <br/>
-                <textarea name="description" cols="50" rows="7"></textarea>
-            </form>
-            <?php
-        }
-
+        ?><br/>
+        <form action="?p=support&do=email" method="post">
+            Issue: <br/>
+            <select name="issue">
+                <option>Technical Problems</option>
+                <option>Violation</option>
+                <option>Other...</option>       
+            </select>
+            <br/>
+            Describe your problem: <br/>
+            <textarea name="description" cols="50" rows="7"></textarea>
+        </form>
+        <?php
     }
 
-    $Support = new Support();
+}
+
+$Support = new Support();
     

@@ -29,7 +29,6 @@
     require('../classes/shop.php');
 
     global $Connect, $Account, $Shop, $Character;
-
     $conn = $Connect->connectToDB();
 
     if ($_POST['action'] == 'removeFromCart')
@@ -40,7 +39,7 @@
 
     if ($_POST['action'] == 'addShopitem')
     {
-        $entry = (int) $_POST['entry'];
+        $entry = mysqli_real_escape_string($conn, $_POST['entry']);
         $shop  = mysqli_real_escape_string($conn, $_POST['shop']);
 
         if (isset($_SESSION[$_POST['cart']][$entry]))
@@ -51,7 +50,7 @@
         {
             $Connect->selectDB('webdb', $conn);
 
-            $result = mysqli_query($conn, 'SELECT entry,price FROM shopitems WHERE entry="' . $entry . '" AND in_shop="' . $shop . '";');
+            $result = mysqli_query($conn, "SELECT entry, price FROM shopitems WHERE entry=". $entry ." AND in_shop='". $shop ."';");
             if (mysqli_num_rows($result) != 0)
             {
                 $row                                     = mysqli_fetch_array($result);
@@ -95,7 +94,7 @@
 
                 $shop_filt = substr($_POST['cart'], 0, -4);
 
-                $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='" . $entry . "' AND in_shop='" . mysqli_real_escape_string($conn, $shop_filt) . "';");
+                $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry=". $entry ." AND in_shop='". mysqli_real_escape_string($conn, $shop_filt) ."';");
                 $row    = mysqli_fetch_assoc($result);
 
 
@@ -134,7 +133,7 @@
             {
                 foreach ($_SESSION['donateCart'] as $entry => $value)
                 {
-                    $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='" . $entry . "' AND in_shop='donate';");
+                    $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry=" . $entry . " AND in_shop='donate';");
                     $row    = mysqli_fetch_assoc($result);
 
                     $add = $row['price'] * $_SESSION['donateCart'][$entry]['quantity'];
@@ -197,7 +196,7 @@
             {
                 foreach ($_SESSION['voteCart'] as $entry => $value)
                 {
-                    $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry='" . $entry . "' AND in_shop='vote';");
+                    $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry=". $entry ." AND in_shop='vote';");
                     $row    = mysqli_fetch_assoc($result);
 
                     $add = $row['price'] * $_SESSION['voteCart'][$entry]['quantity'];
@@ -261,11 +260,11 @@
             exit();
         }
 
-        $entry = (int) $_POST['entry'];
+        $entry = mysqli_real_escape_string($conn, $_POST['entry']);
         $shop  = mysqli_real_escape_string($conn, $_POST['shop']);
 
         $Connect->selectDB('webdb', $conn);
-        mysqli_query($conn, "DELETE FROM shopitems WHERE entry='" . $entry . "' AND in_shop='" . $shop . "'");
+        mysqli_query($conn, "DELETE FROM shopitems WHERE entry=". $entry ." AND in_shop='". $shop ."';");
     }
 
     if ($_POST['action'] == 'editItem')
@@ -275,14 +274,14 @@
             exit();
         }
 
-        $entry = (int) $_POST['entry'];
+        $entry = mysqli_real_escape_string($conn, $_POST['entry']);
         $shop  = mysqli_real_escape_string($conn, $_POST['shop']);
-        $price = (int) $_POST['price'];
+        $price = mysqli_real_escape_string($conn, $_POST['price']);
 
         $Connect->selectDB('webdb', $conn);
 
         if ($price > 0)
         {
-            mysqli_query($conn, "UPDATE shopitems SET price='" . $price . "' WHERE entry='" . $entry . "' AND in_shop='" . $shop . "'");
+            mysqli_query($conn, "UPDATE shopitems SET price=". $price ." WHERE entry=". $entry ." AND in_shop='". $shop ."';");
         }
     }

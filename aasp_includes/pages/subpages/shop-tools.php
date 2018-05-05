@@ -19,7 +19,8 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
-      global $GamePage; ?>
+      global $GamePage;
+?>
 <div class="box_right_title"><?php echo $GamePage->titleLink(); ?> &raquo; Tools</div>
 <input type="submit" value="Clear Vote shop" onclick="clearShop('vote')"/>  &nbsp; 
 This will clear all items from the vote shop<br/><br/>

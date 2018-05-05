@@ -26,8 +26,8 @@
     include('../functions.php');
 
     global $GameServer, $GameAccount;
-
     $conn = $GameServer->connect();
+
     $GameServer->selectDB('logondb', $conn);
 
     ##
@@ -118,7 +118,7 @@
 
         $guid = $GameAccount->getAccID($user);
 
-        mysqli_query($conn, "INSERT INTO account_access VALUES(". $guid .",". $rank .",". $realm .");");
+        mysqli_query($conn, "INSERT INTO account_access VALUES(". $guid .", ". $rank .", ". $realm .");");
         $GameServer->logThis("Added GM account access for " . ucfirst(strtolower($GameAccount->getAccName($guid))));
     }
     
@@ -144,7 +144,7 @@
 
         $GameServer->connectToRealmDB($rid);
 
-        $online = mysqli_query($conn, "SELECT COUNT(*) FROM characters WHERE guid=" . $guid . " AND online=1;");
+        $online = mysqli_query($conn, "SELECT COUNT(*) FROM characters WHERE guid=". $guid ." AND online=1;");
         if (mysqli_data_seek($online, 0) > 0)
         {
             exit('The character must be online for any change to take effect!');
@@ -154,7 +154,7 @@
 
         echo 'The character was saved!';
 
-        $chk = mysqli_query($conn, "SELECT COUNT(*) FROM characters WHERE name='" . $name . "';");
+        $chk = mysqli_query($conn, "SELECT COUNT(*) FROM characters WHERE name='". $name ."';");
 
         if (mysqli_data_seek($chk, 0) > 1)
         {

@@ -20,6 +20,7 @@
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
     global $GameServer, $GamePage;
+    $conn = $GameServer->connect();
     $GameServer->selectDB('webdb', $conn);
 
     $GamePage->validatePageAccess('Logs');
@@ -30,12 +31,12 @@
     }
     else
     {
-        ?>
-        <div class='box_right_title'>Hey! You shouldn't be here!</div>
+      ?>
+      <div class='box_right_title'>Hey! You shouldn't be here!</div>
 
-        <pre>The script might have redirected you wrong. Or... did you try to HACK!? Anyways, good luck.</pre>
+      <pre>The script might have redirected you wrong. Or... did you try to HACK!? Anyways, good luck.</pre>
 
-        <a href="?p=logs&s=voteshop" class="content_hider">Vote Shop logs</a>
-        <a href="?p=logs&s=donateshop" class="content_hider">Donation Shop logs</a>
-        <?php
+      <a href="?p=logs&s=voteshop" class="content_hider">Vote Shop logs</a>
+      <a href="?p=logs&s=donateshop" class="content_hider">Donation Shop logs</a>
+      <?php
     }

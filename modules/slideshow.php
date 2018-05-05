@@ -26,11 +26,11 @@
         <div class="main_view">
             <div class="window">
                 <div class="image_reel">
-        <?php $Website->getSlideShowImages(); ?>
+                    <?php $Website->getSlideShowImages(); ?>
                 </div>
             </div>
             <div class="paging">
-        <?php $Website->getSlideShowImageNumbers(); ?>
+                <?php $Website->getSlideShowImageNumbers(); ?>
             </div>
         </div>
     <?php } ?>

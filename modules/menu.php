@@ -20,7 +20,8 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    global $Connect, $conn;
+    global $Connect;
+    $conn = $Connect->connectToDB();
     $Connect->selectDB('webdb', $conn);
     if (!isset($_SESSION['cw_user']))
     {
@@ -30,7 +31,7 @@
     {
         $sql = "WHERE shownWhen = 'always' OR shownWhen = 'logged'";
     }
-    $getMenuLinks = mysqli_query($conn, "SELECT * FROM site_links " . $sql . " ORDER BY position ASC");
+    $getMenuLinks = mysqli_query($conn, "SELECT * FROM site_links ". $sql ." ORDER BY position ASC;");
     if (mysqli_num_rows($getMenuLinks) == 0)
     {
         buildError("<b>Template error:</b> No menu links was found in the CraftedWeb database!", NULL);

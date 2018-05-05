@@ -20,6 +20,7 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
     global $Account, $Connect, $Character, $Website;
+    $conn = $Connect->connectToDB();
     $service = $_GET['s'];
 
     $service_title = ucfirst($service . " Change");
@@ -57,7 +58,7 @@
             $Account->isNotLoggedIn();
             $Connect->selectDB('webdb', $conn);
             $num    = 0;
-            $result = mysqli_query($conn, 'SELECT char_db,name,id FROM realms ORDER BY id ASC');
+            $result = mysqli_query($conn, "SELECT char_db, name, id FROM realms ORDER BY id ASC;");
             while ($row    = mysqli_fetch_assoc($result))
             {
                 $acct_id  = $Account->getAccountID($_SESSION['cw_user']);
@@ -66,7 +67,7 @@
                 $realm_id = $row['id'];
 
                 $Connect->selectDB($char_db);
-                $result = mysqli_query($conn, 'SELECT name,guid,gender,class,race,level,online FROM characters WHERE account=' . $acct_id);
+                $result = mysqli_query($conn, "SELECT name, guid, gender, class, race, level, online FROM characters WHERE account=". $acct_id .";");
                 while ($row    = mysqli_fetch_assoc($result))
                 {
                     ?><div class='charBox'>
@@ -83,10 +84,7 @@
                                     <?php } ?>
                                 </td>
 
-                                <td width="160"><h3><?php echo $row['name']; ?></h3>
-                    <?php echo $row['level'] . " " . $Character->getRace($row['race']) . " " . $Character->getGender($row['gender']) .
-                    " " . $Character->getClass($row['class']);
-                    ?>
+                                <td width="160"><h3><?php echo $row['name']; ?></h3><?php echo $row['level'] . " " . $Character->getRace($row['race']) . " " . $Character->getGender($row['gender']) ." " . $Character->getClass($row['class']);?>
                                 </td>
 
                                 <td>Realm: <?php echo $realm; ?>
@@ -95,16 +93,12 @@
                                     ?>
                                 </td>
 
-                                <td align="right"> &nbsp; <input type="submit" value="Select" 
-                    <?php if ($row['online'] == 0)
-                    { ?> 
-                                                                     onclick='nstepService(<?php echo $row['guid']; ?>,<?php echo $realm_id; ?>, "<?php echo $service; ?>", "<?php echo $service_title; ?>"
-                                                                                     , "<?php echo $row['name']; ?>")' <?php }
-                else
-                {
-                    echo 'disabled="disabled"';
-                }
-                    ?>>
+                                <td align="right"> &nbsp; <input type="submit" value="Select" <?php if ($row['online'] == 0){ ?> onclick='nstepService(<?php echo $row['guid']; ?>,<?php echo $realm_id; ?>, "<?php echo $service; ?>", "<?php echo $service_title; ?>", "<?php echo $row['name']; ?>")' <?php }
+                                    else
+                                    {
+                                        echo 'disabled="disabled"';
+                                    }
+                                    ?>>
                                 </td>
                             </tr>                         
                         </table>

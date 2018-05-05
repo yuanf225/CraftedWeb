@@ -23,6 +23,7 @@
 Choose the character you wish to revive. The character will be revived with 1 health.<hr/>
 <?php
     global $Website, $Account, $Connect, $Character;
+    $conn = $Connect->connectToDB();
     $service = "revive";
 
     if ($GLOBALS['service'][$service]['price'] == 0)
@@ -42,7 +43,7 @@ Choose the character you wish to revive. The character will be revived with 1 he
     $Account->isNotLoggedIn();
     $Connect->selectDB('webdb', $conn);
     $num    = 0;
-    $result = mysqli_query($conn, 'SELECT char_db,name FROM realms ORDER BY id ASC');
+    $result = mysqli_query($conn, 'SELECT char_db, name FROM realms ORDER BY id ASC;');
     while ($row    = mysqli_fetch_assoc($result))
     {
         $acct_id = $Account->getAccountID($_SESSION['cw_user']);
@@ -50,8 +51,8 @@ Choose the character you wish to revive. The character will be revived with 1 he
         $char_db = $row['char_db'];
 
         $Connect->selectDB($char_db);
-        $result = mysqli_query($conn, 'SELECT name,guid,gender,class,race,level,online FROM characters WHERE account=' . $acct_id);
-        while ($row    = mysqli_fetch_assoc($result))
+        $result = mysqli_query($conn, "SELECT name, guid, gender, class, race, level, online FROM characters WHERE account=". $acct_id .";");
+        while ($row = mysqli_fetch_assoc($result))
         {
             ?><div class='charBox'>
                 <table width="100%">
@@ -63,32 +64,26 @@ Choose the character you wish to revive. The character will be revived with 1 he
                             else
                             {
                                 ?>
-                                <img src="styles/global/images/portraits/
-                <?php echo $row['gender'] . '-' . $row['race'] . '-' . $row['class']; ?>.gif" border="none">
-            <?php } ?>
+                                <img src="styles/global/images/portraits/<?php echo $row['gender'] . '-' . $row['race'] . '-' . $row['class']; ?>.gif" border="none">
+                            <?php } ?>
                         </td>
 
-                        <td width="160"><h3><?php echo $row['name']; ?></h3>
-            <?php echo $row['level'] . " " . $Character->getRace($row['race']) . " " . $Character->getGender($row['gender']) .
-            " " . $Character->getClass($row['class']);
-            ?>
+                        <td width="160">
+                            <h3><?php echo $row['name']; ?></h3>
+                            <?php echo $row['level'] . " " . $Character->getRace($row['race']) . " " . $Character->getGender($row['gender']) ." " . $Character->getClass($row['class']);?>
                         </td>
 
-                        <td>Realm: <?php echo $realm; ?>
-            <?php if ($row['online'] == 1)
-                echo "<br/><span class='red_text'>Please log out before trying to unstuck.</span>";
-            ?>
+                        <td>
+                            Realm: <?php echo $realm; ?>
+                            <?php if ($row['online'] == 1) echo "<br/><span class='red_text'>Please log out before trying to unstuck.</span>";?>
                         </td>
 
-                        <td align="right"> &nbsp; <input type="submit" value="Revive" 
-            <?php if ($row['online'] == 0)
-            { ?> 
-                                                             onclick='revive(<?php echo $row['guid']; ?>, "<?php echo $char_db; ?>")' <?php }
-            else
-            {
-                echo 'disabled="disabled"';
-            }
-            ?>>
+                        <td align="right"> &nbsp; <input type="submit" value="Revive" <?php if ($row['online'] == 0){ ?> onclick='revive(<?php echo $row['guid']; ?>, "<?php echo $char_db; ?>")' <?php }
+                            else
+                            {
+                                echo 'disabled="disabled"';
+                            }
+                            ?>>
                         </td>
                     </tr>                         
                 </table>

@@ -116,11 +116,13 @@
                     // Your site is currently being integrated with AlertPay IPN for TESTING PURPOSES
                     // ONLY. Don't store any information in your production database and 
                     // DO NOT process this transaction as a real order.
-                    global $conn;
+                    global $Connect;
+                    $conn = $Connect->connectToDB();
 
                     #mysqli_select_db($conn, "auth");
 
-                    mysqli_query($conn, "INSERT INTO paypal_payment_info(userid,paymentstatus,buyer_email,firstname,lastname) VALUES ('" . $myCustomField_1 . "','" . $transactionStatus . "','" . $customerEmailAddress . "','" . $customerFirstName . "','" . $customerLastName . "')");
+                    mysqli_query($conn, "INSERT INTO paypal_payment_info(userid, paymentstatus, buyer_email, firstname, lastname) 
+                      VALUES (". $myCustomField_1 .", '". $transactionStatus ."', '". $customerEmailAddress ."', '". $customerFirstName ."', '". $customerLastName ."');");
                 }
                 else
                 {

@@ -20,15 +20,21 @@
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
 
-    global $Page, $Server, $Account, $conn;
+    global $GameServer;
+    $conn = $GameServer->connect();
 ?>
 
 <div class="box_right_title">Character Services</div>
 <table class="center">
-    <tr><th>Service</th><th>Price</th><th>Currency</th><th>Status</th></tr>
+    <tr>
+      <th>Service</th>
+      <th>Price</th>
+      <th>Currency</th>
+      <th>Status</th>
+    </tr>
     <?php
-        $result = mysqli_query($conn, "SELECT * FROM service_prices");
-        while ($row    = mysqli_fetch_assoc($result))
+        $result = mysqli_query($conn, "SELECT * FROM service_prices;");
+        while ($row = mysqli_fetch_assoc($result))
         {
             ?>
             <tr>

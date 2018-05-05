@@ -18,11 +18,10 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?>
-<?php 
+
     global $GamePage, $GameServer, $GameAccount; 
     $conn = $GameServer->connect();
-    ?>
+?>
 <div class="box_right_title"><?php echo $GamePage->titleLink(); ?> &raquo; Manage Users</div>
 
 <?php
@@ -33,7 +32,9 @@
         while ($row = mysqli_fetch_assoc($result))
         {
             $GameServer->connectToRealmDB($row['id']);
-            $get = mysqli_query($conn, "SELECT account, name FROM characters WHERE name='". mysqli_real_escape_string($conn, $_GET['char']) ."' OR guid=". mysqli_real_escape_string($conn, $_GET['char']) .";");
+            $get = mysqli_query($conn, "SELECT account, name FROM characters WHERE name='". mysqli_real_escape_string($conn, $_GET['char']) ."' 
+                OR guid=". mysqli_real_escape_string($conn, $_GET['char']) .";");
+
             $rows = mysqli_fetch_assoc($get);
             echo '<a href="?p=users&s=manage&user=' . $rows['account'] . '">' . $rows['name'] . ' - ' . $row['name'] . '</a><br/>';
         }
@@ -55,16 +56,25 @@
             ?>
             <table width="100%">
                 <tr>
-                    <td><span class='blue_text'>Account Name</span></td><td> <?php echo ucfirst(strtolower($row['username'])); ?> (<?php echo $row['last_ip']; ?>)</td>
-                    <td><span class='blue_text'>Joined</span></td><td><?php echo $row['joindate']; ?></td>
+                    <td><span class='blue_text'>Account Name</span></td>
+                    <td><?php echo ucfirst(strtolower($row['username'])); ?> (<?php echo $row['last_ip']; ?>)</td>
+
+                    <td><span class='blue_text'>Joined</span></td>
+                    <td><?php echo $row['joindate']; ?></td>
                 </tr>
                 <tr>
-                    <td><span class='blue_text'>Email Adress</span></td><td><?php echo $row['email']; ?></td>
-                    <td><span class='blue_text'>Vote Points</span></td><td><?php echo $GameAccount->getVP($row['id']); ?></td>
+                    <td><span class='blue_text'>Email Adress</span></td>
+                    <td><?php echo $row['email']; ?></td>
+
+                    <td><span class='blue_text'>Vote Points</span></td>
+                    <td><?php echo $GameAccount->getVP($row['id']); ?></td>
                 </tr>
                 <tr>
-                    <td><span class='blue_text'>Account Status</span></td><td><?php echo $GameAccount->getBan($row['id']); ?></td>
-                    <td><span class='blue_text'><?php echo $GLOBALS['donation']['coins_name']; ?></span></td><td><?php echo $GameAccount->getDP($row['id']); ?></td>
+                    <td><span class='blue_text'>Account Status</span></td>
+                    <td><?php echo $GameAccount->getBan($row['id']); ?></td>
+                    
+                    <td><span class='blue_text'><?php echo $GLOBALS['donation']['coins_name']; ?></span></td>
+                    <td><?php echo $GameAccount->getDP($row['id']); ?></td>
                 </tr>
                 <tr><td><a href='?p=users&s=manage&getlogs=<?php echo $row['id']; ?>'>Account Payments & Shop Logs</a><br />
                         <a href='?p=users&s=manage&getslogs=<?php echo $row['id']; ?>'>Service Logs</a></td>
@@ -132,13 +142,13 @@
         ?>
         Account Selected: <a href='?p=users&s=manage&user=<?php echo $_GET['getlogs']; ?>'><?php echo $GameAccount->getAccName($_GET['getlogs']); ?></a><p />
 
-        <h4 class='payments' onclick='loadPaymentsLog(<?php echo (int) $_GET['getlogs']; ?>)'>Payments Log</h4>
+        <h4 class='payments' onclick='loadPaymentsLog(<?php echo mysqli_real_escape_string($conn, $_GET['getlogs']); ?>)'>Payments Log</h4>
         <div class='hidden_content' id='payments'></div>
         <hr/>
-        <h4 class='payments' onclick='loadDshopLog(<?php echo (int) $_GET['getlogs']; ?>)'>Donation Shop Log</h4>
+        <h4 class='payments' onclick='loadDshopLog(<?php echo mysqli_real_escape_string($conn, $_GET['getlogs']); ?>)'>Donation Shop Log</h4>
         <div class='hidden_content' id='dshop'></div>
         <hr/>
-        <h4 class='payments' onclick='loadVshopLog(<?php echo (int) $_GET['getlogs']; ?>)'>Vote Shop Log</h4>
+        <h4 class='payments' onclick='loadVshopLog(<?php echo mysqli_real_escape_string($conn, $_GET['getlogs']); ?>)'>Vote Shop Log</h4>
         <div class='hidden_content' id='vshop'></div>
         <?php
     }

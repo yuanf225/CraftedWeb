@@ -22,10 +22,11 @@
 <?php
     require('includes/classes/template_parse.php');
 
-    global $Connect, $Plugins, $conn;
+    global $Connect, $Plugins;
+    $conn = $Connect->connectToDB();
     $Connect->selectDB('webdb', $conn);
 
-    $getTemplate = mysqli_query($conn, "SELECT path FROM template WHERE applied='1' ORDER BY id ASC LIMIT 1;");
+    $getTemplate = mysqli_query($conn, "SELECT path FROM template WHERE applied=1 ORDER BY id ASC LIMIT 1;");
 
     $row = mysqli_fetch_assoc($getTemplate);
 

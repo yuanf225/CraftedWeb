@@ -19,7 +19,9 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
-  global $Page, $Server, $Account, $conn; ?> 
+  global $GamePage, $GameServer, $GameAccount; 
+  $conn = $GameServer->connect();  
+?> 
 <div class="box_right_title">Donation Shop logs</div>
 <?php
     $result = mysqli_query($conn, "SELECT * FROM shoplog WHERE shop='donate' ORDER BY id DESC LIMIT 10;");
@@ -43,11 +45,11 @@
         <?php while ($row = mysqli_fetch_assoc($result))
         { ?>
                     <tr class="center">
-                        <td><?php echo $Account->getAccName($row['account']); ?></td>
-                        <td><?php echo $Account->getCharName($row['char_id'], $row['realm_id']); ?></td>
-                        <td><?php echo $Server->getRealmName($row['realm_id']); ?></td>
+                        <td><?php echo $GameAccount->getAccName($row['account']); ?></td>
+                        <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
+                        <td><?php echo $GameServer->getRealmName($row['realm_id']); ?></td>
                         <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
-                    <?php echo $Server->getItemName($row['entry']); ?></a></td>
+                    <?php echo $GameServer->getItemName($row['entry']); ?></a></td>
                         <td><?php echo $row['date']; ?></td>
                     </tr>	
         <?php } ?>

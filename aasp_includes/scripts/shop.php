@@ -33,8 +33,8 @@
 ###############################
     if ($_POST['action'] == 'addsingle')
     {
-        $entry = (int) $_POST['entry'];
-        $price = (int) $_POST['price'];
+        $entry = mysqli_real_escape_string($conn, $_POST['entry']);
+        $price = mysqli_real_escape_string($conn, $_POST['price']);
         $shop  = mysqli_real_escape_string($conn, $_POST['shop']);
 
         if (empty($entry) || empty($price) || empty($shop))
@@ -43,8 +43,8 @@
         }
 
         $GameServer->selectDB('worlddb');
-        $get = mysqli_query($conn, "SELECT name,displayid,ItemLevel,quality,AllowableRace,AllowableClass,class,subclass,Flags
-	FROM item_template WHERE entry='" . $entry . "'")or die('Error whilst getting item data from the database. Error message: ' . mysqli_error($conn));
+        $get = mysqli_query($conn, "SELECT name,displayid,ItemLevel,quality,AllowableRace,AllowableClass,class,subclass,Flags FROM item_template WHERE entry=". $entry ."")
+            or die('Error whilst getting item data from the database. Error message: ' . mysqli_error($conn));
         $row = mysqli_fetch_assoc($get);
 
         $GameServer->selectDB('webdb', $conn);
@@ -66,10 +66,20 @@
             $faction = $row['AllowableRace'];
         }
 
-        mysqli_query($conn, "INSERT INTO shopitems (entry,name,in_shop,displayid,type,itemlevel,quality,price,class,faction,subtype,flags) VALUES (
-	'" . $entry . "','" . mysqli_real_escape_string($conn, $row['name']) . "','" . $shop . "','" . $row['displayid'] . "','" . $row['class'] . "','" . $row['ItemLevel'] . "'
-	,'" . $row['quality'] . "','" . $price . "','" . $row['AllowableClass'] . "','" . $faction . "','" . $row['subclass'] . "','" . $row['Flags'] . "'
-	)")or die('Error whilst adding items to the database. Error message: ' . mysqli_error($conn));
+        mysqli_query($conn, "INSERT INTO shopitems (entry,name,in_shop,displayid,type,itemlevel,quality,price,class,faction,subtype,flags) VALUES 
+            (". $entry .",
+            '". mysqli_real_escape_string($conn, $row['name']) ."',
+            '". $shop ."',
+            '". $row['displayid'] ."',
+            '". $row['class'] ."',
+            '". $row['ItemLevel'] ."',
+            '". $row['quality'] ."',
+            '". $price ."',
+            '". $row['AllowableClass'] ."',
+            '". $faction ."',
+            '". $row['subclass'] ."',
+            '". $row['Flags'] ."');")
+            or die("Error whilst adding items to the database. Error message: ". mysqli_error($conn));
 
         $GameServer->logThis("Added " . $row['name'] . " to the " . $shop . " shop");
 
@@ -78,9 +88,9 @@
 ###############################
     if ($_POST['action'] == 'addmulti')
     {
-        $il_from = (int) $_POST['il_from'];
-        $il_to   = (int) $_POST['il_to'];
-        $price   = (int) $_POST['price'];
+        $il_from = mysqli_real_escape_string($conn, $_POST['il_from']);
+        $il_to   = mysqli_real_escape_string($conn, $_POST['il_to']);
+        $price   = mysqli_real_escape_string($conn, $_POST['price']);
         $quality = mysqli_real_escape_string($conn, $_POST['quality']);
         $shop    = mysqli_real_escape_string($conn, $_POST['shop']);
         $type    = mysqli_real_escape_string($conn, $_POST['type']);
@@ -112,9 +122,9 @@
         }
 
         $GameServer->selectDB('worlddb');
-        $get = mysqli_query($conn, "SELECT entry,name,displayid,ItemLevel,quality,class,AllowableRace,AllowableClass,subclass,Flags
-	 FROM item_template WHERE itemlevel>='" . $il_from . "'
-	AND itemlevel<='" . $il_to . "' " . $advanced) or die('Error whilst getting item data from the database. Error message: ' . mysqli_error());
+        $get = mysqli_query($conn, "SELECT entry,name,displayid,ItemLevel,quality,class,AllowableRace,AllowableClass,subclass,Flags 
+            FROM item_template WHERE itemlevel>=". $il_from ."	AND itemlevel<=". $il_to ." ". $advanced .";") 
+        or die('Error whilst getting item data from the database. Error message: ' . mysqli_error());
 
         $GameServer->selectDB('webdb', $conn);
 
@@ -136,10 +146,20 @@
                 $faction = $row['AllowableRace'];
             }
 
-            mysqli_query($conn, "INSERT INTO shopitems (entry,name,in_shop,displayid,type,itemlevel,quality,price,class,faction,subtype,flags) VALUES (
-		'" . $row['entry'] . "','" . mysqli_real_escape_string($conn, $row['name']) . "','" . $shop . "','" . $row['displayid'] . "','" . $row['class'] . "','" . $row['ItemLevel'] . "'
-		,'" . $row['quality'] . "','" . $price . "','" . $row['AllowableClass'] . "','" . $faction . "','" . $row['subclass'] . "','" . $row['Flags'] . "'
-		)")or die('Error whilst adding items to the database. Error message: ' . mysqli_error());
+            mysqli_query($conn, "INSERT INTO shopitems (entry,name,in_shop,displayid,type,itemlevel,quality,price,class,faction,subtype,flags) VALUES 
+                ('". $row['entry'] ."',
+                '". mysqli_real_escape_string($conn, $row['name']) ."',
+                '". $shop ."',
+                '". $row['displayid'] ."',
+                '". $row['class'] ."',
+                '". $row['ItemLevel'] ."',
+                '". $row['quality'] ."',
+                '". $price ."',
+                '". $row['AllowableClass'] ."',
+                '". $faction ."',
+                '". $row['subclass'] ."',
+                '". $row['Flags'] ."')")
+            or die("Error whilst adding items to the database. Error message: " . mysqli_error());
 
             $c++;
         }
@@ -150,7 +170,7 @@
 ###############################
     if ($_POST['action'] == 'clear')
     {
-        $shop = (int) $_POST['shop'];
+        $shop = mysqli_real_escape_string($conn, $_POST['shop']);
 
         if ($shop == 1)
         {
@@ -161,15 +181,15 @@
             $shop = "donate";
         }
 
-        mysqli_query($conn, "DELETE FROM shopitems WHERE in_shop='" . $shop . "';");
+        mysqli_query($conn, "DELETE FROM shopitems WHERE in_shop='". $shop ."';");
         mysqli_query($conn, "TRUNCATE shopitems;");
         return;
     }
 ###############################
     if ($_POST['action'] == 'modsingle')
     {
-        $entry = (int) $_POST['entry'];
-        $price = (int) $_POST['price'];
+        $entry = mysqli_real_escape_string($conn, $_POST['entry']);
+        $price = mysqli_real_escape_string($conn, $_POST['price']);
         $shop  = mysqli_real_escape_string($conn, $_POST['shop']);
 
         if (empty($entry) || empty($price) || empty($shop))
@@ -177,27 +197,27 @@
             die("Please enter all fields.");
         }
 
-        mysqli_query($conn, "UPDATE shopitems SET price='" . $price . "' WHERE entry='" . $entry . "' AND in_shop='" . $shop . "';");
+        mysqli_query($conn, "UPDATE shopitems SET price='". $price ."' WHERE entry=". $entry ." AND in_shop='". $shop ."';");
         echo 'Successfully modified item';
     }
 ###############################
     if ($_POST['action'] == 'delsingle')
     {
-        $entry = (int) $_POST['entry'];
+        $entry = mysqli_real_escape_string($conn, $_POST['entry']);
         $shop  = mysqli_real_escape_string($conn, $_POST['shop']);
 
         if (empty($entry) || empty($shop))
             die("Please enter all fields.");
 
-        mysqli_query($conn, "DELETE FROM shopitems WHERE entry='" . $entry . "' AND in_shop='" . $shop . "'");
+        mysqli_query($conn, "DELETE FROM shopitems WHERE entry=". $entry ." AND in_shop='". $shop ."';");
         echo 'Successfully removed item';
     }
 ###############################
     if ($_POST['action'] == 'modmulti')
     {
-        $il_from = (int) $_POST['il_from'];
-        $il_to   = (int) $_POST['il_to'];
-        $price   = (int) $_POST['price'];
+        $il_from = mysqli_real_escape_string($conn, $_POST['il_from']);
+        $il_to   = mysqli_real_escape_string($conn, $_POST['il_to']);
+        $price   = mysqli_real_escape_string($conn, $_POST['price']);
         $quality = mysqli_real_escape_string($conn, $_POST['quality']);
         $shop    = mysqli_real_escape_string($conn, $_POST['shop']);
         $type    = mysqli_real_escape_string($conn, $_POST['type']);
@@ -224,14 +244,14 @@
 
         $count = mysqli_query($conn, "COUNT(*) FROM shopitems WHERE itemlevel >='" . $il_from . "' AND itemlevel <='" . $il_to . "' " . $advanced);
 
-        mysqli_query($conn, "UPDATE shopitems SET price='" . $price . "' WHERE itemlevel >='" . $il_from . "' AND itemlevel <='" . $il_to . "' " . $advanced);
-        echo 'Successfully modified ' . $count . ' items!';
+        mysqli_query($conn, "UPDATE shopitems SET price='". $price ."' WHERE itemlevel >=". $il_from ." AND itemlevel <=". $il_to ." ". $advanced .";");
+        echo "Successfully modified ". $count ." items!";
     }
 ###############################
     if ($_POST['action'] == 'delmulti')
     {
-        $il_from = (int) $_POST['il_from'];
-        $il_to   = (int) $_POST['il_to'];
+        $il_from = mysqli_real_escape_string($conn, $_POST['il_from']);
+        $il_to   = mysqli_real_escape_string($conn, $_POST['il_to']);
         $quality = mysqli_real_escape_string($conn, $_POST['quality']);
         $shop    = mysqli_real_escape_string($conn, $_POST['shop']);
         $type    = mysqli_real_escape_string($conn, $_POST['type']);
@@ -258,10 +278,10 @@
         if ($quality != "all")
             $advanced .= "AND quality='" . $quality . "'";
 
-        $count = mysqli_query($conn, "COUNT(*) FROM shopitems WHERE itemlevel >='" . $il_from . "' AND itemlevel <='" . $il_to . "' " . $advanced);
+        $count = mysqli_query($conn, "SELECT COUNT(*) FROM shopitems WHERE itemlevel >=". $il_from ." AND itemlevel <=". $il_to ." ". $advanced .";");
 
-        mysqli_query($conn, "DELETE FROM shopitems WHERE itemlevel >='" . $il_from . "' AND itemlevel <='" . $il_to . "' " . $advanced);
-        echo 'Successfully removed ' . $count . ' items!';
+        mysqli_query($conn, "DELETE FROM shopitems WHERE itemlevel >=". $il_from ." AND itemlevel <=". $il_to ." ". $advanced .";");
+        echo "Successfully removed ". $count ." items!";
     }
 ###############################
 ?>

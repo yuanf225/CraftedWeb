@@ -29,7 +29,7 @@
         <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
         <title>
             <?php
-                echo $website_title . ' - ';
+                echo $website_title .' - ';
 
                 while ($page_title = current($GLOBALS['core_pages']))
                 {

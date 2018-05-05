@@ -24,7 +24,8 @@
     require('../configuration.php');
     require('connect.php');
 
-    global $Connect, $conn;
+    global $Connect;
+    $conn = $Connect->connectToDB();
 
     $send = 'cmd=_notify-validate';
 
@@ -154,14 +155,14 @@
                         $coins = $mc_gross;
                         if ($coins == $GLOBALS['donationList'][$row][2])
                         {
-                            mysqli_query($conn, "UPDATE account_data SET dp = dp + " . $GLOBALS['donationList'][$row][1] . " WHERE id='" . $custom . "';");
+                            mysqli_query($conn, "UPDATE account_data SET dp=dp + " . $GLOBALS['donationList'][$row][1] . " WHERE id=". $custom .";");
                         }
                     }
                 }
                 elseif ($GLOBALS['donation']['donationType'] == 2)
                 {
                     $coins = ceil($mc_gross);
-                    mysqli_query($conn, "UPDATE account_data SET dp = dp + " . $coins . " WHERE id='" . $custom . "';");
+                    mysqli_query($conn, "UPDATE account_data SET d =dp + " . $coins . " WHERE id=". $custom .";");
                 }
             }
         }

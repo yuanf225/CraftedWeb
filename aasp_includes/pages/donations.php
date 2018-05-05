@@ -38,7 +38,7 @@
             $donationsTotalAmount = $donationsTotalAmount + $row['mc_gross'];
         }
 
-        $donationsThisMonth       = mysqli_query($conn, "SELECT mc_gross FROM payments_log WHERE paymentdate LIKE '%" . date('Y-md') . "%';");
+        $donationsThisMonth       = mysqli_query($conn, "SELECT mc_gross FROM payments_log WHERE paymentdate LIKE '%". date('Y-md') ."%';");
         $donationsThisMonthAmount = 0;
         while ($row = mysqli_fetch_assoc($donationsThisMonth))
         {
@@ -56,18 +56,21 @@
             <tr>
                 <td><span class='blue_text'>Total donations</span></td>
                 <td><?php echo mysqli_num_rows($donationsTotal); ?></td>
+                
                 <td><span class='blue_text'>Total donation amount</span></td>
                 <td><?php echo round($donationsTotalAmount, 0); ?>$</td>
             </tr>
             <tr>
                 <td><span class='blue_text'>Donations this month</span></td>
                 <td><?php echo mysqli_num_rows($donationsThisMonth); ?></td>
+                
                 <td><span class='blue_text'>Donation amount this month</span></td>
                 <td><?php echo round($donationsThisMonthAmount, 0); ?>$</td>
             </tr>
             <tr>
                 <td><span class='blue_text'>Latest donation amount</span></td>
                 <td><?php echo round($donationLatestAmount);  ?>$</td>
+                
                 <td><span class='blue_text'>Latest donator</span></td>
                 <td><?php echo $donationLatest; ?></td>
             </tr>

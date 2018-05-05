@@ -54,7 +54,6 @@
                         }
                     }
 
-
                     if ($count == 0)
                     {
                         $_SESSION['loaded_plugins'] = NULL;
@@ -74,15 +73,17 @@
                 if ($_SESSION['loaded_plugins'] != NULL)
                 {
                     global $Connect;
-                    global $conn;
+                    $conn = $Connect->connectToDB();
+
                     $bad    = array('.', '..', 'index.html');
                     $loaded = array();
+
                     if (is_array($_SESSION['loaded_plugins']) || is_object($_SESSION['loaded_plugins']))
                     {
                         foreach ($_SESSION['loaded_plugins'] as $folderName)
                         {
                             $Connect->selectDB('webdb', $conn);
-                            $chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='" . mysqli_real_escape_string($conn, $folderName) . "'");
+                            $chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='". mysqli_real_escape_string($conn, $folderName) ."';");
                             if (mysqli_field_seek($chk, 0) == 0 && file_exists('plugins/' . $folderName . '/' . $type . '/'))
                             {
                                 $folder = scandir('plugins/' . $folderName . '/' . $type . '/');

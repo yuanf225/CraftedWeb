@@ -97,7 +97,10 @@
     function step3()
     {
         echo '[Info] Connecting to database...';
-        $conn = mysqli_connect($_SESSION['install']['database']['host'], $_SESSION['install']['database']['user'], $_SESSION['install']['database']['pass']) or die ('<br/>[FAILURE] Could not connect to the database. Please restart the installation. ');
+        $conn = mysqli_connect(
+        	$_SESSION['install']['database']['host'], 
+        	$_SESSION['install']['database']['user'], 
+        	$_SESSION['install']['database']['pass']) or die ('<br/>[FAILURE] Could not connect to the database. Please restart the installation. ');
 
         echo '<br/>[Success] Connected to database.';
         echo '<br/>[Info] Creating Website database...';
@@ -202,7 +205,7 @@
 	$showLoadTime = true; 
 	//Shows the page load time in the footer.
 	 
-	$footer_text = \'Copyright &copy; ' . $_SESSION['install']['database']['title'] . ' '. date('Y') .'<br/>
+	$footer_text = \'Copyright &copy; ' . $_SESSION['install']['database']['title'] . ' date(\'Y\')<br/>
 	All rights reserved\'; //Set the footer text, displayed at the bottom.
 	//Tips: &copy; = Copyright symbol. <br/> = line break.
 	 
@@ -223,19 +226,19 @@
 	$adminPanel_minlvl = 4; //Minimum gm level of which accounts are able to log in to the Admin Panel. Default: 4
 	$staffPanel_minlvl = 3; //Minimum gm level of which accounts are able to log in to the Staff Panel. Default: 3
 	 
-	$staffPanel_permissions[\'Pages\'] = false;
-	$staffPanel_permissions[\'News\'] = false;
-	$staffPanel_permissions[\'Shop\'] = false;
-	$staffPanel_permissions[\'Donations\'] = false;
-	$staffPanel_permissions[\'Logs\'] = true;
-	$staffPanel_permissions[\'Interface\'] = false;
-	$staffPanel_permissions[\'Users\'] = true;
-	$staffPanel_permissions[\'Realms\'] = false;
-	$staffPanel_permissions[\'Services\'] = false;
-	$staffPanel_permissions[\'Tools->Tickets\'] = true;
-	$staffPanel_permissions[\'Tools->Account Access\'] = false;
-	$staffPanel_permissions[\'editNewsComments\'] = true;
-	$staffPanel_permissions[\'editShopItems\'] = false;
+	$staffPanel_permissions[\'Pages\'] 					= false;
+	$staffPanel_permissions[\'News\'] 					= false;
+	$staffPanel_permissions[\'Shop\'] 					= false;
+	$staffPanel_permissions[\'Donations\'] 				= false;
+	$staffPanel_permissions[\'Logs\'] 					= true;
+	$staffPanel_permissions[\'Interface\'] 				= false;
+	$staffPanel_permissions[\'Users\'] 					= true;
+	$staffPanel_permissions[\'Realms\'] 				= false;
+	$staffPanel_permissions[\'Services\'] 				= false;
+	$staffPanel_permissions[\'Tools->Tickets\'] 		= true;
+	$staffPanel_permissions[\'Tools->Account Access\'] 	= false;
+	$staffPanel_permissions[\'editNewsComments\'] 		= true;
+	$staffPanel_permissions[\'editShopItems\'] 			= false;
 	 
 	//Pages 				= Disable/Enable pages & Create custom pages.
 	//News 					= Edit/Delete/Post news.
@@ -256,14 +259,14 @@
 	/*************************/
 	/* 	Slideshow settings 
 	/*************************/
-	$enableSlideShow = false; //Enable or Disable the slideshow. This will only be shown at the home page. 
+	$enableSlideShow = true; //Enable or Disable the slideshow. This will only be shown at the home page. 
 	
 	/*************************/
 	/* 	Website compression settings    
 	/*************************/
 	
-	$compression[\'gzip\'] = true; //This is very hard to explain, but it may boost your website speed drastically.
-	$compression[\'sanitize_output\'] = true; //This will strip all the whitespaces on the HTML code written. This should increase the website speed slightly. 
+	$compression[\'gzip\'] 				= true; //This is very hard to explain, but it may boost your website speed drastically.
+	$compression[\'sanitize_output\'] 	= true; //This will strip all the whitespaces on the HTML code written. This should increase the website speed slightly. 
 	//And "copycats" will have a hard time stealing your HTML code :>
 	
 	$useCache = false; //Enable / Disable the use of caching. It\'s in early developement and is currently only applied to very few things in the core at the moment.
@@ -273,20 +276,20 @@
 	/*************************/
 	/* News settings   
 	/*************************/
-	$news[\'enable\'] = true; // Enable/Disable the use of the news system at the homepage. 
-	$news[\'maxShown\'] = 2; //Maximum amount of news posts that will be shown on the home page.
+	$news[\'enable\'] 	= true; // Enable/Disable the use of the news system at the homepage. 
+	$news[\'maxShown\'] = 5; //Maximum amount of news posts that will be shown on the home page.
 							 //People can still view all posts by clicking the "All news" button.
-	$news[\'enableComments\'] = true; //Make people able to comment on your news posts.
-	$news[\'limitHomeCharacters\'] = false; //This will limit the characters shown in the news post. People will have to click the "Read more..." button
-	//to read the whole news post. 
+	$news[\'enableComments\'] 		= true; //Make people able to comment on your news posts.
+	$news[\'limitHomeCharacters\'] 	= false; //This will limit the characters shown in the news post. People will have to click the "Read more..." button
+											//to read the whole news post. 
 	
 	
 	/***** Server status ******/
-	$serverStatus[\'enable\'] = true; //This will enable/disable the server status box.
-	$serverStatus[\'nextArenaFlush\'] = false; //This will display the next arena flush for your realm(s).
-	$serverStatus[\'uptime\'] = true; //This will display the uptime of your realm(s).
-	$serverStatus[\'playersOnline\'] = true; //This will show current players online
-	$serverStatus[\'factionBar\'] = true; //This will show the players online faction bar.
+	$serverStatus[\'enable\'] 			= true; //This will enable/disable the server status box.
+	$serverStatus[\'nextArenaFlush\'] 	= false; //This will display the next arena flush for your realm(s).
+	$serverStatus[\'uptime\'] 			= true; //This will display the uptime of your realm(s).
+	$serverStatus[\'playersOnline\'] 	= true; //This will show current players online
+	$serverStatus[\'factionBar\'] 		= true; //This will show the players online faction bar.
 	
 	
 	/*************************/
@@ -331,7 +334,7 @@
 	/*************************/
 	$vote[\'timer\'] 		= 43200;
 	$vote[\'type\'] 		= \'instant\';
-	$vote[\'multiplier\'] 	= 1;
+	$vote[\'multiplier\'] 	= 2;
 	
 	// timer = Timer between every vote on each link in seconds. Default: 43200 (12 hours)
 	// type = Voting system type. 
@@ -346,7 +349,7 @@
 	$donation[\'coins_name\'] 		= \'Donations Coins\';
 	$donation[\'currency\'] 		= \'USD\';
 	$donation[\'emailResponse\'] 	= true;
-	$donation[\'sendResponseCopy\'] = false;
+	$donation[\'sendResponseCopy\'] = true;
 	$donation[\'copyTo\'] 			= \'' . $_SESSION['install']['database']['email'] . '\';
 	$donation[\'responseSubject\'] 	= \'Thanks for your support!\';
 	$donation[\'donationType\'] 	= 2;
@@ -450,18 +453,21 @@
 	switch($GLOBALS[\'core_expansion\']) 
 	{
 		case(0):
-		$maxItemLevel = 100;
-		break;
+			$maxItemLevel = 100;
+			break;
+
 		case(1):
-		$maxItemLevel = 175;
-		break;
+			$maxItemLevel = 175;
+			break;
+
 		default:
 		case(2):
-		$maxItemLevel = 284;
-		break;
+			$maxItemLevel = 284;
+			break;
+
 		case(3):
-		$maxItemLevel = 416;
-		break;
+			$maxItemLevel = 416;
+			break;
 	}
 	
 	if($GLOBALS[\'core_expansion\'] > 2)
@@ -502,7 +508,7 @@
 ?>';
 
         $fp = fopen('../includes/configuration.php', 'w');
-        fwrite($fp, $config)or die('<br/>[FAILURE] Could not write Configuration file. Please restart the installation.');
+        fwrite($fp, $config) or die('<br/>[FAILURE] Could not write Configuration file. Please restart the installation.');
         fclose($fp);
 
         echo '<br/>[Success] Configuration file was written!';
@@ -534,8 +540,7 @@
                 if (substr($value, -3, 3) == 'sql')
                 {
                     echo '<br>[Info]Applying ' . $value . '...';
-                    $f        = fopen('sql/updates/' . $value, "r+")or die
-                                    ('<br/>[FAILURE] Could not open SQL file. Please set the CHMOD to 777 and try again.');
+                    $f = fopen('sql/updates/' . $value, "r+") or die ('<br/>[FAILURE] Could not open SQL file. Please set the CHMOD to 777 and try again.');
                     $sqlFile  = fread($f, filesize('sql/updates/' . $value));
                     $sqlArray = explode(';', $sqlFile);
 
@@ -565,9 +570,9 @@
         $conn = mysqli_connect($_SESSION['install']['database']['host'], $_SESSION['install']['database']['user'], $_SESSION['install']['database']['pass']);
         mysqli_select_db($conn, $_SESSION['install']['database']['webdb']);
 
-        $rid      = (int) $rid;
+        $rid      = mysqli_real_escape_string($conn, $rid);
         $name     = mysqli_real_escape_string($conn, $name);
-        $port     = (int) $port;
+        $port     = mysqli_real_escape_string($conn, $port);
         $host     = mysqli_real_escape_string($conn, $host);
         $m_host   = mysqli_real_escape_string($conn, $m_host);
         $m_user   = mysqli_real_escape_string($conn, $m_user);
@@ -586,20 +591,20 @@
         }
 
         mysqli_query($conn, "INSERT INTO realms VALUES
-        	('" . $rid . "',
-        	'" . $name . "',
-        	'" . $desc . "',
-        	'" . $chardb . "',
-        	'" . $port . "',
-        	'" . $a_user . "',
-        	'" . $a_pass . "',
-        	'" . $raport . "',
-        	'" . $soapport . "',
-        	'" . $host . "',
-        	'" . $sendtype . "',
-        	'" . $m_host . "',
-        	'" . $m_user . "',
-        	'" . $m_pass . "')")
+        	(". $rid .",
+        	'". $name ."',
+        	'". $desc ."',
+        	'". $chardb ."',
+        	'". $port ."',
+        	'". $a_user ."',
+        	'". $a_pass ."',
+        	'". $raport ."',
+        	'". $soapport ."',
+        	'". $host ."',
+        	'". $sendtype ."',
+        	'". $m_host ."',
+        	'". $m_user ."',
+        	'". $m_pass ."')")
         or die('Could not insert realm into database. (' . mysqli_error($conn) . ')');
 
         echo 'Realm successfully created. <a href="?st=6">Finish Installation</a>';

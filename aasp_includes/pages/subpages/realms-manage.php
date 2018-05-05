@@ -26,10 +26,17 @@
 ?>
 <div class="box_right_title">Manage Realms</div>
 <table class="center">
-    <tr><th>ID</th><th>Name</th><th>Host</th><th>Port</th><th>Character DB</th><th>Actions</th></tr>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Host</th>
+      <th>Port</th>
+      <th>Character DB</th>
+      <th>Actions</th>
+    </tr>
     <?php
         
-        $result = mysqli_query($conn, "SELECT * FROM realms ORDER BY id DESC");
+        $result = mysqli_query($conn, "SELECT * FROM realms ORDER BY id DESC;");
         while ($row    = mysqli_fetch_assoc($result))
         {
             ?>

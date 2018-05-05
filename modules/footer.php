@@ -26,5 +26,5 @@
         echo "Page loaded in ", $end, " seconds. <br/>";
     }
     echo "&copy <a href='http://forums.nomsoftware.com/'>Nomsoft</a> 2011-2012<br>All rights reserved"
-#echo $GLOBALS['footer_text'];
+	echo $GLOBALS['footer_text'];
 ?>

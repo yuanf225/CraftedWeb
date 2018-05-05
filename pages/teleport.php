@@ -21,6 +21,7 @@
 ?>
 <?php
     global $Account, $Website, $Connect;
+    $conn = $Connect->connectToDB();
     $Account->isNotLoggedIn();
 ?>
 <div class='box_two_title'>Character Teleport</div>
@@ -46,16 +47,16 @@ Choose the character & desired location you wish to teleport.
 <h3 id="choosechar">Choose Character</h3> 
 <?php
     $Connect->selectDB('webdb', $conn);
-    $result = mysqli_query($conn, 'SELECT char_db,name FROM realms ORDER BY id ASC');
-    while ($row    = mysqli_fetch_assoc($result))
+    $result = mysqli_query($conn, "SELECT char_db, name FROM realms ORDER BY id ASC;");
+    while ($row = mysqli_fetch_assoc($result))
     {
         $acct_id = $Account->getAccountID($_SESSION['cw_user']);
         $realm   = $row['name'];
         $char_db = $row['char_db'];
 
         $Connect->selectDB($char_db);
-        $result = mysqli_query($conn, 'SELECT name,guid,gender,class,race,level,online FROM characters WHERE account=' . $acct_id);
-        while ($row    = mysqli_fetch_assoc($result))
+        $result = mysqli_query($conn, "SELECT name, guid, gender, class, race, level, online FROM characters WHERE account=". $acct_id .";");
+        while ($row = mysqli_fetch_assoc($result))
         {
             ?>
             <div class='charBox' style="cursor:pointer;" id="<?php echo $row['guid'] . '*' . $char_db; ?>"<?php if ($row['online'] != 1)
@@ -70,19 +71,15 @@ Choose the character & desired location you wish to teleport.
                             else
                             {
                                 ?>
-                                <img src="styles/global/images/portraits/
-                <?php echo $row['gender'] . '-' . $row['race'] . '-' . $row['class']; ?>.gif" border="none">
-                            <?php } ?>
+                                <img src="styles/global/images/portraits/<?php echo $row['gender'] . '-' . $row['race'] . '-' . $row['class']; ?>.gif" border="none"><?php } ?>
                         </td>
 
-                        <td><h3><?php echo $row['name']; ?></h3>
-                            Level <?php echo $row['level'] . " " . $Character->getRace($row['race']) . " " . $Character->getGender($row['gender']) .
-                " " . $Character->getClass($row['class']);
-                ?><br/>
+                        <td>
+                            <h3><?php echo $row['name']; ?></h3>Level <?php echo $row['level'] . " " . $Character->getRace($row['race']) . " " . $Character->getGender($row['gender']) ." " . $Character->getClass($row['class']);?><br/>
                             Realm: <?php echo $realm; ?>
-            <?php if ($row['online'] == 1)
-                echo "<br/><span class='red_text'>Please log out before trying to teleport.</span>";
-            ?>
+                            <?php if ($row['online'] == 1)
+                                echo "<br/><span class='red_text'>Please log out before trying to teleport.</span>";
+                            ?>
                         </td>
                     </tr>                         
                 </table>

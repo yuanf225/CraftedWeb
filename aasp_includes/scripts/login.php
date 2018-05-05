@@ -26,7 +26,6 @@
     include('../functions.php');
 
     global $GameServer;
-
     $conn = $GameServer->connect();
 
     #                                                                   #
@@ -41,19 +40,19 @@
 
         $username     = mysqli_real_escape_string($conn, strtoupper(trim($_POST['username'])));
         $password     = mysqli_real_escape_string($conn, strtoupper(trim($_POST['password'])));
-        $passwordHash = sha1("" . $username . ":" . $password . "");
+        $passwordHash = sha1("". $username .":". $password ."");
 
         if(mysqli_select_db($conn, $GLOBALS['connection']['logondb']) == false)
         {
           die("Database Error.");
         }
 
-        $result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username='" . $username . "' AND sha_pass_hash = '" . $passwordHash . "';");
+        $result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username='". $username ."' AND sha_pass_hash = '". $passwordHash  "';");
 
-        $getId    = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $username . "';");
+        $getId    = mysqli_query($conn, "SELECT id FROM account WHERE username='". $username ."';");
         $row      = mysqli_fetch_assoc($getId);
         $uid      = $row['id'];
-        $result   = mysqli_query($conn, "SELECT gmlevel FROM account_access WHERE id='$uid' AND gmlevel>='" . $GLOBALS[$_POST['panel'] . 'Panel_minlvl'] . "';");
+        $result   = mysqli_query($conn, "SELECT gmlevel FROM account_access WHERE id=$uid AND gmlevel>=". $GLOBALS[$_POST['panel'] . 'Panel_minlvl'] .";");
 
         if (mysqli_num_rows($result) == 0)
         {

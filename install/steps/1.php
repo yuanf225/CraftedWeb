@@ -18,7 +18,8 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?><center>
+?>
+<center>
     <p id="steps">Introduction &raquo; <b>MySQL Info</b> &raquo; Configure &raquo; Database &raquo; Realm Infoq &raquo; Finished<p>
     <hr/>
     <table cellpadding="10" cellspacing="5">
@@ -75,4 +76,5 @@
             <td></td>
             <td><input type="submit" value="Procceed to Step 2" onclick="step1()"></td>
         </tr>
-    </table></center>
+    </table>
+  </center>

@@ -26,16 +26,25 @@
 <div class='box_two_title'>My Account</div>
 <table style="width: 100%; margin-top: -15px;">
     <tr>
-        <td><span class='blue_text'>Account name</span></td><td> <?php echo ucfirst(strtolower($_SESSION['cw_user'])); ?></td>
-        <td><span class='blue_text'>Joined</span></td><td><?php echo $Account->getJoindate($_SESSION['cw_user']); ?></td>
+        <td><span class='blue_text'>Account name</span></td>
+        <td><?php echo ucfirst(strtolower($_SESSION['cw_user'])); ?></td>
+
+        <td><span class='blue_text'>Joined</span></td>
+        <td><?php echo $Account->getJoindate($_SESSION['cw_user']); ?></td>
     </tr>
     <tr>
-        <td><span class='blue_text'>Email adress</span></td><td><?php echo $Account->getEmail($_SESSION['cw_user']); ?></td>
-        <td><span class='blue_text'>Vote Points</span></td><td><?php echo $Account->loadVP($_SESSION['cw_user']); ?></td>
+        <td><span class='blue_text'>Email adress</span></td>
+        <td><?php echo $Account->getEmail($_SESSION['cw_user']); ?></td>
+
+        <td><span class='blue_text'>Vote Points</span></td>
+        <td><?php echo $Account->loadVP($_SESSION['cw_user']); ?></td>
     </tr>
     <tr>
-        <td><span class='blue_text'>Account Status</span></td><td><?php echo $Account->checkBanStatus($_SESSION['cw_user']); ?></td>
-        <td><span class='blue_text'><?php echo $GLOBALS['donation']['coins_name']; ?></span></td><td><?php echo $Account->loadDP($_SESSION['cw_user']); ?></td>
+        <td><span class='blue_text'>Account Status</span></td>
+        <td><?php echo $Account->checkBanStatus($_SESSION['cw_user']); ?></td>
+        
+        <td><span class='blue_text'><?php echo $GLOBALS['donation']['coins_name']; ?></span></td>
+        <td><?php echo $Account->loadDP($_SESSION['cw_user']); ?></td>
     </tr>
     <br/>
 </table>

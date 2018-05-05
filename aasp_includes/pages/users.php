@@ -46,18 +46,21 @@
             <tr>
                 <td><span class='blue_text'>Total users</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($usersTotal)['totalUsers']); ?></td>
+                
                 <td><span class='blue_text'>New users today</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($usersToday)['dailyUsers']); ?></td>
             </tr>
             <tr>
                 <td><span class='blue_text'>New users this month</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($usersMonth)['monthlyUsers']); ?></td>
+                
                 <td><span class='blue_text'>Users online</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($usersOnline)['onlineUsers']); ?></td>
             </tr>
             <tr>
                 <td><span class='blue_text'>Active users (this month)</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($usersActive)['activeUsers']); ?></td>
+                
                 <td><span class='blue_text'>Users logged in today</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($usersActiveToday)['activeUsersToday']); ?></td>
             </tr>

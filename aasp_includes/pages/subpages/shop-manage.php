@@ -19,23 +19,26 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
-    global $GamePage; ?>
+    global $GamePage; 
+?>
 <div class="box_right_title"><?php echo $GamePage->titleLink(); ?> &raquo; Manage Items</div>
 <table width="100%">
     <tr valign="top">
-        <td style="text-align: left; width: 300px;"><h3>Modify Single item</h3>
+        <td style="text-align: left; width: 300px;">
+            <h3>Modify Single item</h3>
             <p/>Entry<br/>
-            <input type="text" style="width: 200px;" id="modsingle_entry"/><br/>
-            Price<br/>
-            <input type="text" style="width: 200px;" id="modsingle_price"/><br/>
-            Shop<br/>
+            <input type="text" style="width: 200px;" id="modsingle_entry"/><br/>Price<br/>
+            <input type="text" style="width: 200px;" id="modsingle_price"/><br/>Shop<br/>
+
             <select style="width: 205px;" id="modsingle_shop">
                 <option value="vote">Vote Shop</option>
                 <option value="donate">Donation Shop</option>
             </select><br/>
+
             <input type="submit" value="Update" onclick="modSingleItem()"/>
             <input type="submit" value="Remove" onclick="delSingleItem()"/>
         </td>
+
         <td style="text-align: left; width: 300px;"><h3>Modify Multiple items</h3>
             <p/>
             Between Item Level<br/>
@@ -55,10 +58,10 @@
         echo "<option>" . $i . "</option>";
     }
 ?>
-            </select><br/>
-            Price<br/>
-            <input type="text" style="width: 200px;" id="modmulti_price"/><br/>
-            Quality<br/>
+            </select>
+            <br/>Price<br/>
+            <input type="text" style="width: 200px;" id="modmulti_price"/><br/>Quality<br/>
+
             <select style="width: 205px;" id="modmulti_quality">
                 <option value="all">All</option>
                 <option value="0">Poor</option>
@@ -67,8 +70,9 @@
                 <option value="3">Rare</option>
                 <option value="4">Epic</option>
                 <option value="5">Legendary</option>
-            </select><br/>
-            Type<br/>
+            </select>
+            <br/>Type<br/>
+
             <select id="modmulti_type" style="width: 205px;">
                 <option value="all">All</option>
                 <option value="0">Consumable</option>
@@ -81,12 +85,13 @@
                 <option value="15-5">Mount</option>
                 <option value="15-2">Pet</option>
             </select>	
-            <br/>
-            Shop<br/>
+            <br/>Shop<br/>
+
             <select style="width: 205px;" id="modmulti_shop">
                 <option value="vote">Vote Shop</option>
                 <option value="donate">Donation Shop</option>
             </select><br/>
+            
             <input type="submit" value="Update" onclick="modMultiItem()"/>
             <input type="submit" value="Remove" onclick="delMultiItem()"/>
         </td>

@@ -19,13 +19,15 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
-    global $Page, $Server, $Account, $conn; ?>
+    global $GamePage, $GameServer, $GameAccount; 
+    $conn = $GameServer->connect();
+?>
 <div class="box_right_title">
-    <?php echo $Page->titleLink(); ?> &raquo; Character Inventory
+    <?php echo $GamePage->titleLink(); ?> &raquo; Character Inventory
 </div>
 Showing inventory of character 
 <a href="?p=users&s=viewchar&guid=<?php echo $_GET['guid']; ?>&rid=<?php echo $_GET['rid']; ?>">
-    <?php echo $Account->getCharName($_GET['guid'], $_GET['rid']); ?>
+    <?php echo $GameAccount->getCharName($_GET['guid'], $_GET['rid']); ?>
 </a>
 <hr/>
 Filter:
@@ -118,10 +120,10 @@ Filter:
 </a> 
 <p/>
 <?php
-    $Server->connectToRealmDB($_GET['rid']);
+    $GameServer->connectToRealmDB($_GET['rid']);
     $equip_array = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18);
 
-    $result = mysqli_query($conn, "SELECT guid, itemEntry, count FROM item_instance WHERE owner_guid='" . (int) $_GET['guid'] . "';");
+    $result = mysqli_query($conn, "SELECT guid, itemEntry, count FROM item_instance WHERE owner_guid=". mysqli_real_escape_string($conn, $_GET['guid']) .";");
     if (mysqli_num_rows($result) == 0)
     {
         echo 'No items was found!';
@@ -137,40 +139,40 @@ Filter:
             {
                 if ($_GET['f'] == 'equip')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='" . $row['guid'] . "' AND bag='0' 
-				        AND slot RANGE(0,18) AND guid='" . (int) $_GET['guid'] . "';");
+                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='". $row['guid'] ."' AND bag='0' 
+				        AND slot RANGE(0,18) AND guid=". mysqli_real_escape_string($conn, $_GET['guid']) .";");
                 }
                 elseif ($_GET['f'] == 'bank')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='" . $row['guid'] . "'
+                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='". $row['guid'] ."'
 				        AND slot>=39 AND slot<=73;");
                 }
                 elseif ($_GET['f'] == 'keyring')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='" . $row['guid'] . "'
+                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='". $row['guid'] ."'
 				        AND slot>=86 AND slot<=117;");
                 }
                 elseif ($_GET['f'] == 'currency')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='" . $row['guid'] . "'
+                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='". $row['guid'] ."'
 				        AND slot>=118 AND slot<=135;");
                 }
             }
             else
             {
-                $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='" . $row['guid'] . "';");
+                $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='". $row['guid'] ."';");
             }
 
             if (mysqli_data_seek($getPos, 0) > 0)
             {
                 $pos = mysqli_fetch_assoc($getPos);
 
-                $Server->selectDB('worlddb');
-                $get = mysqli_query($conn, "SELECT name, entry, quality, displayid FROM item_template WHERE entry='" . $entry . "';");
+                $GameServer->selectDB('worlddb');
+                $get = mysqli_query($conn, "SELECT name, entry, quality, displayid FROM item_template WHERE entry='". $entry ."';");
                 $r   = mysqli_fetch_assoc($get);
 
-                $Server->selectDB('webdb');
-                $getIcon = mysqli_query($conn, "SELECT icon FROM item_icons WHERE displayid='" . $r['displayid'] . "';");
+                $GameServer->selectDB('webdb');
+                $getIcon = mysqli_query($conn, "SELECT icon FROM item_icons WHERE displayid='". $r['displayid'] ."';");
                 if (mysqli_num_rows($getIcon) == 0)
                 {
                     //No icon found. Probably cataclysm item. Get the icon from wowhead instead.
@@ -179,7 +181,7 @@ Filter:
                     $icon = strtolower(mysqli_real_escape_string($conn, $sxml->item->icon));
                     //Now that we have it loaded. Add it into database for future use.
                     //Note that WoWHead XML is extremely slow. This is the main reason why we're adding it into the db.
-                    mysqli_query($conn, "INSERT INTO item_icons VALUES('" . $row['displayid'] . "','" . $icon . "');");
+                    mysqli_query($conn, "INSERT INTO item_icons VALUES('". $row['displayid'] ."', '". $icon ."');");
                 }
                 else
                 {
@@ -187,7 +189,7 @@ Filter:
                     $icon    = strtolower($iconrow['icon']);
                 }
 
-                $Server->connectToRealmDB($_GET['rid']);
+                $GameServer->connectToRealmDB($_GET['rid']);
                 ?>
                 <tr bgcolor="#e9e9e9">
                     <td width="36"><img src="http://static.wowhead.com/images/wow/icons/medium/<?php echo $icon; ?>.jpg"></td>

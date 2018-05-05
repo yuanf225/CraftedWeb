@@ -21,6 +21,9 @@
 #################
 # Not finished. #
 #################
+
+global $Support;
+
 ?>
 <div class='box_two_title'>Support</div>
 <?php exit('This page was never completed.'); ?>
@@ -40,5 +43,5 @@
 </table> 
 <?php
     if (isset($_GET['do']) && $_GET['do'] == "email")
-        support::loadEmailForm();
+        $Support->loadEmailForm();
 ?>      

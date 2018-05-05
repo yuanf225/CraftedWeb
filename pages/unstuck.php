@@ -20,6 +20,7 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
     global $Account, $Website, $Connect;
+    $conn = $Connect->connectToDB();
 ?>
 <div class='box_two_title'>Character Unstuck</div>
 Choose the character you wish to unstuck. The character will be teleported to your character's home location.<hr/>
@@ -43,16 +44,16 @@ Choose the character you wish to unstuck. The character will be teleported to yo
     $Account->isNotLoggedIn();
     $Connect->selectDB('webdb', $conn);
     $num    = 0;
-    $result = mysqli_query($conn, 'SELECT char_db,name FROM realms ORDER BY id ASC');
-    while ($row    = mysqli_fetch_assoc($result))
+    $result = mysqli_query($conn, "SELECT char_db, name FROM realms ORDER BY id ASC;");
+    while ($row = mysqli_fetch_assoc($result))
     {
         $acct_id = $Account->getAccountID($_SESSION['cw_user']);
         $realm   = $row['name'];
         $char_db = $row['char_db'];
 
         $Connect->selectDB($char_db);
-        $result = mysqli_query($conn, 'SELECT name,guid,gender,class,race,level,online FROM characters WHERE account=' . $acct_id);
-        while ($row    = mysqli_fetch_assoc($result))
+        $result = mysqli_query($conn, "SELECT name, guid, gender, class, race, level, online FROM characters WHERE account=". $acct_id .";");
+        while ($row = mysqli_fetch_assoc($result))
         {
             ?><div class='charBox'>
                 <table width="100%">
@@ -64,32 +65,29 @@ Choose the character you wish to unstuck. The character will be teleported to yo
                             else
                             {
                                 ?>
-                                <img src="styles/global/images/portraits/
-                <?php echo $row['gender'] . '-' . $row['race'] . '-' . $row['class']; ?>.gif" border="none">
-                            <?php } ?>
+                                <img src="styles/global/images/portraits/<?php echo $row['gender'] . '-' . $row['race'] . '-' . $row['class']; ?>.gif" border="none"><?php } ?>
                         </td>
 
-                        <td width="160"><h3><?php echo $row['name']; ?></h3>
-            <?php echo $row['level'] . " " . $Character->getRace($row['race']) . " " . $Character->getGender($row['gender']) .
-            " " . $Character->getClass($row['class']);
-            ?>
+                        <td width="160">
+                            <h3><?php echo $row['name']; ?></h3>
+                            <?php echo $row['level'] . " " . $Character->getRace($row['race']) . " " . $Character->getGender($row['gender']) .
+                            " " . $Character->getClass($row['class']);
+                            ?>
                         </td>
 
-                        <td>Realm: <?php echo $realm; ?>
+                        <td>
+                            Realm: <?php echo $realm; ?>
                             <?php if ($row['online'] == 1)
                                 echo "<br/><span class='red_text'>Please log out before trying to unstuck.</span>";
                             ?>
                         </td>
 
-                        <td align="right"> &nbsp; <input type="submit" value="Unstuck" 
-            <?php if ($row['online'] == 0)
-            { ?> 
-                                                             onclick='unstuck(<?php echo $row['guid']; ?>, "<?php echo $char_db; ?>")' <?php }
-        else
-        {
-            echo 'disabled="disabled"';
-        }
-            ?>>
+                        <td align="right"> &nbsp; <input type="submit" value="Unstuck" <?php if ($row['online'] == 0){ ?> onclick='unstuck(<?php echo $row['guid']; ?>, "<?php echo $char_db; ?>")' <?php }
+                        else
+                        {
+                            echo 'disabled="disabled"';
+                        }
+                            ?>>
                         </td>
                     </tr>                         
                 </table>

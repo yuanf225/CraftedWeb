@@ -20,7 +20,8 @@
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    global $Connect, $Plugins, $conn;
+    global $Connect, $Plugins;
+    $conn = $Connect->connectToDB();
     $Connect->selectDB('webdb', $conn);
     $pages = scandir('pages');
     unset($pages[0], $pages[1]);
@@ -48,10 +49,10 @@
     }
     else
     {
-        $result = mysqli_query($conn, "SELECT * FROM custom_pages WHERE filename='" . $page . "'");
+        $result = mysqli_query($conn, "SELECT * FROM custom_pages WHERE filename='". $page ."';");
         if (mysqli_num_rows($result) > 0)
         {
-            $check = mysqli_query($conn, "SELECT COUNT(filename) FROM disabled_pages WHERE filename='" . $page . "'");
+            $check = mysqli_query($conn, "SELECT COUNT(filename) FROM disabled_pages WHERE filename='" . $page . "';");
             if (mysqli_data_seek($check, 0) == 0)
             {
                 $row = mysqli_fetch_assoc($result);

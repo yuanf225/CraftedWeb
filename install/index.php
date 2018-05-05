@@ -19,7 +19,7 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
-<!DOCTYPE html>
+<!DOCTYPE>
 <html lang="en">
     <head>
         <meta charset="utf-8">

@@ -19,11 +19,14 @@
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    $service  = $_GET['s'];
-    $guid     = (int) $_GET['guid'];
-    $realm_id = (int) $_GET['rid'];
+    global $Account, $Website, $Connect, $Character;
+    $conn = $Connect->connectToDB();
 
-    $service_title = ucfirst($service . " Change");
+    $service  = $_GET['s'];
+    $guid     = mysqli_real_escape_string($conn, $_GET['guid']);
+    $realm_id = mysqli_real_escape_string($conn, $_GET['rid']);
+
+    $service_title = ucfirst($service ." Change");
 
     $service_desc = array(
         'race'
@@ -55,9 +58,12 @@
 		<li>A realm transfer is not included in a faction change.</li>
 	</ul>'
     );
-    global $Account, $Website, $Connect, $Character;
+
+    
     if ($GLOBALS['service'][$service]['status'] != "TRUE")
+    {
         echo "This page is currently unavailable.";
+    }
     else
     {
         ?>
@@ -80,13 +86,13 @@
         $Account->isNotLoggedIn();
 
         $Connect->selectDB('webdb', $conn);
-        $result = mysqli_query($conn, "SELECT name FROM realms WHERE id='" . $realm_id . "'");
+        $result = mysqli_query($conn, "SELECT name FROM realms WHERE id=". $realm_id .";");
         $row    = mysqli_fetch_assoc($result);
         $realm  = $row['name'];
 
         $Connect->connectToRealmDB($realm_id);
 
-        $result = mysqli_query($conn, "SELECT name,guid,gender,class,race,level,online FROM characters WHERE guid='" . $guid . "'");
+        $result = mysqli_query($conn, "SELECT name, guid, gender, class, race, level, online FROM characters WHERE guid=". $guid .";");
         $row    = mysqli_fetch_assoc($result)
         ?>
         <h4>Selected character:</h4>

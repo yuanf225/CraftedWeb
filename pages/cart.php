@@ -23,15 +23,20 @@
 ?>
 <div class='box_two_title'>Shopping Cart</div>
 <?php
-    echo '<span class="currency">Vote Points: ' . $Account->loadVP($_SESSION['cw_user']) . '<br/>
-' . $GLOBALS['donation']['coins_name'] . ': ' . $Account->loadDP($_SESSION['cw_user']) . '
-</span>';
+    echo '<span class="currency">Vote Points: '. 
+    $Account->loadVP($_SESSION['cw_user']) . '<br/>
+' . $GLOBALS['donation']['coins_name'] . ': '. $Account->loadDP($_SESSION['cw_user']) . '</span>';
 
     if (isset($_GET['return']) && $_GET['return'] == "true")
-        echo "<span class='accept'>The item(s) was sent to the selected character!</span>";
+    {
+        echo "<span class='accept'>The item/s was/were sent to the selected character!</span>";
+    }
     elseif (isset($_GET['return']) && $_GET['return'] != "true")
+    {
         echo "<span class='alert'>" . $_GET['return'] . "</span>";
+    }
 
+    $conn = $Connect->connectToDB();
     $Account->isNotLoggedIn();
     $Connect->selectDB('webdb', $conn);
 
@@ -55,7 +60,7 @@
                     $sql .= $entry . ',';
 
                     $Connect->selectDB($GLOBALS['connection']['worlddb']);
-                    $result                                     = mysqli_query($conn, "SELECT maxcount FROM item_template WHERE entry='" . $entry . "' AND maxcount>0");
+                    $result = mysqli_query($conn, "SELECT maxcount FROM item_template WHERE entry=" . $entry . " AND maxcount>0;");
                     if (mysqli_data_seek($result, 0) != 0)
                         $_SESSION['donateCart'][$entry]['quantity'] = 1;
 
@@ -64,7 +69,7 @@
             }
         }
 
-        $sql = substr($sql, 0, -1) . ") AND in_shop='donate' ORDER BY `itemlevel` ASC";
+        $sql = substr($sql, 0, -1) . ") AND in_shop='donate' ORDER BY `itemlevel` ASC;";
 
         $query = mysqli_query($conn, $sql);
         ?>
@@ -74,15 +79,18 @@
             while ($row   = mysqli_fetch_array($query))
             {
                 ?><tr align="center">
-                    <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>"><?php echo $row['name']; ?></a></td> <td>
+                    <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>"><?php echo $row['name']; ?></a></td>
+                    <td>
                         <input type="text" value="<?php echo $_SESSION['donateCart'][$row['entry']]['quantity']; ?>" style="width: 30px;"
                                onFocus="$(this).next('.quantitySave').fadeIn()" id="donateCartQuantity-<?php echo $row['entry']; ?>" />
                         <div class="quantitySave" style="display:none;">
                             <a href="#" onclick="saveItemQuantityInCart('donateCart',<?php echo $row['entry']; ?>)">Save</a>
                         </div>
                     </td>
-                    <td><?php echo $_SESSION['donateCart'][$row['entry']]['quantity'] * $row['price']; ?> 
-                        <?php echo $GLOBALS['donation']['coins_name']; ?></td>
+                    <td>
+                        <?php echo $_SESSION['donateCart'][$row['entry']]['quantity'] * $row['price']; ?> 
+                        <?php echo $GLOBALS['donation']['coins_name']; ?>
+                    </td>
                     <td><a href="#" onclick="removeItemFromCart('donateCart',<?php echo $row['entry']; ?>)">Remove</a></td>
                 </tr>
                 <?php
@@ -106,7 +114,7 @@
                 {
                     $sql                                      .= $entry . ',';
                     $Connect->selectDB($GLOBALS['connection']['worlddb']);
-                    $result                                   = mysqli_query($conn, "SELECT maxcount FROM item_template WHERE entry='" . $entry . "' AND maxcount>0");
+                    $result                                   = mysqli_query($conn, "SELECT maxcount FROM item_template WHERE entry=". $entry ." AND maxcount>0;");
                     if (mysqli_data_seek($result, 0) != 0)
                         $_SESSION['voteCart'][$entry]['quantity'] = 1;
 
@@ -143,7 +151,7 @@
         <?php
     }
 ?>
-<br/>Total cost: <?php echo $totalVP; ?> Vote Points, <?php echo $totalDP . ' ' . $GLOBALS['donation']['coins_name']; ?>
+<br/>Total cost: <?php echo $totalVP; ?> Vote Points, <?php echo $totalDP. ' ' .$GLOBALS['donation']['coins_name']; ?>
 <hr/>
 
 <?php
@@ -168,5 +176,7 @@
     }
 
     if ($counter == 0)
+    {
         echo "<span class='attention'>Your cart is empty!</span>";
+    }
 ?>

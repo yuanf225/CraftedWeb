@@ -37,7 +37,7 @@
     }
     else
     {
-        $page   = (isset($_GET['page'])) ? (int) $_GET['page'] : 1;
+        $page   = (isset($_GET['page'])) ? mysqli_real_escape_string($conn, $_GET['page']) : 1;
         $start  = ($page - 1) * $per_page;
         ?>
         <table class="center">
@@ -51,7 +51,7 @@
             <?php
             $GameServer->selectDB('webdb', $conn);
             $countDonators = 0;
-            $result = mysqli_query($conn, "SELECT * FROM payments_log ORDER BY id DESC LIMIT " . $start . "," . $per_page . ";");
+            $result = mysqli_query($conn, "SELECT * FROM payments_log ORDER BY id DESC LIMIT ". $start .", ". $per_page .";");
             while ($row = mysqli_fetch_assoc($result))
             {?>
               <tr>
