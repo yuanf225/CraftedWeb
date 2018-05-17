@@ -25,6 +25,6 @@
         $end = number_format(( microtime(true) - $GLOBALS['start']), 2);
         echo "Page loaded in ", $end, " seconds. <br/>";
     }
-    echo "&copy <a href='http://forums.nomsoftware.com/'>Nomsoft</a> 2011-2012<br>All rights reserved"
+    echo "&copy <a href='http://forums.nomsoftware.com/'>Nomsoft</a> 2011-2012<br>All rights reserved";
 	echo $GLOBALS['footer_text'];
 ?>

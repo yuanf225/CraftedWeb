@@ -162,7 +162,7 @@
             $conn = $this->connect();
             $this->selectDB('logondb', $conn);
             $result = mysqli_query($conn, "SELECT COUNT(id) AS activeMonth FROM account WHERE last_login LIKE '%". date("Y-m") ."%';");
-            $row = mysqli_fetch_assoc($result)
+            $row = mysqli_fetch_assoc($result);
             if ($row['activeMonth'] == null || empty($row['activeMonth'])) $row['activeMonth'] = 0;
             return $row['activeMonth'];
         }
@@ -651,7 +651,7 @@
             }
         }
 
-        public function outputSubPage($panel)
+        public function outputSubPage($panel = null)
         {
             $page    = $_GET['p'];
             $subpage = $_GET['s'];

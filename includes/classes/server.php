@@ -45,7 +45,7 @@
             return $row['name'];
         }
 
-        public static function serverStatus($realm_id)
+        public function serverStatus($realm_id)
         {
             global $Connect;
             $conn = $Connect->connectToDB();

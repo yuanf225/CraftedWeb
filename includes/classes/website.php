@@ -26,7 +26,7 @@
     class Website
     {
 
-        public static function getNews()
+        public function getNews()
         {
             global $Cache, $Connect, $Website;
             $conn = $Connect->connectToDB();
@@ -121,7 +121,7 @@
             }
         }
 
-        public static function getSlideShowImages()
+        public function getSlideShowImages()
         {
             global $Cache, $Connect;
             $conn = $Connect->connectToDB();
@@ -144,7 +144,7 @@
             }
         }
 
-        public static function getSlideShowImageNumbers()
+        public function getSlideShowImageNumbers()
         {
             global $Connect;
             $conn = $Connect->connectToDB();
@@ -160,7 +160,7 @@
             unset($x);
         }
 
-        public static function limit_characters($str, $n)
+        public function limit_characters($str, $n)
         {
             $str = preg_replace("/<img[^>]+\>/i", "(image)", $str);
 
@@ -174,7 +174,7 @@
             }
         }
 
-        public static function loadVotingLinks()
+        public function loadVotingLinks()
         {
             global $Connect, $Account, $Website;
             $conn = $Connect->connectToDB();
@@ -224,7 +224,7 @@
             }
         }
 
-        public static function checkIfVoted($siteid)
+        public function checkIfVoted($siteid)
         {
             global $Account, $Connect;
             $conn = $Connect->connectToDB();
@@ -246,7 +246,7 @@
             }
         }
 
-        public static function sendEmail($to, $from, $subject, $body)
+        public function sendEmail($to, $from, $subject, $body)
         {
             $headers = 'MIME-Version: 1.0' . "\r\n";
             $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -255,7 +255,7 @@
             mail($to, $subject, $body, $headers);
         }
 
-        public static function convertCurrency($currency)
+        public function convertCurrency($currency)
         {
             if ($currency == 'dp')
             {

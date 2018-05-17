@@ -229,7 +229,7 @@
 
                                     if ($row['class'] != "-1")
                                     {
-                                        echo self::getClassMask($row['class']);
+                                        echo $this->getClassMask($row['class']);
                                     }
 
 
@@ -410,7 +410,7 @@
                 (". $entry .", '". $char_id ."', '". date("Y-m-d H:i:s") ."', '". $_SERVER['REMOTE_ADDR'] ."', '". $shop ."', '". $account ."', ". $realm_id .", '". $amount ."')");
         }
 
-        public static function getClassMask($classID)
+        public function getClassMask($classID)
         {
             switch ($classID)
             {

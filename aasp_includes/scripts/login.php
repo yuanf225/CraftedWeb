@@ -47,7 +47,7 @@
           die("Database Error.");
         }
 
-        $result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username='". $username ."' AND sha_pass_hash = '". $passwordHash  "';");
+        $result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username='". $username ."' AND sha_pass_hash = '". $passwordHash ."';");
 
         $getId    = mysqli_query($conn, "SELECT id FROM account WHERE username='". $username ."';");
         $row      = mysqli_fetch_assoc($getId);

@@ -30,7 +30,7 @@
         ####### Log in method
         ###############################
 
-        public static function logIn($username, $password, $last_page, $remember)
+        public function logIn($username, $password, $last_page, $remember)
         {
             if (!isset($username) || !isset($password) || empty($username) || empty($password))
             {
@@ -69,7 +69,7 @@
                         $id = mysqli_fetch_assoc($result);
                         $id = $id['id'];
 
-                        self::GMLogin($username);
+                        $this->GMLogin($username);
                         $_SESSION['cw_user']    = ucfirst(strtolower($username));
                         $_SESSION['cw_user_id'] = $id;
 
@@ -91,7 +91,7 @@
             }
         }
 
-        public static function loadUserData()
+        public function loadUserData()
         {
             //Unused function
             $user_info = array();
@@ -111,7 +111,7 @@
         ####### Log out method
         ###############################
 
-        public static function logOut($last_page)
+        public function logOut($last_page)
         {
             session_destroy();
             setcookie('cw_rememberMe', '', time() - 30758400);
@@ -241,17 +241,17 @@
                 $id     = mysqli_fetch_assoc($result);
                 $id     = $id['id'];
 
-                self::GMLogin($username_clean);
+                $this->GMLogin($username_clean);
 
                 $_SESSION['cw_user']    = ucfirst(strtolower($username_clean));
                 $_SESSION['cw_user_id'] = $id;
 
-                self::forumRegister($username_clean, $password_clean, $email);
+                $this->forumRegister($username_clean, $password_clean, $email);
             }
         }
 
         // Unused
-        /*public static function forumRegister($username, $password, $email)
+        /*public function forumRegister($username, $password, $email)
         {
             date_default_timezone_set($GLOBALS['timezone']);
 
@@ -303,7 +303,7 @@
         ####### Check if a user is logged in method.
         ###############################
 
-        public static function isLoggedIn()
+        public function isLoggedIn()
         {
             if (isset($_SESSION['cw_user']))
             {
@@ -315,7 +315,7 @@
         ####### Check if a user is NOT logged in method.
         ###############################
 
-        public static function isNotLoggedIn()
+        public function isNotLoggedIn()
         {
             if (!isset($_SESSION['cw_user']))
             {
@@ -323,7 +323,7 @@
             }
         }
 
-        public static function isNotGmLoggedIn()
+        public function isNotGmLoggedIn()
         {
             if (!isset($_SESSION['cw_gmlevel']))
             {
@@ -335,12 +335,12 @@
         ####### Return ban status method.
         ###############################
 
-        public static function checkBanStatus($user)
+        public function checkBanStatus($user)
         {
             global $Connect;
             $conn = $Connect->connectToDB();
             $Connect->selectDB('logondb', $conn);
-            $acct_id = self::getAccountID($user);
+            $acct_id = $this->getAccountID($user);
 
             $result = mysqli_query($conn, "SELECT bandate, unbandate, banreason FROM account_banned WHERE id=". $acct_id ." AND active=1;");
             if (mysqli_num_rows($result) > 0)
@@ -370,7 +370,7 @@
         ####### Return account ID method.
         ###############################
 
-        public static function getAccountID($user)
+        public function getAccountID($user)
         {
             global $Connect;
             $conn   = $Connect->connectToDB();
@@ -382,7 +382,7 @@
             return $row['id'];
         }
 
-        public static function getAccountName($id)
+        public function getAccountName($id)
         {
             global $Connect;
             $conn = $Connect->connectToDB();
@@ -403,7 +403,7 @@
             if (isset($_COOKIE['cw_rememberMe']) && !isset($_SESSION['cw_user']))
             {
                 $account_data = explode("*", $_COOKIE['cw_rememberMe']);
-                self::logIn($account_data[0], $account_data[1], $_SERVER['REQUEST_URI'], 835727313);
+                $this->logIn($account_data[0], $account_data[1], $_SERVER['REQUEST_URI'], 835727313);
             }
         }
 
@@ -411,12 +411,12 @@
         ####### Return account Vote Points method.
         ###############################
 
-        public static function loadVP($account_name)
+        public function loadVP($account_name)
         {
             global $Connect;
             $conn = $Connect->connectToDB();
             $accountName = mysqli_real_escape_string($conn, $account_name);
-            $acct_id = self::getAccountID($accountName);
+            $acct_id = $this->getAccountID($accountName);
             $Connect->selectDB('webdb', $conn);
             $result  = mysqli_query($conn, "SELECT vp FROM account_data WHERE id=". $acct_id .";");
             if (mysqli_num_rows($result) == 0)
@@ -430,12 +430,12 @@
             }
         }
 
-        public static function loadDP($account_name)
+        public function loadDP($account_name)
         {
             global $Connect;
             $conn = $Connect->connectToDB();
             $accountName = mysqli_real_escape_string($conn, $account_name);
-            $acct_id = self::getAccountID($accountName);
+            $acct_id = $this->getAccountID($accountName);
             $Connect->selectDB('webdb', $conn);
             $result  = mysqli_query($conn, "SELECT dp FROM account_data WHERE id=". $acct_id .";");
             if (mysqli_num_rows($result) == 0)
@@ -453,7 +453,7 @@
         ####### Return email method.
         ###############################
 
-        public static function getEmail($account_name)
+        public function getEmail($account_name)
         {
             global $Connect;
             $conn = $Connect->connectToDB();
@@ -469,7 +469,7 @@
         ####### Return online status method.
         ###############################
 
-        public static function getOnlineStatus($account_name)
+        public function getOnlineStatus($account_name)
         {
             global $Connect;
             $conn = $Connect->connectToDB();
@@ -490,7 +490,7 @@
         ####### Return Join date method.
         ###############################
 
-        public static function getJoindate($account_name)
+        public function getJoindate($account_name)
         {
             global $Connect;
             $conn = $Connect->connectToDB();
@@ -506,13 +506,13 @@
         ####### Returns a GM session if the user is a GM with rank 2 and above.
         ###############################
 
-        public static function GMLogin($account_name)
+        public function GMLogin($account_name)
         {
             global $Connect;
             $conn = $Connect->connectToDB();
             $Connect->selectDB('logondb', $conn);
             $accountName = mysqli_real_escape_string($conn, $account_name);
-            $acct_id = self::getAccountID($accountName);
+            $acct_id = $this->getAccountID($accountName);
 
             $result = mysqli_query($conn, "SELECT gmlevel FROM account_access WHERE gmlevel > 2 AND id=". $acct_id .";");
             if (mysqli_num_rows($result) > 0)
@@ -522,18 +522,18 @@
             }
         }
 
-        public static function getCharactersForShop($account_name)
+        public function getCharactersForShop($account_name)
         {
             global $Connect;
             $conn = $Connect->connectToDB();
             $accountName = mysqli_real_escape_string($conn, $account_name);
 
-            $acct_id = self::getAccountID($accountName);
+            $acct_id = $this->getAccountID($accountName);
 
             $Connect->selectDB('webdb', $conn);
 
             $getRealms = mysqli_query($conn, "SELECT id, name FROM realms;");
-            while ($row       = mysqli_fetch_assoc($getRealms))
+            while ($row = mysqli_fetch_assoc($getRealms))
             {
                 $Connect->connectToRealmDB($row['id']);
                 $result = mysqli_query($conn, "SELECT name, guid FROM characters WHERE account=". $acct_id .";");
@@ -550,7 +550,7 @@
             }
         }
 
-        public static function changeEmail($email, $current_pass)
+        public function changeEmail($email, $current_pass)
         {
             $errors = array();
 
@@ -614,16 +614,18 @@
         }
 
         //Used for the change password page.
-        public static function changePass($old, $new, $new_repeat)
+        public function changePass($old, $new, $new_repeat)
         {
             global $Connect;
             $conn = $Connect->connectToDB();
-            $_POST['current_password']    = mysqli_real_escape_string($conn, trim($old));
-            $_POST['new_password']        = mysqli_real_escape_string($conn, trim($new));
-            $_POST['new_password_repeat'] = mysqli_real_escape_string($conn, trim($new_repeat));
+            $_POST['current_password']    = mysqli_real_escape_string($conn, $old);
+            $_POST['new_password']        = mysqli_real_escape_string($conn, $new);
+            $_POST['new_password_repeat'] = mysqli_real_escape_string($conn, $new_repeat);
 
             //Check if all field values has been typed into
-            if (empty($_POST['current_password']) || empty($_POST['new_password']) || empty($_POST['new_password_repeat']))
+            if (empty($_POST['current_password']) || 
+                empty($_POST['new_password']) || 
+                empty($_POST['new_password_repeat']))
             {
                 echo '<b class="red_text">Please type in all fields!</b>';
             }
@@ -652,14 +654,14 @@
                         $thePass = $row['sha_pass_hash'];
 
                         $pass      = mysqli_real_escape_string($conn, strtoupper($_POST['current_password']));
-                        $pass_hash = sha1($username . ':' . $pass);
+                        $pass_hash = sha1("". $username .":". $pass ."");
 
                         $new_password      = mysqli_real_escape_string($conn, strtoupper($_POST['new_password']));
-                        $new_password_hash = sha1($username . ':' . $new_password);
+                        $new_password_hash = sha1("". $username .":". $new_password ."");
 
                         if ($thePass != $pass_hash)
                         {
-                            echo '<b class="red_text">The old password is not correct!</b>';
+                            echo "<b class='red_text'>The old password is not correct!</b>'";
                         }
                         else
                         {
@@ -673,7 +675,7 @@
             }
         }
 
-        public static function changePassword($account_name, $password)
+        public function changePassword($account_name, $password)
         {
             global $Connect;
             $conn = $Connect->connectToDB();
@@ -685,10 +687,10 @@
             mysqli_query($conn, "UPDATE `account` SET `sha_pass_hash`='". $pass_hash ."' WHERE `username`='". $username ."';");
             mysqli_query($conn, "UPDATE `account` SET `v`=0 AND `s`=0 WHERE username='". $username ."';");
 
-            self::logThis("Changed password", "passwordchange", NULL);
+            $this->logThis("Changed password", "passwordchange", NULL);
         }
 
-        public static function forgotPW($account_name, $account_email)
+        public function forgotPW($account_name, $account_email)
         {
             global $Website, $Account, $Connect;
             $conn = $Connect->connectToDB();
@@ -717,15 +719,15 @@
 				Hello there. <br/><br/>
 				A password reset has been requested for the account " . $accountName . " <br/>
 				If you wish to reset your password, click the following link: <br/>
-				<a href='" . $GLOBALS['website_domain'] . "?p=forgotpw&code=" . $code . "&account=" . self::getAccountID($accountName) . "'>
-				" . $GLOBALS['website_domain'] . "?p=forgotpw&code=" . $code . "&account=" . self::getAccountID($accountName) . "</a>
+				<a href='" . $GLOBALS['website_domain'] . "?p=forgotpw&code=" . $code . "&account=" . $this->getAccountID($accountName) . "'>
+				" . $GLOBALS['website_domain'] . "?p=forgotpw&code=" . $code . "&account=" . $this->getAccountID($accountName) . "</a>
 				
 				<br/><br/>
 				
 				If you did not request this, just ignore this message.<br/><br/>
 				Sincerely, The Management.");
 
-                    $account_id = self::getAccountID($accountName);
+                    $account_id = $this->getAccountID($accountName);
                     $Connect->selectDB('webdb', $conn);
 
                     mysqli_query($conn, "DELETE FROM password_reset WHERE account_id=". $account_id .";");
@@ -744,7 +746,7 @@
                 $points         = mysqli_real_escape_string($conn, $points);
                 $accountName    = mysqli_real_escape_string($conn, $account_name);
 
-                $account_id = self::getAccountID($accountName);
+                $account_id = $this->getAccountID($accountName);
                 $Connect->selectDB('webdb', $conn);
                 $result = mysqli_query($conn, "SELECT COUNT('id') FROM account_data WHERE vp >= ". $points ." AND id=". $account_id .";");
 
@@ -765,7 +767,7 @@
 
                 $points         = mysqli_real_escape_string($conn, $points);
                 $accountName    = mysqli_real_escape_string($conn, $account_name);
-                $account_id = self::getAccountID($accountName);
+                $account_id = $this->getAccountID($accountName);
                 $Connect->selectDB('webdb', $conn);
 
                 $result = mysqli_query($conn, "SELECT COUNT('id') FROM account_data WHERE dp >=". $points ." AND id=". $account_id .";");
@@ -850,7 +852,7 @@
                 $conn = $Connect->connectToDB();
 
                 $accountName = mysqli_real_escape_string($conn, $account_name);
-                $account_id  = self::getAccountID($accountName);
+                $account_id  = $this->getAccountID($accountName);
                 $result      = mysqli_query($conn, "SELECT COUNT(id) FROM account_access WHERE id=". $account_id ." AND gmlevel >= 1;");
                 if (mysqli_data_seek($result, 0) > 0)
                 {

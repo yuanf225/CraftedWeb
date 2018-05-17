@@ -23,7 +23,7 @@
     class Character
     {
 
-        public static function unstuck($guid, $char_db)
+        public function unstuck($guid, $char_db)
         {
             global $Connect, $Account, $Server;
             $conn = $Connect->connectToDB();
@@ -34,7 +34,7 @@
             $rid  = $Server->getRealmId($charDb);
             $Connect->connectToRealmDB($rid);
 
-            if (self::isOnline($guId) == TRUE)
+            if ($this->isOnline($guId) == TRUE)
             {
                 echo '<b class="red_text">Please log out your character before proceeding.';
             }
@@ -81,13 +81,13 @@
                     map='". $new_map ."' 
                     WHERE guid=". $guId .";");
 
-                $Account->logThis("Performed unstuck on " . self::getCharName($guId, $rid), 'Unstuck', $rid);
+                $Account->logThis("Performed unstuck on " . $this->getCharName($guId, $rid), 'Unstuck', $rid);
 
                 return TRUE;
             }
         }
 
-        public static function revive($guid, $char_db)
+        public function revive($guid, $char_db)
         {
             global $Connect, $Server, $Account;
             $conn = $Connect->connectToDB();
@@ -98,7 +98,7 @@
             $rid  = $Server->getRealmId($charDb);
             $Connect->connectToRealmDB($rid);
 
-            if (self::isOnline($guId) == TRUE)
+            if ($this->isOnline($guId) == TRUE)
             {
                 echo '<b class="red_text">Please log out your character before proceeding.';
             }
@@ -130,13 +130,13 @@
 
                 mysqli_query($conn, "DELETE FROM character_aura WHERE guid=". $guId ." AND spell=20584 OR guid=". $guId ." AND spell=8326;");
 
-                $Account->logThis("Performed a revive on " . self::getCharName($guId, $rid), 'Revive', $rid);
+                $Account->logThis("Performed a revive on " . $this->getCharName($guId, $rid), 'Revive', $rid);
 
                 return TRUE;
             }
         }
 
-        public static function instant80($values)
+        public function instant80($values)
         {
             global $Connect, $Account;
             $conn = $Connect->connectToDB();
@@ -147,7 +147,7 @@
 
             $Connect->connectToRealmDB($values[1]);
 
-            if (self::isOnline($values[0]) == TRUE)
+            if ($this->isOnline($values[0]) == TRUE)
             {
                 echo '<b class="red_text">Please log out your character before proceeding.';
             }
@@ -177,14 +177,14 @@
                     $Connect->connectToRealmDB($values[1]);
                     mysqli_query($conn, "UPDATE characters SET level=80 WHERE guid=". $values[0] .";");
 
-                    $Account->logThis("Performed an instant max level on " . self::getCharName($values[0], NULL), 'Instant', NULL);
+                    $Account->logThis("Performed an instant max level on " . $this->getCharName($values[0], NULL), 'Instant', NULL);
 
                     echo '<h3 class="green_text">The character level was set to 80!</h3>';
                 }
             }
         }
 
-        public static function isOnline($char_guid)
+        public function isOnline($char_guid)
         {
             global $Connect;
             $conn = $Connect->connectToDB();
@@ -201,7 +201,7 @@
             }
         }
 
-        public static function getRace($value)
+        public function getRace($value)
         {
             switch ($value)
             {
@@ -260,7 +260,7 @@
             }
         }
 
-        public static function getGender($value)
+        public function getGender($value)
         {
             if ($value == 1)
             {
@@ -276,7 +276,7 @@
             }
         }
 
-        public static function getClass($value)
+        public function getClass($value)
         {
             switch ($value)
             {
@@ -331,12 +331,12 @@
             }
         }
 
-        public static function getClassIcon($value)
+        public function getClassIcon($value)
         {
             return '<img src="styles/global/images/icons/class/'. $value .'.gif" />';
         }
 
-        public static function getFactionIcon($value)
+        public function getFactionIcon($value)
         {
             $a = array(1, 3, 4, 7, 11, 22);
             $h = array(2, 5, 6, 8, 9, 10);
@@ -351,7 +351,7 @@
             }
         }
 
-        public static function getCharName($id, $realm_id)
+        public function getCharName($id, $realm_id)
         {
             global $Connect;
             $conn = $Connect->connectToDB();

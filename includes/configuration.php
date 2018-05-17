@@ -54,7 +54,7 @@
     $adminPanel_enable = true; //Enable or disable the Administrator Panel. 
     $staffPanel_enable = true; //Enable or disable the Staff Panel. 
 
-    $adminPanel_minlvl = 5; //Minimum gm level of which accounts are able to log in to the Admin Panel. Default: 5
+    $adminPanel_minlvl = 4; //Minimum gm level of which accounts are able to log in to the Admin Panel. Default: 5
     $staffPanel_minlvl = 3; //Minimum gm level of which accounts are able to log in to the Staff Panel. Default: 3
 
     $staffPanel_permissions['Pages']                 = false;

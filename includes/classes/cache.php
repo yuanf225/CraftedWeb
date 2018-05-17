@@ -23,7 +23,7 @@
     class Cache
     {
 
-        public static function buildCache($filename, $content)
+        public function buildCache($filename, $content)
         {
           if ($GLOBALS['useCache'] == TRUE)
           {
@@ -38,11 +38,11 @@
           }
           else
           {
-            self::deleteCache($filename);
+            $this->deleteCache($filename);
           }
         }
 
-        public static function loadCache($filename)
+        public function loadCache($filename)
         {
           if ($GLOBALS['useCache'] == TRUE)
           {
@@ -57,11 +57,11 @@
           }
           else
           {
-            self::deleteCache($filename);
+            $this->deleteCache($filename);
           }
         }
 
-        public static function deleteCache($filename)
+        public function deleteCache($filename)
         {
           if (file_exists('cache/' . $filename . '.cache.php'))
           {
@@ -73,7 +73,7 @@
           }
         }
 
-        public static function exists($filename)
+        public function exists($filename)
         {
           if (file_exists('cache/' . $filename . '.cache.php'))
           {

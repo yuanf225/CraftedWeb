@@ -23,8 +23,8 @@
     class Page
     {
 
-        $page   = null;
-        $values = array();
+        var $page   = null;
+        var $values = array();
 
         function __construct($template)
         {
