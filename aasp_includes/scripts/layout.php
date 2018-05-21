@@ -35,8 +35,13 @@
     #                                                                   #
     if ($_POST['action'] == "setTemplate")
     {
+        $templateId = mysqli_real_escape_string($conn, $_POST['id']);
         mysqli_query($conn, "UPDATE template SET applied=0 WHERE applied=1;");
-        mysqli_query($conn, "UPDATE template SET applied=1 WHERE id=". mysqli_real_escape_string($conn, $_POST['id']) .";");
+        $result = mysqli_query($conn, "UPDATE template SET applied=1 WHERE id=". $templateId .";");
+
+        $GameServer->logThis("Template Changed To ". $templateId);
+        if ($result) echo TRUE;
+        else echo FALSE;
     }
 
     #                                                                   #
@@ -46,7 +51,7 @@
     {
         $name = mysqli_real_escape_string($conn, trim($_POST['name']));
         $path = mysqli_real_escape_string($conn, trim($_POST['path']));
-        mysqli_query($conn, "INSERT INTO template (name, path, applied) VALUES('$name', '$path', 0);");
+        mysqli_query($conn, "INSERT INTO template (`name`, `path`, `applied`) VALUES('". $name ."', '". $path ."', 0);");
         $GameServer->logThis("Installed the template " . $_POST['name']);
     }
 
@@ -55,7 +60,8 @@
     #                                                                   #
     if ($_POST['action'] == "uninstallTemplate")
     {
-        mysqli_query($conn, "DELETE FROM template WHERE id=". mysqli_real_escape_string($conn, $_POST['id']) .";");
+        $templateId = mysqli_real_escape_string($conn, $_POST['id']);
+        mysqli_query($conn, "DELETE FROM template WHERE id=". $templateId .";");
         mysqli_query($conn, "UPDATE template SET applied=1 ORDER BY id ASC LIMIT 1;");
 
         $GameServer->logThis("Uninstalled a template");

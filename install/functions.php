@@ -205,7 +205,7 @@
 	$showLoadTime = true; 
 	//Shows the page load time in the footer.
 	 
-	$footer_text = \'Copyright &copy; ' . $_SESSION['install']['database']['title'] . ' date(\'Y\')<br/>
+	$footer_text = \'Copyright &copy; ' . $_SESSION['install']['database']['title'] . ' \'.date(\'Y\')\'.<br/>
 	All rights reserved\'; //Set the footer text, displayed at the bottom.
 	//Tips: &copy; = Copyright symbol. <br/> = line break.
 	 

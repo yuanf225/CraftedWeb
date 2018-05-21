@@ -39,7 +39,7 @@
         <select id="choose_template">
             <?php
             $result = mysqli_query($conn, "SELECT * FROM template ORDER BY id ASC;");
-            while ($row    = mysqli_fetch_assoc($result))
+            while ($row = mysqli_fetch_assoc($result))
             {
                 if ($row['applied'] == 1)
                 {

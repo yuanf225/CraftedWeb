@@ -18,24 +18,21 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
-?>
-<?php
+
     require('includes/classes/template_parse.php');
 
     global $Connect, $Plugins;
     $conn = $Connect->connectToDB();
     $Connect->selectDB('webdb', $conn);
 
-    $getTemplate = mysqli_query($conn, "SELECT path FROM template WHERE applied=1 ORDER BY id ASC LIMIT 1;");
+    $getTemplate = mysqli_query($conn, "SELECT `path` FROM template WHERE applied=1;");
 
-    $row = mysqli_fetch_assoc($getTemplate);
+    $template = mysqli_fetch_assoc($getTemplate);
 
-    $template['path'] = $row['path'];
-
-    if (!file_exists("styles/" . $template['path'] . "/style.css") || !file_exists("styles/" . $template['path'] . "/template.html"))
+    if (!file_exists("styles/". $template['path'] ."/style.css") || !file_exists("styles/" . $template['path'] . "/template.html"))
     {
-        buildError("<b>Template Error: </b>The active template does not exist or missing files. " . $template['path'], NULL);
-        exit_page();
+      buildError("<b>Template Error: </b>The active template does not exist or missing files. " . $template['path'], NULL);
+      exit_page();
     }
 ?>
 <link rel="stylesheet" href="styles/<?php echo $template['path']; ?>/style.css" />

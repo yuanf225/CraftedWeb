@@ -81,9 +81,9 @@ function setTemplate() {
     showLoader();
     $("#loading").html("Saving...");
     $.post("../aasp_includes/scripts/layout.php", {action: "setTemplate", id: id},
-            function (data) {
-                window.location = '?p=interface'
-            });
+        function (data) {
+            window.location = '?p=interface'
+        });
 
 }
 

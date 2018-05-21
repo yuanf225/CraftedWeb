@@ -129,7 +129,7 @@
         if ($realm == "NULL")
             die("<pre>Please select a realm.</pre>");
 
-        $GameServer->selectDB($realm);
+        $GameServer->selectDB($realm, $conn);
 
         $result = mysqli_query($conn, "SELECT ". $ticketString .", name, message, createtime, ". $guidString .", ". $closedString ." FROM gm_tickets ORDER BY ticketId DESC;");
         if (mysqli_num_rows($result) == 0)

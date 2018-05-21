@@ -22,7 +22,7 @@
 
     require('includes/misc/headers.php'); //Load sessions, erorr reporting & ob.
 
-    if (file_exists('install/index.php'))
+    if (file_exists("install/index.php"))
     {
         header("Location: install/index.php");
     }
