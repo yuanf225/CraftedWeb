@@ -34,7 +34,9 @@
         {
             if (!isset($username) || !isset($password) || empty($username) || empty($password))
             {
-                echo '<span class="red_text">Please enter both fields.</span>';
+                echo '<span class="red_text">
+                        Please enter both fields.
+                      </span>';
             }
             else
             {
@@ -47,7 +49,9 @@
                 $checkForAccount = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username='". $username ."';");
                 if (mysqli_data_seek($checkForAccount, 0) == 0)
                 {
-                    echo '<span class="red_text">Invalid username.</span>';
+                    echo '<span class="red_text">
+                            Invalid username.
+                        </span>';
                 }
                 else
                 {
@@ -56,13 +60,15 @@
                     $result = mysqli_query($conn, "SELECT id FROM account WHERE username='". $username ."' AND sha_pass_hash='". $password ."';");
                     if (mysqli_num_rows($result) == 0)
                     {
-                        echo '<span class="red_text">Wrong password.</span>';
+                        echo '<span class="red_text">
+                                Wrong password.
+                            </span>';
                     }
                     else
                     {
                         if ($remember == 'on')
                         {
-                            setcookie("cw_rememberMe", $username . ' * ' . $password, time() + 30758400);
+                            setcookie("cw_rememberMe", $username .' * '. $password, time() + 30758400);
                             //Set "remember me" cookie. Expires in 1 year.
                         }
 
@@ -80,7 +86,7 @@
 
                         if (!empty($last_page))
                         {
-                            header("Location: " . $last_page);
+                            header("Location: ". $last_page);
                         }
                         else
                         {
@@ -98,7 +104,8 @@
             global $Connect, $conn;
             $Connect->selectDB('logondb', $conn);
 
-            $account_info = mysqli_query($conn, "SELECT id, username, email, joindate, locked, last_ip, expansion FROM account WHERE username='". $_SESSION['cw_user'] ."';");
+            $account_info = mysqli_query($conn, "SELECT id, username, email, joindate, locked, last_ip, expansion FROM account 
+                                                    WHERE username='". $_SESSION['cw_user'] ."';");
             while ($row = mysqli_fetch_array($account_info))
             {
                 $user_info[] = $row;
@@ -229,7 +236,7 @@
             {
                 $password = sha1("". $username .":". $password ."");
                 mysqli_query($conn, "INSERT INTO account (username, email, sha_pass_hash, joindate, expansion, recruiter) 
-                    VALUES('". $username ."','". $email ."','". $password ."','". date("Y-m-d H:i:s") ."','". $GLOBALS['core_expansion'] ."','". $raf ."');");
+                    VALUES('". $username ."', '". $email ."', '". $password ."', '". date("Y-m-d H:i:s") ."', '". $GLOBALS['core_expansion'] ."', '". $raf ."');");
 
                 $getID = mysqli_query($conn, "SELECT id FROM account WHERE username='". $username ."';");
                 $row   = mysqli_fetch_assoc($getID);
@@ -462,6 +469,7 @@
 
             $result       = mysqli_query($conn, "SELECT email FROM account WHERE username='". $accountName ."';");
             $row          = mysqli_fetch_assoc($result);
+
             return $row['email'];
         }
 
@@ -499,6 +507,7 @@
 
             $result       = mysqli_query($conn, "SELECT joindate FROM account WHERE username='". $account_name ."';");
             $row          = mysqli_fetch_assoc($result);
+
             return $row['joindate'];
         }
 
@@ -638,9 +647,13 @@
                 }
                 else
                 {
-                    if (strlen($_POST['new_password']) < $GLOBALS['registration']['passMinLength'] || strlen($_POST['new_password']) > $GLOBALS['registration']['passMaxLength'])
+                    if (strlen($_POST['new_password']) < $GLOBALS['registration']['passMinLength'] || 
+                        strlen($_POST['new_password']) > $GLOBALS['registration']['passMaxLength'])
                     {
-                        echo "<b class='red_text'>Your password must be between ". $GLOBALS['registration']['passMinLength'] ." and ". $GLOBALS['registration']['passMaxLength'] ." letters</b>";
+                        echo "<b class='red_text'>
+                                Your password must be between ". $GLOBALS['registration']['passMinLength'] ." 
+                                and ". $GLOBALS['registration']['passMaxLength'] ." letters.
+                            </b>";
                     }
                     else
                     {
@@ -661,12 +674,16 @@
 
                         if ($thePass != $pass_hash)
                         {
-                            echo "<b class='red_text'>The old password is not correct!</b>'";
+                            echo "<b class='red_text'>
+                                    The old password is not correct!
+                                </b>'";
                         }
                         else
                         {
                             //success, change password
-                            echo "<b class='green_text'>Your Password was changed!</b>";
+                            echo "<b class='green_text'>
+                                    Your Password was changed!
+                                </b>";
                             mysqli_query($conn, "UPDATE account SET sha_pass_hash='". $new_password_hash ."' WHERE username='". $username ."';");
                             mysqli_query($conn, "UPDATE account SET v=0 AND s=0 WHERE username='". $username ."';");
                         }
@@ -709,18 +726,20 @@
 
                 if (mysqli_data_seek($result, 0) == 0)
                 {
-                    echo '<b class="red_text">The username or email is incorrect.</b>';
+                    echo '<b class="red_text">
+                            The username or email is incorrect.
+                        </b>';
                 }
                 else
                 {
                     //Success, lets send an email & add the forgotpw thingy.
                     $code = RandomString();
                     $Website->sendEmail($accountEmail, $GLOBALS['default_email'], 'Forgot Password', "
-				Hello there. <br/><br/>
-				A password reset has been requested for the account " . $accountName . " <br/>
-				If you wish to reset your password, click the following link: <br/>
-				<a href='" . $GLOBALS['website_domain'] . "?p=forgotpw&code=" . $code . "&account=" . $this->getAccountID($accountName) . "'>
-				" . $GLOBALS['website_domain'] . "?p=forgotpw&code=" . $code . "&account=" . $this->getAccountID($accountName) . "</a>
+        				Hello there. <br/><br/>
+        				A password reset has been requested for the account ". $accountName ." <br/>
+        				If you wish to reset your password, click the following link: <br/>
+        				<a href='". $GLOBALS['website_domain'] ."?p=forgotpw&code=". $code ."&account=". $this->getAccountID($accountName) ."'>
+        				". $GLOBALS['website_domain'] ."?p=forgotpw&code=". $code ."&account=". $this->getAccountID($accountName) ."</a>
 				
 				<br/><br/>
 				
@@ -731,8 +750,8 @@
                     $Connect->selectDB('webdb', $conn);
 
                     mysqli_query($conn, "DELETE FROM password_reset WHERE account_id=". $account_id .";");
-                    mysqli_query($conn, "INSERT INTO password_reset (code, account_id)
-                        VALUES ('". $code ."', ". $account_id .");");
+                    mysqli_query($conn, "INSERT INTO password_reset (code, account_id) VALUES ('". $code ."', ". $account_id .");");
+
                     echo "An email containing a link to reset your password has been sent to the Email address you specified. 
 					  If you've tried to send other forgot password requests before this, they won't work. <br/>";
                 }
@@ -748,7 +767,7 @@
 
                 $account_id = $this->getAccountID($accountName);
                 $Connect->selectDB('webdb', $conn);
-                $result = mysqli_query($conn, "SELECT COUNT('id') FROM account_data WHERE vp >= ". $points ." AND id=". $account_id .";");
+                $result = mysqli_query($conn, "SELECT COUNT(id) FROM account_data WHERE vp >= ". $points ." AND id=". $account_id .";");
 
                 if (mysqli_data_seek($result, 0) == 0)
                 {
@@ -825,6 +844,7 @@
 
                 $accountId  = mysqli_real_escape_string($conn, $account_id);
                 $points     = mysqli_real_escape_string($conn, $points);
+
                 $Connect->selectDB('webdb', $conn);
 
                 mysqli_query($conn, "UPDATE account_data SET dp=dp + ". $points ." WHERE id=". $accountId .";");
@@ -843,6 +863,7 @@
 
                 $result = mysqli_query($conn, "SELECT account FROM characters WHERE guid=". $charId .";");
                 $row    = mysqli_fetch_assoc($result);
+
                 return $row['account'];
             }
 
@@ -876,7 +897,7 @@
 
                 $Connect->selectDB('webdb', $conn);
                 mysqli_query($conn, "INSERT INTO user_log (`account`, `service`, `timestamp`, `ip`, `realmid`, `desc`) 
-                    VALUES('". $account ."','". $service ."','". time() ."','". $_SERVER['REMOTE_ADDR'] ."','". $realmId ."','". $desc ."');");
+                    VALUES('". $account ."', '". $service ."', '". time() ."', '". $_SERVER['REMOTE_ADDR'] ."', '". $realmId ."', '". $desc ."');");
             }
         }
     }

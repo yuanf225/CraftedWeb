@@ -23,14 +23,14 @@
     class Page
     {
 
-        var $page   = null;
-        var $values = array();
+        public static $page   = null;
+        public static $values = array();
 
         function __construct($template)
         {
             if (file_exists($template))
             {
-                $this->page = join("", file($template));
+              self::$page = join("", file($template));
             }
         }
 
@@ -52,7 +52,7 @@
                     foreach ($tags as $tag => $data)
                     {
                         $data       = (file_exists($data)) ? $this->parse($data) : $data;
-                        $this->page = preg_replace("({" . $tag . "})", $data, $this->page);
+                        self::$page = preg_replace("({" . $tag . "})", $data, self::$page);
                     }
                 }
             }
@@ -60,12 +60,12 @@
 
         function setVar($key, $array)
         {
-            $this->values[$key] = $array;
+            self::$values[$key] = $array;
         }
 
         function output()
         {
-            echo $this->page;
+            echo self::$page;
         }
 
         function loadCustoms()

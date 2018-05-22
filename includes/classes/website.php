@@ -57,12 +57,16 @@
                                 echo $newsPT1 = '
 						       <table class="news" width="100%"> 
 							        <tr>
-									    <td><h3 class="yellow_text">' . $row['title'] . '</h3></td>
+									    <td>
+                                            <h3 class="yellow_text">'. 
+                                                $row['title'] 
+                                            .'</h3></td>
 								    </tr>
 							   </table>
 	                           <table class="news_content" cellpadding="4"> 
 							       <tr>
-							          <td><img src="' . $row['image'] . '" alt=""/></td> 
+							          <td>
+                                        <img src="'. $row['image'] .'" alt=""/></td> 
 							          <td>';
                             }
                             else
@@ -70,7 +74,11 @@
                                 echo $newsPT1 = '
 						       <table class="news" width="100%"> 
 							        <tr>
-									    <td><h3 class="yellow_text">' . $row['title'] . '</h3></td>
+									    <td>
+                                            <h3 class="yellow_text">'. 
+                                                $row['title'] 
+                                            .'</h3>
+                                        </td>
 								    </tr>
 							   </table>
 	                           <table class="news_content" cellpadding="4"> 
@@ -106,11 +114,11 @@
                             }
 
                             echo $newsPT2 = '
-						<br/><br/><br/>
-						<i class="gray_text"> Written by ' . $row['author'] . ' | ' . $row['date'] . ' ' . $comments . '</i>
-						</td> 
-						</tr>
-					    </table>';
+        						<br/><br/><br/>
+        						<i class="gray_text"> Written by ' . $row['author'] . ' | ' . $row['date'] . ' ' . $comments . '</i>
+        						</td> 
+        						</tr>
+        					    </table>';
                             $output  .= $newsPT2;
                             unset($newsPT2);
                         }
@@ -132,7 +140,7 @@
             else
             {
                 $Connect->selectDB('webdb', $conn);
-                $result = mysqli_query($conn, "SELECT path, link FROM slider_images ORDER BY position ASC;");
+                $result = mysqli_query($conn, "SELECT `path`, `link` FROM slider_images ORDER BY position ASC;");
                 while ($row = mysqli_fetch_assoc($result))
                 {
                     echo $outPutPT = '<a href="' . $row['link'] . '">
@@ -150,13 +158,15 @@
             $conn = $Connect->connectToDB();
             $Connect->selectDB('webdb', $conn);
 
-            $result = mysqli_query($conn, "SELECT position FROM slider_images ORDER BY position ASC;");
+            $result = mysqli_query($conn, "SELECT `position` FROM slider_images ORDER BY position ASC;");
             $x      = 1;
+
             while ($row = mysqli_fetch_assoc($result))
             {
                 echo '<a href="#" rel="' . $x . '">' . $x . '</a>';
                 $x++;
             }
+            
             unset($x);
         }
 
@@ -249,7 +259,7 @@
         public function sendEmail($to, $from, $subject, $body)
         {
             $headers = 'MIME-Version: 1.0' . "\r\n";
-            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+            $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
             $headers .= 'From: ' . $from . "\r\n";
 
             mail($to, $subject, $body, $headers);

@@ -96,7 +96,8 @@
                     $advanced .= " AND itemlevel<='" . $ilevelto . "'";
                 }
 
-                $count = mysqli_query($conn, "SELECT COUNT(id) AS item FROM shopitems WHERE name LIKE '%". $value ."%' AND in_shop = '". $shop ."' ". $advanced .";");
+                $count = mysqli_query($conn, "SELECT COUNT(id) AS item FROM shopitems 
+                                        WHERE name LIKE '%". $value ."%' AND in_shop = '". $shop ."' ". $advanced .";");
 
                 if (mysqli_data_seek($count, 0) == 0)
                 {
@@ -117,8 +118,8 @@
                 }
             }
 
-            $result = mysqli_query($conn, "SELECT entry, displayid, name, quality, price, faction, class FROM shopitems WHERE name LIKE '%". $value ."%' 
-									AND in_shop = '". mysqli_real_escape_string($conn, $shop) ."' ". $advanced .";");
+            $result = mysqli_query($conn, "SELECT entry, displayid, name, quality, price, faction, class FROM shopitems 
+                                            WHERE name LIKE '%". $value ."%' AND in_shop = '". mysqli_real_escape_string($conn, $shop) ."' ". $advanced .";");
 
             if ($results != "--Results--")
             {

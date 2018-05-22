@@ -18,6 +18,7 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
+
     global $GameServer, $GamePage;
     $conn = $GameServer->connect();
 
@@ -35,74 +36,67 @@
 
         if (!isset($_GET['action']))
         {
-
-            ?><table class='center'>
+            ?>
+            <table class='center'>
                 <tr>
                     <th>Name</th>
                     <th>File name</th>
                     <th>Actions</th>
                 </tr>
 
-        <?php 
-            $result = mysqli_query($conn, "SELECT * FROM custom_pages ORDER BY id ASC;");
-            while ($row    = mysqli_fetch_assoc($result))
-            {
-                $disabled = true;
-                $check = mysqli_query($conn, "SELECT COUNT(filename) FROM disabled_pages WHERE filename='". $row['filename'] ."';");
-                if (mysqli_data_seek($check, 0) == 0)
+            <?php 
+                $result = mysqli_query($conn, "SELECT * FROM custom_pages ORDER BY id ASC;");
+                while ($row = mysqli_fetch_assoc($result))
                 {
                     $disabled = false;
-                }
-                ?>
-                <tr <?php
-                if ($disabled)
-                {
-                    echo "style='color: #999;'";
-                }
-                ?>>
-                    <td width="50"><?php echo $row['name']; ?></td>
-                    <td width="100"><?php echo $row['filename']; ?>(Database)</td>
-                    <td><select id="action-<?php echo $row['filename']; ?>"><?php
-                            if ($disabled == true)
-                            {
-                                ?>
-                                <option value="1">Enable</option>
-                                <?php
-                            }
-                            else
-                            {
-                                ?>
-                                <option value="2">Disable</option>
-                        <?php } ?>
-                            <option value="3">Edit</option>
-                            <option value="4">Remove</option>
-                        </select> &nbsp;<input type="submit" value="Save" onclick="savePage('<?php echo $row['filename']; ?>')"></td>
-                </tr>
+                    $check = mysqli_query($conn, "SELECT COUNT(filename) AS filename FROM disabled_pages WHERE filename='". $row['filename'] ."';");
+                    if (mysqli_fetch_assoc($check)['filename'] == 1)
+                    {
+                        $disabled = true;
+                    }
+                    ?>
+                    <tr <?php if ($disabled) echo "style='color: #999;'"; ?>>
+                        <td width="50"><?php echo $row['name']; ?></td>
+                        <td width="100"><?php echo $row['filename']; ?>(Database)</td>
+                        <td><select id="action-<?php echo $row['filename']; ?>"><?php
+                                if ($disabled == true)
+                                {
+                                    ?>
+                                    <option value="1">Enable</option>
+                                    <?php
+                                }
+                                elseif ($disabled == false)
+                                {
+                                    ?>
+                                    <option value="2">Disable</option>
+                            <?php } ?>
+                                <option value="3">Edit</option>
+                                <option value="4">Remove</option>
+                            </select> &nbsp;<input type="submit" value="Save" onclick="savePage('<?php echo $row['filename']; ?>')"></td>
+                    </tr>
                 <?php
             }
 
             if (is_array($GLOBALS['core_pages']) || is_object($GLOBALS['core_pages']))
             {
-                foreach ($GLOBALS['core_pages'] as $k => $v)
+                foreach ($GLOBALS['core_pages'] as $pageName => $fileName)
                 {
-                    $filename = substr($v, 0, -4);
+                    $filename = substr($fileName, 0, -4);
                     unset($check);
-                    $disabled = true;
-                    $check    = mysqli_query($conn, "SELECT COUNT(filename) FROM disabled_pages WHERE filename='" . $filename . "';");
-                    if (mysqli_data_seek($check, 0) == 0)
+                    $check = mysqli_query($conn, "SELECT COUNT(filename) AS filename FROM disabled_pages WHERE filename='". $filename ."';");
+                    if (mysqli_fetch_assoc($check)['filename'] == 1)
+                    {
+                        $disabled = true;
+                    }
+                    else
                     {
                         $disabled = false;
                     }
                     ?>
 
-                    <tr <?php
-                    if ($disabled)
-                    {
-                        echo "style='color: #999;'";
-                    }
-                    ?>>
-                        <td><?php echo $k; ?></td>
-                        <td><?php echo $v; ?></td>
+                    <tr <?php if ($disabled) echo "style='color: #999;'"; ?>>
+                        <td><?php echo $pageName; ?></td>
+                        <td><?php echo $fileName; ?></td>
                         <td><select id="action-<?php echo $filename; ?>">
                                 <?php
                                 if ($disabled)
@@ -111,10 +105,10 @@
                                     <option value="1">Enable</option>
                                     <?php
                                 }
-                                else
+                                elseif (!$disabled)
                                 {?>
                                     <option value="2">Disable</option>
-                    <?php } ?>
+                            <?php } ?>
                             </select> &nbsp;<input type="submit" value="Save" onclick="savePage('<?php echo $filename; ?>')"></td>
                     </tr>
             <?php } ?>

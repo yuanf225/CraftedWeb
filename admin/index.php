@@ -230,36 +230,29 @@
                         <table>
                             <tr valign="top">
                                 <td>
-
                                     <tr>
                                         <td>MySQL Host: </td>
                                         <td>MySQL User: </td>
                                         <td>MySQL Password: </td>
                                     </tr>
-
                                 </td>
                                 <td>
-
                                     <tr style="font-weight: bold;">
                                         <td><?php echo $GLOBALS['connection']['host']; ?></td>
                                         <td><?php echo $GLOBALS['connection']['user']; ?></td>
-                                        <td><?php echo substr($GLOBALS['connection']['password'], 0, 4); ?>****<br/></td>
+                                        <td>****<br/></td>
                                     </tr>
-
                                 </td>
                                 <td>
-
                                     <tr>
                                         <td>Logon Database: </td>
                                         <td>Website Database: </td>
                                         <td>World Database: </td>
                                         <td>Database Revision: </td>
                                     </tr>
-
                                 </td>
                                 <td>
                                     <tr style="font-weight: bold;">
-                                        
                                         <td><?php echo $GLOBALS['connection']['logondb']; ?></td>
                                         <td><?php echo $GLOBALS['connection']['webdb']; ?></td>
                                         <td><?php echo $GLOBALS['connection']['worlddb']; ?></td>
@@ -272,7 +265,6 @@
                                                 echo $row['version'];
                                             ?>
                                         </td>
-
                                     </tr>
                                 </td>
                             </tr>
@@ -285,8 +277,7 @@
     <?php
         include("../aasp_includes/javascript_loader.php");
         if (!isset($_SESSION['cw_admin']))
-        {
-            ?>
+        { ?>
             <script type="text/javascript">
                 document.onkeydown = function (event)
                 {

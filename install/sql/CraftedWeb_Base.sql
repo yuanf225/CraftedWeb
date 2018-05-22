@@ -221,7 +221,7 @@ CREATE TABLE IF NOT EXISTS `template`
   `id` int(32) NOT NULL auto_increment,
   `name` varchar(32) NOT NULL,
   `path` varchar(100) NOT NULL,
-  `applied` enum('0','1') DEFAULT '0',
+  `applied` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

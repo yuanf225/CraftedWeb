@@ -19,16 +19,18 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
-    if (!isset($_SESSION))
+    if (!isset($_SESSION) && empty($_SESSION))
         session_start();
 
-    if (isset($_SESSION['cw_staff']) && !isset($_SESSION['cw_staff_id']))
+    if (isset($_SESSION['cw_staff']) && !isset($_SESSION['cw_staff_id']) && 
+        !empty($_SESSION['cw_staff']) && empty($_SESSION['cw_staff_id']))
     {
         exit('Seems like you\'re missing 1 or more sessions. You\'ve been logged out due to security reasons.');
         session_destroy();
     }
 
-    if (isset($_SESSION['cw_admin']) && !isset($_SESSION['cw_admin_id']))
+    if (isset($_SESSION['cw_admin']) && !isset($_SESSION['cw_admin_id']) &&
+        !empty($_SESSION['cw_admin']) && empty($_SESSION['cw_admin_id']))
     {
         exit('Seems like you\'re missing 1 or more sessions. You\'ve been logged out due to security reasons.');
         session_destroy();
@@ -46,7 +48,7 @@
             $conn = $this->connect();
             $this->selectDB('logondb', $conn);
 
-            $result = mysqli_query($conn, "SELECT COUNT(id) AS connections FROM account WHERE online='1';");
+            $result = mysqli_query($conn, "SELECT COUNT(id) AS connections FROM account WHERE online=1;");
             return mysqli_fetch_assoc($result)['connections'];
         }
 
@@ -54,7 +56,7 @@
         {
             $conn = $this->connect();
             $this->connectToRealmDB($realmId);
-            $result = mysqli_query($conn, "SELECT COUNT(guid) AS online FROM characters WHERE online='1';");
+            $result = mysqli_query($conn, "SELECT COUNT(guid) AS online FROM characters WHERE online=1;");
             if (!$this->getServerStatus($realmId, false)) 
             {
                 return '-----';
@@ -100,7 +102,7 @@
                 $uptime   = $uptime / 24;
             }
             
-            return ceil($uptime) . " " . $string;
+            return ceil($uptime) ." ". $string;
         }
         
         public function getServerStatus($realmId, $showText = true)
@@ -151,9 +153,11 @@
         {
             $conn = $this->connect();
             $this->selectDB('logondb', $conn);
-            $result = mysqli_query($conn, "SELECT COUNT(id) AS accountsCreated FROM account WHERE joindate LIKE '%" . date("Y-m-d") . "%';");
+            $result = mysqli_query($conn, "SELECT COUNT(id) AS accountsCreated FROM account WHERE joindate LIKE '%". date("Y-m-d") ."%';");
             $row = mysqli_fetch_assoc($result);
-            if ($row['accountsCreated'] == null || empty($row['accountsCreated'])) $row['accountsCreated'] = 0;
+            if ($row['accountsCreated'] == null || empty($row['accountsCreated'])) 
+                $row['accountsCreated'] = 0;
+
             return $row['accountsCreated'];
         }
 
@@ -163,7 +167,9 @@
             $this->selectDB('logondb', $conn);
             $result = mysqli_query($conn, "SELECT COUNT(id) AS activeMonth FROM account WHERE last_login LIKE '%". date("Y-m") ."%';");
             $row = mysqli_fetch_assoc($result);
-            if ($row['activeMonth'] == null || empty($row['activeMonth'])) $row['activeMonth'] = 0;
+            if ($row['activeMonth'] == null || empty($row['activeMonth'])) 
+                $row['activeMonth'] = 0;
+
             return $row['activeMonth'];
         }
 
@@ -173,7 +179,9 @@
             $this->selectDB('logondb', $conn);
             $result = mysqli_query($conn, "SELECT COUNT(id) AS activeConnections FROM account WHERE online=1;");
             $row = mysqli_fetch_assoc($result);
-            if ($row['activeConnections'] == null || empty($row['activeConnections'])) $row['activeConnections'] = 0;
+            if ($row['activeConnections'] == null || empty($row['activeConnections'])) 
+                $row['activeConnections'] = 0;
+
             return $row['activeConnections'];
         }
 
@@ -216,13 +224,23 @@
 
             $result = mysqli_query($conn, "SELECT COUNT(*) AS accountsToday FROM account WHERE last_login LIKE '%" . date('Y-m-d') . "%'");
             $row = mysqli_fetch_assoc($result);
-            if ($row['accountsToday'] == null || empty($row['accountsToday'])) $row['accountsToday'] = 0;
+            if ($row['accountsToday'] == null || empty($row['accountsToday'])) 
+                $row['accountsToday'] = 0;
+
             return $row['accountsToday'];
         }
 
         public function connect()
         {
-            return mysqli_connect($GLOBALS['connection']['host'], $GLOBALS['connection']['user'], $GLOBALS['connection']['password']);
+            if($conn = mysqli_connect($GLOBALS['connection']['host'], $GLOBALS['connection']['user'], $GLOBALS['connection']['password']))
+            {
+                mysqli_set_charset($conn, "utf8");
+                return $conn;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public function connectToRealmDB($realmId)
@@ -238,16 +256,16 @@
                     $row['mysqli_user'] != $GLOBALS['connection']['user'] || 
                     $row['mysqli_pass'] != $GLOBALS['connection']['password'])
                 {
-                    return mysqli_connect($row['mysqli_host'], $row['mysqli_user'], $row['mysqli_pass'])or
-                            buildError("<b>Database Connection error:</b> A connection could not be established to Realm. Error: " . mysqli_error($conn), NULL);
+                    return mysqli_connect($row['mysqli_host'], $row['mysqli_user'], $row['mysqli_pass']) 
+                        or buildError("<b>Database Connection error:</b> A connection could not be established to Realm. Error: ". mysqli_error($conn), NULL);
                 }
                 else
                 {
                     return $this->connect();
                 }
 
-                mysqli_select_db($conn, $row['char_db']) or
-                        buildError("<b>Database Selection error:</b> The realm database could not be selected. Error: " . mysqli_error($conn), NULL);
+                mysqli_select_db($conn, $row['char_db']) 
+                    or buildError("<b>Database Selection error:</b> The realm database could not be selected. Error: " . mysqli_error($conn), NULL);
             }
         }
 
@@ -256,19 +274,19 @@
             switch ($database)
             {
                 default:
-                    mysqli_select_db($connection, $database);
+                    if(mysqli_set_charset($connection, "utf8")) mysqli_select_db($connection, $database);
                     break;
 
                 case('logondb'):
-                    mysqli_select_db($connection, $GLOBALS['connection']['logondb']);
+                    if(mysqli_set_charset($connection, "utf8")) mysqli_select_db($connection, $GLOBALS['connection']['logondb']);
                     break;
 
                 case('webdb'):
-                    mysqli_select_db($connection, $GLOBALS['connection']['webdb']);
+                    if(mysqli_set_charset($connection, "utf8")) mysqli_select_db($connection, $GLOBALS['connection']['webdb']);
                     break;
 
                 case('worlddb'):
-                    mysqli_select_db($connection, $GLOBALS['connection']['worlddb']);
+                    if(mysqli_set_charset($connection, "utf8")) mysqli_select_db($connection, $GLOBALS['connection']['worlddb']);
                     break;
             }
         }
@@ -312,11 +330,10 @@
                 ('". $url ."', '". $_SERVER['REMOTE_ADDR'] ."', '". time() ."', '". $action ."', '". $aid ."', '". $extended ."');");
         }
 
-        public function addRealm($id, $name, $desc, $host, $port, $chardb, $sendtype, $rank_user, $rank_pass, $ra_port, $soap_port, $m_host, $m_user, $m_pass)
+        public function addRealm($name, $desc, $host, $port, $chardb, $sendtype, $rank_user, $rank_pass, $ra_port, $soap_port, $m_host, $m_user, $m_pass)
         {
 
             $conn      = $this->connect();
-            $id        = mysqli_real_escape_string($conn, $id);
             $name      = mysqli_real_escape_string($conn, $name);
             $desc      = mysqli_real_escape_string($conn, $desc);
             $host      = mysqli_real_escape_string($conn, $host);
@@ -333,7 +350,12 @@
 
             if (empty($name) || empty($host) || empty($port) || empty($chardb) || empty($rank_user) || empty($rank_pass))
             {
-                echo "<pre><b class='red_text'>Please enter all required fields!</b></pre><br/>";
+                echo "<pre>
+                        <b class='red_text'>
+                            Please enter all required fields!
+                        </b>
+                    </pre>
+                    <br/>";
             }
             else
             {
@@ -360,7 +382,19 @@
 
                 $this->selectDB('webdb', $conn);
                 mysqli_query($conn, "INSERT INTO realms VALUES 
-                    ('". $id ."', '". $name ."', '". $desc ."', '". $chardb ."', '". $port ."', '". $rank_user ."', '". $rank_pass ."', '". $ra_port ."', '". $soap_port ."', '". $host ."', '". $sendtype ."', '". $m_host ."', '". $m_user ."', '". $m_pass ."';)");
+                    ('". $name ."', 
+                    '". $desc ."', 
+                    '". $chardb ."', 
+                    ". $port .", 
+                    '". $rank_user ."', 
+                    '". $rank_pass ."', 
+                    '". $ra_port ."', 
+                    '". $soap_port ."', 
+                    '". $host ."', 
+                    '". $sendtype ."', 
+                    '". $m_host ."', 
+                    '". $m_user ."', 
+                    '". $m_pass ."';)");
 
                 $this->logThis("Added the realm ". $name ."<br/>");
 
@@ -380,7 +414,8 @@
             $result = mysqli_query($conn, "SELECT name FROM realms WHERE id=". $ID .";");
             $row    = mysqli_fetch_assoc($result);
 
-            if (!empty($row['name'])) $value = $row['name'];
+            if (!empty($row['name'])) 
+                $value = $row['name'];
 
             return $value;
         }
@@ -392,10 +427,9 @@
             $this->selectDB('webdb', $conn);
 
 
-
             //Check for old votelogs
             $old    = time() - 2592000;
-            $result = mysqli_query($conn, "SELECT COUNT(*) AS records FROM votelog WHERE `timestamp` <= ". $old ."");
+            $result = mysqli_query($conn, "SELECT COUNT(*) AS records FROM votelog WHERE `timestamp` <= ". $old .";");
 
             if (mysqli_data_seek($result, 0) > 1)
             {
@@ -423,7 +457,7 @@
                 $rid = $_COOKIE['presetRealmStatus'];
             }
 
-            echo 'Selected realm: <b>' . $this->getRealmName($rid) . '</b> <a href="#" onclick="changePresetRealmStatus()">(Change Realm)</a><hr/>';
+            echo 'Selected realm: <b>' . $this->getRealmName($rid) . '</b><a href="#" onclick="changePresetRealmStatus()">(Change Realm)</a><hr/>';
             ?>
             <table>
                 <tr valign="top">
@@ -464,7 +498,7 @@
         }
     }
     $GameServer = new GameServer();
-    $conn = $GameServer->connect();
+    $conn       = $GameServer->connect();
 
     #                                                                   #
         ############################################################
@@ -472,7 +506,6 @@
 
     class GameAccount
     {
-
         public function getAccID($user)
         {
             global $GameServer;
@@ -519,8 +552,11 @@
             if (mysqli_num_rows($result) > 0)
             {
                 $row = mysqli_fetch_assoc($result);
-                if (!empty($row['name'])) 
+                if (!empty($row['name']))
+                {
                     return $row['name'];
+                    exit;
+                }
             }
 
             return $return;
@@ -536,6 +572,7 @@
 
             $result = mysqli_query($conn, "SELECT email FROM account WHERE id=". $accountId .";");
             $row    = mysqli_fetch_assoc($result);
+
             return $row['email'];
         }
 
@@ -590,10 +627,11 @@
                 $time = date("Y-m-d H:i", $row['unbandate']);
 
             return
-                    "<font size='-4'><b class='red_text'>Banned</b><br/>
-                    Unban date: <b>" . $time . "</b><br/>
-                    Banned by: <b>" . $row['bannedby'] . "</b><br/>
-                    Reason: <b>" . $row['banreason'] . "</b></font>";
+                    "<font size='-4'>
+                    <b class='red_text'>Banned</b><br/>
+                    Unban date: <b>". $time ."</b><br/>
+                    Banned by: <b>". $row['bannedby'] ."</b><br/>
+                    Reason: <b>". $row['banreason'] ."</b></font>";
         }
 
         private function downloadFile($url, $path)
@@ -674,7 +712,7 @@
 
         public function titleLink()
         {
-            return '<a href="?p=' . $_GET['p'] . '" title="Back to ' . ucfirst($_GET['p']) . '">' . ucfirst($_GET['p']) . '</a>';
+            return '<a href="?p='. $_GET['p'] .'" title="Back to '. ucfirst($_GET['p']) .'">'. ucfirst($_GET['p']) .'</a>';
         }
 
         public function addSlideImage($upload, $path, $url)
@@ -686,7 +724,7 @@
             $path = mysqli_real_escape_string($conn, $path);
             $url  = mysqli_real_escape_string($conn, $url);
 
-            if (empty($path))
+            if (empty($path) || empty($url))
             {
                 //No path set, upload image.
                 if ($upload['error'] > 0)
@@ -701,31 +739,34 @@
                         ($upload["type"] == "image/pjpeg") || 
                         ($upload["type"] == "image/png"))
                     {
-                        if (file_exists("../styles/global/slideshow/images/" . $upload["name"]))
+                        if (file_exists("../styles/global/slideshow/images/". $upload["name"]))
                         {
-                            unlink("../styles/global/slideshow/images/" . $upload["name"]);
-                            move_uploaded_file($upload["tmp_name"], "../styles/global/slideshow/images/" . $upload["name"]);
-                            $path = "../styles/global/slideshow/images/" . $upload["name"];
+                            unlink("../styles/global/slideshow/images/". $upload["name"]);
+                            move_uploaded_file($upload["tmp_name"], "../styles/global/slideshow/images/". $upload["name"]);
+                            $path = "../styles/global/slideshow/images/". $upload["name"];
                         }
                         else
                         {
-                            move_uploaded_file($upload["tmp_name"], "../styles/global/slideshow/images/" . $upload["name"]);
-                            $path = "styles/global/slideshow/images/" . $upload["name"];
+                            move_uploaded_file($upload["tmp_name"], "../styles/global/slideshow/images/". $upload["name"]);
+                            $path = "styles/global/slideshow/images/". $upload["name"];
                         }
                     }
                     else
+                    {
                         $abort = true;
+                    }
                 }
             }
             else
-                $path = $path;
+            {
+                die("Path/Url Cannot Be Empty.");
+            }
 
             if (!$abort)
             {
-                mysqli_query($conn, "INSERT INTO slider_images (`path`, `link`) VALUES('". $path ."','". $url ."');");
+                mysqli_query($conn, "INSERT INTO slider_images (`path`, `link`) VALUES('". $path ."', '". $url ."');");
             }
         }
-
     }
     $GamePage = new GamePage();
 

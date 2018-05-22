@@ -19,18 +19,30 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
+  function setError($haystack)
+  {
+    return strpos($haystack, "Error") !== false;
+  }
+
+
     global $GameServer, $GameAccount;
     $conn = $GameServer->connect();
 ?>
 <div class="box_right_title">Dashboard</div>
 <table style="width: 605px;">
     <tr>
-        <td><span class='blue_text'>Active Connections</span></td><td><?php echo $GameServer->getActiveConnections(); ?></td>
-        <td><span class='blue_text'>Active accounts(This month)</span></td><td><?php echo $GameServer->getActiveAccounts(); ?></td>
+        <td><span class='blue_text'>Active Connections</span></td>
+        <td><?php echo $GameServer->getActiveConnections(); ?></td>
+        
+        <td><span class='blue_text'>Active accounts(This month)</span></td>
+        <td><?php echo $GameServer->getActiveAccounts(); ?></td>
     </tr>
     <tr>
-        <td><span class='blue_text'>Accounts logged in today</span></td><td><?php echo $GameServer->getAccountsLoggedToday(); ?></td> 
-        <td><span class='blue_text'>Accounts created today</span></td><td><?php echo $GameServer->getAccountsCreatedToday(); ?></td>
+        <td><span class='blue_text'>Accounts logged in today</span></td>
+        <td><?php echo $GameServer->getAccountsLoggedToday(); ?></td>
+
+        <td><span class='blue_text'>Accounts created today</span></td>
+        <td><?php echo $GameServer->getAccountsCreatedToday(); ?></td>
     </tr>
 </table>
 </div>
@@ -43,10 +55,10 @@
     <div class="box_right_title">Admin Panel log</div>
     <?php
         $GameServer->selectDB('webdb', $conn);
-        $result = mysqli_query($conn, "SELECT * FROM admin_log ORDER BY id DESC LIMIT 10;");
+        $result = mysqli_query($conn, "SELECT * FROM admin_log ORDER BY id DESC LIMIT 25;");
         if (mysqli_num_rows($result) == 0)
         {
-            echo "The admin log was empty!";
+            echo "The admin log is empty!";
         }
         else
         {
@@ -64,7 +76,7 @@
                         <td><?php echo $GameAccount->getAccName($row['account']); ?></td>
                         <td><?php echo $row['action']; ?></td>
                     </tr>
-        <?php } ?>
+          <?php } ?>
             </table><br/>
             <a href="?p=logs&s=admin" title="Get more logs">Older logs...</a>
     <?php } ?>

@@ -38,7 +38,6 @@
         if (isset($_POST['add_realm']))
         {
             $GameServer->addRealm(
-                $_POST['realm_id'], 
                 $_POST['realm_name'], 
                 $_POST['realm_desc'], 
                 $_POST['realm_host'], 
@@ -57,10 +56,12 @@
 
         <form action="?p=realms" method="post" style="line-height: 15px;">
             <b>General Realm Information</b><hr/>
+            <!-- 
             Realm ID: <br/>
             <input type="text" name="realm_id" placeholder="Default: 1"/> <br/>
             <i class='blue_text'>This must be the same ID of the one you have specified in your realmlist table in Auth. 
                 Otherwise the uptime won't work properly if you have more than 1 realm.</i><br/>
+            -->
             Realm Name: <br/>
             <input type="text" name="realm_name" placeholder="Default: Sample Realm"/> <br/>
             (Optional) Realm Description: <br/>

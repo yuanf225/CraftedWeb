@@ -9,7 +9,9 @@
         {
             case(1):
                 step1(
-                    $_POST['realmlist'], $_POST['host'], $_POST['user'], $_POST['pass'], $_POST['webdb'], $_POST['worlddb'], $_POST['logondb'], $_POST['domain'], $_POST['title'], $_POST['email'], $_POST['expansion'], $_POST['paypal']
+                    $_POST['realmlist'], $_POST['host'], $_POST['user'], $_POST['pass'], 
+                    $_POST['webdb'], $_POST['worlddb'], $_POST['logondb'], 
+                    $_POST['domain'], $_POST['title'], $_POST['email'], $_POST['expansion'], $_POST['paypal']
                 );
                 break;
 
@@ -27,15 +29,20 @@
 
             case(5):
                 step5(
-                    $_POST['rid'], $_POST['name'], $_POST['port'], $_POST['host'], $_POST['m_host'], $_POST['m_user'], $_POST['m_pass'], $_POST['a_user'], $_POST['a_pass'], $_POST['desc'], $_POST['sendtype'], $_POST['chardb'], $_POST['raport'], $_POST['soapport']
-                );
+                    $_POST['rid'], $_POST['name'], $_POST['port'], 
+                    $_POST['host'], $_POST['m_host'], $_POST['m_user'], 
+                    $_POST['m_pass'], $_POST['a_user'], $_POST['a_pass'], 
+                    $_POST['desc'], $_POST['sendtype'], $_POST['chardb'], 
+                    $_POST['raport'], $_POST['soapport']);
                 break;
         }
     }
 
     function step1($realmlist, $host, $user, $pass, $webdb, $worlddb, $logondb, $domain, $title, $email, $exp, $paypal)
     {
-        if (empty($host) || empty($user) || empty($logondb) || empty($worlddb) || empty($webdb) || empty($realmlist) || empty($title) || empty($domain) || empty($email))
+        if (empty($host) || empty($user) || empty($logondb) || 
+        	empty($worlddb) || empty($webdb) || empty($realmlist) || 
+        	empty($title) || empty($domain) || empty($email))
         {
             exit('Please enter all fields!');
         }
@@ -58,22 +65,16 @@
 
     function step2()
     {
+    	$config = false;
+    	$sql = false;
         if (is_writable('../includes/configuration.php'))
         {
             $config = true;
-        }
-        else
-        {
-            $config = false;
         }
 
         if (is_readable('sql/CraftedWeb_Base.sql'))
         {
             $sql = true;
-        }
-        else
-        {
-            $sql = false;
         }
 
         if ($sql == true && $config == true)
@@ -100,17 +101,20 @@
         $conn = mysqli_connect(
         	$_SESSION['install']['database']['host'], 
         	$_SESSION['install']['database']['user'], 
-        	$_SESSION['install']['database']['pass']) or die ('<br/>[FAILURE] Could not connect to the database. Please restart the installation. ');
+        	$_SESSION['install']['database']['pass'])
+        	or die ('<br/>[FAILURE] Could not connect to the database. Please restart the installation. ');
 
         echo '<br/>[Success] Connected to database.';
         echo '<br/>[Info] Creating Website database...';
 
-        mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS " . mysqli_real_escape_string($conn, $_SESSION['install']['database']['webdb'])) or die ('<br/>[FAILURE] Could not create the website database. Please restart the installation.');
+        mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS ". mysqli_real_escape_string($conn, $_SESSION['install']['database']['webdb']) .";") 
+        	or die ('<br/>[FAILURE] Could not create the website database. Please restart the installation.');
 
         echo '<br/>[Success] Created Website database';
         echo '<br/>[Info] Connecting to Website database';
 
-        mysqli_select_db($conn, $_SESSION['install']['database']['webdb']) or die ('<br/>[FAILURE] Could not connect to the Website database. Please restart the installation.');
+        mysqli_select_db($conn, $_SESSION['install']['database']['webdb']) 
+        	or die ('<br/>[FAILURE] Could not connect to the Website database. Please restart the installation.');
 
         echo '<br/>[Success] Connected to Website database';
         echo '<br/>[Info] Creating tables & inserting data into Website database...';
@@ -125,10 +129,9 @@
             {
                 if (strlen($stmt) > 3)
                 {
-                    $result = mysqli_query($conn, $stmt);
-                    if (!$result)
+                    if (!mysqli_query($conn, $stmt))
                     {
-                        die('<br/>[FAILURE] Could not run SQL file for the Website database. Please restart the installation. (' . mysqli_error($conn) . ')');
+                        die('<br/>[FAILURE] Could not run SQL file for the Website database. Please restart the installation. ('. mysqli_error($conn) .')');
                     }
                 }
             }
@@ -147,8 +150,7 @@
             {
                 if (strlen($stmt) > 3)
                 {
-                    $result = mysqli_query($conn, $stmt);
-                    if (!$result)
+                    if (!mysqli_query($conn, $stmt))
                     {
                         $err = 1;
                     }
@@ -161,7 +163,7 @@
         }
         else
         {
-            echo '<br/>[Info] <i>item_icons</i> was not imported. (' . mysqli_error($conn) . ')';
+            echo '<br/>[Info] <i>item_icons</i> was not imported. ('. mysqli_error($conn) .')';
         }
 
         echo '<br/>[Info] Writing configuration file...';
@@ -177,6 +179,9 @@
 	## GENERATION 1            ##
 	## Author:				   ##
 	## Anthony @ CraftedDev    ##
+	## Edited/Modified:        ##
+	## Alexandre @ SkyLiner    ##
+	## github.com/alexandre433 ##
 	## ------------------------##
 	## Please note that:       ##
 	## true = Enabled          ##
@@ -194,25 +199,25 @@
 	$maintainance_allowIPs = array(\'herp.derp.13.37\'); //Allow specific IP addresses to view the website even though you have maintainance mode enabled.
 	//Example: \'123.456.678\', \'987.654.321\'
 	 
-	$website_title = \'' . $_SESSION['install']['database']['title'] . '\'; //The title of your website, shown in the users browser.
+	$website_title = \''. $_SESSION['install']['database']['title'] .'\'; //The title of your website, shown in the users browser.
 	 
-	$default_email = \'' . $_SESSION['install']['database']['email'] . '\'; //The default email address from wich Emails will be sent.
+	$default_email = \''. $_SESSION['install']['database']['email'] .'\'; //The default email address from wich Emails will be sent.
 
-	$website_domain = \'' . $_SESSION['install']['database']['domain'] . '\'; //Provide the domain name AND PATH to your website.
+	$website_domain = \''. $_SESSION['install']['database']['domain'] .'\'; //Provide the domain name AND PATH to your website.
 	//Example: http://yourserver.com/
 	//If you have your website in a sub-directory, include that aswell. Ex: http://yourserver.com/cataclysm/
 	 
 	$showLoadTime = true; 
 	//Shows the page load time in the footer.
 	 
-	$footer_text = \'Copyright &copy; ' . $_SESSION['install']['database']['title'] . ' \'.date(\'Y\')\'.<br/>
+	$footer_text = \'Copyright &copy; '. $_SESSION['install']['database']['title'] .' \'.date(\'Y\').\'<br/>
 	All rights reserved\'; //Set the footer text, displayed at the bottom.
 	//Tips: &copy; = Copyright symbol. <br/> = line break.
 	 
-	$timezone = \'Europe/Belgrade\'; //Set the time zone for your website. Default: Europe/Belgrade (GMT +1)
+	$timezone = \''. date_default_timezone_get() .'\'; //Gets the time zone for your website, from the server\'s location/timezone.
 	//Full list of supported timezones can be found here: http://php.net/manual/en/timezones.php
 	 
-	$core_expansion = ' . $_SESSION['install']['database']['exp'] . '; //The expansion of your server.
+	$core_expansion = '. $_SESSION['install']['database']['exp'] .'; //The expansion of your server.
 	// 0 = Vanilla
 	// 1 = The Burning Crusade
 	// 2 = Wrath of The Lich King
@@ -257,7 +262,7 @@
 	$enablePlugins = true; //Enable or disable the use of plugins. Plugins May slow down your site a bit.
 	 
 	/*************************/
-	/* 	Slideshow settings 
+	# 	Slideshow settings 
 	/*************************/
 	$enableSlideShow = true; //Enable or Disable the slideshow. This will only be shown at the home page. 
 	
@@ -296,13 +301,13 @@
 	/* mysqli connection settings
 	/*************************/
 	
-	$connection[\'host\'] 		= \'' . $_SESSION['install']['database']['host'] . '\';
-	$connection[\'user\'] 		= \'' . $_SESSION['install']['database']['user'] . '\';
-	$connection[\'password\'] 	= \'' . $_SESSION['install']['database']['pass'] . '\';
-	$connection[\'logondb\'] 	= \'' . $_SESSION['install']['database']['logondb'] . '\';
-	$connection[\'webdb\'] 		= \'' . $_SESSION['install']['database']['webdb'] . '\';
-	$connection[\'worlddb\'] 	= \'' . $_SESSION['install']['database']['worlddb'] . '\';
-	$connection[\'realmlist\'] 	= \'' . $_SESSION['install']['database']['realmlist'] . '\';
+	$connection[\'host\'] 		= \''. $_SESSION['install']['database']['host'] .'\';
+	$connection[\'user\'] 		= \''. $_SESSION['install']['database']['user'] .'\';
+	$connection[\'password\'] 	= \''. $_SESSION['install']['database']['pass'] .'\';
+	$connection[\'logondb\'] 	= \''. $_SESSION['install']['database']['logondb'] .'\';
+	$connection[\'webdb\'] 		= \''. $_SESSION['install']['database']['webdb'] .'\';
+	$connection[\'worlddb\'] 	= \''. $_SESSION['install']['database']['worlddb'] .'\';
+	$connection[\'realmlist\'] 	= \''. $_SESSION['install']['database']['realmlist'] .'\';
 	
 	// host = Either an IP address or a DNS address
 	// user = A mysqli user with access to view/write the entire database.
@@ -332,9 +337,9 @@
 	/*************************/
 	/* Voting settings
 	/*************************/
-	$vote[\'timer\'] 		= 43200;
-	$vote[\'type\'] 		= \'instant\';
-	$vote[\'multiplier\'] 	= 2;
+	$vote[\'timer\'] 	  = 43200;
+	$vote[\'type\'] 	  = \'instant\';
+	$vote[\'multiplier\'] = 2;
 	
 	// timer = Timer between every vote on each link in seconds. Default: 43200 (12 hours)
 	// type = Voting system type. 
@@ -345,12 +350,12 @@
 	/*************************/
 	/* Donation settings
 	/*************************/
-	$donation[\'paypal_email\'] 	= \'' . $_SESSION['install']['database']['paypal'] . '\';
+	$donation[\'paypal_email\'] 	= \''. $_SESSION['install']['database']['paypal'] .'\';
 	$donation[\'coins_name\'] 		= \'Donations Coins\';
-	$donation[\'currency\'] 		= \'USD\';
+	$donation[\'currency\'] 		= \'EUR\';
 	$donation[\'emailResponse\'] 	= true;
 	$donation[\'sendResponseCopy\'] = true;
-	$donation[\'copyTo\'] 			= \'' . $_SESSION['install']['database']['email'] . '\';
+	$donation[\'copyTo\'] 			= \''. $_SESSION['install']['database']['email'] .'\';
 	$donation[\'responseSubject\'] 	= \'Thanks for your support!\';
 	$donation[\'donationType\'] 	= 2;
 	
@@ -479,9 +484,6 @@
 		$tooltip_href = \'www.openwow.com/?\';
 	}
 	
-	//Set the timezone.
-	date_default_timezone_set($GLOBALS[\'timezone\']);
-	
 	//Set the error handling.
 	if(file_exists(\'includes/classes/error.php\'))
 	{
@@ -521,13 +523,13 @@
         $files = scandir('sql/updates/');
 
         echo '[Info]Connecting to database...';
-        $conn = mysqli_connect($_SESSION['install']['database']['host'], $_SESSION['install']['database']['user'], $_SESSION['install']['database']['pass'])or die
-                        ('<br/>[FAILURE] Could not connect to the database. Please restart the installation. ');
+        $conn = mysqli_connect($_SESSION['install']['database']['host'], $_SESSION['install']['database']['user'], $_SESSION['install']['database']['pass']) 
+        	or die('<br/>[FAILURE] Could not connect to the database. Please restart the installation. ');
 
         echo '<br/>[Success] Connected to database.';
         echo '<br/>[Info] Connecting to Website database';
 
-        mysqli_select_db($conn, $_SESSION['install']['database']['webdb'])or die
+        mysqli_select_db($conn, $_SESSION['install']['database']['webdb']) or die
                         ('<br/>[FAILURE] Could not connect to the Website database. Please restart the installation.');
 
         echo '<br/>[Success] Connected to Website database';
@@ -550,10 +552,13 @@
                         {
                             if (strlen($stmt) > 3)
                             {
-                                $result = mysqli_query($conn, $stmt);
-                                if (!$result)
+                                if (!mysqli_query($conn, $stmt))
                                 {
                                     die('<br/>[FAILURE] Could not run SQL file for the Website database. (' . mysqli_error($conn) . ')');
+                                }
+                                else
+                                {
+                                	echo '[Success] Updates completed. <a href="?st=5">Click here to continue</a>';
                                 }
                             }
                         }
@@ -562,7 +567,7 @@
             }
         }
 
-        echo '[Success] Updates completed. <a href="?st=5">Click here to continue</a>';
+        
     }
 
     function step5($rid, $name, $port, $host, $m_host, $m_user, $m_pass, $a_user, $a_pass, $desc, $sendtype, $chardb, $raport, $soapport)
@@ -587,7 +592,7 @@
 
         if (empty($rid) || empty($name) || empty($port) || empty($host) || empty($m_host) || empty($m_user) || empty($a_user) || empty($a_pass) || empty($sendtype) || empty($chardb))
         {
-            exit('Please enter all fields.');
+            die('Please enter all fields.');
         }
 
         mysqli_query($conn, "INSERT INTO realms VALUES
