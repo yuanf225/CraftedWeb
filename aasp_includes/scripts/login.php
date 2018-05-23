@@ -33,9 +33,10 @@
     #                                                                   #
     if (isset($_POST['login']))
     {
-        if (empty($_POST['username']) || empty($_POST['password']) && !isset($_POST['username']) || !isset($_POST['password']))
+        if (empty($_POST['username']) || empty($_POST['password']) && 
+          !isset($_POST['username']) || !isset($_POST['password']))
         {
-          die("Please enter both fields.");
+          die("Please Enter Both Fields.");
         }
 
         $username     = mysqli_real_escape_string($conn, strtoupper(trim($_POST['username'])));
@@ -56,7 +57,7 @@
 
         if (mysqli_num_rows($result) == 0)
         {
-          die("The specified account does not have access to log in!");
+          die("The Specified Account Does Not Have Access To Log In!");
         }
 
         $rank = mysqli_fetch_assoc($result);
@@ -67,7 +68,7 @@
 
         if (empty($_SESSION['cw_' . $_POST['panel']]) || empty($_SESSION['cw_' . $_POST['panel'] . '_id']) || empty($_SESSION['cw_' . $_POST['panel'] . '_level']))
         {
-          die('The scripts encountered an error. (1 or more Sessions was set to NULL)');
+          die('The Scripts Encountered An Error. (1 Or More Sessions Were Set To NULL)');
         }
 
         sleep(1);

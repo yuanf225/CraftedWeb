@@ -36,7 +36,7 @@
     $result = mysqli_query($conn, "SELECT * FROM shoplog WHERE shop='vote' ORDER BY id DESC LIMIT ". $start .", ". $per_page .";");
     if (mysqli_num_rows($result) == 0)
     {
-        echo "Seems like the vote shop log was empty!";
+        echo "Seems Like The Vote Shop Log Was Empty!";
     }
     else
     {
@@ -75,24 +75,24 @@
                 if ($page > 1)
                 {
                     $prev = $page - 1;
-                    echo '<a href="?p=logs&s=voteshop&page=' . $prev . '" title="Previous">Previous</a> &nbsp;';
+                    echo "<a href='?p=logs&s=voteshop&page=". $prev ."' title='Previous'>Previous</a> &nbsp;";
                 }
                 for ($x = 1; $x <= $pages; $x++)
                 {
                     if ($page == $x)
                     {
-                        echo '<a href="?p=logs&s=voteshop&page=' . $x . '" title="Page ' . $x . '"><b>' . $x . '</b></a> ';
+                        echo "<a href='?p=logs&s=voteshop&page=". $x ."' title='Page ". $x ."'><b>". $x ."</b></a>";
                     }
                     else
                     {
-                        echo '<a href="?p=logs&s=voteshop&page=' . $x . '" title="Page ' . $x . '">' . $x . '</a> ';
+                        echo "<a href='?p=logs&s=voteshop&page=". $x ."' title='Page ". $x ."'>". $x ."</a> ";
                     }
                 }
 
                 if ($page < $x - 1)
                 {
                     $next = $page + 1;
-                    echo '&nbsp; <a href="?p=logs&s=voteshop&page=' . $next . '" title="Next">Next</a> &nbsp; &nbsp;';
+                    echo "&nbsp; <a href='?p=logs&s=voteshop&page=". $next ."' title='Next'>Next</a> &nbsp; &nbsp;";
                 }
             }
             ?>

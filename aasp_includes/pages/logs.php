@@ -32,9 +32,9 @@
     else
     {
       ?>
-      <div class='box_right_title'>Hey! You shouldn't be here!</div>
+      <div class='box_right_title'>Hey! You Shouldn't Be Here!</div>
 
-      <pre>The script might have redirected you wrong. Or... did you try to HACK!? Anyways, good luck.</pre>
+      <pre>The Script Might Have Redirected You Wrong. Or... Did You Try To HACK!? Anyways, Good Luck..</pre>
 
       <a href="?p=logs&s=voteshop" class="content_hider">Vote Shop logs</a>
       <a href="?p=logs&s=donateshop" class="content_hider">Donation Shop logs</a>

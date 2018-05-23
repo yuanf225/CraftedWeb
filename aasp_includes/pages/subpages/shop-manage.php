@@ -25,7 +25,7 @@
 <table width="100%">
     <tr valign="top">
         <td style="text-align: left; width: 300px;">
-            <h3>Modify Single item</h3>
+            <h3>Modify Single Item</h3>
             <p/>Entry<br/>
             <input type="text" style="width: 200px;" id="modsingle_entry"/><br/>Price<br/>
             <input type="text" style="width: 200px;" id="modsingle_price"/><br/>Shop<br/>
@@ -39,14 +39,14 @@
             <input type="submit" value="Remove" onclick="delSingleItem()"/>
         </td>
 
-        <td style="text-align: left; width: 300px;"><h3>Modify Multiple items</h3>
+        <td style="text-align: left; width: 300px;"><h3>Modify Multiple Items</h3>
             <p/>
             Between Item Level<br/>
             <select style="width: 140px;" id="modmulti_il_from">
                 <?php
                     for ($i = 1; $i <= $GLOBALS['maxItemLevel']; $i++)
                     {
-                        echo "<option>" . $i . "</option>";
+                        echo "<option>". $i ."</option>";
                     }
                 ?>
             </select>
@@ -55,7 +55,7 @@
 <?php
     for ($i = $GLOBALS['maxItemLevel']; $i >= 1; $i--)
     {
-        echo "<option>" . $i . "</option>";
+        echo "<option>". $i ."</option>";
     }
 ?>
             </select>
@@ -71,6 +71,7 @@
                 <option value="4">Epic</option>
                 <option value="5">Legendary</option>
             </select>
+            
             <br/>Type<br/>
 
             <select id="modmulti_type" style="width: 205px;">

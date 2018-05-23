@@ -22,7 +22,7 @@
 
     global $GameServer, $GamePage;
     $conn = $GameServer->connect();
-    $GameServer->selectDB('webdb', $conn);
+    $GameServer->selectDB("webdb", $conn);
 
     if ($GamePage->validateSubPage() == TRUE)
     {
@@ -31,9 +31,9 @@
     else
     {
         ?>
-        <div class='box_right_title'>Hey! You shouldn't be here!</div>
+        <div class='box_right_title'>Hey! You Shouldn't Be Bere!</div>
 
-        <pre>The script might have redirected you wrong. Or... did you try to HACK!? Anyways, good luck.</pre>
+        <pre>The Script Might Have Redirected You Wrong. Or... Did You Try To HACK!? Anyways, Good Luck..</pre>
 
         <a href="?p=tools&s=tickets" class="content_hider">Tickets</a>
         <a href="?p=tools&s=accountaccess" class="content_hider">Account Access</a>

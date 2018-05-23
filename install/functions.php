@@ -44,21 +44,24 @@
         	empty($worlddb) || empty($webdb) || empty($realmlist) || 
         	empty($title) || empty($domain) || empty($email))
         {
-            exit('Please enter all fields!');
+            die("Please enter all fields!");
         }
-
-        $_SESSION['install']['database']['host']      = $host;
-        $_SESSION['install']['database']['user']      = $user;
-        $_SESSION['install']['database']['pass']      = $pass;
-        $_SESSION['install']['database']['logondb']   = $logondb;
-        $_SESSION['install']['database']['worlddb']   = $worlddb;
-        $_SESSION['install']['database']['webdb']     = $webdb;
-        $_SESSION['install']['database']['realmlist'] = $realmlist;
-        $_SESSION['install']['database']['title']     = $title;
-        $_SESSION['install']['database']['domain']    = $domain;
-        $_SESSION['install']['database']['exp']       = $exp;
-        $_SESSION['install']['database']['email']     = $email;
-        $_SESSION['install']['database']['paypal']    = $paypal;
+        else
+        {
+        	$_SESSION['install']['database']['host']      = $host;
+	        $_SESSION['install']['database']['user']      = $user;
+	        $_SESSION['install']['database']['pass']      = $pass;
+	        $_SESSION['install']['database']['logondb']   = $logondb;
+	        $_SESSION['install']['database']['worlddb']   = $worlddb;
+	        $_SESSION['install']['database']['webdb']     = $webdb;
+	        $_SESSION['install']['database']['realmlist'] = $realmlist;
+	        $_SESSION['install']['database']['title']     = $title;
+	        $_SESSION['install']['database']['domain']    = $domain;
+	        $_SESSION['install']['database']['exp']       = $exp;
+	        $_SESSION['install']['database']['email']     = $email;
+	        $_SESSION['install']['database']['paypal']    = $paypal;
+        }
+        
 
         print true;
     }
@@ -570,12 +573,15 @@
         
     }
 
-    function step5($rid, $name, $port, $host, $m_host, $m_user, $m_pass, $a_user, $a_pass, $desc, $sendtype, $chardb, $raport, $soapport)
+    function step5($name, $port, $host, $m_host, $m_user, $m_pass, $a_user, $a_pass, $desc, $sendtype, $chardb, $raport, $soapport)
     {
-        $conn = mysqli_connect($_SESSION['install']['database']['host'], $_SESSION['install']['database']['user'], $_SESSION['install']['database']['pass']);
+        $conn = mysqli_connect(
+        	$_SESSION['install']['database']['host'], 
+        	$_SESSION['install']['database']['user'], 
+        	$_SESSION['install']['database']['pass']);
+
         mysqli_select_db($conn, $_SESSION['install']['database']['webdb']);
 
-        $rid      = mysqli_real_escape_string($conn, $rid);
         $name     = mysqli_real_escape_string($conn, $name);
         $port     = mysqli_real_escape_string($conn, $port);
         $host     = mysqli_real_escape_string($conn, $host);
@@ -590,14 +596,14 @@
         $raport   = mysqli_real_escape_string($conn, $raport);
         $soapport = mysqli_real_escape_string($conn, $soapport);
 
-        if (empty($rid) || empty($name) || empty($port) || empty($host) || empty($m_host) || empty($m_user) || empty($a_user) || empty($a_pass) || empty($sendtype) || empty($chardb))
+        if (empty($name) || empty($port) || empty($host) || empty($m_host) || empty($m_user) || 
+        	empty($a_user) || empty($a_pass) || empty($sendtype) || empty($chardb))
         {
             die('Please enter all fields.');
         }
 
         mysqli_query($conn, "INSERT INTO realms VALUES
-        	(". $rid .",
-        	'". $name ."',
+        	('". $name ."',
         	'". $desc ."',
         	'". $chardb ."',
         	'". $port ."',
@@ -610,8 +616,8 @@
         	'". $m_host ."',
         	'". $m_user ."',
         	'". $m_pass ."')")
-        or die('Could not insert realm into database. (' . mysqli_error($conn) . ')');
+        or die("Could not insert realm into database. (". mysqli_error($conn) .")");
 
-        echo 'Realm successfully created. <a href="?st=6">Finish Installation</a>';
+        echo "Realm successfully created. <a href='?st=6'>Finish Installation</a>";
     }
     

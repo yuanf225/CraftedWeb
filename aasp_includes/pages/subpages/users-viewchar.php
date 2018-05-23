@@ -23,7 +23,7 @@
     $conn = $GameServer->connect();
 ?>
 <div class="box_right_title"><?php echo $GamePage->titleLink(); ?> &raquo; Manage Character</div>
-Selected character:  <?php echo $GameAccount->getCharName($_GET['guid'], $_GET['rid']); ?>
+Selected Character:  <?php echo $GameAccount->getCharName($_GET['guid'], $_GET['rid']); ?>
 <?php
     $GameServer->connectToRealmDB($_GET['rid']);
 
@@ -123,11 +123,11 @@ Selected character:  <?php echo $GameAccount->getCharName($_GET['guid'], $_GET['
             <?php
                 if ($row['online'] == 0)
                 {
-                    echo '<input type="text" value="Offline" disabled="disabled"/>';
+                    echo "<input type='text' value='Offline' disabled='disabled' />";
                 }
                 else
                 {
-                    echo '<input type="text" value="Online" disabled="disabled"/>';
+                    echo "<input type='text' value='Online' disabled='disabled' />";
                 }
             ?>              
         </td>
@@ -139,7 +139,7 @@ Selected character:  <?php echo $GameAccount->getCharName($_GET['guid'], $_GET['
     <tr>
         <td></td>
         <td><input type="submit" value="Save" onclick="editChar('<?php echo $_GET['guid']; ?>', '<?php echo $_GET['rid']; ?>')"/> 
-            <i>* Note</i>: You may not edit any data if the character is online.</td>
+            <i>* Note</i>: You May Not Edit Any Data If The Character Is Logged In.</td>
     </tr>
 </table>
 <hr/>

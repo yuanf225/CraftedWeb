@@ -34,14 +34,14 @@
         <td><span class='blue_text'>Active Connections</span></td>
         <td><?php echo $GameServer->getActiveConnections(); ?></td>
         
-        <td><span class='blue_text'>Active accounts(This month)</span></td>
+        <td><span class='blue_text'>Active Accounts(This Month)</span></td>
         <td><?php echo $GameServer->getActiveAccounts(); ?></td>
     </tr>
     <tr>
-        <td><span class='blue_text'>Accounts logged in today</span></td>
+        <td><span class='blue_text'>Accounts Logged In Today</span></td>
         <td><?php echo $GameServer->getAccountsLoggedToday(); ?></td>
 
-        <td><span class='blue_text'>Accounts created today</span></td>
+        <td><span class='blue_text'>Accounts Vreated Today</span></td>
         <td><?php echo $GameServer->getAccountsCreatedToday(); ?></td>
     </tr>
 </table>
@@ -52,7 +52,7 @@
 ?>
 
 <div class="box_right">
-    <div class="box_right_title">Admin Panel log</div>
+    <div class="box_right_title">Admin Panel Log</div>
     <?php
         $GameServer->selectDB('webdb', $conn);
         $result = mysqli_query($conn, "SELECT * FROM admin_log ORDER BY id DESC LIMIT 25;");
@@ -78,6 +78,6 @@
                     </tr>
           <?php } ?>
             </table><br/>
-            <a href="?p=logs&s=admin" title="Get more logs">Older logs...</a>
+            <a href="?p=logs&s=admin" title="Get more logs">Older Logs...</a>
     <?php } ?>
 </div>

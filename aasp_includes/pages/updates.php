@@ -28,10 +28,10 @@
 </script>
 <table width="100%">
     <tr>
-        <td>Current version: r_01</td><td class="hidden_version">Available version: r_02</td>
+        <td>Current Version: r_01</td><td class="hidden_version">Available Version: r_02</td>
     </tr>
     <tr>
-        <td>Current database version: r_01</td><td class="hidden_version">Available database version: r_02</td>
+        <td>Current Database Version: r_01</td><td class="hidden_version">Available Database Version: r_02</td>
     </tr>
     <tr>
         <td><input type="submit" value="Check for available versions" onclick="getLatestVersions()"/></td>

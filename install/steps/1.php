@@ -19,8 +19,8 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
-<center>
-    <p id="steps">Introduction &raquo; <b>MySQL Info</b> &raquo; Configure &raquo; Database &raquo; Realm Infoq &raquo; Finished<p>
+
+    <p id="steps">Introduction &raquo; <b>MySQL Info</b> &raquo; Configure &raquo; Database &raquo; Realm Info &raquo; Finished<p>
     <hr/>
     <table cellpadding="10" cellspacing="5">
         <tr>
@@ -45,7 +45,7 @@
         </tr>
         <tr>   
             <td>MySQL Password:</td>
-            <td><input type="text" placeholder="Default: ascent" id="step1_pass"></td>  
+            <td><input type="password" placeholder="Default: ascent" id="step1_pass"></td>  
 
             <td>World Database:</td>
             <td><input type="text" placeholder="Default: world" id="step1_worlddb"></td>
@@ -77,4 +77,4 @@
             <td><input type="submit" value="Procceed to Step 2" onclick="step1()"></td>
         </tr>
     </table>
-  </center>
+

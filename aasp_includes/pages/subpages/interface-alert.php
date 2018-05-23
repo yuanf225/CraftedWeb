@@ -26,25 +26,25 @@
         $alert_enable  = $_POST['alert_enable'];
         $alert_message = trim($_POST['alert_message']);
 
-        $alert_enable = ($alert_enable == 'on') ? 'true' : 'false';
+        $alert_enable = ($alert_enable == "on") ? "true" : "false";
 
-        $file_content = '<?php
+        $file_content = "<?php
 
-						$alert_enabled = ' . $alert_enable . ';
+						$alert_enabled = ". $alert_enable .";
 
-						$alert_message = "' . $alert_message . '";
+						$alert_message = \"". $alert_message ."\";
 
 						?>
-						';
+						";
 
         $fp = fopen('../documents/alert.php', 'w');
         if (fwrite($fp, $file_content))
         {
-            $msg = 'The alert message was updated!';
+            $msg = "The Alert Message Was Updated!";
         }
         else
         {
-            $msg = '[Failure]Could not write to file!';
+            $msg = "[Failure]Could not write to file!";
         }
 
         fclose($fp);
@@ -69,7 +69,7 @@
                 <?php
                     if (isset($msg))
                     {
-                        echo $msg;
+                      echo $msg;
                     }
                 ?>
             </td>

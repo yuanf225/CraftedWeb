@@ -72,24 +72,24 @@
             <input type="text" name="realm_host" placeholder="Default: 127.0.0.1"/> <br/>
 
             <br/>
-            <b>Remote Console information</b> <i>(Vote & Donation Shop)</i><hr/>
-            Remote console <i>(You can always change this later)</i>: <br/>
+            <b>Remote Console Information</b> <i>(Vote & Donation Shop)</i><hr/>
+            Remote Console <i>(You Can Always Change This Later)</i>: <br/>
             <select name="realm_sendtype">
                 <option value="ra">RA</option>
                 <option value="soap">SOAP</option>
             </select><br/>
-            <i class='blue_text'>Specify a level 3 GM account(Used for the remote console)<br/>
-                Tip: Do not use your admin account. Use a level 3 account.</i><br/>
+            <i class='blue_text'>Specify A Level 3 GM Account (Used For The Remote Console)<br/>
+                Tip: Do Not Use Your Admin Account. Use A Level 3 Account.</i><br/>
             Username: <br/>
             <input type="text" name="realm_rank_username" placeholder="Default: rauser"/> <br/>
             Password: <br/>
             <input type="password" name="realm_rank_password" placeholder="Default: rapassword"/> <br/>
-            RA port: <i>(Can be ignored if you have chosen SOAP)</i> <br/>
+            RA Port: <i>(Can Be Ignored If You Have Chosen SOAP)</i> <br/>
             <input type="text" name="realm_ra_port" placeholder="Default: 3443"/> <br/>
-            SOAP port: <i>(Can be ignored if you have chosen RA)</i> <br/>
+            SOAP Port: <i>(Can Be Ignored If You Have Chosen RA)</i> <br/>
             <input type="text" name="realm_soap_port" placeholder="Default: 7878"/> <br/>
             <br/>
-            <b>MySQL information</b> <i>(If left blank, settings will be copied from your configuration file)</i><hr/>
+            <b>MySQL Information</b> <i>(If Left Blank, Settings Will Be Copied From Your Configuration File)</i><hr/>
             MySQL Host: <br/>
             <input type="text" name="realm_m_host" placeholder="Default: 127.0.0.1"/><br/>
             MySQL User: <br/>

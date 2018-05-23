@@ -27,7 +27,7 @@
     $result = mysqli_query($conn, "SELECT * FROM shoplog WHERE shop='donate' ORDER BY id DESC LIMIT 10;");
     if (mysqli_num_rows($result) == 0)
     {
-        echo "Seems like the donation shop log was empty!";
+        echo "Seems Like The Donation Shop Log Was Empty!";
     }
     else
     {

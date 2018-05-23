@@ -35,7 +35,7 @@ Let's you reset the instance on your characters.<hr/>
     {
         ?>
         <span class="attention">Instance Reset costs 
-            <?php echo $GLOBALS['service'][$service]['price'] . ' ' . $Website->convertCurrency($GLOBALS['service'][$service]['currency']); ?></span>
+            <?php echo $GLOBALS['service'][$service]['price'] .' '. $Website->convertCurrency($GLOBALS['service'][$service]['currency']); ?></span>
         <?php
         if ($GLOBALS['service'][$service]['currency'] == "vp")
             echo "<span class='currency'>Vote Points: " . $Account->loadVP($_SESSION['cw_user']) . "</span>";
@@ -44,7 +44,7 @@ Let's you reset the instance on your characters.<hr/>
     }
 
     if (isset($_POST['ir_step1']) || isset($_POST['ir_step2']))
-        echo 'Selected realm: <b>' . $Server->getRealmName($_POST['ir_realm']) . '</b><br/><br/>';
+        echo 'Selected Realm: <b>' . $Server->getRealmName($_POST['ir_realm']) . '</b><br/><br/>';
     else
     {
         ?>

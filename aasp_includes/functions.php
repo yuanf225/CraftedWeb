@@ -57,11 +57,7 @@
             $conn = $this->connect();
             $this->connectToRealmDB($realmId);
             $result = mysqli_query($conn, "SELECT COUNT(guid) AS online FROM characters WHERE online=1;");
-            if (!$this->getServerStatus($realmId, false)) 
-            {
-                return '-----';
-            }
-            else
+            if ($this->getServerStatus($realmId, false)) 
             {
                 return round(mysqli_fetch_assoc($result)['online']);
             }
@@ -71,7 +67,7 @@
         {
             if (!$this->getServerStatus($realmId, false)) 
             {
-                return '-----';
+                return "";
             }
             $conn = $this->connect();
             $this->selectDB('logondb', $conn);
@@ -350,7 +346,7 @@
 
             if (empty($name) || empty($host) || empty($port) || empty($chardb) || empty($rank_user) || empty($rank_pass))
             {
-                echo "<pre>
+                echo "<pre style='text-align:center;'>
                         <b class='red_text'>
                             Please enter all required fields!
                         </b>
@@ -370,18 +366,20 @@
 
                 if (empty($ra_port) || $ra_port == null || !isset($ra_port))
                 {
-                    $ra_port   = 3443;
-                    $soap_port = "";
+                    $ra_port   = "3443";
+                    $soap_port = NULL;
                 }
 
                 if (empty($soap_port) || $soap_port == null || !isset($soap_port))
                 {
-                    $ra_port = "";
-                    $soap_port = 7878;
+                    $ra_port = NULL;
+                    $soap_port = "7878";
                 }
 
                 $this->selectDB('webdb', $conn);
-                mysqli_query($conn, "INSERT INTO realms VALUES 
+                if(mysqli_query($conn, "INSERT INTO realms 
+                    (name, description, char_db, port, rank_user, rank_pass, ra_port, soap_port, host, sendType, mysqli_host, mysqli_user, mysqli_pass) 
+                    VALUES 
                     ('". $name ."', 
                     '". $desc ."', 
                     '". $chardb ."', 
@@ -394,11 +392,18 @@
                     '". $sendtype ."', 
                     '". $m_host ."', 
                     '". $m_user ."', 
-                    '". $m_pass ."';)");
+                    '". $m_pass ."');"))
+                {
+                    $this->logThis("Added the realm ". $name ."<br/>");
 
-                $this->logThis("Added the realm ". $name ."<br/>");
+                    echo "<pre><h3>&raquo; Successfully added the realm `". $name ."`!</h3></pre><br/>";
+                }
+                else
+                {
+                    echo "<pre><h3>&raquo; Error adding the realm `". mysqli_error($conn) ."`</h3></pre><br/>";
+                }
 
-                echo '<pre><h3>&raquo; Successfully added the realm '. $name .'!</h3></pre><br/>';
+                
             }
         }
 
@@ -457,7 +462,7 @@
                 $rid = $_COOKIE['presetRealmStatus'];
             }
 
-            echo 'Selected realm: <b>' . $this->getRealmName($rid) . '</b><a href="#" onclick="changePresetRealmStatus()">(Change Realm)</a><hr/>';
+            echo 'Selected Realm: <b>' . $this->getRealmName($rid) . '</b><a href="#" onclick="changePresetRealmStatus()"> (Change Realm)</a><hr/>';
             ?>
             <table>
                 <tr valign="top">

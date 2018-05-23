@@ -43,23 +43,24 @@
                 <td><?php echo $row['title']; ?></td>
                 <td><?php echo $row['url']; ?></td>
                 <td><?php
-                    if ($row['shownWhen'] == 'logged')
+                    if ($row['shownWhen'] == "logged")
                     {
-                        echo "Logged in";
+                      echo "Logged in";
                     }
-                    elseif ($row['shownWhen'] == 'notlogged')
+                    elseif ($row['shownWhen'] == "notlogged")
                     {
-                        echo "Not logged in";
+                      echo "Not logged in";
                     }
                     else
                     {
-                        echo ucfirst($row['shownWhen']);
+                      echo ucfirst($row['shownWhen']);
                     }
                     ?>
                 </td>
                 <td>
-                    <a href="#" onclick="editMenu(<?php echo $row['position']; ?>)"
-                       >Edit</a> &nbsp; <a href="#" onclick="deleteLink(<?php echo $row['position']; ?>)">Delete</a>
+                    <a href="#" onclick="editMenu(<?php echo $row['position']; ?>)">Edit</a>
+                    &nbsp; 
+                    <a href="#" onclick="deleteLink(<?php echo $row['position']; ?>)">Delete</a>
                 </td>
             </tr>
         <?php $x++;
@@ -67,4 +68,4 @@
 ?>
 </table>
 <br/>
-<a href="#" onclick="addLink()" class="content_hider">Add a new link</a>
+<a href="#" onclick="addLink()" class="content_hider">Add A New Link</a>

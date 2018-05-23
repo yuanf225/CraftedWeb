@@ -23,9 +23,9 @@
     global $GameServer, $GamePage;
     $conn = $GameServer->connect();
 
-    $GameServer->selectDB('webdb', $conn);
+    $GameServer->selectDB("webdb", $conn);
 
-    $GamePage->validatePageAccess('Users');
+    $GamePage->validatePageAccess("Users");
 
     if ($GamePage->validateSubPage() == TRUE)
     {
@@ -33,7 +33,7 @@
     }
     else
     {
-        $GameServer->selectDB('logondb', $conn);
+        $GameServer->selectDB("logondb", $conn);
         $usersTotal       = mysqli_query($conn, "SELECT COUNT(*) AS totalUsers FROM account;");
         $usersToday       = mysqli_query($conn, "SELECT COUNT(*) AS dailyUsers FROM account WHERE joindate LIKE '%". date("Y-m-d") ."%';");
         $usersMonth       = mysqli_query($conn, "SELECT COUNT(*) AS monthlyUsers FROM account WHERE joindate LIKE '%". date("Y-m") ."%';");
@@ -44,24 +44,24 @@
         <div class="box_right_title">Users Overview</div>
         <table style="width: 100%;">
             <tr>
-                <td><span class='blue_text'>Total users</span></td>
+                <td><span class='blue_text'>Total Users</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($usersTotal)['totalUsers']); ?></td>
                 
-                <td><span class='blue_text'>New users today</span></td>
+                <td><span class='blue_text'>New Users Today</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($usersToday)['dailyUsers']); ?></td>
             </tr>
             <tr>
-                <td><span class='blue_text'>New users this month</span></td>
+                <td><span class='blue_text'>New Users This Month</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($usersMonth)['monthlyUsers']); ?></td>
                 
-                <td><span class='blue_text'>Users online</span></td>
+                <td><span class='blue_text'>Users Online</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($usersOnline)['onlineUsers']); ?></td>
             </tr>
             <tr>
-                <td><span class='blue_text'>Active users (this month)</span></td>
+                <td><span class='blue_text'>Active Users (This Month)</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($usersActive)['activeUsers']); ?></td>
                 
-                <td><span class='blue_text'>Users logged in today</span></td>
+                <td><span class='blue_text'>Users Logged In Today</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($usersActiveToday)['activeUsersToday']); ?></td>
             </tr>
         </table>

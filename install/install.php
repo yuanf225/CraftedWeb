@@ -50,19 +50,17 @@
         </style>
     </head>
     <body>
-    </center>
+    <center>
     <div id="main_box">
         <h1>Installation &raquo; Step <?php echo $step; ?> (<?php echo $steps[$step]; ?>)</h1>
 
         <div id="content">
-            <?php include( './steps/' . $step . '.php' ); ?>
+            <?php include("./steps/". $step .".php"); ?>
 
-            <div id="info">
-
-            </div>
+            <div id="info"></div>
         </div>
     </div>
-</center>
+    </center>
 </body>
 </html>
 <script type="text/javascript" src="scripts.js"></script>

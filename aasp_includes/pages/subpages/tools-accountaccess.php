@@ -23,12 +23,12 @@
     global $GamePage, $GameServer, $GameAccount;
 
     $conn = $GameServer->connect();
-    $GameServer->selectDB('logondb', $conn);
+    $GameServer->selectDB("logondb", $conn);
 
-    $GamePage->validatePageAccess('Tools->Account Access');
+    $GamePage->validatePageAccess("Tools->Account Access");
 ?>
 <div class="box_right_title">Account Access</div>
-All GM accounts are listed below.
+All GM Accounts Are Listed Below.
 <br/>&nbsp;
 <table>
     <tr>
@@ -44,7 +44,7 @@ All GM accounts are listed below.
         $result = mysqli_query($conn, "SELECT * FROM account_access;");
         if (mysqli_num_rows($result) == 0)
         {
-            echo "<b>No GM accounts found!</b>";
+            echo "<b>No GM Accounts Found!</b>";
         }
         else
         {
@@ -57,9 +57,9 @@ All GM accounts are listed below.
                     <td><?php echo $row['gmlevel']; ?></td>
                     <td>
                         <?php
-                        if ($row['RealmID'] == '-1')
+                        if ($row['RealmID'] == "-1")
                         {
-                            echo 'All';
+                            echo "All";
                         }
                         else
                         {
@@ -101,4 +101,4 @@ All GM accounts are listed below.
     ?>
 </table>
 <hr/>
-<a href="#" class="content_hider" onclick="addAccA()">Add account</a>
+<a href="#" class="content_hider" onclick="addAccA()">Add Account</a>

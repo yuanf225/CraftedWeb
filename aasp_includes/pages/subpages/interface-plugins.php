@@ -33,9 +33,9 @@
         <th>Status</th>
     </tr>
     <?php
-        $bad = array('.', '..', 'index.html');
+        $bad = array(".", "..", "index.html");
 
-        $folder = scandir('../plugins/');
+        $folder = scandir("../plugins/");
 
         if (is_array($folder) || is_object($folder))
         {
@@ -43,20 +43,18 @@
             {
                 if (!in_array($folderName, $bad))
                 {
-                    if (file_exists('../plugins/' . $folderName . '/info.php'))
+                    if (file_exists("../plugins/". $folderName ."/info.php"))
                     {
-                        include('../plugins/' . $folderName . '/info.php');
+                        include("../plugins/" . $folderName . "/info.php");
                         ?> <tr class="center" onclick="window.location = '?p=interface&s=viewplugin&plugin=<?php echo $folderName; ?>'"> <?php
-                            echo '<td><a href="?p=interface&s=viewplugin&plugin=' . $folderName . '">' . $title . '</a></td>';
-                            echo '<td>' . substr($desc, 0, 40) . '</td>';
-                            echo '<td>' . $author . '</td>';
-                            echo '<td>' . $created . '</td>';
-                            $chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='" . mysqli_real_escape_string($conn, $folderName) . "';");
-                            if (mysqli_data_seek($chk, 0) > 0)
-                                echo '<td>Disabled</td>';
-                            else
-                                echo '<td>Enabled</td>';
-                            echo '</tr>';
+                            echo "<td><a href='?p=interface&s=viewplugin&plugin=". $folderName ."'>". $title ."</a></td>";
+                            echo "<td>". substr($desc, 0, 40) ."</td>";
+                            echo "<td>". $author ."</td>";
+                            echo "<td>". $created ."</td>";
+                            $chk = mysqli_query($conn, "SELECT COUNT(*) AS disabledPlugins FROM disabled_plugins WHERE foldername='". mysqli_real_escape_string($conn, $folderName) ."';");
+                            if (mysqli_fetch_assoc($chk)['disabledPlugins'] == 0) echo "<td>Enabled</td>";
+                            else echo "<td>Disabled</td>";
+                            echo "</tr>";
                         }
                     }
                 }

@@ -35,7 +35,7 @@
     </tr>
     <?php
         $result = mysqli_query($conn, "SELECT * FROM votingsites ORDER BY id ASC;");
-        while ($row    = mysqli_fetch_assoc($result))
+        while ($row = mysqli_fetch_assoc($result))
         {
             ?>
             <tr>
@@ -53,4 +53,4 @@
     ?>
 </table>
 <br/>
-<a href="#" class="content_hider" onclick="addVoteLink()">Add a new voting site</a>
+<a href="#" class="content_hider" onclick="addVoteLink()">Add A New Voting Site</a>

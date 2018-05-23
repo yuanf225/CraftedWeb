@@ -31,7 +31,7 @@
 
     $count = mysqli_query($conn, "SELECT COUNT(*) AS sliderImages FROM slider_images;");
 ?>
-The slideshow is <b><?php echo $status; ?></b>. You have <b><?php echo round(mysqli_fetch_assoc($count)['sliderImages']); ?></b> images in the slideshow.
+The Slideshow Is <b><?php echo $status; ?></b>. You Have <b><?php echo round(mysqli_fetch_assoc($count)['sliderImages']); ?></b> Images In The Slideshow.
 <hr/>
 <?php
     if (isset($_POST['addSlideImage']))
@@ -39,14 +39,14 @@ The slideshow is <b><?php echo $status; ?></b>. You have <b><?php echo round(mys
       $GamePage->addSlideImage($_FILES['slideImage_upload'], $_POST['slideImage_path'], $_POST['slideImage_url']);
     }
 ?>
-<a href="#addimage" onclick="addSlideImage()" class="content_hider">Add image</a>
+<a href="#addimage" onclick="addSlideImage()" class="content_hider">Add Image</a>
 <div class="hidden_content" id="addSlideImage">
     <form action="" method="post" enctype="multipart/form-data">
-        Upload an image:<br/>
+        Upload An Image:<br/>
         <input type="file" name="slideImage_upload"><br/>
-        or enter image URL: (This will override your uploaded image)<br/>
+        Or Enter Image URL: (This Will Override Your Uploaded Image)<br/>
         <input type="text" name="slideImage_path"><br/>
-        Where should the image redirect? (Leave empty if no redirect)<br/>
+        Where Should The Image Redirect? (Leave Empty If No Redirect)<br/>
         <input type="text" name="slideImage_url"><br/>
         <input type="submit" value="Add" name="addSlideImage">
     </form>
@@ -60,16 +60,15 @@ The slideshow is <b><?php echo $status; ?></b>. You have <b><?php echo round(mys
     }
     else
     {
-        echo '<table>';
+        echo "<table>";
         $c   = 1;
         while ($row = mysqli_fetch_assoc($result))
         {
-            echo '<tr class="center">';
-            echo '<td><h2>&nbsp; ' . $c . ' &nbsp;</h2><br/>
-		<a href="#remove" onclick="removeSlideImage(' . $row['position'] . ')">Remove</a></td>';
-            echo '<td><img src="../' . $row['path'] . '" alt="' . $c . '" class="slide_image" maxheight="200"/></td>';
-            echo '</tr>';
+            echo "<tr class='center'>";
+            echo "<td><h2>&nbsp; ". $c ." &nbsp;</h2><br/><a href='#remove' onclick='removeSlideImage(". $row['position'] .")'>Remove</a></td>";
+            echo "<td><img src='../". $row['path'] ."' alt='". $c ."' class='slide_image' maxheight='200'/></td>";
+            echo "</tr>";
             $c++;
         }
-        echo '</table>';
+        echo "</table>";
     }

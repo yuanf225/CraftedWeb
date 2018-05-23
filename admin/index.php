@@ -248,7 +248,7 @@
                                         <td>Logon Database: </td>
                                         <td>Website Database: </td>
                                         <td>World Database: </td>
-                                        <td>Database Revision: </td>
+                                        <td>Db Rev: </td>
                                     </tr>
                                 </td>
                                 <td>

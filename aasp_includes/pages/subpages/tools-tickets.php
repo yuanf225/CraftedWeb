@@ -23,30 +23,30 @@
     global $GameServer, $GameAccount, $GamePage;
     $conn = $GameServer->connect();
 
-    $GamePage->validatePageAccess('Tools->Tickets');
+    $GamePage->validatePageAccess("Tools->Tickets");
 ?>
 <div class="box_right_title">Tickets</div>
 <?php if (!isset($_GET['guid']))
     { ?>
     <table class="center">
         <tr>
-            <td><input type="checkbox" id="tickets_offline">View offline tickets</td>
+            <td><input type="checkbox" id="tickets_offline">View Offline Tickets</td>
             <td>
                 <select id="tickets_realm">
                     <?php
-                    $GameServer->selectDB('webdb', $conn);
+                    $GameServer->selectDB("webdb", $conn);
 
                     $result = mysqli_query($conn, "SELECT char_db, name, description FROM realms;");
                     if (mysqli_num_rows($result) == 0)
                     {
-                        echo '<option value="NULL">No realms found.</option>';
+                        echo "<option value='NULL'>No Realms Found.</option>";
                     }
                     else
                     {
-                        echo '<option value="NULL">--Select a realm--</option>';
+                        echo "<option value='NULL'>--Select A Realm--</option>";
                         while ($row = mysqli_fetch_assoc($result))
                         {
-                            echo '<option value="' . $row['char_db'] . '">' . $row['name'] . ' - <i>' . $row['description'] . '</i></option>';
+                            echo "<option value='". $row['char_db'] ."'>". $row['name'] ." - <i>". $row['description'] ."</i></option>";
                         }
                     }
                     ?>
@@ -65,31 +65,31 @@
             ##############################
             if ($GLOBALS['core_expansion'] == 3)
             {
-                $guidString = 'playerGuid';
+                $guidString = "playerGuid";
             }
             else
             {
-                $guidString = 'guid';
+                $guidString = "guid";
             }
 
             ###############
             if ($GLOBALS['core_expansion'] == 3)
             {
-                $closedString = 'closed';
+                $closedString = "closed";
             }
             else
             {
-                $closedString = 'closedBy';
+                $closedString = "closedBy";
             }
 
             ###############
             if ($GLOBALS['core_expansion'] == 3)
             {
-                $ticketString = 'guid';
+                $ticketString = "guid";
             }
             else
             {
-                $ticketString = 'ticketId';
+                $ticketString = "ticketId";
             }
             ############################
 
@@ -99,7 +99,7 @@
 
             if ($realm == "NULL")
             {
-                die("<pre>Please select a realm.</pre>");
+                die("<pre>Please Select A Realm.</pre>");
             }
 
             mysqli_select_db($conn, $realm);
@@ -108,11 +108,11 @@
                 FROM gm_tickets ORDER BY ticketId DESC;");
             if (mysqli_num_rows($result) == 0)
             {
-                die("<pre>No tickets were found!</pre>");
+                die("<pre>No Tickets Were Found!</pre>");
             }
 
-            echo '
-			<table class="center">
+            echo "
+			<table class='center'>
 			   <tr>
 				   <th>ID</th>
 				   <th>Name</th>
@@ -122,36 +122,36 @@
 				   <th>Player Status</th>
 				   <th>Quick Tools</th>
 			   </tr>
-			';
+			";
 
             while ($row = mysqli_fetch_assoc($result))
             {
                 $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid='" . $row[$guidString] . "' AND online='1';");
                 if (mysqli_data_seek($get, 0) == 0 && $offline == "on")
                 {
-                    echo '<tr>';
-                    echo '<td><a href="?p=tools&s=tickets&guid=' . $row[$ticketString] . '&db=' . $realm . '">' . $row[$ticketString] . '</td>';
-                    echo '<td><a href="?p=tools&s=tickets&guid=' . $row[$ticketString] . '&db=' . $realm . '">' . $row['name'] . '</td>';
-                    echo '<td><a href="?p=tools&s=tickets&guid=' . $row[$ticketString] . '&db=' . $realm . '">' . substr($row['message'], 0, 15) . '...</td>';
-                    echo '<td><a href="?p=tools&s=tickets&guid=' . $row[$ticketString] . '&db=' . $realm . '">' . date('Y-m-d H:i:s', $row['createtime']) . '</a></td>';
+                    echo "<tr>";
+                    echo "<td><a href='?p=tools&s=tickets&guid=". $row[$ticketString] ."&db=". $realm ."'>". $row[$ticketString] ."</td>";
+                    echo "<td><a href='?p=tools&s=tickets&guid=". $row[$ticketString] ."&db=". $realm ."'>". $row['name'] ."</td>";
+                    echo "<td><a href='?p=tools&s=tickets&guid=". $row[$ticketString] ."&db=". $realm ."'>". substr($row['message'], 0, 15) ."...</td>";
+                    echo "<td><a href='?p=tools&s=tickets&guid=". $row[$ticketString] ."&db=". $realm ."'>". date('Y-m-d H:i:s', $row['createtime']) ."</a></td>";
 
                     if ($row[$closedString] == 1)
                     {
-                        echo '<td><font color="red">Closed</font></td>';
+                        echo "<td><font color='red'>Closed</font></td>";
                     }
                     else
                     {
-                        echo '<td><font color="green">Open</font></td>';
+                        echo "<td><font color='green'>Open</font></td>";
                     }
 
                     $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
                     if (mysqli_data_seek($get, 0) > 0)
                     {
-                        echo '<td><font color="green">Online</font></td>';
+                        echo "<td><font color='green'>Online</font></td>";
                     }
                     else
                     {
-                        echo '<td><font color="red">Offline</font></td>';
+                        echo "<td><font color='red'>Offline</font></td>";
                     }
                     ?> <td><a href="#" onclick="deleteTicket('<?php echo $row[$ticketString]; ?>', '<?php echo $realm; ?>')">Delete</a>
                         &nbsp;
@@ -169,13 +169,13 @@
                         }
                         ?>
                     </td><?php
-                    echo '<tr>';
+                    echo "<tr>";
                 }
             }
-            echo '</table>';
+            echo "</table>";
         }
         else
-            echo '<pre>Please select a realm.</pre>';
+            echo "<pre>Please Select A Realm.</pre>";
         ?>
     </span>
     <?php
@@ -185,31 +185,31 @@
         ##############################
         if ($GLOBALS['core_expansion'] == 3)
         {
-            $guidString = 'playerGuid';
+            $guidString = "playerGuid";
         }
         else
         {
-            $guidString = 'guid';
+            $guidString = "guid";
         }
 
         ###############
         if ($GLOBALS['core_expansion'] == 3)
         {
-            $closedString = 'closed';
+            $closedString = "closed";
         }
         else
         {
-            $closedString = 'closedBy';
+            $closedString = "closedBy";
         }
 
         ###############
         if ($GLOBALS['core_expansion'] == 3)
         {
-            $ticketString = 'guid';
+            $ticketString = "guid";
         }
         else
         {
-            $ticketString = 'ticketId';
+            $ticketString = "ticketId";
         }
         ##############################
 
@@ -221,7 +221,7 @@
     <table style="width: 100%;" class="center">
         <tr>
             <td>
-                <span class='blue_text'>Submitted by:</span>
+                <span class='blue_text'>Submitted By:</span>
             </td>	
             <td>
                 <?php echo $row['name']; ?>
@@ -241,11 +241,11 @@
                 <?php
                 if ($row[$closedString] == 1)
                 {
-                    echo '<font color="red">Closed</font>';
+                    echo "<font color='red'>Closed</font>";
                 }
                 else
                 {
-                    echo '<font color="green">Open</font>';
+                    echo "<font color='green'>Open</font>";
                 }
                 ?>
             </td>
@@ -258,11 +258,11 @@
                 $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
                 if (mysqli_data_seek($get, 0) > 0)
                 {
-                    echo '<font color="green">Online</font>';
+                    echo "<font color='green'>Online</font>";
                 }
                 else
                 {
-                    echo '<font color="red">Offline</font>';
+                    echo "<font color='red'>Offline</font>";
                 }
                 ?>
             </td>
@@ -277,17 +277,17 @@
     <pre>
         <a href="?p=tools&s=tickets">&laquo; Back to tickets</a>
         &nbsp; &nbsp; &nbsp;
-        <a href="#" onclick="deleteTicket('<?php echo $_GET['guid']; ?>', '<?php echo $_GET['db']; ?>')">Remove ticket</a>
+        <a href="#" onclick="deleteTicket('<?php echo $_GET['guid']; ?>', '<?php echo $_GET['db']; ?>')">Remove Ticket</a>
         &nbsp; &nbsp; &nbsp;
     <?php 
         if ($row[$closedString] == 1)
         { ?>
-		  <a href="#" onclick="openTicket('<?php echo $_GET['guid']; ?>', '<?php echo $_GET['db']; ?>')">Open ticket</a>
+		  <a href="#" onclick="openTicket('<?php echo $_GET['guid']; ?>', '<?php echo $_GET['db']; ?>')">Open Ticket</a>
         <?php
         }
         else
         {?>
-            <a href="#" onclick="closeTicket('<?php echo $_GET['guid']; ?>', '<?php echo $_GET['db']; ?>')">Close ticket</a>
+            <a href="#" onclick="closeTicket('<?php echo $_GET['guid']; ?>', '<?php echo $_GET['db']; ?>')">Close Ticket</a>
         <?php
         }
     ?>

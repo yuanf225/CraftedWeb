@@ -34,7 +34,8 @@
         ?>
         <div class="box_right_title">Template</div>          
 
-        Here you can choose which template that should be active on your website. This is also where you install new themes for your website.<br/><br/>
+        Here You Can Choose Which Template That Should Be Active On Your Website. This Is Also Where You Install New Themes For Your Website.<br/><br/>
+
         <h3>Choose Template</h3>
         <select id="choose_template">
             <?php
@@ -43,24 +44,24 @@
             {
                 if ($row['applied'] == 1)
                 {
-                    echo "<option selected='selected' value='" . $row['id'] . "'>[Active] ";
+                    echo "<option selected='selected' value='". $row['id'] ."'>[Active] ";
                 }
                 else
                 {
-                    echo "<option value='" . $row['id'] . "'>";
+                    echo "<option value='". $row['id'] ."'>";
                 }
 
-                echo $row['name'] . "</option>";
+                echo $row['name'] ."</option>";
             }
             ?>
         </select>
         <input type="submit" value="Save" onclick="setTemplate()"/><hr/><p/>
 
         <h3>Install a new template</h3>
-        <a href="#" onclick="templateInstallGuide()">How to install new templates on your website</a><br/><br/><br/>
+        <a href="#" onclick="templateInstallGuide()">How To Install New Templates On Your Website</a><br/><br/><br/>
         Path to the template<br/>
         <input type="text" id="installtemplate_path"/><br/>
-        Choose a name<br/>
+        Choose A Name<br/>
         <input type="text" id="installtemplate_name"/><br/>
         <input type="submit" value="Install" onclick="installTemplate()"/>
         <hr/>
@@ -70,18 +71,18 @@
         <select id="uninstall_template_id">
             <?php
             $result = mysqli_query($conn, "SELECT * FROM template ORDER BY id ASC;");
-            while ($row    = mysqli_fetch_assoc($result))
+            while ($row = mysqli_fetch_assoc($result))
             {
                 if ($row['applied'] == 1)
                 {
-                    echo "<option selected='selected' value='" . $row['id'] . "'>[Active] ";
+                    echo "<option selected='selected' value='". $row['id'] ."'>[Active] ";
                 }
                 else
                 {
-                    echo "<option value='" . $row['id'] . "'>";
+                    echo "<option value='". $row['id'] ."'>";
                 }
 
-                echo $row['name'] . "</option>";
+                echo $row['name'] ."</option>";
             }
             ?>
         </select>

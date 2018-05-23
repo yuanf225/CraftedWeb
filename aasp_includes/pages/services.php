@@ -23,9 +23,9 @@
 
     global $GameServer, $GamePage;
     $conn = $GameServer->connect();
-    $GameServer->selectDB('webdb', $conn);
+    $GameServer->selectDB("webdb", $conn);
 
-    $GamePage->validatePageAccess('Services');
+    $GamePage->validatePageAccess("Services");
 
     if ($GamePage->validateSubPage() == TRUE)
     {
@@ -33,5 +33,5 @@
     }
     else
     {
-        echo '<h2>Forbidden!</h2>Or actually... there\'s nothing here!';
+        echo "<h2>Forbidden!</h2>Or Actually... There's Nothing Here!";
     }

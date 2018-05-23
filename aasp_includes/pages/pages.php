@@ -142,7 +142,7 @@
                             SET name='". $name ."', filename='". $filename ."', content='". $content ."' 
                             WHERE filename='". mysqli_real_escape_string($conn, $_GET['filename']) ."';");
 
-                        echo "<h3>The page was successfully updated.</h3> <a href='" . $GLOBALS['website_domain'] . "?p=" . $filename . "' target='_blank'>View Page</a>";
+                        echo "<h3>The Page Was Successfully Updated.</h3> <a href='". $GLOBALS['website_domain'] ."?p=". $filename ."' target='_blank'>View Page</a>";
                     }
                 }
 
@@ -160,8 +160,7 @@
                     <textarea cols="77" rows="14" id="wysiwyg" name="editpage_content"><?php echo $row['content']; ?></textarea>    
                     <br/>
                     <input type="submit" value="Save" name="editpage">
-                </form>
-                    <?php
+                </form><?php
             }
         }
     }

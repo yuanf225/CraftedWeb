@@ -21,9 +21,9 @@
 
     global $GameServer, $GamePage, $GameAccount;
     $conn = $GameServer->connect();
-    $GameServer->selectDB('webdb', $conn);
+    $GameServer->selectDB("webdb", $conn);
 
-    $GamePage->validatePageAccess('Donations');
+    $GamePage->validatePageAccess("Donations");
 
     if ($GamePage->validateSubPage() == TRUE)
     {
@@ -54,24 +54,24 @@
         <div class="box_right_title">Donations Overview</div>
         <table style="width: 100%;">
             <tr>
-                <td><span class='blue_text'>Total donations</span></td>
+                <td><span class='blue_text'>Total Number Of Donations</span></td>
                 <td><?php echo mysqli_num_rows($donationsTotal); ?></td>
                 
-                <td><span class='blue_text'>Total donation amount</span></td>
+                <td><span class='blue_text'>Total Amount Of Donations</span></td>
                 <td><?php echo round($donationsTotalAmount, 0); ?>$</td>
             </tr>
             <tr>
-                <td><span class='blue_text'>Donations this month</span></td>
+                <td><span class='blue_text'>Number Of Donations This Month</span></td>
                 <td><?php echo mysqli_num_rows($donationsThisMonth); ?></td>
                 
-                <td><span class='blue_text'>Donation amount this month</span></td>
+                <td><span class='blue_text'>Amount Of Donations This Month</span></td>
                 <td><?php echo round($donationsThisMonthAmount, 0); ?>$</td>
             </tr>
             <tr>
-                <td><span class='blue_text'>Latest donation amount</span></td>
+                <td><span class='blue_text'>Latest Donation Amount</span></td>
                 <td><?php echo round($donationLatestAmount);  ?>$</td>
                 
-                <td><span class='blue_text'>Latest donator</span></td>
+                <td><span class='blue_text'>Latest Donator</span></td>
                 <td><?php echo $donationLatest; ?></td>
             </tr>
         </table>

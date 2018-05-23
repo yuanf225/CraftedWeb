@@ -33,7 +33,7 @@
 
     if (mysqli_data_seek($pages_query, 0) == 0)
     {
-        echo "Seems like the donation log was empty!";
+      echo "Seems Like The Donation Log Was Empty!";
     }
     else
     {
@@ -71,24 +71,24 @@
           if ($page > 1)
           {
             $prev = $page - 1;
-            echo '<a href="?p=donations&s=browse&page=' . $prev . '" title="Previous">Previous</a> &nbsp;';
+            echo "<a href='?p=donations&s=browse&page=". $prev ."' title='Previous'>Previous</a> &nbsp;";
           }
           for ($x = 1; $x <= $pages; $x++)
           {
             if ($page == $x && $countDonators > 19)
             {
-              echo '<a href="?p=donations&s=browse&page=' . $x . '" title="Page ' . $x . '"><b>' . $x . '</b></a> ';
+              echo "<a href='?p=donations&s=browse&page=". $x ."' title='Page ". $x ."'><b>". $x ."</b></a> ";
             }
             elseif ($countDonators > 19)
             {
-              echo '<a href="?p=donations&s=browse&page=' . $x . '" title="Page ' . $x . '">' . $x . '</a> ';
+              echo "<a href='?p=donations&s=browse&page=". $x ."' title='Page ". $x ."'>". $x ."</a> ";
             }
           }
 
           if ($page < $x - 1)
           {
             $next = $page + 1;
-            echo '&nbsp; <a href="?p=donations&s=browse&page=' . $next . '" title="Next">Next</a> &nbsp; &nbsp;';
+            echo "&nbsp; <a href='?p=donations&s=browse&page=". $next ."' title='Next'>Next</a> &nbsp; &nbsp;";
           }
         }
     }

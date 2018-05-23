@@ -25,7 +25,7 @@
 <div class="box_right_title">
     <?php echo $GamePage->titleLink(); ?> &raquo; Character Inventory
 </div>
-Showing inventory of character 
+Showing Inventory Of Character 
 <a href="?p=users&s=viewchar&guid=<?php echo $_GET['guid']; ?>&rid=<?php echo $_GET['rid']; ?>">
     <?php echo $GameAccount->getCharName($_GET['guid'], $_GET['rid']); ?>
 </a>
@@ -33,16 +33,16 @@ Showing inventory of character
 Filter:
 <a href="?p=users&s=inventory&guid=<?php echo $_GET['guid']; ?>&rid=<?php echo $_GET['rid']; ?>&f=equip">
 <?php
-    if (isset($_GET['f']) && $_GET['f'] == 'equip')
+    if (isset($_GET['f']) && $_GET['f'] == "equip")
     {
-        echo '<b>';
+        echo "<b>";
     }
 ?>
     Equipped Items</a>
 <?php
-    if (isset($_GET['f']) && $_GET['f'] == 'equip')
+    if (isset($_GET['f']) && $_GET['f'] == "equip")
     {
-        echo '</b>';
+        echo "</b>";
     }
 ?>
 </a> 
@@ -51,16 +51,16 @@ Filter:
 
 <a href="?p=users&s=inventory&guid=<?php echo $_GET['guid']; ?>&rid=<?php echo $_GET['rid']; ?>&f=bank">
     <?php
-        if (isset($_GET['f']) && $_GET['f'] == 'bank')
+        if (isset($_GET['f']) && $_GET['f'] == "bank")
         {
-            echo '<b>';
+            echo "<b>";
         }
     ?>
     Items in bank
     <?php
-        if (isset($_GET['f']) && $_GET['f'] == 'bank')
+        if (isset($_GET['f']) && $_GET['f'] == "bank")
         {
-            echo '</b>';
+            echo "</b>";
         }
     ?>
 </a> 
@@ -69,16 +69,16 @@ Filter:
 
 <a href="?p=users&s=inventory&guid=<?php echo $_GET['guid']; ?>&rid=<?php echo $_GET['rid']; ?>&f=keyring">
     <?php
-        if (isset($_GET['f']) && $_GET['f'] == 'keyring')
+        if (isset($_GET['f']) && $_GET['f'] == "keyring")
         {
-            echo '<b>';
+            echo "<b>";
         }
     ?>
     Items in keyring
     <?php
-        if (isset($_GET['f']) && $_GET['f'] == 'keyring')
+        if (isset($_GET['f']) && $_GET['f'] == "keyring")
         {
-            echo '</b>';
+            echo "</b>";
         }
     ?>
 </a> 
@@ -87,16 +87,16 @@ Filter:
 
 <a href="?p=users&s=inventory&guid=<?php echo $_GET['guid']; ?>&rid=<?php echo $_GET['rid']; ?>&f=currency">
     <?php
-        if (isset($_GET['f']) && $_GET['f'] == 'currency')
+        if (isset($_GET['f']) && $_GET['f'] == "currency")
         {
-            echo '<b>';
+            echo "<b>";
         }
     ?>
     Currencies
     <?php
-        if (isset($_GET['f']) && $_GET['f'] == 'currency')
+        if (isset($_GET['f']) && $_GET['f'] == "currency")
         {
-            echo '</b>';
+            echo "</b>";
         }
     ?>
 </a> 
@@ -107,14 +107,14 @@ Filter:
     <?php
         if (!isset($_GET['f']))
         {
-            echo '<b>';
+            echo "<b>";
         }
     ?>
     All Items
     <?php
         if (!isset($_GET['f']))
         {
-            echo '</b>';
+            echo "</b>";
         }
     ?>
 </a> 
@@ -126,11 +126,11 @@ Filter:
     $result = mysqli_query($conn, "SELECT guid, itemEntry, count FROM item_instance WHERE owner_guid=". mysqli_real_escape_string($conn, $_GET['guid']) .";");
     if (mysqli_num_rows($result) == 0)
     {
-        echo 'No items was found!';
+        echo "No Items Were Found!";
     }
     else
     {
-        echo '<table cellspacing="3" cellpadding="5">';
+        echo "<table cellspacing='3' cellpadding='5'>";
         while ($row = mysqli_fetch_assoc($result))
         {
             $entry = $row['itemEntry'];
@@ -139,23 +139,23 @@ Filter:
             {
                 if ($_GET['f'] == 'equip')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='". $row['guid'] ."' AND bag='0' 
-				        AND slot RANGE(0,18) AND guid=". mysqli_real_escape_string($conn, $_GET['guid']) .";");
+                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory 
+                        WHERE item='". $row['guid'] ."' AND bag='0' AND slot RANGE(0,18) AND guid=". mysqli_real_escape_string($conn, $_GET['guid']) .";");
                 }
                 elseif ($_GET['f'] == 'bank')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='". $row['guid'] ."'
-				        AND slot>=39 AND slot<=73;");
+                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory 
+                        WHERE item='". $row['guid'] ."' AND slot>=39 AND slot<=73;");
                 }
                 elseif ($_GET['f'] == 'keyring')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='". $row['guid'] ."'
-				        AND slot>=86 AND slot<=117;");
+                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory 
+                        WHERE item='". $row['guid'] ."' AND slot>=86 AND slot<=117;");
                 }
                 elseif ($_GET['f'] == 'currency')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='". $row['guid'] ."'
-				        AND slot>=118 AND slot<=135;");
+                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory 
+                        WHERE item='". $row['guid'] ."' AND slot>=118 AND slot<=135;");
                 }
             }
             else
@@ -176,7 +176,7 @@ Filter:
                 if (mysqli_num_rows($getIcon) == 0)
                 {
                     //No icon found. Probably cataclysm item. Get the icon from wowhead instead.
-                    $sxml = new SimpleXmlElement(file_get_contents('http://www.wowhead.com/item=' . $entry . '&xml'));
+                    $sxml = new SimpleXmlElement(file_get_contents("http://www.wowhead.com/item=". $entry ."&xml"));
 
                     $icon = strtolower(mysqli_real_escape_string($conn, $sxml->item->icon));
                     //Now that we have it loaded. Add it into database for future use.
@@ -201,10 +201,10 @@ Filter:
                         <?php
                         if (!isset($_GET['f']))
                         {
-                            if (in_array($pos['slot'], $equip_array) && $pos['bag'] == 0)   echo '(Equipped)';
-                            if ($pos['slot'] >= 39 && $pos['slot'] <= 73)                   echo '(Bank)';
-                            if ($pos['slot'] >= 86 && $pos['slot'] <= 117)                  echo '(Keyring)';
-                            if ($pos['slot'] >= 118 && $pos['slot'] <= 135)                 echo '(Currency)';
+                            if (in_array($pos['slot'], $equip_array) && $pos['bag'] == 0)   echo "(Equipped)";
+                            if ($pos['slot'] >= 39 && $pos['slot'] <= 73)                   echo "(Bank)";
+                            if ($pos['slot'] >= 86 && $pos['slot'] <= 117)                  echo "(Keyring)";
+                            if ($pos['slot'] >= 118 && $pos['slot'] <= 135)                 echo "(Currency)";
                         }
                         ?>
                     </td>
@@ -212,5 +212,5 @@ Filter:
                 <?php
             }
         }
-        echo '</table>';
+        echo "</table>";
     }

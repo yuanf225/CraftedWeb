@@ -22,7 +22,7 @@
 
     global $GamePage, $GameServer;
 
-    $GamePage->validatePageAccess('Shop');
+    $GamePage->validatePageAccess("Shop");
 
     if ($GamePage->validateSubPage() == TRUE)
     {
@@ -31,7 +31,7 @@
     else
     {   
         $conn = $GameServer->connect();
-        $GameServer->selectDB('webdb', $conn);
+        $GameServer->selectDB("webdb", $conn);
         $inShop     = mysqli_query($conn, "SELECT COUNT(*) AS items FROM shopitems;");
         $purchToday = mysqli_query($conn, "SELECT COUNT(*) AS purchases FROM shoplog WHERE date LIKE '%". date('Y-m-d') ."%';");
         $getAvg     = mysqli_query($conn, "SELECT AVG(*) AS priceAvg FROM shopitems;");
@@ -42,16 +42,16 @@
         <div class="box_right_title">Shop Overview</div>
         <table style="width: 100%;">
             <tr>
-                <td><span class='blue_text'>Items in shop</span></td><td><?php echo round(mysqli_fetch_assoc($inShop)['items']); ?></td>
+                <td><span class='blue_text'>Items In Shop</span></td><td><?php echo round(mysqli_fetch_assoc($inShop)['items']); ?></td>
             </tr>
             <tr>
-                <td><span class='blue_text'>Purchases today</span></td>
+                <td><span class='blue_text'>Purchases Today</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($purchToday)['purchases']); ?></td>
-                <td><span class='blue_text'>Total purchases</span></td>
+                <td><span class='blue_text'>Total Purchases</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($totalPurch)['purchasesTotal']); ?></td>
             </tr>
             <tr>
-                <td><span class='blue_text'>Average item cost</span></td>
+                <td><span class='blue_text'>Average Item Cost</span></td>
                 <td><?php echo round(mysqli_fetch_assoc($getAvg)['priceAvg']); ?></td>
             </tr>
         </table>
