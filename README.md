@@ -9,13 +9,13 @@ CraftedWeb has a plethora of features, outlined below.
 ### Expansions
 |Expansion			| Supported?                    | Planned?                   |
 |------------------|-------------------------------|----------------------------|
-|Vanilla           |`Yes`            				|           				|
-|Burning Crusade   |`Yes`            				|          					|
+|Vanilla           |`No`            				| `Yes`          				|
+|Burning Crusade   |`No`            				| `Yes`         					|
 |WoTLK             |`Yes`							|							|
-|Cataclysm         |`Yes`							|							|
-|Mists of Pandaria |`Yes`							|							|
+|Cataclysm         |`No`							|`Yes`							|
+|Mists of Pandaria |`No`							|	`Yes`						|
 |WoD               |`No`							|`No`						|
-|Legion            |`Yes`							|							|
+|Legion            |`No`							|		`Yes`					|
 
 ### Main Features
 | Feature				| Supported	| Planned	|
