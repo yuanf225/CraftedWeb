@@ -67,19 +67,18 @@ function step4()
 
 function step5()
 {
-    var rid = document.getElementById("addrealm_id").value;
-    var name = document.getElementById("addrealm_name").value;
-    var host = document.getElementById("addrealm_host").value;
-    var port = document.getElementById("addrealm_port").value;
-    var desc = document.getElementById("addrealm_desc").value;
-    var m_host = document.getElementById("addrealm_m_host").value;
-    var m_user = document.getElementById("addrealm_m_user").value;
-    var m_pass = document.getElementById("addrealm_m_pass").value;
-    var a_user = document.getElementById("addrealm_a_user").value;
-    var a_pass = document.getElementById("addrealm_a_pass").value;
+    var name    = document.getElementById("addrealm_name").value;
+    var host    = document.getElementById("addrealm_host").value;
+    var port    = document.getElementById("addrealm_port").value;
+    var desc    = document.getElementById("addrealm_desc").value;
+    var m_host  = document.getElementById("addrealm_m_host").value;
+    var m_user  = document.getElementById("addrealm_m_user").value;
+    var m_pass  = document.getElementById("addrealm_m_pass").value;
+    var a_user  = document.getElementById("addrealm_a_user").value;
+    var a_pass  = document.getElementById("addrealm_a_pass").value;
     var sendtype = document.getElementById("addrealm_sendtype").value;
-    var chardb = document.getElementById("addrealm_chardb").value;
-    var raport = document.getElementById("addrealm_raport").value;
+    var chardb  = document.getElementById("addrealm_chardb").value;
+    var raport  = document.getElementById("addrealm_raport").value;
     var soapport = document.getElementById("addrealm_soapport").value;
 
     if (soapport == "")
@@ -91,7 +90,7 @@ function step5()
         raport = "NULL";
     }
 
-    $.post("functions.php", {step: 5, rid: rid, name: name, host: host, port: port, desc: desc, m_host: m_host, m_user: m_user, m_pass: m_pass,
+    $.post("functions.php", {step: 5, name: name, host: host, port: port, desc: desc, m_host: m_host, m_user: m_user, m_pass: m_pass,
         a_user: a_user, a_pass: a_pass, sendtype: sendtype, chardb: chardb, raport: raport, soapport: soapport},
             function (data)
             {

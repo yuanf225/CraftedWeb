@@ -63,7 +63,7 @@
 ##
     if (isset($_POST['serverStatus']))
     {
-        echo '<div class="box_one_title">Server status</div>';
+        echo "<div class='box_one_title'>Server status</div>";
         $num = 0;
         if (is_array($GLOBALS['realms']) || is_object($GLOBALS['realms']))
         {

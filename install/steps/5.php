@@ -23,9 +23,6 @@
 <hr/>
 <table cellpadding="10" cellspacing="5">
     <tr>
-        <td>Realm ID:</td>
-        <td><input type="text" placeholder="Default: 1" id="addrealm_id"></td>
-
         <td>Realm Name:</td>
         <td><input type="text" placeholder="Default: Sample Realm" id="addrealm_name"></td>
 
@@ -57,7 +54,7 @@
         <td><input type="text" placeholder="Default: admin" id="addrealm_a_user"></td> 
 
         <td>Authorized Account password:</td>
-        <td><input type="text" placeholder="Default: adminpass" id="addrealm_a_pass"></td>        
+        <td><input type="password" placeholder="Default: adminpass" id="addrealm_a_pass"></td>        
     </tr>
     <tr>
         <td>Remote Console:</td>

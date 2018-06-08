@@ -9,9 +9,18 @@
         {
             case(1):
                 step1(
-                    $_POST['realmlist'], $_POST['host'], $_POST['user'], $_POST['pass'], 
-                    $_POST['webdb'], $_POST['worlddb'], $_POST['logondb'], 
-                    $_POST['domain'], $_POST['title'], $_POST['email'], $_POST['expansion'], $_POST['paypal']
+                    $_POST['realmlist'], 
+                    $_POST['host'], 
+                    $_POST['user'], 
+                    $_POST['pass'], 
+                    $_POST['webdb'], 
+                    $_POST['worlddb'], 
+                    $_POST['logondb'], 
+                    $_POST['domain'], 
+                    $_POST['title'], 
+                    $_POST['email'], 
+                    $_POST['expansion'], 
+                    $_POST['paypal']
                 );
                 break;
 
@@ -29,11 +38,20 @@
 
             case(5):
                 step5(
-                    $_POST['rid'], $_POST['name'], $_POST['port'], 
-                    $_POST['host'], $_POST['m_host'], $_POST['m_user'], 
-                    $_POST['m_pass'], $_POST['a_user'], $_POST['a_pass'], 
-                    $_POST['desc'], $_POST['sendtype'], $_POST['chardb'], 
-                    $_POST['raport'], $_POST['soapport']);
+                    $_POST['name'], 
+                    $_POST['port'], 
+                    $_POST['host'], 
+                    $_POST['m_host'], 
+                    $_POST['m_user'], 
+                    $_POST['m_pass'], 
+                    $_POST['a_user'], 
+                    $_POST['a_pass'], 
+                    $_POST['desc'], 
+                    $_POST['sendtype'], 
+                    $_POST['chardb'], 
+                    $_POST['raport'], 
+                    $_POST['soapport']
+                );
                 break;
         }
     }
@@ -62,7 +80,6 @@
 	        $_SESSION['install']['database']['paypal']    = $paypal;
         }
         
-
         print true;
     }
 
@@ -70,12 +87,12 @@
     {
     	$config = false;
     	$sql = false;
-        if (is_writable('../includes/configuration.php'))
+        if (is_writable("../includes/configuration.php"))
         {
             $config = true;
         }
 
-        if (is_readable('sql/CraftedWeb_Base.sql'))
+        if (is_readable("sql/CraftedWeb_Base.sql"))
         {
             $sql = true;
         }
@@ -100,31 +117,31 @@
 
     function step3()
     {
-        echo '[Info] Connecting to database...';
+        echo "[Info] Connecting to database...";
         $conn = mysqli_connect(
         	$_SESSION['install']['database']['host'], 
         	$_SESSION['install']['database']['user'], 
         	$_SESSION['install']['database']['pass'])
-        	or die ('<br/>[FAILURE] Could not connect to the database. Please restart the installation. ');
+        	or die ("<br/>[FAILURE] Could not connect to the database. Please restart the installation. ");
 
-        echo '<br/>[Success] Connected to database.';
-        echo '<br/>[Info] Creating Website database...';
+        echo "<br>[Success] Connected to database.";
+        echo "<br>[Info] Creating Website database...";
 
         mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS ". mysqli_real_escape_string($conn, $_SESSION['install']['database']['webdb']) .";") 
-        	or die ('<br/>[FAILURE] Could not create the website database. Please restart the installation.');
+        	or die ("<br>[FAILURE] Could not create the website database. Please restart the installation.");
 
-        echo '<br/>[Success] Created Website database';
-        echo '<br/>[Info] Connecting to Website database';
+        echo "<br>[Success] Created Website database";
+        echo "<br>[Info] Connecting to Website database";
 
         mysqli_select_db($conn, $_SESSION['install']['database']['webdb']) 
-        	or die ('<br/>[FAILURE] Could not connect to the Website database. Please restart the installation.');
+        	or die ("<br>[FAILURE] Could not connect to the Website database. Please restart the installation.");
 
-        echo '<br/>[Success] Connected to Website database';
-        echo '<br/>[Info] Creating tables & inserting data into Website database...';
+        echo "<br>[Success] Connected to Website database";
+        echo "<br>[Info] Creating tables & inserting data into Website database...";
 
-        $f        = fopen('sql/CraftedWeb_Base.sql', "r+");
-        $sqlFile  = fread($f, filesize('sql/CraftedWeb_Base.sql'));
-        $sqlArray = explode(';', $sqlFile);
+        $f        = fopen("sql/CraftedWeb_Base.sql", "r+");
+        $sqlFile  = fread($f, filesize("sql/CraftedWeb_Base.sql"));
+        $sqlArray = explode(";", $sqlFile);
 
         if (is_array($sqlArray) || is_object($sqlArray))
         {
@@ -134,18 +151,18 @@
                 {
                     if (!mysqli_query($conn, $stmt))
                     {
-                        die('<br/>[FAILURE] Could not run SQL file for the Website database. Please restart the installation. ('. mysqli_error($conn) .')');
+                        die("<br>[FAILURE] Could not run SQL file for the Website database. Please restart the installation. (". mysqli_error($conn) .")");
                     }
                 }
             }
         }
 
-        echo '<br/>[Success] SQL file imported successfully!';
-        echo '<br/>[Info] (Optional)Trying to import <i>item_icons</i> into Website database.';
+        echo "<br>[Success] SQL file imported successfully!";
+        echo "<br>[Info] (Optional) Trying to import <i>item_icons</i> into Website database.";
 
-        $f        = fopen('sql/item_icons.sql', "r+");
-        $sqlFile2 = fread($f, filesize('sql/item_icons.sql'));
-        $sqlArray = explode(';', $sqlFile2);
+        $f        = fopen("sql/item_icons.sql", "r+");
+        $sqlFile2 = fread($f, filesize("sql/item_icons.sql"));
+        $sqlArray = explode(";", $sqlFile2);
 
         if (is_array($sqlArray) || is_object($sqlArray))
         {
@@ -162,14 +179,14 @@
         }
         if (!isset($err))
         {
-            echo '<br/>[Success] SQL file imported successfully!';
+            echo "<br/>[Success] SQL file imported successfully!";
         }
         else
         {
-            echo '<br/>[Info] <i>item_icons</i> was not imported. ('. mysqli_error($conn) .')';
+            echo "<br/>[Info] <i>item_icons</i> was not imported. (". mysqli_error($conn) .")";
         }
 
-        echo '<br/>[Info] Writing configuration file...';
+        echo "<br/>[Info] Writing configuration file...";
 
 
         $config = '
@@ -512,42 +529,44 @@
 	loadCustomErrors(); //Load custom errors
 ?>';
 
-        $fp = fopen('../includes/configuration.php', 'w');
-        fwrite($fp, $config) or die('<br/>[FAILURE] Could not write Configuration file. Please restart the installation.');
+        $fp = fopen("../includes/configuration.php", "w");
+        fwrite($fp, $config) or die("<br/>[FAILURE] Could not write Configuration file. Please restart the installation.");
         fclose($fp);
 
-        echo '<br/>[Success] Configuration file was written!';
+        echo "<br>[Success] Configuration file was written!";
 
-        echo '<hr/>Installation proccess finished. <a href="?st=4">Click here to continue</a>';
+        echo "<hr>Installation proccess finished. <a href='?st=4'>Click here to continue</a>";
     }
 
     function step4()
     {
-        $files = scandir('sql/updates/');
+        $files = scandir("sql/updates/");
 
-        echo '[Info]Connecting to database...';
+        echo "[Info] Connecting to database...";
         $conn = mysqli_connect($_SESSION['install']['database']['host'], $_SESSION['install']['database']['user'], $_SESSION['install']['database']['pass']) 
-        	or die('<br/>[FAILURE] Could not connect to the database. Please restart the installation. ');
+        	or die("<br/>[FAILURE] Could not connect to the database. Please restart the installation. ");
 
-        echo '<br/>[Success] Connected to database.';
-        echo '<br/>[Info] Connecting to Website database';
+        echo "<br>[Success] Connected to database.";
+        echo "<br>[Info] Connecting to Website database";
 
-        mysqli_select_db($conn, $_SESSION['install']['database']['webdb']) or die
-                        ('<br/>[FAILURE] Could not connect to the Website database. Please restart the installation.');
+        mysqli_select_db($conn, $_SESSION['install']['database']['webdb']) 
+        	or die("<br>[FAILURE] Could not connect to the Website database. Please restart the installation.");
 
-        echo '<br/>[Success] Connected to Website database';
-        echo '<br/>[Info] Now applying updates...';
+        echo "<br>[Success] Connected to Website database";
+        echo "<br>[Info] Now applying updates...";
 
         if (is_array($files) || is_object($files))
         {
             foreach ($files as $value)
             {
-                if (substr($value, -3, 3) == 'sql')
+                if (substr($value, -3, 3) == "sql")
                 {
-                    echo '<br>[Info]Applying ' . $value . '...';
-                    $f = fopen('sql/updates/' . $value, "r+") or die ('<br/>[FAILURE] Could not open SQL file. Please set the CHMOD to 777 and try again.');
-                    $sqlFile  = fread($f, filesize('sql/updates/' . $value));
-                    $sqlArray = explode(';', $sqlFile);
+                    echo "<br>[Info] Applying ". $value ."...";
+                    $f = fopen("sql/updates/". $value, "r+") 
+                    	or die ("<br/>[FAILURE] Could not open SQL file. Please set the CHMOD to 777 and try again.");
+
+                    $sqlFile  = fread($f, filesize("sql/updates/". $value));
+                    $sqlArray = explode(";", $sqlFile);
 
                     if (is_array($sqlArray) || is_object($sqlArray))
                     {
@@ -557,11 +576,11 @@
                             {
                                 if (!mysqli_query($conn, $stmt))
                                 {
-                                    die('<br/>[FAILURE] Could not run SQL file for the Website database. (' . mysqli_error($conn) . ')');
+                                    die("<br/>[FAILURE] Could not run SQL file for the Website database. (". mysqli_error($conn) .")");
                                 }
                                 else
                                 {
-                                	echo '[Success] Updates completed. <a href="?st=5">Click here to continue</a>';
+                                	echo "<br>[Success] Updates completed. <a href='?st=5'>Click here to continue</a>";
                                 }
                             }
                         }
@@ -569,8 +588,6 @@
                 }
             }
         }
-
-        
     }
 
     function step5($name, $port, $host, $m_host, $m_user, $m_pass, $a_user, $a_pass, $desc, $sendtype, $chardb, $raport, $soapport)
@@ -582,40 +599,39 @@
 
         mysqli_select_db($conn, $_SESSION['install']['database']['webdb']);
 
-        $name     = mysqli_real_escape_string($conn, $name);
-        $port     = mysqli_real_escape_string($conn, $port);
-        $host     = mysqli_real_escape_string($conn, $host);
-        $m_host   = mysqli_real_escape_string($conn, $m_host);
-        $m_user   = mysqli_real_escape_string($conn, $m_user);
-        $m_pass   = mysqli_real_escape_string($conn, $m_pass);
-        $a_user   = mysqli_real_escape_string($conn, $a_user);
-        $a_pass   = mysqli_real_escape_string($conn, $a_pass);
-        $desc     = mysqli_real_escape_string($conn, $desc);
-        $sendtype = mysqli_real_escape_string($conn, $sendtype);
-        $chardb   = mysqli_real_escape_string($conn, $chardb);
-        $raport   = mysqli_real_escape_string($conn, $raport);
-        $soapport = mysqli_real_escape_string($conn, $soapport);
+        $realmName     		= mysqli_real_escape_string($conn, $name);
+        $realmPort     		= mysqli_real_escape_string($conn, $port);
+        $realmHost     		= mysqli_real_escape_string($conn, $host);
+        $mysqli_host   		= mysqli_real_escape_string($conn, $m_host);
+        $mysqli_user   		= mysqli_real_escape_string($conn, $m_user);
+        $mysqli_password   	= mysqli_real_escape_string($conn, $m_pass);
+        $admin_user   		= mysqli_real_escape_string($conn, $a_user);
+        $admin_password   	= mysqli_real_escape_string($conn, $a_pass);
+        $description     	= mysqli_real_escape_string($conn, $desc);
+        $sendtype 			= mysqli_real_escape_string($conn, $sendtype);
+        $chardb   			= mysqli_real_escape_string($conn, $chardb);
+        $raport   			= mysqli_real_escape_string($conn, $raport);
+        $soapport 			= mysqli_real_escape_string($conn, $soapport);
 
-        if (empty($name) || empty($port) || empty($host) || empty($m_host) || empty($m_user) || 
-        	empty($a_user) || empty($a_pass) || empty($sendtype) || empty($chardb))
+        if (empty($realmName) || 
+        	empty($realmPort) || 
+        	empty($realmHost) || 
+        	empty($mysqli_host) || 
+        	empty($mysqli_user) || 
+        	empty($admin_user) || 
+        	empty($admin_password) || 
+        	empty($sendtype) || 
+        	empty($chardb))
         {
             die('Please enter all fields.');
         }
 
-        mysqli_query($conn, "INSERT INTO realms VALUES
-        	('". $name ."',
-        	'". $desc ."',
-        	'". $chardb ."',
-        	'". $port ."',
-        	'". $a_user ."',
-        	'". $a_pass ."',
-        	'". $raport ."',
-        	'". $soapport ."',
-        	'". $host ."',
-        	'". $sendtype ."',
-        	'". $m_host ."',
-        	'". $m_user ."',
-        	'". $m_pass ."')")
+        mysqli_query($conn, "INSERT INTO realms 
+        	(name, description, char_db, port, rank_user, rank_pass, ra_port, soap_port, host, sendType, mysqli_host, mysqli_user, mysqli_pass) 
+        	VALUES
+        	('". $realmName ."', '". $description ."', '". $chardb ."', '". $realmPort ."', '". $admin_user ."', 
+        	'". $admin_password ."', '". $raport ."', '". $soapport ."', '". $realmHost ."', '". $sendtype ."', 
+        	'". $mysqli_host ."', '". $mysqli_user ."', '". $mysqli_password ."')")
         or die("Could not insert realm into database. (". mysqli_error($conn) .")");
 
         echo "Realm successfully created. <a href='?st=6'>Finish Installation</a>";

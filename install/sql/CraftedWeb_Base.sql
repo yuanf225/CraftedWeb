@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `payments_log`
 DROP TABLE IF EXISTS `realms`;
 CREATE TABLE IF NOT EXISTS `realms` 
 (
-  `id` int(32) NOT NULL auto_increment,
+  `id` int(32) AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL,
   `char_db` varchar(255) DEFAULT NULL,

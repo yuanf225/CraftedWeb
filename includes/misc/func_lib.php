@@ -46,21 +46,21 @@
     {
         if ($time < 60)
         {
-            $string = 'Seconds';
+            $string = "Seconds";
         }
-        elseif ($time > 60)
+        if ($time > 60)
         {
             $time   = $time / 60;
-            $string = 'Minutes';
+            $string = "Minutes";
         }
-        elseif ($time > 60)
+        if ($time > 60)
         {
-            $string = 'Hours';
+            $string = "Hours";
             $time   = $time / 60;
         }
-        elseif ($time > 24)
+        if ($time > 24)
         {
-            $string = 'Days';
+            $string = "Days";
             $time   = $time / 24;
         }
         

@@ -451,7 +451,7 @@
             if (!isset($_COOKIE['presetRealmStatus']))
             {
                 $conn = $this->connect();
-                $this->selectDB('webdb', $conn);
+                $this->selectDB("webdb", $conn);
                 $getRealm = mysqli_query($conn, "SELECT id FROM realms ORDER BY id ASC LIMIT 1;");
                 $row      = mysqli_fetch_assoc($getRealm);
 
@@ -462,7 +462,7 @@
                 $rid = $_COOKIE['presetRealmStatus'];
             }
 
-            echo 'Selected Realm: <b>' . $this->getRealmName($rid) . '</b><a href="#" onclick="changePresetRealmStatus()"> (Change Realm)</a><hr/>';
+            echo "Selected Realm: <b>". $this->getRealmName($rid) ."</b><a href='#' onclick='changePresetRealmStatus()'> (Change Realm)</a><hr/>";
             ?>
             <table>
                 <tr valign="top">
@@ -717,7 +717,7 @@
 
         public function titleLink()
         {
-            return '<a href="?p='. $_GET['p'] .'" title="Back to '. ucfirst($_GET['p']) .'">'. ucfirst($_GET['p']) .'</a>';
+            return "<a href='?p=". htmlentities($_GET['p']) ."' title='Back to ". htmlentities(ucfirst($_GET['p'])) ."'>". htmlentities(ucfirst($_GET['p'])) ."</a>";
         }
 
         public function addSlideImage($upload, $path, $url)
@@ -919,7 +919,7 @@
     function activeMenu($p)
     {
         if (isset($_GET['p']) && $_GET['p'] == $p)
-            echo "style='display:block;'";
+            echo htmlentities("style='display:block;'");
     }
 
     function limit_characters($str, $n)
@@ -928,13 +928,13 @@
         if (strlen($str) <= $n)
             return $str;
         else
-            return substr($str, 0, $n) . '';
+            return substr($str, 0, $n). "";
     }
 
     function stripBBCode($text_to_search)
     {
         $pattern = '|[[\/\!]*?[^\[\]]*?]|si';
-        $replace = '';
+        $replace = "";
         return preg_replace($pattern, $replace, $text_to_search);
     }
     

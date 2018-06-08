@@ -43,9 +43,9 @@
                             if (!in_array($folderName, $bad))
                             {
                                 $Connect->selectDB('webdb', $conn);
-                                if (file_exists('plugins/' . $folderName . '/config.php'))
+                                if (file_exists('plugins/'. $folderName .'/config.php'))
                                 {
-                                    include('plugins/' . $folderName . '/config.php');
+                                    include('plugins/'. $folderName .'/config.php');
                                 }
 
                                 $loaded_plugins[] = $folderName;
@@ -82,21 +82,21 @@
                     {
                         foreach ($_SESSION['loaded_plugins'] as $folderName)
                         {
-                            $Connect->selectDB('webdb', $conn);
+                            $Connect->selectDB("webdb", $conn);
                             $chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='". mysqli_real_escape_string($conn, $folderName) ."';");
-                            if (mysqli_field_seek($chk, 0) == 0 && file_exists('plugins/' . $folderName . '/' . $type . '/'))
+                            if (mysqli_field_seek($chk, 0) == 0 && file_exists('plugins/'. $folderName .'/'. $type .'/'))
                             {
-                                $folder = scandir('plugins/' . $folderName . '/' . $type . '/');
+                                $folder = scandir('plugins/'. $folderName .'/'. $type .'/');
 
                                 foreach ($folder as $fileName)
                                 {
                                     if (!in_array($fileName, $bad))
                                     {
-                                        $loaded[] = 'plugins/' . $folderName . '/' . $type . '/' . $fileName;
+                                        $loaded[] = 'plugins/'. $folderName .'/'. $type .'/'. $fileName;
                                     }
                                 }
 
-                                $_SESSION['loaded_plugins_' . $type] = $loaded;
+                                $_SESSION['loaded_plugins_'. $type] = $loaded;
                             }
                         }
                     }
@@ -109,7 +109,7 @@
             if ($GLOBALS['enablePlugins'] == true)
             {
                 ##########################
-                if ($type == 'pages')
+                if ($type == "pages")
                 {
                     $count = 0;
                     if (is_array($_SESSION['loaded_plugins_' . $type]) || is_object($_SESSION['loaded_plugins_' . $type]))
