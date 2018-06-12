@@ -1,6 +1,24 @@
 <?php
     session_start();
-    $step  = (int) $_GET['st'];
+
+    if (file_exists("../includes/classes/validator.php"))
+    {
+        include_once "../includes/classes/validator.php";
+
+        $validator = new Validator(array('st' => 'int'), array('st'), array('st'));
+        if ($validator->validate($_GET))
+        {
+            $_GET = $validator->sanatize($_GET);
+            $step = $_GET['st'];
+        }
+        else header("Location: ./index.php");
+    }
+    elseif(is_numeric($_GET['st']))
+    {
+        $step = $_GET['st'];
+    }
+    else header("Location: ./index.php");
+
     $steps = array
     (
         1 => 'Database Connection & General Info',

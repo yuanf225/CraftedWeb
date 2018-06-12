@@ -70,7 +70,7 @@
                 <p>You will need a MySQL User login and Database along with your server information before you continue.<p>
                 <p>Please CHMOD 777 <i>'includes/configuration.php'</i> AND <i>'install/sql/CraftedWeb_Base.sql'</i> ahead of time.</p>
                 <p>When ready, start the installation process</p>
-                <p><input type="submit" value="Start the installation" onclick="window.location = 'install.php?st=1'"></p>
+                <p><input type="submit" value="Start the installation" onclick="<?php echo htmlentities("window.location='install.php?st=1'"); ?>"></p>
             </div>
         </div>
     </center>

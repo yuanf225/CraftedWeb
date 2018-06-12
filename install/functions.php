@@ -5,23 +5,74 @@
 
     if (isset($_POST['step']))
     {
+
+    	$step1_variables = array
+    	(
+    		'step1_host'		=> 'anything',
+        	'step1_realmlist'	=> 'alfanum',
+        	'step1_title'		=> 'alfanum',
+            'step1_user'		=> 'alfanum',
+            'step1_logondb'		=> 'alfanum',
+            'step1_domain'		=> 'anything',
+            'step1_pass'		=> 'anything',
+            'step1_worlddb'		=> 'alfanum',
+            'step1_exp'			=> 'number',
+            'step1_paypal'		=> 'email',
+            'step1_webdb'		=> 'alfanum',
+            'step1_email'		=> 'email'
+    	);
+
+    	$step1_required = array
+    	(
+    		'step1_host',
+        	'step1_realmlist',
+        	'step1_title',
+            'step1_user',
+            'step1_logondb',
+            'step1_domain',
+            'step1_pass',
+            'step1_worlddb',
+            'step1_exp',
+            'step1_paypal',
+            'step1_webdb',
+            'step1_email',
+    	);
+
+    	$step5_variables = array
+    	(
+    		'addrealm_name'		=> 'alfanum',
+        	'addrealm_host'		=> 'anything',
+        	'addrealm_port'		=> 'int',
+        	'addrealm_desc'		=> 'string',
+        	'addrealm_m_host'	=> 'anything',
+        	'addrealm_m_user'	=> 'alfanum',
+        	'addrealm_a_user'	=> 'alfanum',
+        	'addrealm_a_pass'	=> 'anything',
+        	'addrealm_sendtype'	=> 'string',
+        	'addrealm_chardb'	=> 'alfanum',
+    	);
+
+    	$step5_required = array
+    	(
+    		'addrealm_name',
+        	'addrealm_host',
+        	'addrealm_port',
+        	'addrealm_desc',
+        	'addrealm_m_host',
+        	'addrealm_m_user',
+        	'addrealm_m_pass',
+        	'addrealm_a_user',
+        	'addrealm_a_pass',
+        	'addrealm_sendtype',
+        	'addrealm_chardb',
+        	'addrealm_raport',
+        	'addrealm_soapport',
+    	);
+
         switch ($_POST['step'])
         {
             case(1):
-                step1(
-                    $_POST['realmlist'], 
-                    $_POST['host'], 
-                    $_POST['user'], 
-                    $_POST['pass'], 
-                    $_POST['webdb'], 
-                    $_POST['worlddb'], 
-                    $_POST['logondb'], 
-                    $_POST['domain'], 
-                    $_POST['title'], 
-                    $_POST['email'], 
-                    $_POST['expansion'], 
-                    $_POST['paypal']
-                );
+                step1();
                 break;
 
             case(2):
@@ -37,48 +88,56 @@
                 break;
 
             case(5):
-                step5(
-                    $_POST['name'], 
-                    $_POST['port'], 
-                    $_POST['host'], 
-                    $_POST['m_host'], 
-                    $_POST['m_user'], 
-                    $_POST['m_pass'], 
-                    $_POST['a_user'], 
-                    $_POST['a_pass'], 
-                    $_POST['desc'], 
-                    $_POST['sendtype'], 
-                    $_POST['chardb'], 
-                    $_POST['raport'], 
-                    $_POST['soapport']
-                );
+                step5();
                 break;
         }
     }
 
-    function step1($realmlist, $host, $user, $pass, $webdb, $worlddb, $logondb, $domain, $title, $email, $exp, $paypal)
+    function step1()
     {
-        if (empty($host) || empty($user) || empty($logondb) || 
-        	empty($worlddb) || empty($webdb) || empty($realmlist) || 
-        	empty($title) || empty($domain) || empty($email))
+        if (empty($_POST['step1_host']) ||
+        	empty($_POST['step1_realmlist']) ||
+        	empty($_POST['step1_title']) ||
+            empty($_POST['step1_user']) ||
+            empty($_POST['step1_logondb']) ||
+            empty($_POST['step1_domain']) ||
+            empty($_POST['step1_worlddb']) ||
+            empty($_POST['step1_exp']) ||
+            empty($_POST['step1_paypal']) ||
+            empty($_POST['step1_webdb']) ||
+            empty($_POST['step1_email']))
         {
             die("Please enter all fields!");
         }
-        else
+
+        if (file_exists("../includes/classes/validator.php"))
         {
-        	$_SESSION['install']['database']['host']      = $host;
-	        $_SESSION['install']['database']['user']      = $user;
-	        $_SESSION['install']['database']['pass']      = $pass;
-	        $_SESSION['install']['database']['logondb']   = $logondb;
-	        $_SESSION['install']['database']['worlddb']   = $worlddb;
-	        $_SESSION['install']['database']['webdb']     = $webdb;
-	        $_SESSION['install']['database']['realmlist'] = $realmlist;
-	        $_SESSION['install']['database']['title']     = $title;
-	        $_SESSION['install']['database']['domain']    = $domain;
-	        $_SESSION['install']['database']['exp']       = $exp;
-	        $_SESSION['install']['database']['email']     = $email;
-	        $_SESSION['install']['database']['paypal']    = $paypal;
-        }
+        	include "../includes/classes/validator.php";
+
+        	$Validator = new Validator($step1_variables, $step1_required, $step1_required);
+        	if($validator->validate($_POST))
+        	{
+        		$_POST = $validator->sanatize($_POST);
+        		# $_POST has been sanatized.
+
+        		$_SESSION['install']['database']['host']      = $_POST['step1_host'];
+	        	$_SESSION['install']['database']['realmlist'] = $_POST['step1_realmlist'];
+	        	$_SESSION['install']['database']['title']     = $_POST['step1_title'];
+
+		        $_SESSION['install']['database']['user']      = $_POST['step1_user'];
+		        $_SESSION['install']['database']['logondb']   = $_POST['step1_logondb'];
+		        $_SESSION['install']['database']['domain']    = $_POST['step1_domain'];
+
+		        $_SESSION['install']['database']['pass']      = $_POST['step1_pass'];
+		        $_SESSION['install']['database']['worlddb']   = $_POST['step1_worlddb'];
+		        $_SESSION['install']['database']['exp']       = $_POST['step1_exp'];
+
+				$_SESSION['install']['database']['paypal']    = $_POST['step1_paypal'];
+		        $_SESSION['install']['database']['webdb']     = $_POST['step1_webdb'];
+		        $_SESSION['install']['database']['email']     = $_POST['step1_email'];
+
+        	}
+    	}
         
         print true;
     }
@@ -86,7 +145,8 @@
     function step2()
     {
     	$config = false;
-    	$sql = false;
+    	$sql 	= false;
+
         if (is_writable("../includes/configuration.php"))
         {
             $config = true;
@@ -122,19 +182,19 @@
         	$_SESSION['install']['database']['host'], 
         	$_SESSION['install']['database']['user'], 
         	$_SESSION['install']['database']['pass'])
-        	or die ("<br/>[FAILURE] Could not connect to the database. Please restart the installation. ");
+        	or die ("<br/>[FAILURE] Could not connect to the database. Please <a href='./index.php'>restart</a> the installation. ");
 
         echo "<br>[Success] Connected to database.";
         echo "<br>[Info] Creating Website database...";
 
         mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS ". mysqli_real_escape_string($conn, $_SESSION['install']['database']['webdb']) .";") 
-        	or die ("<br>[FAILURE] Could not create the website database. Please restart the installation.");
+        	or die ("<br>[FAILURE] Could not create the website database. Please <a href='./index.php'>restart</a> the installation.");
 
         echo "<br>[Success] Created Website database";
         echo "<br>[Info] Connecting to Website database";
 
         mysqli_select_db($conn, $_SESSION['install']['database']['webdb']) 
-        	or die ("<br>[FAILURE] Could not connect to the Website database. Please restart the installation.");
+        	or die ("<br>[FAILURE] Could not connect to the Website database. Please <a href='./index.php'>restart</a> the installation.");
 
         echo "<br>[Success] Connected to Website database";
         echo "<br>[Info] Creating tables & inserting data into Website database...";
@@ -151,7 +211,7 @@
                 {
                     if (!mysqli_query($conn, $stmt))
                     {
-                        die("<br>[FAILURE] Could not run SQL file for the Website database. Please restart the installation. (". mysqli_error($conn) .")");
+                        die("<br>[FAILURE] Could not run SQL file for the Website database. Please <a href='./index.php'>restart</a> the installation. (". mysqli_error($conn) .")");
                     }
                 }
             }
@@ -211,7 +271,8 @@
 	/*************************/
 	/* General settings      
 	/*************************/
-	$useDebug = false; //If you are having problems with your website, set this to "true", if not, set to "false". 
+	$useDebug = false; 
+	//If you are having problems with your website, set this to "true", if not, set to "false". 
 	//All errors will be logged and visible in "includes/error-log.php". If set to false, error log will be blank. 
 	//This will also enable/disable errors on the Admin- & Staff panel.
 	 
@@ -282,7 +343,7 @@
 	$enablePlugins = true; //Enable or disable the use of plugins. Plugins May slow down your site a bit.
 	 
 	/*************************/
-	# 	Slideshow settings 
+	/* 	Slideshow settings 
 	/*************************/
 	$enableSlideShow = true; //Enable or Disable the slideshow. This will only be shown at the home page. 
 	
@@ -301,24 +362,24 @@
 	/*************************/
 	/* News settings   
 	/*************************/
-	$news[\'enable\'] 	= true; // Enable/Disable the use of the news system at the homepage. 
-	$news[\'maxShown\'] = 5; //Maximum amount of news posts that will be shown on the home page.
-							 //People can still view all posts by clicking the "All news" button.
-	$news[\'enableComments\'] 		= true; //Make people able to comment on your news posts.
-	$news[\'limitHomeCharacters\'] 	= false; //This will limit the characters shown in the news post. People will have to click the "Read more..." button
-											//to read the whole news post. 
+	$news[\'enable\'] 				= true;  // Enable/Disable the use of the news system at the homepage. 
+	$news[\'maxShown\'] 			= 5; 	 // Maximum amount of news posts that will be shown on the home page.
+							 				 // People can still view all posts by clicking the "All news" button.
+	$news[\'enableComments\'] 		= true;  // Make people able to comment on your news posts.
+	$news[\'limitHomeCharacters\'] 	= false; // This will limit the characters shown in the news post. People will have to click the "Read more..." button
+											 //to read the whole news post. 
 	
 	
 	/***** Server status ******/
-	$serverStatus[\'enable\'] 			= true; //This will enable/disable the server status box.
+	$serverStatus[\'enable\'] 			= true;  //This will enable/disable the server status box.
 	$serverStatus[\'nextArenaFlush\'] 	= false; //This will display the next arena flush for your realm(s).
-	$serverStatus[\'uptime\'] 			= true; //This will display the uptime of your realm(s).
-	$serverStatus[\'playersOnline\'] 	= true; //This will show current players online
-	$serverStatus[\'factionBar\'] 		= true; //This will show the players online faction bar.
+	$serverStatus[\'uptime\'] 			= true;  //This will display the uptime of your realm(s).
+	$serverStatus[\'playersOnline\'] 	= true;  //This will show current players online
+	$serverStatus[\'factionBar\'] 		= true;  //This will show the players online faction bar.
 	
 	
 	/*************************/
-	/* mysqli connection settings
+	/* MySQL connection settings
 	/*************************/
 	
 	$connection[\'host\'] 		= \''. $_SESSION['install']['database']['host'] .'\';
@@ -329,23 +390,23 @@
 	$connection[\'worlddb\'] 	= \''. $_SESSION['install']['database']['worlddb'] .'\';
 	$connection[\'realmlist\'] 	= \''. $_SESSION['install']['database']['realmlist'] .'\';
 	
-	// host = Either an IP address or a DNS address
-	// user = A mysqli user with access to view/write the entire database.
-	// password = The password for the user you specified
-	// logondb = The name of your "auth" or "realmdb" database name. Default: auth
-	// webdb = The name of the database with CraftedWeb data. Default: craftedweb
-	// worlddb = The name of your world database. Default: world
-	// realmlist = This could be your server IP or DNS. Ex: logon.yourserver.com
+	// host 		= Either an IP address or a DNS address
+	// user 		= A mysqli user with access to view/write the entire database.
+	// password 	= The password for the user you specified
+	// logondb 		= The name of your "auth" or "realmdb" database name. Default: auth
+	// webdb 		= The name of the database with CraftedWeb data. Default: craftedweb
+	// worlddb 		= The name of your world database. Default: world
+	// realmlist 	= This could be your server IP or DNS. Ex: logon.yourserver.com
 	
 	/*************************/
 	/* Registration settings
 	/*************************/
 	$registration[\'userMaxLength\'] 	= 16;
 	$registration[\'userMinLength\'] 	= 3;
-	$registration[\'passMaxLength\'] 	= 22;
+	$registration[\'passMaxLength\'] 	= 255;
 	$registration[\'passMinLength\'] 	= 5;
 	$registration[\'validateEmail\'] 	= false;
-	$registration[\'captcha\'] 			= false;
+	$registration[\'captcha\'] 			= true;
 	
 	//userMaxLength = Maximum length of usernames
 	//userMinLength = Minimum length of usernames
@@ -358,7 +419,7 @@
 	/* Voting settings
 	/*************************/
 	$vote[\'timer\'] 	  = 43200;
-	$vote[\'type\'] 	  = \'instant\';
+	$vote[\'type\'] 	  = \'confirm\';
 	$vote[\'multiplier\'] = 2;
 	
 	// timer = Timer between every vote on each link in seconds. Default: 43200 (12 hours)
@@ -379,17 +440,17 @@
 	$donation[\'responseSubject\'] 	= \'Thanks for your support!\';
 	$donation[\'donationType\'] 	= 2;
 	
-	// paypal_email = The PayPal email address of wich payment will be sent to.
-	// coins_name = The name of the donation coins that the user will buy.
-	// currency = The name of the currency that you want the user to pay with. Default: USD
-	// emailResponse = Enabling this will make the donator to recieve a validation email after their donation, containing the donation information. 
+	// paypal_email 	= The PayPal email address of wich payment will be sent to.
+	// coins_name 		= The name of the donation coins that the user will buy.
+	// currency 		= The name of the currency that you want the user to pay with. Default: EUR
+	// emailResponse 	= Enabling this will make the donator to recieve a validation email after their donation, containing the donation information. 
 	// sendResponseCopy = Set this to "true" if you wish to recieve a copy of the email response mentioned above. 
-	// copyTo = Enable the sendResponseCopy to activate this function. Enter the email address of wich the payment copy will be sent to. 
-	// responseSubject =  Enable the sendResponseCopy to activate this function. The subject of the email response sent to the donator.
-	// donationType = How the user will donate. 1 = They can enter how many coins they wish to buy, and the value can be increased with the multiplier.
-	// 2 = A list of options will be shown, you may set the list below.
+	// copyTo 			= Enable the sendResponseCopy to activate this function. Enter the email address of wich the payment copy will be sent to. 
+	// responseSubject 	= Enable the sendResponseCopy to activate this function. The subject of the email response sent to the donator.
+	// donationType 	= How the user will donate. 1 = They can enter how many coins they wish to buy, and the value can be increased with the multiplier.
+	// 2 				= A list of options will be shown, you may set the list below.
 	
-	/*  EDITING THIS IS ONLY NECESSARY IF YOU HAVE \'donationType\' SET TO 2     */
+	/*  EDITING THIS IS ONLY NECESSARY IF YOU HAVE \'donationType\' SET TO 2 */
 	/* Just follow the template and enter your custom values */
 	/* array(\'NAME/TITLE\', COINS TO ADD, PRICE) */
 	$donationList = array
@@ -408,9 +469,9 @@
 	$voteShop[\'enableAdvancedSearch\'] = true;
 	$voteShop[\'shopType\'] 			= 1;
 	
-	// enableShop = Enables/disables the use of the Vote Shop. "true" = enable, "false" = disable.
-	// enableAdvancedSearch = Enabled/disables the use of the advanced search feature. "true" = enable, "false" = disable.
-	// shopType = The type of shop you wish to use. 1 = "Search". 2 = List all items available.
+	// enableShop 				= Enables/disables the use of the Vote Shop. "true" = enable, "false" = disable.
+	// enableAdvancedSearch 	= Enabled/disables the use of the advanced search feature. "true" = enable, "false" = disable.
+	// shopType 				= The type of shop you wish to use. 1 = "Search". 2 = List all items available.
 	
 	
 	/*************************/
@@ -427,7 +488,7 @@
 	$social[\'facebookGroupURL\'] 		= \'http://www.facebook.com/YourServer\';
 	
 	// enableFacebookModule = This will create a Facebook box to the left, below the server status. "true" = enable, "false" = disable.
-	// facebookGroupURL = The full URL to your facebook group.
+	// facebookGroupURL 	= The full URL to your facebook group.
 	// NOTE! This feature might be a little buggy due to the width of some themes. I wish you good luck though.
 	
 	/*************************/
@@ -530,7 +591,7 @@
 ?>';
 
         $fp = fopen("../includes/configuration.php", "w");
-        fwrite($fp, $config) or die("<br/>[FAILURE] Could not write Configuration file. Please restart the installation.");
+        fwrite($fp, $config) or die("<br/>[FAILURE] Could not write Configuration file. Please <a href='./index.php'>restart</a> the installation.");
         fclose($fp);
 
         echo "<br>[Success] Configuration file was written!";
@@ -544,13 +605,13 @@
 
         echo "[Info] Connecting to database...";
         $conn = mysqli_connect($_SESSION['install']['database']['host'], $_SESSION['install']['database']['user'], $_SESSION['install']['database']['pass']) 
-        	or die("<br/>[FAILURE] Could not connect to the database. Please restart the installation. ");
+        	or die("<br/>[FAILURE] Could not connect to the database. Please <a href='./index.php'>restart</a> the installation. ");
 
         echo "<br>[Success] Connected to database.";
         echo "<br>[Info] Connecting to Website database";
 
         mysqli_select_db($conn, $_SESSION['install']['database']['webdb']) 
-        	or die("<br>[FAILURE] Could not connect to the Website database. Please restart the installation.");
+        	or die("<br>[FAILURE] Could not connect to the Website database. Please <a href='./index.php'>restart</a> the installation.");
 
         echo "<br>[Success] Connected to Website database";
         echo "<br>[Info] Now applying updates...";
@@ -590,50 +651,85 @@
         }
     }
 
-    function step5($name, $port, $host, $m_host, $m_user, $m_pass, $a_user, $a_pass, $desc, $sendtype, $chardb, $raport, $soapport)
+    function step5()
     {
-        $conn = mysqli_connect(
-        	$_SESSION['install']['database']['host'], 
-        	$_SESSION['install']['database']['user'], 
-        	$_SESSION['install']['database']['pass']);
 
-        mysqli_select_db($conn, $_SESSION['install']['database']['webdb']);
-
-        $realmName     		= mysqli_real_escape_string($conn, $name);
-        $realmPort     		= mysqli_real_escape_string($conn, $port);
-        $realmHost     		= mysqli_real_escape_string($conn, $host);
-        $mysqli_host   		= mysqli_real_escape_string($conn, $m_host);
-        $mysqli_user   		= mysqli_real_escape_string($conn, $m_user);
-        $mysqli_password   	= mysqli_real_escape_string($conn, $m_pass);
-        $admin_user   		= mysqli_real_escape_string($conn, $a_user);
-        $admin_password   	= mysqli_real_escape_string($conn, $a_pass);
-        $description     	= mysqli_real_escape_string($conn, $desc);
-        $sendtype 			= mysqli_real_escape_string($conn, $sendtype);
-        $chardb   			= mysqli_real_escape_string($conn, $chardb);
-        $raport   			= mysqli_real_escape_string($conn, $raport);
-        $soapport 			= mysqli_real_escape_string($conn, $soapport);
-
-        if (empty($realmName) || 
-        	empty($realmPort) || 
-        	empty($realmHost) || 
-        	empty($mysqli_host) || 
-        	empty($mysqli_user) || 
-        	empty($admin_user) || 
-        	empty($admin_password) || 
-        	empty($sendtype) || 
-        	empty($chardb))
+    	if (empty($_POST['addrealm_name']) || 
+        	empty($_POST['addrealm_host']) || 
+        	empty($_POST['addrealm_port']) || 
+        	empty($_POST['addrealm_m_host']) || 
+        	empty($_POST['addrealm_m_user']) || 
+        	empty($_POST['addrealm_a_user']) || 
+        	empty($_POST['addrealm_a_pass']) || 
+        	empty($_POST['addrealm_sendtype']) || 
+        	empty($_POST['addrealm_chardb']))
         {
             die('Please enter all fields.');
         }
 
-        mysqli_query($conn, "INSERT INTO realms 
-        	(name, description, char_db, port, rank_user, rank_pass, ra_port, soap_port, host, sendType, mysqli_host, mysqli_user, mysqli_pass) 
-        	VALUES
-        	('". $realmName ."', '". $description ."', '". $chardb ."', '". $realmPort ."', '". $admin_user ."', 
-        	'". $admin_password ."', '". $raport ."', '". $soapport ."', '". $realmHost ."', '". $sendtype ."', 
-        	'". $mysqli_host ."', '". $mysqli_user ."', '". $mysqli_password ."')")
-        or die("Could not insert realm into database. (". mysqli_error($conn) .")");
+        if (file_exists("../includes/classes/validator.php"))
+        {
+        	include "../includes/classes/validator.php";
 
-        echo "Realm successfully created. <a href='?st=6'>Finish Installation</a>";
+        	$Validator = new Validator($step5_variables, $step5_required, $step5_required);
+        	if($validator->validate($_POST))
+        	{
+        		$_POST = $validator->sanatize($_POST);
+        		# $_POST has been sanatized.
+
+            $conn = mysqli_connect(
+            	$_SESSION['install']['database']['host'], 
+            	$_SESSION['install']['database']['user'], 
+            	$_SESSION['install']['database']['pass']);
+
+            mysqli_select_db($conn, $_SESSION['install']['database']['webdb']);
+
+            $realmName     		= mysqli_real_escape_string($conn, $_POST['addrealm_name']);
+            $realmHost     		= mysqli_real_escape_string($conn, $_POST['addrealm_host']);
+            $realmPort     		= mysqli_real_escape_string($conn, $_POST['addrealm_port']);        
+            $mysqli_host   		= mysqli_real_escape_string($conn, $_POST['addrealm_m_host']);
+            $mysqli_user   		= mysqli_real_escape_string($conn, $_POST['addrealm_m_user']);
+            if (!empty($_POST['addrealm_m_pass']))
+            {
+            	$validator = new Validator(array('addrealm_m_pass' => 'anything'), array('addrealm_m_pass'), array('addrealm_m_pass'));
+                if ($validator->validate($_POST))
+                {
+                    $_POST = $validator->sanatize($_POST);
+                    $mysqli_password = mysqli_real_escape_string($conn, $_POST['addrealm_m_pass']);
+                }
+            	
+            }
+            $admin_user   		= mysqli_real_escape_string($conn, $_POST['addrealm_a_user']);
+            $admin_password   	= mysqli_real_escape_string($conn, $_POST['addrealm_a_pass']);
+            $description     	= mysqli_real_escape_string($conn, $_POST['addrealm_desc']);
+            $sendtype 			= mysqli_real_escape_string($conn, $_POST['addrealm_sendtype']);
+            $chardb   			= mysqli_real_escape_string($conn, $_POST['addrealm_chardb']);
+
+            if (empty($_POST['addrealm_raport'])) $raport = NULL;
+            elseif(is_numeric($raport)) $raport = mysqli_real_escape_string($conn, $_POST['addrealm_raport']);
+
+            if (empty($_POST['addrealm_soapport'])) $soapport = NULL;
+            elseif (is_numeric($soapport)) $soapport = mysqli_real_escape_string($conn, $_POST['addrealm_soapport']);
+
+            mysqli_query($conn, "INSERT INTO realms 
+            	(name, description, char_db, port, rank_user, rank_pass, ra_port, soap_port, host, sendType, mysqli_host, mysqli_user, mysqli_pass) 
+            	VALUES
+            	('". $realmName ."', 
+            	'". $description ."', 
+            	'". $chardb ."', 
+            	'". $realmPort ."', 
+            	'". $admin_user ."', 
+            	'". $admin_password ."', 
+            	'". $raport ."', 
+            	'". $soapport ."', 
+            	'". $realmHost ."', 
+            	'". $sendtype ."', 
+            	'". $mysqli_host ."', 
+            	'". $mysqli_user ."', 
+            	'". $mysqli_password ."')")
+            or die("Could not insert realm into database. (". mysqli_error($conn) .")");
+
+            echo "Realm successfully created. <a href='?st=6'>Finish Installation</a>";
+        }
     }
     
