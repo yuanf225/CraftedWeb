@@ -1,18 +1,18 @@
 function step1()
 {
     $("#info").html("");
-    var realmlist   = document.getElementById("step1_realmlist").value;
-    var title       = document.getElementById("step1_title").value;
-    var host        = document.getElementById("step1_host").value;
-    var user        = document.getElementById("step1_user").value;
-    var pass        = document.getElementById("step1_pass").value;
-    var webdb       = document.getElementById("step1_webdb").value;
-    var worlddb     = document.getElementById("step1_worlddb").value;
-    var logondb     = document.getElementById("step1_logondb").value;
-    var email       = document.getElementById("step1_email").value;
-    var domain      = document.getElementById("step1_domain").value;
-    var expansion   = document.getElementById("step1_exp").value;
-    var paypal      = document.getElementById("step1_paypal").value;
+    var realmlist   = document.getElementsByName("step1_realmlist")[0].value;
+    var title       = document.getElementsByName("step1_title")[0].value;
+    var host        = document.getElementsByName("step1_host")[0].value;
+    var user        = document.getElementsByName("step1_user")[0].value;
+    var pass        = document.getElementsByName("step1_pass")[0].value;
+    var webdb       = document.getElementsByName("step1_webdb")[0].value;
+    var worlddb     = document.getElementsByName("step1_worlddb")[0].value;
+    var logondb     = document.getElementsByName("step1_logondb")[0].value;
+    var email       = document.getElementsByName("step1_email")[0].value;
+    var domain      = document.getElementsByName("step1_domain")[0].value;
+    var expansion   = document.getElementsByName("step1_exp")[0].value;
+    var paypal      = document.getElementsByName("step1_paypal")[0].value;
 
     $.post("functions.php",
             {step: 1, 
@@ -78,19 +78,19 @@ function step4()
 
 function step5()
 {
-    var name    = document.getElementById("addrealm_name").value;
-    var host    = document.getElementById("addrealm_host").value;
-    var port    = document.getElementById("addrealm_port").value;
-    var desc    = document.getElementById("addrealm_desc").value;
-    var m_host  = document.getElementById("addrealm_m_host").value;
-    var m_user  = document.getElementById("addrealm_m_user").value;
-    var m_pass  = document.getElementById("addrealm_m_pass").value;
-    var a_user  = document.getElementById("addrealm_a_user").value;
-    var a_pass  = document.getElementById("addrealm_a_pass").value;
-    var sendtype = document.getElementById("addrealm_sendtype").value;
-    var chardb  = document.getElementById("addrealm_chardb").value;
-    var raport  = document.getElementById("addrealm_raport").value;
-    var soapport = document.getElementById("addrealm_soapport").value;
+    var name    = document.getElementsByName("addrealm_name")[0].value;
+    var host    = document.getElementsByName("addrealm_host")[0].value;
+    var port    = document.getElementsByName("addrealm_port")[0].value;
+    var desc    = document.getElementsByName("addrealm_desc")[0].value;
+    var m_host  = document.getElementsByName("addrealm_m_host")[0].value;
+    var m_user  = document.getElementsByName("addrealm_m_user")[0].value;
+    var m_pass  = document.getElementsByName("addrealm_m_pass")[0].value;
+    var a_user  = document.getElementsByName("addrealm_a_user")[0].value;
+    var a_pass  = document.getElementsByName("addrealm_a_pass")[0].value;
+    var sendtype = document.getElementsByName("addrealm_sendtype")[0].value;
+    var chardb  = document.getElementsByName("addrealm_chardb")[0].value;
+    var raport  = document.getElementsByName("addrealm_raport")[0].value;
+    var soapport = document.getElementsByName("addrealm_soapport")[0].value;
 
     if (soapport == "")
     {
@@ -116,7 +116,7 @@ function step5()
         chardb: addrealm_chardb, 
         raport: addrealm_raport, 
         soapport: addrealm_soapport},
-        
+
             function (data)
             {
                 if (data == true)
