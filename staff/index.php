@@ -30,14 +30,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title><?php echo $GLOBALS['website_title']; ?> Staff Panel</title>
-        <link rel="stylesheet" href="../aasp_includes/styles/default/style.css" />
-        <link rel="stylesheet" href="../aasp_includes/styles/wysiwyg.css" />
-        <script type="text/javascript" src="../javascript/jquery.js"></script>
+        <link rel="stylesheet" href="../core/aasp_includes/styles/default/style.css" />
+        <link rel="stylesheet" href="../core/aasp_includes/styles/wysiwyg.css" />
+        <script type="text/javascript" src="../core/javascript/jquery.js"></script>
     </head>
 
     <body>
         <div id="overlay"></div>
-        <div id="loading"><img src="../aasp_includes/styles/default/images/ajax-loader.gif" /></div>
+        <div id="loading"><img src="../core/aasp_includes/styles/default/images/ajax-loader.gif" /></div>
         <div id="leftcontent">
             <div id="menu_left">
                 <ul>
@@ -208,20 +208,20 @@
                             {
                                 $page = $_GET['p'];
                             }
-                            $pages = scandir('../aasp_includes/pages');
+                            $pages = scandir('../core/aasp_includes/pages');
                             unset($pages[0], $pages[1]);
 
-                            if (!file_exists('../aasp_includes/pages/' . $page . '.php'))
+                            if (!file_exists('../core/aasp_includes/pages/' . $page . '.php'))
                             {
-                                include('../aasp_includes/pages/404.php');
+                                include('../core/aasp_includes/pages/404.php');
                             }
                             elseif (in_array($page . '.php', $pages))
                             {
-                                include('../aasp_includes/pages/' . $page . '.php');
+                                include('../core/aasp_includes/pages/' . $page . '.php');
                             }
                             else
                             {
-                                include('../aasp_includes/pages/404.php');
+                                include('../core/aasp_includes/pages/404.php');
                             }
                         }
                     ?>
@@ -339,7 +339,7 @@
         </div>               
     </div> 
 <?php
-    include('../aasp_includes/javascript_loader.php');
+    include('../core/aasp_includes/javascript_loader.php');
     if (!isset($_SESSION['cw_admin']))
     {
         ?>

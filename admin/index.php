@@ -28,14 +28,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title><?php echo $GLOBALS['website_title']; ?> Admin Panel</title>
-        <link rel="stylesheet" href="../aasp_includes/styles/default/style.css" />
-        <link rel="stylesheet" href="../aasp_includes/styles/wysiwyg.css" />
-        <script type="text/javascript" src="../javascript/jquery.js"></script>
+        <link rel="stylesheet" href="../core/aasp_includes/styles/default/style.css" />
+        <link rel="stylesheet" href="../core/aasp_includes/styles/wysiwyg.css" />
+        <script type="text/javascript" src="../core/javascript/jquery.js"></script>
     </head>
 
     <body>
         <div id="overlay"></div>
-        <div id="loading"><img src="../aasp_includes/styles/default/images/ajax-loader.gif" /></div>
+        <div id="loading"><img src="../core/aasp_includes/styles/default/images/ajax-loader.gif" /></div>
         <div id="leftcontent">
             <div id="menu_left">
                 <ul>
@@ -159,60 +159,60 @@
                             {
                                 $page = $_GET['p'];
                             }
-                            $pages = scandir('../aasp_includes/pages');
+                            $pages = scandir('../core/aasp_includes/pages');
                             unset($pages[0], $pages[1]);
 
-                            if (!file_exists('../aasp_includes/pages/' . $page . '.php'))
+                            if (!file_exists('../core/aasp_includes/pages/' . $page . '.php'))
                             {
-                                include('../aasp_includes/pages/404.php');
+                                include('../core/aasp_includes/pages/404.php');
                             }
                             elseif (in_array($page . '.php', $pages))
                             {
-                                include('../aasp_includes/pages/' . $page . '.php');
+                                include('../core/aasp_includes/pages/' . $page . '.php');
                             }
                             else
                             {
-                                include('../aasp_includes/pages/404.php');
+                                include('../core/aasp_includes/pages/404.php');
                             }
                         }
                     ?>
             <?php if ($GLOBALS['forum']['type'] == 'phpbb' && $GLOBALS['forum']['autoAccountCreate'] == TRUE && $page == 'dashboard')
     {
         ?>
-                            <div class="box_right">
-                                <div class="box_right_title">Recent forum activity</div>
-                                <table width="100%">
-                                    <tr>
-                                        <th>Account</th>
-                                        <th>Topic</th>
-                                        <th>Message</th>
-                                        <th>Topic</th>
-                                    </tr>
-                                    <?php
-                                    $GameServer->selectDB($GLOBALS['forum']['forum_db']);
-                                    $result = mysqli_query($conn, "SELECT poster_id, post_text, post_time, topic_id FROM phpbb_posts ORDER BY post_id DESC LIMIT 10");
-                                    while ($row    = mysqli_fetch_assoc($result))
-                                    {
-                                        $string   = $row['post_text'];
-                                        //Lets get the username     
-                                        $getUser  = mysqli_query($conn, "SELECT username FROM phpbb_users WHERE user_id=". $row['poster_id'] .";");
-                                        $user     = mysqli_fetch_assoc($getUser);
-                                        //Get topic
-                                        $getTopic = mysqli_query($conn, "SELECT topic_title FROM phpbb_topics WHERE topic_id=". $row['topic_id'] .";");
-                                        $topic    = mysqli_fetch_assoc($getTopic);
-                                        ?>
-                                        <tr class="center">
-                                            <td><a href="http://heroic-wow.net/forum/memberlist.php?mode=viewprofile&u=<?php echo $row['poster_id']; ?>" title="View profile" 
-                                                   target="_blank"><?php echo $user['username']; ?></a></td>
-                                            <td><?php echo $topic['topic_title']; ?></td>
-                                            <td><?php echo limit_characters(strip_tags($string), 75); ?>...</td>
-                                            <td><a href="<?php echo $GLOBALS['website_domain'] . substr($GLOBALS['forum']['forum_path'], 1); ?>viewtopic.php?t=<?php echo $row['topic_id'] ?>" 
-                                                   title="View this topic" target="_blank">
-                                                    View topic</a></td>
-                                        </tr>
-                            <?php } ?>
-                                </table>
-                            </div> 
+                <div class="box_right">
+                    <div class="box_right_title">Recent forum activity</div>
+                    <table width="100%">
+                        <tr>
+                            <th>Account</th>
+                            <th>Topic</th>
+                            <th>Message</th>
+                            <th>Topic</th>
+                        </tr>
+                        <?php
+                        $GameServer->selectDB($GLOBALS['forum']['forum_db']);
+                        $result = mysqli_query($conn, "SELECT poster_id, post_text, post_time, topic_id FROM phpbb_posts ORDER BY post_id DESC LIMIT 10");
+                        while ($row    = mysqli_fetch_assoc($result))
+                        {
+                            $string   = $row['post_text'];
+                            //Lets get the username     
+                            $getUser  = mysqli_query($conn, "SELECT username FROM phpbb_users WHERE user_id=". $row['poster_id'] .";");
+                            $user     = mysqli_fetch_assoc($getUser);
+                            //Get topic
+                            $getTopic = mysqli_query($conn, "SELECT topic_title FROM phpbb_topics WHERE topic_id=". $row['topic_id'] .";");
+                            $topic    = mysqli_fetch_assoc($getTopic);
+                            ?>
+                            <tr class="center">
+                                <td><a href="http://heroic-wow.net/forum/memberlist.php?mode=viewprofile&u=<?php echo $row['poster_id']; ?>" title="View profile" 
+                                       target="_blank"><?php echo $user['username']; ?></a></td>
+                                <td><?php echo $topic['topic_title']; ?></td>
+                                <td><?php echo limit_characters(strip_tags($string), 75); ?>...</td>
+                                <td><a href="<?php echo $GLOBALS['website_domain'] . substr($GLOBALS['forum']['forum_path'], 1); ?>viewtopic.php?t=<?php echo $row['topic_id'] ?>" 
+                                       title="View this topic" target="_blank">
+                                        View topic</a></td>
+                            </tr>
+                <?php } ?>
+                    </table>
+                </div> 
                 <?php } ?>
                 </div>
 
@@ -275,7 +275,7 @@
         </div>               
     </div> 
     <?php
-        include("../aasp_includes/javascript_loader.php");
+        include("../core/aasp_includes/javascript_loader.php");
         if (!isset($_SESSION['cw_admin']))
         { ?>
             <script type="text/javascript">

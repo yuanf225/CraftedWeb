@@ -1,9 +1,9 @@
 <?php
     session_start();
 
-    if (file_exists("../includes/classes/validator.php"))
+    if (file_exists("../core/includes/classes/validator.php"))
     {
-        include_once "../includes/classes/validator.php";
+        include_once "../core/includes/classes/validator.php";
 
         $validator = new Validator(array('st' => 'int'), array('st'), array('st'));
         if ($validator->validate($_GET))
@@ -32,7 +32,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="other.js"></script>
         <meta charset="utf-8">
         <title>CraftedWeb Installer</title>
 

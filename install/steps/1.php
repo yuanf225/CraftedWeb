@@ -31,7 +31,7 @@
             <td><input type="text" placeholder="Default: logon.yourserver.com" name="step1_realmlist"></td>
 
             <td>Website Title:</td>
-            <td><input type="text" placeholder="Default: YourServer" namr="step1_title"></td>
+            <td><input type="text" placeholder="Default: YourServer" name="step1_title"></td>
         </tr>
         <tr>   
             <td>MySQL User:</td>
