@@ -1,4 +1,5 @@
 <?php
+
     session_start();
 
     if (file_exists("../core/includes/classes/validator.php"))
@@ -6,18 +7,25 @@
         include_once "../core/includes/classes/validator.php";
 
         $validator = new Validator(array('st' => 'int'), array('st'), array('st'));
+
         if ($validator->validate($_GET))
         {
             $_GET = $validator->sanatize($_GET);
             $step = $_GET['st'];
         }
-        else header("Location: ./index.php");
+        else 
+        {
+            header("Location: ./index.php");
+        }
     }
-    elseif(is_numeric($_GET['st']))
+    elseif (is_numeric($_GET['st']))
     {
         $step = $_GET['st'];
     }
-    else header("Location: ./index.php");
+    else 
+    {
+        header("Location: ./index.php");
+    }
 
     $steps = array
     (
@@ -70,10 +78,10 @@
     <body>
     <center>
     <div id="main_box">
-        <h1>Installation &raquo; Step <?php echo $step; ?> (<?php echo $steps[$step]; ?>)</h1>
+        <h1>Installation &raquo; Step <?php echo $step; ?> ( <?php echo $steps[$step]; ?> )</h1>
 
         <div id="content">
-            <?php include("./steps/". $step .".php"); ?>
+            <?php include "./steps/". $step .".php"; ?>
 
             <div id="info"></div>
         </div>

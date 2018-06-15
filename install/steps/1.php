@@ -77,4 +77,3 @@
             <td><input type="submit" value="Procceed to Step 2" onclick="step1()"></td>
         </tr>
     </table>
-

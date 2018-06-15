@@ -15,40 +15,40 @@ function step1()
     var paypal      = document.getElementsByName("step1_paypal")[0].value;
 
     $.post("functions.php",
-            {step: 1, 
-                step1_realmlist: realmlist, 
-                step1_title: title, 
-                step1_host: host, 
-                step1_user: user, 
-                step1_pass: pass, 
-                step1_webdb: webdb, 
-                step1_worlddb: worlddb, 
-                step1_logondb: logondb,
-                step1_email: email, 
-                step1_domain: domain, 
-                step1_exp: expansion, 
-                step1_paypal: paypal},
-            function (data)
+        {step: 1, 
+            step1_realmlist: realmlist, 
+            step1_title: title, 
+            step1_host: host, 
+            step1_user: user, 
+            step1_pass: pass, 
+            step1_webdb: webdb, 
+            step1_worlddb: worlddb, 
+            step1_logondb: logondb,
+            step1_email: email, 
+            step1_domain: domain, 
+            step1_exp: expansion, 
+            step1_paypal: paypal},
+        function (data)
+        {
+            if (data == true)
             {
-                if (data == true)
-                {
-                    window.location = "?st=2";
-                }
-                else
-                {
-                    $("#info").html("<p><code>" + data + "</code></p>");
-                }
-            });
+                window.location = "?st=2";
+            }
+            else
+            {
+                $("#info").html("<p><code>"+ data +"</code></p>");
+            }
+        });
 }
 
 function step2()
 {
     $("#info").html("");
     $.post("functions.php", {step: 2},
-            function (data)
-            {
-                $("#info").html("<p><code>" + data + "</code></p>");
-            }
+        function (data)
+        {
+            $("#info").html("<p><code>" + data + "</code></p>");
+        }
     );
 }
 
@@ -56,24 +56,22 @@ function step3()
 {
     $("#info").html("");
     $.post("functions.php", {step: 3},
-            function (data)
-            {
-                $("#info").html("<p><code>" + data + "</code></p>");
-            }
+        function (data)
+        {
+            $("#info").html("<p><code>" + data + "</code></p>");
+        }
     );
-
 }
 
 function step4()
 {
     $("#info").html("");
     $.post("functions.php", {step: 4},
-            function (data)
-            {
-                $("#info").html("<p><code>" + data + "</code></p>");
-            }
+        function (data)
+        {
+            $("#info").html("<p><code>" + data + "</code></p>");
+        }
     );
-
 }
 
 function step5()
@@ -117,16 +115,16 @@ function step5()
         raport: addrealm_raport, 
         soapport: addrealm_soapport},
 
-            function (data)
+        function (data)
+        {
+            if (data == true)
             {
-                if (data == true)
-                {
-                    window.location = "?st=6";
-                }
-                else
-                {
-                    $("#info").html("<p><code>" + data + "</code></p>");
-                }
+                window.location = "?st=6";
             }
-    );
+            else
+            {
+                $("#info").html("<p><code>" + data + "</code></p>");
+            }
+        }
+);
 }
