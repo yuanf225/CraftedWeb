@@ -13,10 +13,6 @@
             $_GET = $validator->sanatize($_GET);
             $step = $_GET['st'];
         }
-        else 
-        {
-            header("Location: ./index.php");
-        }
     }
     elseif (is_numeric($_GET['st']))
     {
@@ -24,7 +20,7 @@
     }
     else 
     {
-        header("Location: ./index.php");
+        header("Location: ./index.php?error=url_error");
     }
 
     $steps = array

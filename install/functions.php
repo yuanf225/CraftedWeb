@@ -141,7 +141,7 @@
                 }
                 else 
                 {
-                    $_SESSION['install']['database']['user'] = $_POST['step1_user']);
+                    $_SESSION['install']['database']['user'] = $_POST['step1_user'];
                 }
 
                 if (empty($_POST['step1_logondb'])) 
