@@ -39,8 +39,8 @@
 
     if ($_POST['action'] == 'addShopitem')
     {
-        $entry = mysqli_real_escape_string($conn, $_POST['entry']);
-        $shop  = mysqli_real_escape_string($conn, $_POST['shop']);
+        $entry = $conn->escape_string($_POST['entry']);
+        $shop  = $conn->escape_string($_POST['shop']);
 
         if (isset($_SESSION[$_POST['cart']][$entry]))
         {
@@ -50,10 +50,10 @@
         {
             $Connect->selectDB('webdb', $conn);
 
-            $result = mysqli_query($conn, "SELECT entry, price FROM shopitems WHERE entry=". $entry ." AND in_shop='". $shop ."';");
-            if (mysqli_num_rows($result) != 0)
+            $result = $conn->query("SELECT entry, price FROM shopitems WHERE entry=". $entry ." AND in_shop='". $shop ."';");
+            if ($result->num_rows != 0)
             {
-                $row                                     = mysqli_fetch_array($result);
+                $row                                     = $result->fetch_array();
                 $_SESSION[$_POST['cart']][$row['entry']] = array("quantity" => 1, "price" => $row['price']);
             }
         }
@@ -94,8 +94,8 @@
 
                 $shop_filt = substr($_POST['cart'], 0, -4);
 
-                $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry=". $entry ." AND in_shop='". mysqli_real_escape_string($conn, $shop_filt) ."';");
-                $row    = mysqli_fetch_assoc($result);
+                $result = $conn->query("SELECT price FROM shopitems WHERE entry=". $entry ." AND in_shop='". $conn->escape_string($shop_filt) ."';");
+                $row    = $result->fetch_assoc();
 
 
                 $totalPrice = $totalPrice + ( $_SESSION[$_POST['cart']][$entry]['quantity'] * $row['price'] );
@@ -133,8 +133,8 @@
             {
                 foreach ($_SESSION['donateCart'] as $entry => $value)
                 {
-                    $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry=" . $entry . " AND in_shop='donate';");
-                    $row    = mysqli_fetch_assoc($result);
+                    $result = $conn->query("SELECT price FROM shopitems WHERE entry=" . $entry . " AND in_shop='donate';");
+                    $row    = $result->fetch_assoc();
 
                     $add = $row['price'] * $_SESSION['donateCart'][$entry]['quantity'];
 
@@ -196,8 +196,8 @@
             {
                 foreach ($_SESSION['voteCart'] as $entry => $value)
                 {
-                    $result = mysqli_query($conn, "SELECT price FROM shopitems WHERE entry=". $entry ." AND in_shop='vote';");
-                    $row    = mysqli_fetch_assoc($result);
+                    $result = $conn->query("SELECT price FROM shopitems WHERE entry=". $entry ." AND in_shop='vote';");
+                    $row    = $result->fetch_assoc();
 
                     $add = $row['price'] * $_SESSION['voteCart'][$entry]['quantity'];
 
@@ -260,11 +260,11 @@
             exit();
         }
 
-        $entry = mysqli_real_escape_string($conn, $_POST['entry']);
-        $shop  = mysqli_real_escape_string($conn, $_POST['shop']);
+        $entry = $conn->escape_string($_POST['entry']);
+        $shop  = $conn->escape_string($_POST['shop']);
 
         $Connect->selectDB('webdb', $conn);
-        mysqli_query($conn, "DELETE FROM shopitems WHERE entry=". $entry ." AND in_shop='". $shop ."';");
+        $conn->query("DELETE FROM shopitems WHERE entry=". $entry ." AND in_shop='". $shop ."';");
     }
 
     if ($_POST['action'] == 'editItem')
@@ -274,14 +274,14 @@
             exit();
         }
 
-        $entry = mysqli_real_escape_string($conn, $_POST['entry']);
-        $shop  = mysqli_real_escape_string($conn, $_POST['shop']);
-        $price = mysqli_real_escape_string($conn, $_POST['price']);
+        $entry = $conn->escape_string($_POST['entry']);
+        $shop  = $conn->escape_string($_POST['shop']);
+        $price = $conn->escape_string($_POST['price']);
 
         $Connect->selectDB('webdb', $conn);
 
         if ($price > 0)
         {
-            mysqli_query($conn, "UPDATE shopitems SET price=". $price ." WHERE entry=". $entry ." AND in_shop='". $shop ."';");
+            $conn->query("UPDATE shopitems SET price=". $price ." WHERE entry=". $entry ." AND in_shop='". $shop ."';");
         }
     }

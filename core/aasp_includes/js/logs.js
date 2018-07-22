@@ -7,7 +7,7 @@ function loadPaymentsLog(id)
     if (loadedPayments == 0)
     {
         loader("#payments");
-        $.post("../aasp_includes/scripts/logs.php", {action: 'payments', id: id},
+        $.post("../core/aasp_includes/scripts/logs.php", {action: 'payments', id: id},
                 function (data)
                 {
                     $("#payments").html(data);
@@ -21,7 +21,7 @@ function loadDshopLog(id)
     if (loadedDshop == 0)
     {
         loader("#dshop");
-        $.post("../aasp_includes/scripts/logs.php", {action: 'dshop', id: id},
+        $.post("../core/aasp_includes/scripts/logs.php", {action: 'dshop', id: id},
                 function (data)
                 {
                     $("#dshop").html(data);
@@ -35,7 +35,7 @@ function loadVshopLog(id)
     if (loadedVshop == 0)
     {
         loader("#vshop");
-        $.post("../aasp_includes/scripts/logs.php", {action: 'vshop', id: id},
+        $.post("../core/aasp_includes/scripts/logs.php", {action: 'vshop', id: id},
                 function (data)
                 {
                     $("#vshop").html(data);
@@ -63,7 +63,7 @@ function searchLog(shop)
     {
         $("#logs_search").val("Search...");
     }
-    $.post("../aasp_includes/scripts/logs.php", {action: 'search', shop: shop, input: input},
+    $.post("../core/aasp_includes/scripts/logs.php", {action: 'search', shop: shop, input: input},
             function (data)
             {
                 $("#logs_content").html(data);

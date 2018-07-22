@@ -123,15 +123,15 @@ Filter:
     $GameServer->connectToRealmDB($_GET['rid']);
     $equip_array = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18);
 
-    $result = mysqli_query($conn, "SELECT guid, itemEntry, count FROM item_instance WHERE owner_guid=". mysqli_real_escape_string($conn, $_GET['guid']) .";");
-    if (mysqli_num_rows($result) == 0)
+    $result = $conn->query("SELECT guid, itemEntry, count FROM item_instance WHERE owner_guid=". $conn->escape_string($_GET['guid']) .";");
+    if ($result->num_rows == 0)
     {
         echo "No Items Were Found!";
     }
     else
     {
         echo "<table cellspacing='3' cellpadding='5'>";
-        while ($row = mysqli_fetch_assoc($result))
+        while ($row = $result->fetch_assoc())
         {
             $entry = $row['itemEntry'];
 
@@ -139,53 +139,53 @@ Filter:
             {
                 if ($_GET['f'] == 'equip')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory 
-                        WHERE item='". $row['guid'] ."' AND bag='0' AND slot RANGE(0,18) AND guid=". mysqli_real_escape_string($conn, $_GET['guid']) .";");
+                    $getPos = $conn->query("SELECT slot, bag FROM character_inventory 
+                        WHERE item='". $row['guid'] ."' AND bag='0' AND slot RANGE(0,18) AND guid=". $conn->escape_string($_GET['guid']) .";");
                 }
                 elseif ($_GET['f'] == 'bank')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory 
+                    $getPos = $conn->query("SELECT slot, bag FROM character_inventory 
                         WHERE item='". $row['guid'] ."' AND slot>=39 AND slot<=73;");
                 }
                 elseif ($_GET['f'] == 'keyring')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory 
+                    $getPos = $conn->query("SELECT slot, bag FROM character_inventory 
                         WHERE item='". $row['guid'] ."' AND slot>=86 AND slot<=117;");
                 }
                 elseif ($_GET['f'] == 'currency')
                 {
-                    $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory 
+                    $getPos = $conn->query("SELECT slot, bag FROM character_inventory 
                         WHERE item='". $row['guid'] ."' AND slot>=118 AND slot<=135;");
                 }
             }
             else
             {
-                $getPos = mysqli_query($conn, "SELECT slot, bag FROM character_inventory WHERE item='". $row['guid'] ."';");
+                $getPos = $conn->query("SELECT slot, bag FROM character_inventory WHERE item='". $row['guid'] ."';");
             }
 
-            if (mysqli_data_seek($getPos, 0) > 0)
+            if ($getPos->data_seek(0) > 0)
             {
-                $pos = mysqli_fetch_assoc($getPos);
+                $pos =$getPos->fetch_assoc();
 
                 $GameServer->selectDB('worlddb');
-                $get = mysqli_query($conn, "SELECT name, entry, quality, displayid FROM item_template WHERE entry='". $entry ."';");
-                $r   = mysqli_fetch_assoc($get);
+                $get = $conn->query("SELECT name, entry, quality, displayid FROM item_template WHERE entry='". $entry ."';");
+                $r   = $get->fetch_assoc();
 
                 $GameServer->selectDB('webdb');
-                $getIcon = mysqli_query($conn, "SELECT icon FROM item_icons WHERE displayid='". $r['displayid'] ."';");
-                if (mysqli_num_rows($getIcon) == 0)
+                $getIcon = $conn->query("SELECT icon FROM item_icons WHERE displayid='". $r['displayid'] ."';");
+                if ($getIcon->num_rows == 0)
                 {
                     //No icon found. Probably cataclysm item. Get the icon from wowhead instead.
                     $sxml = new SimpleXmlElement(file_get_contents("http://www.wowhead.com/item=". $entry ."&xml"));
 
-                    $icon = strtolower(mysqli_real_escape_string($conn, $sxml->item->icon));
+                    $icon = strtolower($conn->escape_string($sxml->item->icon));
                     //Now that we have it loaded. Add it into database for future use.
                     //Note that WoWHead XML is extremely slow. This is the main reason why we're adding it into the db.
-                    mysqli_query($conn, "INSERT INTO item_icons VALUES('". $row['displayid'] ."', '". $icon ."');");
+                    $conn->query("INSERT INTO item_icons VALUES('". $row['displayid'] ."', '". $icon ."');");
                 }
                 else
                 {
-                    $iconrow = mysqli_fetch_assoc($getIcon);
+                    $iconrow = $getIcon->fetch_assoc();
                     $icon    = strtolower($iconrow['icon']);
                 }
 

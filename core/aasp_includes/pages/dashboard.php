@@ -55,8 +55,8 @@
     <div class="box_right_title">Admin Panel Log</div>
     <?php
         $GameServer->selectDB('webdb', $conn);
-        $result = mysqli_query($conn, "SELECT * FROM admin_log ORDER BY id DESC LIMIT 25;");
-        if (mysqli_num_rows($result) == 0)
+        $result = $conn->query("SELECT * FROM admin_log ORDER BY id DESC LIMIT 25;");
+        if ($result->num_rows == 0)
         {
             echo "The admin log is empty!";
         }
@@ -69,7 +69,7 @@
                     <th>User</th>
                     <th>Action</th>
                 </tr>
-                <?php while ($row = mysqli_fetch_assoc($result))
+                <?php while ($row = $result->fetch_assoc())
                 { ?>
                     <tr>
                         <td><?php echo date("Y-m-d H:i:s", $row['timestamp']); ?></td>

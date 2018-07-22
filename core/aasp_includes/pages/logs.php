@@ -27,7 +27,7 @@
 
     if ($GamePage->validateSubPage() == TRUE)
     {
-        $GamePage->outputSubPage();
+      $GamePage->outputSubPage();
     }
     else
     {

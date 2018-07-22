@@ -34,35 +34,35 @@
     else
     {
         $GameServer->selectDB("logondb", $conn);
-        $usersTotal       = mysqli_query($conn, "SELECT COUNT(*) AS totalUsers FROM account;");
-        $usersToday       = mysqli_query($conn, "SELECT COUNT(*) AS dailyUsers FROM account WHERE joindate LIKE '%". date("Y-m-d") ."%';");
-        $usersMonth       = mysqli_query($conn, "SELECT COUNT(*) AS monthlyUsers FROM account WHERE joindate LIKE '%". date("Y-m") ."%';");
-        $usersOnline      = mysqli_query($conn, "SELECT COUNT(*) AS onlineUsers FROM account WHERE online=1;");
-        $usersActive      = mysqli_query($conn, "SELECT COUNT(*) AS activeUsers FROM account WHERE last_login LIKE '%". date("Y-m") ."%';");
-        $usersActiveToday = mysqli_query($conn, "SELECT COUNT(*) AS activeUsersToday FROM account WHERE last_login LIKE '%". date("Y-m-d") ."%';");
+        $usersTotal       = $conn->query("SELECT COUNT(*) AS totalUsers FROM account;");
+        $usersToday       = $conn->query("SELECT COUNT(*) AS dailyUsers FROM account WHERE joindate LIKE '%". date("Y-m-d") ."%';");
+        $usersMonth       = $conn->query("SELECT COUNT(*) AS monthlyUsers FROM account WHERE joindate LIKE '%". date("Y-m") ."%';");
+        $usersOnline      = $conn->query("SELECT COUNT(*) AS onlineUsers FROM account WHERE online=1;");
+        $usersActive      = $conn->query("SELECT COUNT(*) AS activeUsers FROM account WHERE last_login LIKE '%". date("Y-m") ."%';");
+        $usersActiveToday = $conn->query("SELECT COUNT(*) AS activeUsersToday FROM account WHERE last_login LIKE '%". date("Y-m-d") ."%';");
         ?>
         <div class="box_right_title">Users Overview</div>
         <table style="width: 100%;">
             <tr>
                 <td><span class='blue_text'>Total Users</span></td>
-                <td><?php echo round(mysqli_fetch_assoc($usersTotal)['totalUsers']); ?></td>
+                <td><?php echo round($usersTotal->fetch_assoc()['totalUsers']); ?></td>
                 
                 <td><span class='blue_text'>New Users Today</span></td>
-                <td><?php echo round(mysqli_fetch_assoc($usersToday)['dailyUsers']); ?></td>
+                <td><?php echo round($usersToday->fetch_assoc()['dailyUsers']); ?></td>
             </tr>
             <tr>
                 <td><span class='blue_text'>New Users This Month</span></td>
-                <td><?php echo round(mysqli_fetch_assoc($usersMonth)['monthlyUsers']); ?></td>
+                <td><?php echo round($usersMonth->fetch_assoc()['monthlyUsers']); ?></td>
                 
                 <td><span class='blue_text'>Users Online</span></td>
-                <td><?php echo round(mysqli_fetch_assoc($usersOnline)['onlineUsers']); ?></td>
+                <td><?php echo round($usersOnline->fetch_assoc()['onlineUsers']); ?></td>
             </tr>
             <tr>
                 <td><span class='blue_text'>Active Users (This Month)</span></td>
-                <td><?php echo round(mysqli_fetch_assoc($usersActive)['activeUsers']); ?></td>
+                <td><?php echo round($usersActive->fetch_assoc()['activeUsers']); ?></td>
                 
                 <td><span class='blue_text'>Users Logged In Today</span></td>
-                <td><?php echo round(mysqli_fetch_assoc($usersActiveToday)['activeUsersToday']); ?></td>
+                <td><?php echo round($usersActiveToday->fetch_assoc()['activeUsersToday']); ?></td>
             </tr>
         </table>
         <hr/>

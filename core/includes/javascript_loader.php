@@ -20,8 +20,8 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 ?>
-<script type="text/javascript" src="javascript/jquery.js"></script>
-<script type="text/javascript" src="javascript/main.js"></script>
+<script type="text/javascript" src="core/javascript/jquery.js"></script>
+<script type="text/javascript" src="core/javascript/main.js"></script>
 
 <?php
 
@@ -55,7 +55,7 @@
     if ($GLOBALS['enableSlideShow'] == true)
     {
         ?>
-        <script type="text/javascript" src="javascript/slideshow.js"></script>
+        <script type="text/javascript" src="core/javascript/slideshow.js"></script>
         <?php
 
     }
@@ -65,7 +65,7 @@
     }
     else
     {
-        echo '<script type="text/javascript" src="http://cdn.openwow.com/api/tooltip.js"></script>';
+        echo '<script type="text/javascript" src="http://cdn.cavernoftime.com/api/tooltip.js"></script>';
     }
 
 ####CURSOR TRACKER####
@@ -106,7 +106,7 @@
         <script type="text/javascript">
             $(document).ready(function ()
             {
-                $.post("includes/scripts/misc.php", {serverStatus: true},
+                $.post("core/includes/scripts/misc.php", {serverStatus: true},
                         function (data)
                         {
                             $("#server_status").html(data);

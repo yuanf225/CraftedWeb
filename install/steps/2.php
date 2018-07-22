@@ -31,3 +31,9 @@
     <br/>
     <input type="submit" value="Test if file is writeable" onclick="step2()">
 </p>
+
+<?php 
+
+    print_r($_SESSION['install']);
+
+    ?>

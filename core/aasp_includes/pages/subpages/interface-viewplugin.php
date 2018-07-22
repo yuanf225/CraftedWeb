@@ -24,7 +24,7 @@
     $GameServer->selectDB('webdb', $conn);
 
     $filename = $_GET['plugin'];
-    include("../plugins/". $filename ."/info.php");
+    include("../core/plugins/". $filename ."/info.php");
 ?>
 <div class="box_right_title">
     <a href="?p=interface&s=plugins">Plugins</a> 
@@ -44,7 +44,7 @@ Author: <?php echo $author; ?> - <?php echo $created; ?>
 <?php
     $bad = array(".", "..");
 //Classes
-    $folder = scandir("../plugins/". $filename ."/classes/");
+    $folder = scandir("../core/plugins/". $filename ."/classes/");
     if (is_array($folder) || is_object($folder))
     {
         foreach ($folder as $file)
@@ -56,7 +56,7 @@ Author: <?php echo $author; ?> - <?php echo $created; ?>
         }
     }
 //Modules
-    $folder = scandir("../plugins/". $filename ."/modules/");
+    $folder = scandir("../core/plugins/". $filename ."/modules/");
     if (is_array($folder) || is_object($folder))
     {
         foreach ($folder as $file)
@@ -69,7 +69,7 @@ Author: <?php echo $author; ?> - <?php echo $created; ?>
     }
 
 //Pages
-    $folder = scandir("../plugins/". $filename ."/pages/");
+    $folder = scandir("../core/plugins/". $filename ."/pages/");
     if (is_array($folder) || is_object($folder))
     {
         foreach ($folder as $file)
@@ -82,7 +82,7 @@ Author: <?php echo $author; ?> - <?php echo $created; ?>
     }
 
 //Styles
-    $folder = scandir("../plugins/". $filename ."/styles/");
+    $folder = scandir("../core/plugins/". $filename ."/styles/");
     if (is_array($folder) || is_object($folder))
     {
         foreach ($folder as $file)
@@ -95,7 +95,7 @@ Author: <?php echo $author; ?> - <?php echo $created; ?>
     }
 
 //Javascript
-    $folder = scandir("../plugins/". $filename ."/javascript/");
+    $folder = scandir("../core/plugins/". $filename ."/javascript/");
     if (is_array($folder) || is_object($folder))
     {
         foreach ($folder as $file)
@@ -108,12 +108,12 @@ Author: <?php echo $author; ?> - <?php echo $created; ?>
     }
     
 //Plugins
-    $chk = mysqli_query($conn, "SELECT COUNT(*) AS disabledPlugins FROM disabled_plugins WHERE foldername='". mysqli_real_escape_string($conn, $filename) ."';");
-    if (mysqli_fetch_assoc($chk)['disabledPlugins'] > 0)
+    $chk = $conn->query("SELECT COUNT(*) AS disabledPlugins FROM disabled_plugins WHERE foldername='". $conn->escape_string($filename) ."';");
+    if ($chk->fetch_assoc()['disabledPlugins'] > 0)
     {
-        echo "<input type='submit' value='Enable Plugin' onclick='enablePlugin(\'". $filename ."\')'>";
+        echo "<input type=\"submit\" value=\"Enable Plugin\" onclick=\"enablePlugin('$filename')\">";
     }
     else
     {
-        echo "<input type='submit' value='Disable Plugin' onclick='disablePlugin(\'". $filename ."\')'>";
+        echo "<input type=\"submit\" value=\"Disable Plugin\" onclick=\"disablePlugin('$filename')\">";
     }

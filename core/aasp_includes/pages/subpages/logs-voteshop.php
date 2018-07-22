@@ -27,14 +27,16 @@
 <?php
     $per_page = 40;
 
-    $pages_query = mysqli_query($conn, "SELECT COUNT(*) AS voteLogs FROM shoplog WHERE shop='vote';");
-    $pages       = ceil(mysqli_fetch_assoc($pages_query)['voteLogs'] / $per_page);
+    $GameServer->selectDB("webdb", $conn);
 
-    $page  = ( isset($_GET['page']) ) ? mysqli_real_escape_string($conn, $_GET['page']) : 1;
+    $pages_query = $conn->query("SELECT COUNT(*) AS voteLogs FROM shoplog WHERE shop='vote';");
+    $pages       = ceil($pages_query->fetch_assoc()['voteLogs'] / $per_page);
+
+    $page  = ( isset($_GET['page']) ) ? $conn->escape_string($_GET['page']) : 1;
     $start = ($page - 1) * $per_page;
 
-    $result = mysqli_query($conn, "SELECT * FROM shoplog WHERE shop='vote' ORDER BY id DESC LIMIT ". $start .", ". $per_page .";");
-    if (mysqli_num_rows($result) == 0)
+    $result = $conn->query("SELECT * FROM shoplog WHERE shop='vote' ORDER BY id DESC LIMIT ". $start .", ". $per_page .";");
+    if ($result->num_rows == 0)
     {
         echo "Seems Like The Vote Shop Log Was Empty!";
     }
@@ -54,7 +56,7 @@
                     <th>Date</th>
                 </tr>
                 <?php
-                while ($row = mysqli_fetch_assoc($result))
+                while ($row = $result->fetch_assoc())
                 {
                     ?>
                     <tr class="center">

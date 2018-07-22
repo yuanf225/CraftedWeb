@@ -35,16 +35,16 @@
         else
         {
             $Connect->selectDB('webdb', $conn);
-            $code    = mysqli_real_escape_string($conn, $_GET['code']);
-            $account = mysqli_real_escape_string($conn, $_GET['account']);
-            $result  = mysqli_query($conn, "SELECT COUNT('id') FROM password_reset WHERE code='" . $code . "' AND account_id=". $account .";");
-            if (mysqli_data_seek($result, 0) == 0)
+            $code    = $conn->escape_string($_GET['code']);
+            $account = $conn->escape_string($_GET['account']);
+            $result  = $conn->query("SELECT COUNT('id') FROM password_reset WHERE code='" . $code . "' AND account_id=". $account .";");
+            if ($result->data_seek(0) == 0)
                 echo "<b class='red_text'>The values specified does not match the ones in the database.</b>";
             else
             {
                 $newPass      = RandomString();
                 echo "<b class='yellow_text'>Your new password is: " . $newPass . " <br/><br/>Please sign in and change your password.</b>";
-                mysqli_query($conn, "DELETE FROM password_reset WHERE account_id=". $account .";");
+                $conn->query("DELETE FROM password_reset WHERE account_id=". $account .";");
                 $account_name = $Account->getAccountName($account);
 
                 $Account->changePassword($account_name, $newPass);

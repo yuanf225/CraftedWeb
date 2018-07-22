@@ -28,15 +28,27 @@
     if (isset($_GET['char']))
     {
         echo "Search Results For <b>" . $_GET['char'] . "</b><pre>";
-        $result = mysqli_query($conn, "SELECT name, id FROM realms;");
-        while ($row = mysqli_fetch_assoc($result))
-        {
-            $GameServer->connectToRealmDB($row['id']);
-            $get = mysqli_query($conn, "SELECT account, name FROM characters 
-                WHERE name='". mysqli_real_escape_string($conn, $_GET['char']) ."' OR guid=". mysqli_real_escape_string($conn, $_GET['char']) .";");
+        $GameServer->selectDB("webdb", $conn);
 
-            $rows = mysqli_fetch_assoc($get);
-            echo "<a href='?p=users&s=manage&user=". $rows['account'] ."'>". $rows['name'] ." - ". $row['name'] ."</a><br/>";
+        $character = $conn->escape_string($_GET['char']);
+
+        $result = $conn->query("SELECT name, id FROM realms;");
+        
+        while ($row = $result->fetch_assoc())
+        {
+            #$GameServer->connectToRealmDB($row['id']);
+            $conn->select_db("characters");
+            $get = $conn->query("SELECT account, name FROM characters WHERE name='". ucfirst($character) ."' OR guid='$character';");
+
+            if ($get->num_rows > 0)
+            {
+                $rows = $get->fetch_assoc();
+                echo "<a href='?p=users&s=manage&user=". $rows['account'] ."'>". $rows['name'] ." - ". $row['name'] ."</a><br/>";
+            }
+            else
+            {
+                echo "No Records Of \"$character\" Where Found.";
+            }
         }
         echo "</pre><hr/>";
     }
@@ -44,15 +56,15 @@
     if (isset($_GET['user']))
     {
         $GameServer->selectDB("logondb", $conn);
-        $value  = mysqli_real_escape_string($conn, $_GET['user']);
-        $result = mysqli_query($conn, "SELECT * FROM account WHERE username='". $value ."' OR id=". $value .";");
-        if (mysqli_num_rows($result) == 0)
+        $value  = $conn->escape_string(strtoupper($_GET['user']));
+        $result = $conn->query("SELECT * FROM account WHERE username='$value' OR id='$value';");
+        if ($result->num_rows == 0)
         {
             echo "<span class='red_text'>No Results Were Found!</span>";
         }
         else
         {
-            $row = mysqli_fetch_assoc($result);
+            $row = $result->fetch_assoc();
             ?>
             <table width="100%">
                 <tr>
@@ -95,24 +107,39 @@
                     <th>Actions</th>
                 </tr>
                 <?php
-                $GameServer->selectDB('webdb', $conn);
-                $result = mysqli_query($conn, "SELECT name, id FROM realms;");
-                while ($row = mysqli_fetch_assoc($result))
-                {
-                    $user = mysqli_real_escape_string($conn, $_GET['user']);
-                    $account_id = $GameAccount->getAccID($user);
-                    $GameServer->connectToRealmDB($row['id']);
-                    $result  = mysqli_query($conn, "SELECT name, guid, level, class, race, gender, online FROM characters 
-                        WHERE name='". $user ."' OR account=". $account_id .";");
+                $GameServer->selectDB("webdb", $conn);
+                $result = $conn->query("SELECT name, id FROM realms;");
 
-                    while ($rows = mysqli_fetch_assoc($result))
+                if (is_numeric($_GET['user']))
+                {
+                    $account_id = $conn->escape_string($_GET['user']);
+                }
+                if (!is_numeric($_GET['user']))
+                {
+                    $user = $conn->escape_string($_GET['user']);
+                    $account_id = $GameAccount->getAccID($user);
+
+                }
+                while ($row = $result->fetch_assoc())
+                {
+                    
+
+                    #$conn = $GameServer->connectToRealmDB($row['id']);
+                    $conn->select_db("characters");
+
+                    $result  = $conn->query("SELECT name, guid, level, class, race, gender, online FROM characters 
+                        WHERE name='$user' OR account='$account_id';");
+
+                    if (!$result) die($conn->error);
+
+                    while ($rows = $result->fetch_assoc())
                     { ?>
                         <tr class="center">
                             <td><?php echo $rows['guid']; ?></td>
                             <td><?php echo $rows['name']; ?></td>
                             <td><?php echo $rows['level']; ?></td>
-                            <td><img src="../styles/global/images/icons/class/<?php echo $rows['class']; ?>.gif" /></td>
-                            <td><img src="../styles/global/images/icons/race/<?php echo $rows['race'] . '-' . $rows['gender']; ?>.gif" /></td>
+                            <td><img src="../core/styles/global/images/icons/class/<?php echo $rows['class']; ?>.gif" /></td>
+                            <td><img src="../core/styles/global/images/icons/race/<?php echo $rows['race'] . '-' . $rows['gender']; ?>.gif" /></td>
                             <td><?php echo $row['name']; ?></td>
                             <td>
                                 <?php
@@ -142,13 +169,13 @@
         ?>
         Account Selected: <a href='?p=users&s=manage&user=<?php echo $_GET['getlogs']; ?>'><?php echo $GameAccount->getAccName($_GET['getlogs']); ?></a><p />
 
-        <h4 class='payments' onclick='loadPaymentsLog(<?php echo mysqli_real_escape_string($conn, $_GET['getlogs']); ?>)'>Payments Log</h4>
+        <h4 class='payments' onclick='loadPaymentsLog(<?php echo $conn->escape_string($_GET['getlogs']); ?>)'>Payments Log</h4>
         <div class='hidden_content' id='payments'></div>
         <hr/>
-        <h4 class='payments' onclick='loadDshopLog(<?php echo mysqli_real_escape_string($conn, $_GET['getlogs']); ?>)'>Donation Shop Log</h4>
+        <h4 class='payments' onclick='loadDshopLog(<?php echo $conn->escape_string($_GET['getlogs']); ?>)'>Donation Shop Log</h4>
         <div class='hidden_content' id='dshop'></div>
         <hr/>
-        <h4 class='payments' onclick='loadVshopLog(<?php echo mysqli_real_escape_string($conn, $_GET['getlogs']); ?>)'>Vote Shop Log</h4>
+        <h4 class='payments' onclick='loadVshopLog(<?php echo $conn->escape_string($_GET['getlogs']); ?>)'>Vote Shop Log</h4>
         <div class='hidden_content' id='vshop'></div>
         <?php
     }
@@ -183,7 +210,7 @@
     }
     elseif (isset($_GET['getslogs']))
     {
-        $getLogs = mysqli_real_escape_string($conn, $_GET['getslogs']);
+        $getLogs = $conn->escape_string($_GET['getslogs']);
         ?>
         Account Selected: <a href='?p=users&s=manage&user=<?php echo $getLogs; ?>'><?php echo $GameAccount->getAccName($getLogs); ?></a><p />
         <table>
@@ -195,14 +222,14 @@
             </tr>
             <?php
             $GameServer->selectDB('webdb', $conn);
-            $result = mysqli_query($conn, "SELECT * FROM user_log WHERE account=". $getLogs .";");
-            if (mysqli_num_rows($result) == 0)
+            $result = $conn->query("SELECT * FROM user_log WHERE account=". $getLogs .";");
+            if ($result->num_rows == 0)
             {
                 echo "No Logs Were Found For This Account!";
             }
             else
             {
-                while ($row = mysqli_fetch_assoc($result))
+                while ($row = $result->fetch_assoc())
                 {
                     echo "<tr class='center'>";
                     echo "<td>". $row['service'] ."</td>";

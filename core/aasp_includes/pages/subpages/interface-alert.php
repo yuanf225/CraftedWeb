@@ -37,7 +37,7 @@
 						?>
 						";
 
-        $fp = fopen('../documents/alert.php', 'w');
+        $fp = fopen('../core/documents/alert.php', 'w');
         if (fwrite($fp, $file_content))
         {
             $msg = "The Alert Message Was Updated!";
@@ -50,7 +50,7 @@
         fclose($fp);
     }
 
-    include('../documents/alert.php');
+    include('../core/documents/alert.php');
 ?>
 <div class="box_right_title"><?php echo $GamePage->titleLink(); ?> &raquo; Alert Message</div>
 <form action="?p=interface&s=alert" method="post">

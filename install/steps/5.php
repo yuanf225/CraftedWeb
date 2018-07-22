@@ -19,61 +19,64 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 ?>
+<style type="text/css">
+  
+  #main_box
+  {
+    width: 1000px;
+  }
+
+</style>
 <p id="steps"><b>Introduction</b> &raquo; MySQL Info &raquo; Configure &raquo; Database &raquo; <b>Realm Info</b> &raquo; Finished<p>
-<hr/>
+
+<hr>
+
 <table cellpadding="10" cellspacing="5">
     <tr>
-        <td>Realm Name:</td>
-        <td><input type="text" placeholder="Default: Sample Realm" name="addrealm_name"></td>
+        <th>
+          Realm Name:<br>
+          <input type="text" placeholder="Default: Sample Realm" id="realm_name" required>
+        </th>
 
-        <td>MySQL Host:</td>
-        <td><input type="text" placeholder="Default: 127.0.0.1" name="addrealm_m_host"></td>
+        <th>
+          Administrator Username:
+          <input type="text" placeholder="Default: admin" id="realm_access_username" required>
+        </th> 
+
+        <th>
+          Administrator Password:
+          <input type="password" placeholder="Default: adminpass" id="realm_access_password" required>
+        </th>
+        
     </tr>
-    <tr>   
-        <td>Description (Not needed):</td>
-        <td><input type="text" placeholder="Default: Blizzlike 1x" name="addrealm_desc"></td>
 
-        <td>Host:</td>
-        <td><input type="text" placeholder="Default: 127.0.0.1" name="addrealm_host"></td>
-
-        <td>MySQL Username:</td>
-        <td><input type="text" placeholder="Default: root" name="addrealm_m_user"></td>
-    </tr>
-    <tr>   
-        <td>Port:</td>
-        <td><input type="text" placeholder="Default: 8085" name="addrealm_port"></td> 
-
-        <td>Character Database:</td>
-        <td><input type="text" placeholder="Default: characters" name="addrealm_chardb"></td>
-
-        <td>MySQL Password:</td>
-        <td><input type="text" placeholder="Default: ascent" name="addrealm_m_pass"></td>
-    </tr>
-    <tr>    
-        <td>Authorized Account username:</td>
-        <td><input type="text" placeholder="Default: admin" name="addrealm_a_user"></td> 
-
-        <td>Authorized Account password:</td>
-        <td><input type="password" placeholder="Default: adminpass" name="addrealm_a_pass"></td>        
-    </tr>
     <tr>
-        <td>Remote Console:</td>
-        <td>
-            <select name="addrealm_sendtype">
-                <option value="ra">RA</option>
-                <option value="soap">SOAP</option>
+        
+        <th>
+          Description:
+          <input type="text" placeholder="Default: Blizzlike 1x" id="realm_description" required>
+        </th>
+
+        <th>Remote Console:<br>
+            <select id="realm_sendtype">
+              <option value="none" selected></option>
+              <option value="RA">RA</option>
+              <option value="SOAP">SOAP</option>
             </select>
-        </td>
+        </th>
 
-        <td>RA Port (Ignore if you've chosen SOAP):</td>
-        <td><input type="text" placeholder="Default: 3443" name="addrealm_raport"></td>
+        <th id="realm_ra">
+          RA Port:
+          <input type="text" placeholder="Default: 3443" id="realm_ra_port" required>
+        </th>
 
-        <td>SOAP Port (Ignore if you've chosen RA):</td>
-        <td><input type="text" placeholder="Default: 7878" name="addrealm_soapport"></td>
-
+        <th id="realm_soap">
+          SOAP Port:
+          <input type="text" placeholder="Default: 7878" id="realm_soap_port">
+        </th>
     </tr>
+    
     <tr>
-        <td></td>
-        <td><input type="submit" value="Finished" onclick="step5()"></td>
+        <th colspan="4"><input type="submit" value="Finished" onclick="step5()"></th>
     </tr>
 </table>

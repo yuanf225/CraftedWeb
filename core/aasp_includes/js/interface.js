@@ -39,6 +39,7 @@ function centerLoader() {
 
     var left = scrolledX + (screenWidth - $("#loading").width()) / 2;
     var top = scrolledY + (screenHeight - $("#loading").height()) / 4;
+
     //centering
     $("#loading").css({
         "position": "absolute",
@@ -54,12 +55,12 @@ function centerLoader() {
 }
 
 function getPage(pagename) {
-    $(".box_right").html("<img src='images/ajax-loader.gif'>'");
+    $(".box_right").html("<img src='../core/aasp_includes/images/ajax-loader.gif'>'");
     $(".box_right").load("pages/" + pagename + ".php");
 }
 
 function loader(id) {
-    $(id).html("<img src='styles/default/images/ajax-loader.gif'>'");
+    $(id).html("<img src='../core/aasp_includes/styles/default/images/ajax-loader.gif'>'");
 }
 function templateInstallGuide() {
     showLoader();
@@ -80,7 +81,7 @@ function setTemplate() {
 
     showLoader();
     $("#loading").html("Saving...");
-    $.post("../aasp_includes/scripts/layout.php", {action: "setTemplate", id: id},
+    $.post("../core/aasp_includes/scripts/layout.php", {action: "setTemplate", id: id},
         function (data) {
             window.location = '?p=interface'
         });
@@ -94,7 +95,7 @@ function installTemplate() {
 
     showLoader();
     $("#loading").html("Saving...");
-    $.post("../aasp_includes/scripts/layout.php", {action: "installTemplate", path: path, name: name},
+    $.post("../core/aasp_includes/scripts/layout.php", {action: "installTemplate", path: path, name: name},
             function (data) {
                 window.location = '?p=interface'
             });
@@ -107,7 +108,7 @@ function uninstallTemplate() {
 
     showLoader();
     $("#loading").html("Saving...");
-    $.post("../aasp_includes/scripts/layout.php", {action: "uninstallTemplate", id: id},
+    $.post("../core/aasp_includes/scripts/layout.php", {action: "uninstallTemplate", id: id},
             function (data) {
                 window.location = '?p=interface'
             });
@@ -117,7 +118,7 @@ function uninstallTemplate() {
 function editMenu(id) {
 
     showLoader();
-    $.post("../aasp_includes/scripts/layout.php", {action: "getMenuEditForm", id: id},
+    $.post("../core/aasp_includes/scripts/layout.php", {action: "getMenuEditForm", id: id},
             function (data) {
                 $("#loading").html(data);
             });
@@ -132,7 +133,7 @@ function saveMenuLink(pos) {
 
     showLoader();
     $("#loading").html("Saving...");
-    $.post("../aasp_includes/scripts/layout.php", {action: "saveMenu", title: title, url: url, shownWhen: shownWhen, id: pos},
+    $.post("../core/aasp_includes/scripts/layout.php", {action: "saveMenu", title: title, url: url, shownWhen: shownWhen, id: pos},
             function (data) {
                 if (data == true) {
                     window.location = '?p=interface&s=menu'
@@ -147,7 +148,7 @@ function deleteLink(id) {
 
     showLoader();
     $("#loading").html("Are you sure you wish to delete this link?<br/><br/>\
-	<input type='submit' value='Yes I do' onclick='deleteLinkNow( " + id + " )'> <input type='submit' value='No' onclick='hideLoader()'>");
+	<input type='submit' value='Yes' onclick='deleteLinkNow( " + id + " )'> <input type='submit' value='No' onclick='hideLoader()'>");
 
 }
 
@@ -155,7 +156,7 @@ function deleteLinkNow(id) {
 
     showLoader();
     $("#loading").html("Saving...");
-    $.post("../aasp_includes/scripts/layout.php", {action: "deleteLink", id: id},
+    $.post("../core/aasp_includes/scripts/layout.php", {action: "deleteLink", id: id},
             function (data) {
                 if (data == true) {
                     window.location = '?p=interface&s=menu'
@@ -188,7 +189,7 @@ function addLinkNow() {
 
     $("#loading").html("Adding...");
 
-    $.post("../aasp_includes/scripts/layout.php", {action: "addLink", title: title, url: url, shownWhen: shownWhen},
+    $.post("../core/aasp_includes/scripts/layout.php", {action: "addLink", title: title, url: url, shownWhen: shownWhen},
             function (data) {
                 if (data == true) {
                     window.location = '?p=interface&s=menu'
@@ -213,7 +214,7 @@ function savePage(filename) {
 
     if (action == 2 || action == 1) 
     {
-        $.post("../aasp_includes/scripts/pages.php", {action: "toggle", value: action, filename: filename},
+        $.post("../core/aasp_includes/scripts/pages.php", {action: "toggle", value: action, filename: filename},
                 function (data) {
                     window.location = '?p=pages';
                 });
@@ -228,14 +229,14 @@ function savePage(filename) {
     {
         showLoader();
         $("#loading").html('Are you sure you wish to delete this page?<br/>\
-		<input type="submit" value="Yes I do" onclick="deletePage(\'' + filename + '\')"> \
+		<input type="submit" value="Yes" onclick="deletePage(\'' + filename + '\')"> \
 		<input type="submit" value="No" onclick="hideLoader()">');
     }
 
 }
 
 function deletePage(filename) {
-    $.post("../aasp_includes/scripts/pages.php", {action: "delete", filename: filename},
+    $.post("../core/aasp_includes/scripts/pages.php", {action: "delete", filename: filename},
             function (data) {
                 window.location = '?p=pages';
             });
@@ -244,12 +245,12 @@ function deletePage(filename) {
 function removeSlideImage(id) {
     showLoader();
     $("#loading").html('Are you sure you wish to remove this image?<br/>\
-	<input type="submit" value="Yes I do" onclick="removeSlideImageNow(' + id + ')"> \
+	<input type="submit" value="Yes" onclick="removeSlideImageNow(' + id + ')"> \
 	<input type="submit" value="No" onclick="hideLoader()">');
 }
 
 function removeSlideImageNow(id) {
-    $.post("../aasp_includes/scripts/layout.php", {action: "deleteImage", id: id},
+    $.post("../core/aasp_includes/scripts/layout.php", {action: "deleteImage", id: id},
             function (data) {
                 window.location = '?p=interface&s=slideshow';
             });
@@ -274,7 +275,7 @@ function saveVoteLink(id) {
     var image = document.getElementById("editVoteLink_image").value;
     var url = document.getElementById("editVoteLink_url").value;
 
-    $.post("../aasp_includes/scripts/pages.php", {action: "saveVoteLink", id: id, title: title, points: points, image: image, url: url},
+    $.post("../core/aasp_includes/scripts/pages.php", {action: "saveVoteLink", id: id, title: title, points: points, image: image, url: url},
             function (data) {
                 window.location = '?p=services&s=voting';
             });
@@ -283,12 +284,12 @@ function saveVoteLink(id) {
 function removeVoteLink(id) {
     showLoader();
     $("#loading").html('Are you sure you wish to remove this voting site?<br/>\
-	<input type="submit" value="Yes I do" onclick="removeVoteLinkNow(' + id + ')"> \
+	<input type="submit" value="Yes" onclick="removeVoteLinkNow(' + id + ')"> \
 	<input type="submit" value="No" onclick="hideLoader()">');
 }
 
 function removeVoteLinkNow(id) {
-    $.post("../aasp_includes/scripts/pages.php", {action: "removeVoteLink", id: id},
+    $.post("../core/aasp_includes/scripts/pages.php", {action: "removeVoteLink", id: id},
             function (data) {
                 window.location = '?p=services&s=voting';
             });
@@ -309,7 +310,7 @@ function addVoteLinkNow() {
     var image = document.getElementById("addVoteLink_image").value;
     var url = document.getElementById("addVoteLink_url").value;
 
-    $.post("../aasp_includes/scripts/pages.php", {action: "addVoteLink", title: title, points: points, image: image, url: url},
+    $.post("../core/aasp_includes/scripts/pages.php", {action: "addVoteLink", title: title, points: points, image: image, url: url},
             function (data) {
                 window.location = '?p=services&s=voting';
             });
@@ -321,7 +322,7 @@ function saveServicePrice(service) {
     var enabled = document.getElementById(service + "_enabled").value;
 
 
-    $.post("../aasp_includes/scripts/pages.php", {action: "saveServicePrice", service: service, price: price, currency: currency, enabled: enabled},
+    $.post("../core/aasp_includes/scripts/pages.php", {action: "saveServicePrice", service: service, price: price, currency: currency, enabled: enabled},
             function (data) {
                 window.location = '?p=services&s=charservice';
             });
@@ -329,7 +330,7 @@ function saveServicePrice(service) {
 
 function disablePlugin(foldername) {
 
-    $.post("../aasp_includes/scripts/layout.php", {action: "disablePlugin", foldername: foldername},
+    $.post("../core/aasp_includes/scripts/layout.php", {action: "disablePlugin", foldername: foldername},
             function (data) {
                 window.location = '?p=interface&s=viewplugin&plugin=' + foldername;
             });
@@ -337,7 +338,7 @@ function disablePlugin(foldername) {
 
 function enablePlugin(foldername) {
 
-    $.post("../aasp_includes/scripts/layout.php", {action: "enablePlugin", foldername: foldername},
+    $.post("../core/aasp_includes/scripts/layout.php", {action: "enablePlugin", foldername: foldername},
             function (data) {
                 window.location = '?p=interface&s=viewplugin&plugin=' + foldername;
             });

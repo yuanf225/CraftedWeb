@@ -265,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `votingsites`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `votingsites`(`title`,`points`,`image`,`url`) VALUES 
-('OpenWoW',       2,'http://cdn.openwow.com/toplist/vote_small.jpg','http://www.openwow.com/'),
+('OpenWoW',       2,'http://cdn.cavernoftime.com/toplist/vote_small.jpg','http://www.cavernoftime.com/'),
 ('Xtremetop100',  2,'http://www.xtremeTop100.com/votenew.jpg',      'http://www.xtremetop100.com/');
 
 DROP TABLE IF EXISTS `shopLog`;

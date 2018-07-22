@@ -36,15 +36,15 @@
                     <?php
                     $GameServer->selectDB("webdb", $conn);
 
-                    $result = mysqli_query($conn, "SELECT char_db, name, description FROM realms;");
-                    if (mysqli_num_rows($result) == 0)
+                    $result = $conn->query("SELECT char_db, name, description FROM realms;");
+                    if ($result->num_rows == 0)
                     {
                         echo "<option value='NULL'>No Realms Found.</option>";
                     }
                     else
                     {
                         echo "<option value='NULL'>--Select A Realm--</option>";
-                        while ($row = mysqli_fetch_assoc($result))
+                        while ($row = $result->fetch_assoc())
                         {
                             echo "<option value='". $row['char_db'] ."'>". $row['name'] ." - <i>". $row['description'] ."</i></option>";
                         }
@@ -94,7 +94,7 @@
             ############################
 
             $offline = $_SESSION['lastTicketRealmOffline'];
-            $realm   = mysqli_real_escape_string($conn, $_SESSION['lastTicketRealm']);
+            $realm   = $conn->escape_string($_SESSION['lastTicketRealm']);
 
 
             if ($realm == "NULL")
@@ -102,11 +102,11 @@
                 die("<pre>Please Select A Realm.</pre>");
             }
 
-            mysqli_select_db($conn, $realm);
+            $conn->select_db($realm);
 
-            $result = mysqli_query($conn, "SELECT ". $ticketString .", name, message, createtime, ". $guidString .", ". $closedString ." 
+            $result = $conn->query("SELECT ". $ticketString .", name, message, createtime, ". $guidString .", ". $closedString ." 
                 FROM gm_tickets ORDER BY ticketId DESC;");
-            if (mysqli_num_rows($result) == 0)
+            if ($result->num_rows == 0)
             {
                 die("<pre>No Tickets Were Found!</pre>");
             }
@@ -124,10 +124,10 @@
 			   </tr>
 			";
 
-            while ($row = mysqli_fetch_assoc($result))
+            while ($row = $result->fetch_assoc())
             {
-                $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid='" . $row[$guidString] . "' AND online='1';");
-                if (mysqli_data_seek($get, 0) == 0 && $offline == "on")
+                $get = $conn->query("SELECT COUNT(online) FROM characters WHERE guid='" . $row[$guidString] . "' AND online='1';");
+                if ($get->data_seek(0) == 0 && $offline == "on")
                 {
                     echo "<tr>";
                     echo "<td><a href='?p=tools&s=tickets&guid=". $row[$ticketString] ."&db=". $realm ."'>". $row[$ticketString] ."</td>";
@@ -144,8 +144,8 @@
                         echo "<td><font color='green'>Open</font></td>";
                     }
 
-                    $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
-                    if (mysqli_data_seek($get, 0) > 0)
+                    $get = $conn->query("SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
+                    if ($get->data_seek(0) > 0)
                     {
                         echo "<td><font color='green'>Online</font></td>";
                     }
@@ -213,10 +213,10 @@
         }
         ##############################
 
-        mysqli_select_db($conn, $_GET['db']);
-        $result = mysqli_query($conn, "SELECT name, message, createtime, ". $guidString .", ". $closedString ." 
-            FROM gm_tickets WHERE ". $ticketString ."='" . mysqli_real_escape_string($conn, $_GET['guid']) ."';");
-        $row = mysqli_fetch_assoc($result);
+        $conn->select_db($_GET['db']);
+        $result = $conn->query("SELECT name, message, createtime, ". $guidString .", ". $closedString ." 
+            FROM gm_tickets WHERE ". $ticketString ."='" . $conn->escape_string($_GET['guid']) ."';");
+        $row = $result->fetch_assoc();
         ?>
     <table style="width: 100%;" class="center">
         <tr>
@@ -255,8 +255,8 @@
             </td>
             <td>
                 <?php
-                $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
-                if (mysqli_data_seek($get, 0) > 0)
+                $get = $conn->query("SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
+                if ($get->data_seek(0) > 0)
                 {
                     echo "<font color='green'>Online</font>";
                 }

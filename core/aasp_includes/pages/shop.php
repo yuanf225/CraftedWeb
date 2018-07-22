@@ -32,27 +32,29 @@
     {   
         $conn = $GameServer->connect();
         $GameServer->selectDB("webdb", $conn);
-        $inShop     = mysqli_query($conn, "SELECT COUNT(*) AS items FROM shopitems;");
-        $purchToday = mysqli_query($conn, "SELECT COUNT(*) AS purchases FROM shoplog WHERE date LIKE '%". date('Y-m-d') ."%';");
-        $getAvg     = mysqli_query($conn, "SELECT AVG(*) AS priceAvg FROM shopitems;");
-        $totalPurch = mysqli_query($conn, "SELECT COUNT(*) AS purchasesTotal FROM shoplog;");
+        $inShop     = $conn->query("SELECT COUNT(id) AS items FROM shopitems;");
+        $purchToday = $conn->query("SELECT COUNT(id) AS purchases FROM shoplog WHERE date LIKE '%". date('Y-m-d') ."%';");
+        $getAvg     = $conn->query("SELECT AVG(price) AS priceAvg FROM shopitems;");
+        $totalPurch = $conn->query("SELECT COUNT(id) AS purchasesTotal FROM shoplog;");
+
+
 
         //Note: The round() function will return 0 if no value is set :)
         ?>
         <div class="box_right_title">Shop Overview</div>
         <table style="width: 100%;">
             <tr>
-                <td><span class='blue_text'>Items In Shop</span></td><td><?php echo round(mysqli_fetch_assoc($inShop)['items']); ?></td>
+                <td><span class='blue_text'>Items In Shop</span></td>
+                <td><?php echo round($inShop->fetch_assoc()['items']); ?></td>
+
+                <td><span class='blue_text'>Average Item Cost</span></td>
+                <td><?php echo round($getAvg->fetch_assoc()['priceAvg']); ?> Vote Points</td>
             </tr>
             <tr>
                 <td><span class='blue_text'>Purchases Today</span></td>
-                <td><?php echo round(mysqli_fetch_assoc($purchToday)['purchases']); ?></td>
+                <td><?php echo round($purchToday->fetch_assoc()['purchases']); ?></td>
                 <td><span class='blue_text'>Total Purchases</span></td>
-                <td><?php echo round(mysqli_fetch_assoc($totalPurch)['purchasesTotal']); ?></td>
-            </tr>
-            <tr>
-                <td><span class='blue_text'>Average Item Cost</span></td>
-                <td><?php echo round(mysqli_fetch_assoc($getAvg)['priceAvg']); ?></td>
+                <td><?php echo round($totalPurch->fetch_assoc()['purchasesTotal']); ?></td>
             </tr>
         </table>
         <hr/>

@@ -25,9 +25,9 @@
     $GameServer->selectDB('webdb', $conn);
     if (isset($_POST['newpage']))
     {
-        $name     = mysqli_real_escape_string($conn, $_POST['newpage_name']);
-        $filename = mysqli_real_escape_string($conn, trim(strtolower($_POST['newpage_filename'])));
-        $content  = mysqli_real_escape_string($conn, htmlentities($_POST['newpage_content']));
+        $name     = $conn->escape_string($_POST['newpage_name']);
+        $filename = $conn->escape_string(trim(strtolower($_POST['newpage_filename'])));
+        $content  = $conn->escape_string(htmlentities($_POST['newpage_content']));
 
         if (empty($name) || empty($filename) || empty($content))
         {
@@ -35,10 +35,10 @@
         }
         else
         {
-            mysqli_query($conn, "INSERT INTO custom_pages (name, filename, content, date) VALUES 
+            $conn->query("INSERT INTO custom_pages (name, filename, content, date) VALUES 
               ('". $name ."', '". $filename ."', '". $content ."', '". date("Y-m-d H:i:s") ."');");
 
-            echo "<h3>The Page Was Successfully Created.</h3><a href='". $GLOBALS['website_domain'] ."?p=". $filename ."' target='_blank'>View Page</a><br/><br/> ". mysqli_error($conn);
+            echo "<h3>The Page Was Successfully Created.</h3><a href='../?p=". $filename ."' target='_blank'>View Page</a><br/><br/>";
         }
     }
 ?>

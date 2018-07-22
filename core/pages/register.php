@@ -56,7 +56,7 @@ It's free, join us today! <hr/>
             ?>
             <tr>
                 <td align="right"></td>
-                <td><img src="includes/misc/captcha.php" /></td>
+                <td><img src="../core/includes/misc/captcha.php" /></td>
             </tr>
             <tr> 
                 <td align="right">Captcha:</td>

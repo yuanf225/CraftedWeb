@@ -24,7 +24,7 @@
     $Account->isNotLoggedIn();
 
     /* Declare some general variables */
-    $shopPage     = mysqli_real_escape_string($conn, $_GET['p']);
+    $shopPage     = $conn->escape_string($_GET['p']);
     $shopVar      = "donate";
     $shopCurrency = $GLOBALS['donation']['coins_name'];
 

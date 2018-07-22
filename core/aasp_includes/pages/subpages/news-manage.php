@@ -23,8 +23,8 @@
     global $GameServer;
     $conn = $GameServer->connect();
     $GameServer->selectDB('webdb', $conn);
-    $result = mysqli_query($conn, "SELECT * FROM news ORDER BY id DESC;");
-    if (mysqli_num_rows($result) == 0)
+    $result = $conn->query("SELECT * FROM news ORDER BY id DESC;");
+    if ($result->num_rows == 0)
     {
         echo "<span class='blue_text'>No News Has Been Posted Yet!</span>";
     }
@@ -41,14 +41,14 @@
                 <th>Actions</th>
             </tr>
             <?php
-            while ($row = mysqli_fetch_assoc($result))
+            while ($row = $result->fetch_assoc())
             {
-                $comments = mysqli_query($conn, "SELECT COUNT(id) AS comments FROM news_comments WHERE newsid=". $row['id'] .";");
+                $comments = $conn->query("SELECT COUNT(id) AS comments FROM news_comments WHERE newsid=". $row['id'] .";");
                 echo "<tr class='center'>
                   			<td>". $row['id'] ."</td>
                   			<td>". $row['title'] ."</td>
                   			<td>". substr($row['body'], 0, 25) ."...</td>
-                  			<td>". mysqli_fetch_assoc($comments)['comments'] ."</td>
+                  			<td>". $comments->fetch_assoc()['comments'] ."</td>
                   			<td> <a onclick='editNews(". $row['id'] .")' href='#'>Edit</a> &nbsp;  
                   			<a onclick='deleteNews(". $row['id'] .")' href='#'>Delete</a></td>
                   	</tr>";

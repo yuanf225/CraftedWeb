@@ -41,14 +41,14 @@ All GM Accounts Are Listed Below.
         <th>Actions</th>
     </tr>
     <?php
-        $result = mysqli_query($conn, "SELECT * FROM account_access;");
-        if (mysqli_num_rows($result) == 0)
+        $result = $conn->query("SELECT * FROM account_access;");
+        if ($result->num_rows == 0)
         {
             echo "<b>No GM Accounts Found!</b>";
         }
         else
         {
-            while ($row = mysqli_fetch_assoc($result))
+            while ($row = $result->fetch_assoc())
             {
                 ?>
                 <tr style="text-align:center;">
@@ -63,17 +63,17 @@ All GM Accounts Are Listed Below.
                         }
                         else
                         {
-                            $getRealm = mysqli_query($conn, "SELECT name FROM realmlist WHERE id=". $row['RealmID'] .";");
-                            #if (mysqli_num_rows($getRealm) == 0) echo 'Unknown';
-                            $rows     = mysqli_fetch_assoc($getRealm);
+                            $getRealm = $conn->query("SELECT name FROM realmlist WHERE id=". $row['RealmID'] .";");
+                            #if ($getRealm->num_rows == 0) echo 'Unknown';
+                            $rows     = $getRealm->fetch_assoc();
                             echo $rows['name'];
                         }
                         ?>
                     </td>
                     <td>
                         <?php
-                        $getData = mysqli_query($conn, "SELECT last_login, online FROM account WHERE id=". $row['id'] .";");
-                        $rows    = mysqli_fetch_assoc($getData);
+                        $getData = $conn->query("SELECT last_login, online FROM account WHERE id=". $row['id'] .";");
+                        $rows    = $getData->fetch_assoc();
                         if ($rows['online'] == 0)
                         {
                             echo '<font color="red">Offline</font>';

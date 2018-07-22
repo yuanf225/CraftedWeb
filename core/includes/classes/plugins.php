@@ -35,7 +35,7 @@
                     $bad   = array('.', '..', 'index.html');
                     $count = 0;
 
-                    $folder = scandir('plugins/');
+                    $folder = scandir('core/plugins/');
                     if (is_array($folder) || is_object($folder))
                     {
                         foreach ($folder as $folderName)
@@ -83,8 +83,9 @@
                         foreach ($_SESSION['loaded_plugins'] as $folderName)
                         {
                             $Connect->selectDB("webdb", $conn);
-                            $chk = mysqli_query($conn, "SELECT COUNT(*) FROM disabled_plugins WHERE foldername='". mysqli_real_escape_string($conn, $folderName) ."';");
-                            if (mysqli_field_seek($chk, 0) == 0 && file_exists('plugins/'. $folderName .'/'. $type .'/'))
+                            
+                            $chk = $conn->query("SELECT COUNT(*) FROM disabled_plugins WHERE foldername='". $conn->escape_string($folderName) ."';");
+                            if ($chk->field_seek(0) == 0 && file_exists('plugins/'. $folderName .'/'. $type .'/'))
                             {
                                 $folder = scandir('plugins/'. $folderName .'/'. $type .'/');
 
@@ -92,7 +93,7 @@
                                 {
                                     if (!in_array($fileName, $bad))
                                     {
-                                        $loaded[] = 'plugins/'. $folderName .'/'. $type .'/'. $fileName;
+                                        $loaded[] = 'core/plugins/'. $folderName .'/'. $type .'/'. $fileName;
                                     }
                                 }
 

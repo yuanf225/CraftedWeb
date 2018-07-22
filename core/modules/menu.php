@@ -23,6 +23,7 @@
     global $Connect;
     $conn = $Connect->connectToDB();
     $Connect->selectDB('webdb', $conn);
+
     if (!isset($_SESSION['cw_user']))
     {
         $sql = "WHERE shownWhen = 'always' OR shownWhen = 'notlogged'";
@@ -31,14 +32,14 @@
     {
         $sql = "WHERE shownWhen = 'always' OR shownWhen = 'logged'";
     }
-    $getMenuLinks = mysqli_query($conn, "SELECT * FROM site_links ". $sql ." ORDER BY position ASC;");
-    if (mysqli_num_rows($getMenuLinks) == 0)
+    $getMenuLinks = $conn->query("SELECT * FROM site_links ". $sql ." ORDER BY position ASC;");
+    if ($getMenuLinks->num_rows == 0)
     {
         buildError("<b>Template error:</b> No menu links was found in the CraftedWeb database!", NULL);
         echo "<br/>No menu links was found!";
     }
 
-    while ($row = mysqli_fetch_assoc($getMenuLinks))
+    while ($row = $getMenuLinks->fetch_assoc())
     {
         $curr = substr($row['url'], 3);
         if ($_GET['p'] == $curr)

@@ -43,16 +43,16 @@ Choose the character you wish to revive. The character will be revived with 1 he
     $Account->isNotLoggedIn();
     $Connect->selectDB('webdb', $conn);
     $num    = 0;
-    $result = mysqli_query($conn, 'SELECT char_db, name FROM realms ORDER BY id ASC;');
-    while ($row    = mysqli_fetch_assoc($result))
+    $result = $conn->query('SELECT char_db, name FROM realms ORDER BY id ASC;');
+    while ($row    = $result->fetch_assoc())
     {
         $acct_id = $Account->getAccountID($_SESSION['cw_user']);
         $realm   = $row['name'];
         $char_db = $row['char_db'];
 
         $Connect->selectDB($char_db);
-        $result = mysqli_query($conn, "SELECT name, guid, gender, class, race, level, online FROM characters WHERE account=". $acct_id .";");
-        while ($row = mysqli_fetch_assoc($result))
+        $result = $conn->query("SELECT name, guid, gender, class, race, level, online FROM characters WHERE account=". $acct_id .";");
+        while ($row = $result->fetch_assoc())
         {
             ?><div class='charBox'>
                 <table width="100%">

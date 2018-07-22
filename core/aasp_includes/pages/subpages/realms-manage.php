@@ -36,8 +36,8 @@
     </tr>
     <?php
         
-        $result = mysqli_query($conn, "SELECT * FROM realms ORDER BY id DESC;");
-        while ($row = mysqli_fetch_assoc($result))
+        $result = $conn->query("SELECT * FROM realms ORDER BY id DESC;");
+        while ($row = $result->fetch_assoc())
         {
             ?>
             <tr>

@@ -6,7 +6,7 @@ function addSingleItem()
 
     showLoader();
 
-    $.post("../aasp_includes/scripts/shop.php", {action: 'addsingle', entry: entry, price: price, shop: shop},
+    $.post("../core/aasp_includes/scripts/shop.php", {action: 'addsingle', entry: entry, price: price, shop: shop},
             function (data)
             {
                 $("#loading").html(data);
@@ -24,7 +24,7 @@ function addMultiItem()
 
     showLoader();
 
-    $.post("../aasp_includes/scripts/shop.php", {action: 'addmulti', il_from: il_from, il_to: il_to, price: price, shop: shop,
+    $.post("../core/aasp_includes/scripts/shop.php", {action: 'addmulti', il_from: il_from, il_to: il_to, price: price, shop: shop,
         quality: quality, type: type},
             function (data)
             {
@@ -40,7 +40,7 @@ function modSingleItem()
 
     showLoader();
 
-    $.post("../aasp_includes/scripts/shop.php", {action: 'modsingle', entry: entry, price: price, shop: shop},
+    $.post("../core/aasp_includes/scripts/shop.php", {action: 'modsingle', entry: entry, price: price, shop: shop},
             function (data)
             {
                 $("#loading").html(data);
@@ -58,7 +58,7 @@ function modMultiItem()
 
     showLoader();
 
-    $.post("../aasp_includes/scripts/shop.php", {action: 'modmulti', il_from: il_from, il_to: il_to, price: price, shop: shop,
+    $.post("../core/aasp_includes/scripts/shop.php", {action: 'modmulti', il_from: il_from, il_to: il_to, price: price, shop: shop,
         quality: quality, type: type},
             function (data)
             {
@@ -72,14 +72,14 @@ function delSingleItem()
     var shop = document.getElementById('modsingle_shop').value;
 
     $("#loading").html('Are you sure you wish to remove this item from the shop?<br/>\
-	<input type="submit" value="Yes I do" onclick="delSingleItemNow(' + entry + ',\'' + shop + '\')"> <input type="submit" value="No" onclick="hideLoader()">');
+	<input type="submit" value="Yes" onclick="delSingleItemNow(' + entry + ',\'' + shop + '\')"> <input type="submit" value="No" onclick="hideLoader()">');
 
     showLoader();
 }
 
 function delSingleItemNow(entry, shop)
 {
-    $.post("../aasp_includes/scripts/shop.php", {action: 'delsingle', entry: entry, shop: shop},
+    $.post("../core/aasp_includes/scripts/shop.php", {action: 'delsingle', entry: entry, shop: shop},
             function (data)
             {
                 $("#loading").html(data);
@@ -95,7 +95,7 @@ function delMultiItem()
     var type = document.getElementById('modmulti_type').value;
 
     $("#loading").html('Are you sure you wish to remove all these item from the shop?<br/>\
-	<input type="submit" value="Yes I do" onclick="delMultiItemNow(\'' + il_from + '\',\'' + il_to + '\',\'' + quality + '\',\'' + shop + '\',\'' + type + '\')"> \
+	<input type="submit" value="Yes" onclick="delMultiItemNow(\'' + il_from + '\',\'' + il_to + '\',\'' + quality + '\',\'' + shop + '\',\'' + type + '\')"> \
 	<input type="submit" value="No" onclick="hideLoader()">');
 
     showLoader();
@@ -107,7 +107,7 @@ function delMultiItemNow(il_from, il_to, quality, shop, type)
 
     showLoader();
 
-    $.post("../aasp_includes/scripts/shop.php", {action: 'delmulti', il_from: il_from, il_to: il_to, shop: shop,
+    $.post("../core/aasp_includes/scripts/shop.php", {action: 'delmulti', il_from: il_from, il_to: il_to, shop: shop,
         quality: quality, type: type},
             function (data)
             {
@@ -128,13 +128,13 @@ function clearShop(shop)
     {
         shop = 2;
     }
-    $("#loading").html("Are you sure you wish to remove all items in the shop?<br/><input type='submit' value='Yes I do' onclick='clearShopNow(" + shop + ")'> <input type='submit' value='No' onclick='hideLoader()'>");
+    $("#loading").html("Are you sure you wish to remove all items in the shop?<br/><input type='submit' value='Yes' onclick='clearShopNow(" + shop + ")'> <input type='submit' value='No' onclick='hideLoader()'>");
 }
 
 function clearShopNow(shop)
 {
     $("#loading").html("Deleting & Clearing up...");
-    $.post("../aasp_includes/scripts/shop.php", {action: "clear", shop: shop},
+    $.post("../core/aasp_includes/scripts/shop.php", {action: "clear", shop: shop},
             function (data)
             {
                 $("#loading").html("The shop was cleared!");

@@ -39,8 +39,8 @@
         <h3>Choose Template</h3>
         <select id="choose_template">
             <?php
-            $result = mysqli_query($conn, "SELECT * FROM template ORDER BY id ASC;");
-            while ($row = mysqli_fetch_assoc($result))
+            $result = $conn->query("SELECT * FROM template ORDER BY id ASC;");
+            while ($row = $result->fetch_assoc())
             {
                 if ($row['applied'] == 1)
                 {
@@ -70,8 +70,8 @@
         <h3>Uninstall a template</h3>
         <select id="uninstall_template_id">
             <?php
-            $result = mysqli_query($conn, "SELECT * FROM template ORDER BY id ASC;");
-            while ($row = mysqli_fetch_assoc($result))
+            $result = $conn->query("SELECT * FROM template ORDER BY id ASC;");
+            while ($row = $result->fetch_assoc())
             {
                 if ($row['applied'] == 1)
                 {

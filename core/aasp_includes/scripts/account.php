@@ -36,50 +36,50 @@
     {
         case "addAccA":
         {
-            $user  = mysqli_real_escape_string($conn, $_POST['user']);
-            $realm = mysqli_real_escape_string($conn, $_POST['realm']);
-            $rank  = mysqli_real_escape_string($conn, $_POST['rank']);
+            $user  = $conn->escape_string($_POST['user']);
+            $realm = $conn->escape_string($_POST['realm']);
+            $rank  = $conn->escape_string($_POST['rank']);
 
             $guid = $GameAccount->getAccID($user);
 
-            mysqli_query($conn, "INSERT INTO account_access VALUES(". $guid .", ". $rank .", ". $realm .");");
+            $conn->query("INSERT INTO account_access VALUES(". $guid .", ". $rank .", ". $realm .");");
             $GameServer->logThis("Added GM Account Access For " . ucfirst(strtolower($GameAccount->getAccName($guid))));
             break;
         }
         
         case "edit":
         {
-            $email    = mysqli_real_escape_string($conn, trim($_POST['email']));
-            $password = mysqli_real_escape_string($conn, trim(strtoupper($_POST['password'])));
-            $vp       = mysqli_real_escape_string($conn, $_POST['vp']);
-            $dp       = mysqli_real_escape_string($conn, $_POST['dp']);
-            $id       = mysqli_real_escape_string($conn, $_POST['id']);
+            $email    = $conn->escape_string(trim($_POST['email']));
+            $password = $conn->escape_string(trim(strtoupper($_POST['password'])));
+            $vp       = $conn->escape_string($_POST['vp']);
+            $dp       = $conn->escape_string($_POST['dp']);
+            $id       = $conn->escape_string($_POST['id']);
             $extended = NULL;
 
-            $chk1 = mysqli_query($conn, "SELECT COUNT(*) FROM account WHERE email='". $email ."' AND id=". $id .";");
-            if (mysqli_data_seek($chk1, 0) > 1)
+            $chk1 = $conn->query("SELECT COUNT(*) FROM account WHERE email='". $email ."' AND id=". $id .";");
+            if ($chk1->data_seek(0) > 1)
             {
                 $extended .= "Changed email to". $email ."<br/>";
             }
-            mysqli_query($conn, "UPDATE account SET email='". $email ."' WHERE id=". $id .";");
+            $conn->query("UPDATE account SET email='". $email ."' WHERE id=". $id .";");
 
             $GameServer->selectDB('webdb', $conn);
 
-            mysqli_query($conn, "INSERT INTO account_data (id) VALUES(". $id .");");
+            $conn->query("INSERT INTO account_data (id) VALUES(". $id .");");
 
-            $chk2 = mysqli_query($conn, "SELECT COUNT(*) FROM account_data WHERE vp=". $vp ." AND id=". $id .";");
-            if (mysqli_data_seek($conn, $chk2, 0) > 1)
+            $chk2 = $conn->query("SELECT COUNT(*) FROM account_data WHERE vp=". $vp ." AND id=". $id .";");
+            if ($chk2->data_seek(0) > 1)
             {
                 $extended .= "Updated Vote Points to ". $vp ."<br/>";
             }
 
-            $chk3 = mysqli_query($conn, "SELECT COUNT(*) FROM account_data WHERE dp=". $dp ." AND id=". $id .";");
-            if (mysqli_data_seek($conn, $chk3, 0) > 1)
+            $chk3 = $conn->query("SELECT COUNT(*) FROM account_data WHERE dp=". $dp ." AND id=". $id .";");
+            if ($chk3->data_seek(0) > 1)
             {
                 $extended .= "Updated Donation Coins to ". $dp ."<br/>";
             }
 
-            mysqli_query($conn, "UPDATE account_data SET vp=". $vp .", dp =". $dp ." WHERE id=". $id .";");
+            $conn->query("UPDATE account_data SET vp=". $vp .", dp =". $dp ." WHERE id=". $id .";");
 
             if (!empty($password))
             {
@@ -87,8 +87,8 @@
 
                 $password = sha1("". $username .":". $password ."");
                 $GameServer->selectDB('logondb', $conn);
-                mysqli_query($conn, "UPDATE account SET sha_pass_hash='". $password ."' WHERE id=". $id .";");
-                mysqli_query($conn, "UPDATE account SET v='0', s='0' WHERE id=". $id .";");
+                $conn->query("UPDATE account SET sha_pass_hash='". $password ."' WHERE id=". $id .";");
+                $conn->query("UPDATE account SET v='0', s='0' WHERE id=". $id .";");
                 $extended .= "Changed password<br/>";
             }
 
@@ -100,14 +100,14 @@
 
         case "editChar":
         {
-            $guid            = mysqli_real_escape_string($conn, $_POST['guid']);
-            $rid             = mysqli_real_escape_string($conn, $_POST['rid']);
-            $name            = mysqli_real_escape_string($conn, trim(ucfirst(strtolower($_POST['name']))));
-            $class           = mysqli_real_escape_string($conn, $_POST['class']);
-            $race            = mysqli_real_escape_string($conn, $_POST['race']);
-            $gender          = mysqli_real_escape_string($conn, $_POST['gender']);
-            $money           = mysqli_real_escape_string($conn, $_POST['money']);
-            $GameAccountname = mysqli_real_escape_string($conn, $_POST['account']);
+            $guid            = $conn->escape_string($_POST['guid']);
+            $rid             = $conn->escape_string($_POST['rid']);
+            $name            = $conn->escape_string(trim(ucfirst(strtolower($_POST['name']))));
+            $class           = $conn->escape_string($_POST['class']);
+            $race            = $conn->escape_string($_POST['race']);
+            $gender          = $conn->escape_string($_POST['gender']);
+            $money           = $conn->escape_string($_POST['money']);
+            $GameAccountname = $conn->escape_string($_POST['account']);
             $GameAccountid   = $GameAccount->getAccID($GameAccountname);
 
             if (empty($guid) || empty($rid) || empty($name) || empty($class) || empty($race))
@@ -117,19 +117,19 @@
 
             $GameServer->connectToRealmDB($rid);
 
-            $online = mysqli_query($conn, "SELECT COUNT(*) FROM characters WHERE guid=". $guid ." AND online=1;");
-            if (mysqli_data_seek($online, 0) > 0)
+            $online = $conn->query("SELECT COUNT(*) FROM characters WHERE guid=". $guid ." AND online=1;");
+            if ($online->data_seek(0) > 0)
             {
                 exit('The character must be online for any change to take effect!');
             }
 
-            mysqli_query($conn, "UPDATE characters SET name='". $name ."', class=". $class .", race=". $race .", gender=". $gender .", money=". $money .", account=". $GameAccountid ." WHERE guid=". $guid .";");
+            $conn->query("UPDATE characters SET name='". $name ."', class=". $class .", race=". $race .", gender=". $gender .", money=". $money .", account=". $GameAccountid ." WHERE guid=". $guid .";");
 
             echo 'The character was saved!';
 
-            $chk = mysqli_query($conn, "SELECT COUNT(*) FROM characters WHERE name='". $name ."';");
+            $chk = $conn->query("SELECT COUNT(*) FROM characters WHERE name='". $name ."';");
 
-            if (mysqli_data_seek($chk, 0) > 1)
+            if ($chk->data_seek(0) > 1)
             {
                 echo '<br/><b>NOTE:</b> It seems like there more than 1 character with this name, this might force them to rename when they log in.';
             }
@@ -141,9 +141,9 @@
 
         case "removeAccA":
         {
-            $id = mysqli_real_escape_string($conn, $_POST['id']);
+            $id = $conn->escape_string($_POST['id']);
 
-            mysqli_query($conn, "DELETE FROM account_access WHERE id=". $id .";");
+            $conn->query("DELETE FROM account_access WHERE id=". $id .";");
             $GameServer->logThis("Modified GM account access for " . ucfirst(strtolower($GameAccount->getAccName($id))));
 
             break;
@@ -151,11 +151,11 @@
 
         case "saveAccA":
         {
-            $id    = mysqli_real_escape_string($conn, $_POST['id']);
-            $rank  = mysqli_real_escape_string($conn, $_POST['rank']);
-            $realm = mysqli_real_escape_string($conn, $_POST['realm']);
+            $id    = $conn->escape_string($_POST['id']);
+            $rank  = $conn->escape_string($_POST['rank']);
+            $realm = $conn->escape_string($_POST['realm']);
 
-            mysqli_query($conn, "UPDATE account_access SET gmlevel=". $rank .", RealmID=". $realm ." WHERE id=". $id .";");
+            $conn->query("UPDATE account_access SET gmlevel=". $rank .", RealmID=". $realm ." WHERE id=". $id .";");
             $GameServer->logThis("Modified account access for " . ucfirst(strtolower($GameAccount->getAccName($id))));
 
             break;

@@ -5,7 +5,7 @@ function login(panel)
 
     showLoader();
 
-    $.post("../aasp_includes/scripts/login.php", {login: true, username: username, password: password, panel: panel},
+    $.post("../core/aasp_includes/scripts/login.php", {login: true, username: username, password: password, panel: panel},
             function (data)
             {
                 if (data == true)
@@ -29,7 +29,7 @@ function save_account_data()
 
     showLoader();
 
-    $.post("../aasp_includes/scripts/account.php", {action: 'edit', email: email, password: password, vp: vp, dp: dp, id: id},
+    $.post("../core/aasp_includes/scripts/account.php", {action: 'edit', email: email, password: password, vp: vp, dp: dp, id: id},
             function (data) {
                 $("#loading").html(data);
             });
@@ -37,9 +37,9 @@ function save_account_data()
 
 function editAccA(id, rank, realm)
 {
-    $("#loading").html("Rank <br/>\
+    $("#loading").html("Rank (3 - Staff Panel | 4 - Admin Panel Access)<br/>\
 	<input type='text' value='" + rank + "' id='editAccARank'><br/>\
-	Realm ID<br/>\
+	Realm ID (-1 = All Servers)<br/>\
 	<input type='text' value='" + realm + "' id='editAccARealm'><br/>\
 	<input type='submit' value='Save' onclick='editAccANow(" + id + ")'>");
 
@@ -53,7 +53,7 @@ function editAccANow(id)
 
     $("#loading").html("Saving...");
 
-    $.post("../aasp_includes/scripts/account.php", {action: "saveAccA", id: id, rank: rank, realm: realm},
+    $.post("../core/aasp_includes/scripts/account.php", {action: "saveAccA", id: id, rank: rank, realm: realm},
             function (data) {
                 window.location = '?p=tools&s=accountaccess';
             });
@@ -62,7 +62,7 @@ function editAccANow(id)
 function removeAccA(id)
 {
     $("#loading").html("Are you sure you wish to remove this account's GM access? <br/>\
-	<input type='submit' value='Yes I do' onclick='removeAccANow(" + id + ")'> <input type='submit' value='No' onclick='hideLoader()'>");
+	<input type='submit' value='Yes' onclick='removeAccANow(" + id + ")'> <input type='submit' value='No' onclick='hideLoader()'>");
 
     showLoader();
 }
@@ -72,7 +72,7 @@ function removeAccANow(id)
 
     $("#loading").html("Removing...");
 
-    $.post("../aasp_includes/scripts/account.php", {action: "removeAccA", id: id},
+    $.post("../core/aasp_includes/scripts/account.php", {action: "removeAccA", id: id},
             function (data) {
                 window.location = '?p=tools&s=accountaccess';
             });
@@ -97,7 +97,7 @@ function addAccANow()
     var rank = document.getElementById("addAccARank").value;
     var realm = document.getElementById("addAccARealm").value;
 
-    $.post("../aasp_includes/scripts/account.php", {action: "addAccA", user: user, rank: rank, realm: realm},
+    $.post("../core/aasp_includes/scripts/account.php", {action: "addAccA", user: user, rank: rank, realm: realm},
             function (data) {
                 window.location = '?p=tools&s=accountaccess';
             });
@@ -106,7 +106,7 @@ function addAccANow()
 function editChar(guid, rid)
 {
     $("#loading").html("Are you sure you wish to save this character? <br/>\
-	<input type='submit' value='Yes I do' onclick='editCharNow(" + guid + "," + rid + ")'> <input type='submit' value='No' onclick='hideLoader()'>");
+	<input type='submit' value='Yes' onclick='editCharNow(" + guid + "," + rid + ")'> <input type='submit' value='No' onclick='hideLoader()'>");
 
     showLoader();
 }
@@ -124,7 +124,7 @@ function editCharNow(guid, rid)
     var money = document.getElementById("editchar_money").value;
 
 
-    $.post("../aasp_includes/scripts/account.php", {
+    $.post("../core/aasp_includes/scripts/account.php", {
         action: "editChar", guid: guid, rid: rid, name: charname, account: account, race: raceid, class: classid, gender: genderid, money: money},
             function (data) {
                 $("#loading").html(data);

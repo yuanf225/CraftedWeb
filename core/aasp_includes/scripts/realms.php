@@ -69,11 +69,11 @@
 
         case "closeTicket":
         {
-            $id = mysqli_real_escape_string($conn, $_POST['id']);
-            $db = mysqli_real_escape_string($conn, $_POST['db']);
-            mysqli_select_db($db);
+            $id = $conn->escape_string($_POST['id']);
+            $db = $conn->escape_string($_POST['db']);
+            $conn->select_db($db);
 
-            mysqli_query($conn, "UPDATE gm_tickets SET ". $closedString ."=1 WHERE ". $ticketString ."=". $id .";");
+            $conn->query("UPDATE gm_tickets SET ". $closedString ."=1 WHERE ". $ticketString ."=". $id .";");
 
 
             break;
@@ -81,9 +81,9 @@
 
         case "delete":
         {
-            $id = mysqli_real_escape_string($conn, $_POST['id']);
+            $id = $conn->escape_string($_POST['id']);
 
-            mysqli_query($conn, "DELETE FROM realms WHERE id=". $id .";");
+            $conn->query("DELETE FROM realms WHERE id=". $id .";");
 
             $GameServer->logThis("Deleted a realm");
 
@@ -92,30 +92,30 @@
 
         case "deleteTicket":
         {
-            $id = mysqli_real_escape_string($conn, $_POST['id']);
-            $db = mysqli_real_escape_string($conn, $_POST['db']);
-            mysqli_select_db($db);
+            $id = $conn->escape_string($_POST['id']);
+            $db = $conn->escape_string($_POST['db']);
+            $conn->select_db($db);
 
-            mysqli_query($conn, "DELETE FROM gm_tickets WHERE ". $ticketString ."=". $id .";");
+            $conn->query("DELETE FROM gm_tickets WHERE ". $ticketString ."=". $id .";");
 
             break;
         }
         
         case "edit":
         {
-            $id     = mysqli_real_escape_string($conn, $_POST['id']);
-            $new_id = mysqli_real_escape_string($conn, $_POST['new_id']);
-            $name   = mysqli_real_escape_string($conn, trim($_POST['name']));
-            $host   = mysqli_real_escape_string($conn, trim($_POST['host']));
-            $port   = mysqli_real_escape_string($conn, $_POST['port']);
-            $chardb = mysqli_real_escape_string($conn, trim($_POST['chardb']));
+            $id     = $conn->escape_string($_POST['id']);
+            $new_id = $conn->escape_string($_POST['new_id']);
+            $name   = $conn->escape_string(trim($_POST['name']));
+            $host   = $conn->escape_string(trim($_POST['host']));
+            $port   = $conn->escape_string($_POST['port']);
+            $chardb = $conn->escape_string(trim($_POST['chardb']));
 
             if (empty($name) || empty($host) || empty($port) || empty($chardb))
                 die("<span class='red_text'>Please enter all fields.</span><br/>");
 
             $GameServer->logThis("Updated realm information for " . $name);
 
-            mysqli_query($conn, "UPDATE realms SET id=". $new_id .", name='". $name ."', host='". $host ."', port='". $port ."', char_db='". $chardb ."' 
+            $conn->query("UPDATE realms SET id=". $new_id .", name='". $name ."', host='". $host ."', port='". $port ."', char_db='". $chardb ."' 
                 WHERE id=". $id .";");
             return TRUE;
 
@@ -124,10 +124,10 @@
         
         case "edit_console":
         {
-            $id   = mysqli_real_escape_string($conn, $_POST['id']);
-            $type = mysqli_real_escape_string($conn, $_POST['type']);
-            $user = mysqli_real_escape_string($conn, trim($_POST['user']));
-            $pass = mysqli_real_escape_string($conn, trim($_POST['pass']));
+            $id   = $conn->escape_string($_POST['id']);
+            $type = $conn->escape_string($_POST['type']);
+            $user = $conn->escape_string(trim($_POST['user']));
+            $pass = $conn->escape_string(trim($_POST['pass']));
 
             if (empty($id) || empty($type) || empty($user) || empty($pass))
             {
@@ -136,7 +136,7 @@
 
             $GameServer->logThis("Updated console information for realm with ID: " . $id);
 
-            mysqli_query($conn, "UPDATE realms SET sendType='". $type ."', rank_user='". $user ."', rank_pass='". $pass ."' WHERE id=". $id . ";");
+            $conn->query("UPDATE realms SET sendType='". $type ."', rank_user='". $user ."', rank_pass='". $pass ."' WHERE id=". $id . ";");
             return TRUE;
 
             break;
@@ -147,8 +147,8 @@
             echo '<h3>Select a realm</h3><hr/>';
             $GameServer->selectDB('webdb', $conn);
 
-            $result = mysqli_query($conn, "SELECT id, name, description FROM realms ORDER BY id ASC;");
-            while ($row = mysqli_fetch_assoc($result))
+            $result = $conn->query("SELECT id, name, description FROM realms ORDER BY id ASC;");
+            while ($row = $result->fetch_assoc())
             {
                 echo '<table width="100%">';
                 echo '<tr>';
@@ -169,8 +169,8 @@
         
         case "loadTickets":
         {
-            $offline = mysqli_real_escape_string($conn, $_POST['offline']);
-            $realm   = mysqli_real_escape_string($conn, $_POST['realm']);
+            $offline = $conn->escape_string($_POST['offline']);
+            $realm   = $conn->escape_string($_POST['realm']);
 
             $_SESSION['lastTicketRealm']        = $realm;
             $_SESSION['lastTicketRealmOffline'] = $offline;
@@ -180,8 +180,8 @@
 
             $GameServer->selectDB($realm, $conn);
 
-            $result = mysqli_query($conn, "SELECT ". $ticketString .", name, message, createtime, ". $guidString .", ". $closedString ." FROM gm_tickets ORDER BY ticketId DESC;");
-            if (mysqli_num_rows($result) == 0)
+            $result = $conn->query("SELECT ". $ticketString .", name, message, createtime, ". $guidString .", ". $closedString ." FROM gm_tickets ORDER BY ticketId DESC;");
+            if ($result->num_rows == 0)
                 die("<pre>No tickets were found!</pre>");
 
             echo "<table class='center'>
@@ -195,10 +195,10 @@
                        <th>Quick Tools</th>
                    </tr>";
 
-            while ($row = mysqli_fetch_assoc($result))
+            while ($row = $result->fetch_assoc())
             {
-                $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
-                if (mysqli_data_seek($get, 0) == 0 && $offline == "on")
+                $get = $conn->query("SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
+                if ($get->data_seek(0) == 0 && $offline == "on")
                 {
                     echo '<tr>';
                     echo '<td><a href="?p=tools&s=tickets&guid=' . $row[$ticketString] . '&db=' . $realm . '">' . $row[$ticketString] . '</td>';
@@ -215,8 +215,8 @@
                         echo '<td><font color="green">Open</font></td>';
                     }
 
-                    $get = mysqli_query($conn, "SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
-                    if (mysqli_data_seek($get, 0) > 0)
+                    $get = $conn->query("SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
+                    if ($get->data_seek(0) > 0)
                     {
                         echo '<td><font color="green">Online</font></td>';
                     }
@@ -250,18 +250,18 @@
         
         case "openTicket":
         {
-            $id = mysqli_real_escape_string($conn, $_POST['id']);
-            $db = mysqli_real_escape_string($conn, $_POST['db']);
-            mysqli_select_db($db);
+            $id = $conn->escape_string($_POST['id']);
+            $db = $conn->escape_string($_POST['db']);
+            $conn->select_db($db);
 
-            mysqli_query($conn, "UPDATE gm_tickets SET ". $closedString ."=0 WHERE ". $ticketString ."=". $id .";");
+            $conn->query("UPDATE gm_tickets SET ". $closedString ."=0 WHERE ". $ticketString ."=". $id .";");
 
             break;
         }
         
         case "savePresetRealm":
         {
-            $rid = mysqli_real_escape_string($conn, $_POST['rid']);
+            $rid = $conn->escape_string($_POST['rid']);
 
             if (isset($_COOKIE['presetRealmStatus']))
             {

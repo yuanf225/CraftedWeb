@@ -297,9 +297,13 @@
     }
 
     if ($GLOBALS['core_expansion'] > 2)
+    {
         $tooltip_href = 'www.wowhead.com/';
+    }
     else
-        $tooltip_href = 'www.openwow.com/?';
+    {
+        $tooltip_href = 'www.cavernoftime.com/?';
+    }
 
     //Set the timezone.
     date_default_timezone_set($GLOBALS['timezone']);

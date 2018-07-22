@@ -21,19 +21,19 @@
 
     global $Connect, $conn;
     $Connect->selectDB('webdb', $conn);
-    $result    = mysqli_query($conn, "SELECT id,name FROM realms WHERE id='" . $GLOBALS['playersOnline']['realm_id'] . "';");
-    $row       = mysqli_fetch_assoc($result);
+    $result    = $conn->query("SELECT id,name FROM realms WHERE id='" . $GLOBALS['playersOnline']['realm_id'] . "';");
+    $row       = $result->fetch_assoc();
     $rid       = $row['id'];
     $realmname = $row['name'];
 
     $Connect->connectToRealmDB($rid);
 
-    $count = mysqli_query($conn, "SELECT COUNT(*) AS online FROM characters WHERE name!='' AND online=1;");
+    $count = $conn->query("SELECT COUNT(*) AS online FROM characters WHERE name!='' AND online=1;");
 ?>
 <div class="box_one">
     <div class="box_one_title">Online Players - <?php echo $realmname; ?></div>
     <?php
-        if (mysqli_data_seek($count, 0) == 0)
+        if ($count->data_seek(0) == 0)
         {
             echo '<b>No players are online right now!</b>';
         }
@@ -50,7 +50,7 @@
                 <?php
                 if ($GLOBALS['playersOnline']['moduleResults'] > 0)
                 {
-                    $count = mysqli_fetch_assoc($count)['online'];
+                    $count = $count->fetch_assoc()['online'];
                     if ($count > 10)
                     {
                         $count = $count - 10;
@@ -58,25 +58,25 @@
 
                     $rand = rand(1, $count);
 
-                    $result = mysqli_query($conn, "SELECT guid, name, totalKills, level, race, class, gender, account FROM characters WHERE name!='' 
+                    $result = $conn->query("SELECT guid, name, totalKills, level, race, class, gender, account FROM characters WHERE name!='' 
 								AND online=1 LIMIT " . $rand . "," . $GLOBALS['playersOnline']['moduleResults']);
                 }
                 else
                 {
-                    $result = mysqli_query($conn, "SELECT guid, name, totalKills, level, race, class, gender, account FROM characters WHERE name!='' 
+                    $result = $conn->query("SELECT guid, name, totalKills, level, race, class, gender, account FROM characters WHERE name!='' 
 								  AND online=1");
                 }
-                while ($row = mysqli_fetch_assoc($result))
+                while ($row = $result->fetch_assoc())
                 {
                     $Connect->connectToRealmDB($rid);
-                    $getGuild = mysqli_query($conn, "SELECT guildid FROM guild_member WHERE guid='" . $row['guid'] . "'");
-                    if (mysqli_num_rows($getGuild) == 0)
+                    $getGuild = $conn->query("SELECT guildid FROM guild_member WHERE guid='" . $row['guid'] . "'");
+                    if ($getGuild->num_rows == 0)
                         $guild    = "None";
                     else
                     {
-                        $g        = mysqli_fetch_assoc($getGuild);
-                        $getGName = mysqli_query($conn, "SELECT name FROM guild WHERE guildid='" . $g['guildid'] . "'");
-                        $x        = mysqli_fetch_assoc($getGName);
+                        $g        = $getGuild->fetch_assoc();
+                        $getGName = $conn->query("SELECT name FROM guild WHERE guildid='" . $g['guildid'] . "'");
+                        $x        = $getGName->fetch_assoc();
                         $guild    = '&lt; ' . $x['name'] . ' &gt;';
                     }
 
@@ -84,8 +84,8 @@
                     {
                         //Check if GM.
                         $Connect->selectDB('logondb', $conn);
-                        $checkGM = mysqli_query($conn, "SELECT COUNT(*) FROM account_access WHERE id='" . $row['account'] . "' AND gmlevel >0");
-                        if (mysqli_data_seek($checkGM, 0) == 0)
+                        $checkGM = $conn->query("SELECT COUNT(*) FROM account_access WHERE id='" . $row['account'] . "' AND gmlevel >0");
+                        if ($checkGM->data_seek(0) == 0)
                         {
                             echo
                             '<tr style="text-align: center;">

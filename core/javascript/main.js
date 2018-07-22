@@ -24,10 +24,10 @@ $(".login_input").focus(function ()
 function vote(siteid, button)
 {
     $(button).attr("disabled", "true");
-    $.post("includes/scripts/vote.php", {siteid: siteid},
+    $.post("core/includes/scripts/vote.php", {siteid: siteid},
         function (data)
         {
-            window.location = data;
+            window.open(data, "_blank");
         });
 }
 
@@ -40,7 +40,7 @@ function changeAmount(input, type)
     }
     else
     {
-        $.post("includes/scripts/misc.php", {'convertDonationList': input.value},
+        $.post("core/includes/scripts/misc.php", {'convertDonationList': input.value},
             function (data)
             {
                 var amount = document.getElementById("amount");
@@ -67,12 +67,12 @@ function buyShopItem(type, entry, last_page, account_name)
     var character = document.getElementById("character");
     $("#overlay").fadeIn("fast");
     $("#shopContent").html("<b class='yellow_text'>Proccessing...</b>");
-    $.post("includes/scripts/sendReward.php", {item_entry: entry, character_realm: character.value, send_mode: type, last_page: last_page},
+    $.post("core/includes/scripts/sendReward.php", {item_entry: entry, character_realm: character.value, send_mode: type, last_page: last_page},
         function (data)
         {
             popUp("Item Purchased", "The item was purchased and sent to your character via mail.");
             $("#shopContent").html(data);
-            $.post("includes/scripts/misc.php", {element: type, account: account_name},
+            $.post("core/includes/scripts/misc.php", {element: type, account: account_name},
                 function (data)
                 {
                     $("#" + type).html(data);
@@ -227,7 +227,7 @@ function revive(guid, char_db)
 function confirmService(guid, realm_id, service, title, name)
 {
     popUp("Confirm", "Are you sure you wish to perform a " + title + " on " + name + "?<br/><br/>\
-	<input type='button' value='Yes I do' onclick='service(" + guid + "," + realm_id + ",\"" + service + "\")'>  \
+	<input type='button' value='Yes' onclick='service(" + guid + "," + realm_id + ",\"" + service + "\")'>  \
 	<input type='button' value='No' onclick='closePopup()'>");
 }
 
@@ -336,7 +336,7 @@ function checkout()
 
 function viewTos()
 {
-    $.post("includes/scripts/misc.php", {getTos: true},
+    $.post("core/includes/scripts/misc.php", {getTos: true},
         function (data)
         {
             popUp("Terms of Service", data);
@@ -345,7 +345,7 @@ function viewTos()
 
 function viewRefundPolicy()
 {
-    $.post("includes/scripts/misc.php", {getRefundPolicy: true},
+    $.post("core/includes/scripts/misc.php", {getRefundPolicy: true},
         function (data)
         {
             popUp("Refund Policy", data);
@@ -383,7 +383,7 @@ function selectChar(values, box)
 function portTo(locationTo, char_db, character)
 {
     popUp("Confirm Teleport", "Are you sure you wish to teleport this character to " + locationTo + "?<br/><br/>\
-	<input type='button' value='Yes I do' onclick='portNow(\"" + character + "\",\"" + locationTo + "\",\"" + char_db + "\")'> \
+	<input type='button' value='Yes' onclick='portNow(\"" + character + "\",\"" + locationTo + "\",\"" + char_db + "\")'> \
 	<input type='button' value='No' onclick='closePopup()'>");
 }
 
@@ -399,14 +399,14 @@ function portNow(character, location, char_db)
 function removeNewsComment(id)
 {
     popUp("Remove comment", "Are you sure you wish to remove this comment?<br/><br/>\
-	<input type='button' value='Yes I do' onclick='removeNewsCommentNow(" + id + ")'> \
+	<input type='button' value='Yes' onclick='removeNewsCommentNow(" + id + ")'> \
 	<input type='button' value='No' onclick='closePopup()'>");
 }
 
 function removeNewsCommentNow(id)
 {
     popUp("Remove comment", "Removing...");
-    $.post("includes/scripts/misc.php", {action: "removeComment", id: id},
+    $.post("core/includes/scripts/misc.php", {action: "removeComment", id: id},
         function (data)
         {
             closePopup()
@@ -418,7 +418,7 @@ function removeNewsCommentNow(id)
 function removeShopItem(entry, shop)
 {
     popUp("Remove item", "Are you sure you wish to remove this item?<br/><br/>\
-	<input type='button' value='Yes I do' onclick='removeShopItemNow(" + entry + ",\"" + shop + "\")'> \
+	<input type='button' value='Yes' onclick='removeShopItemNow(" + entry + ",\"" + shop + "\")'> \
 	<input type='button' value='No' onclick='closePopup()'>");
     $("#popup").css("top", mouseY - 150);
 

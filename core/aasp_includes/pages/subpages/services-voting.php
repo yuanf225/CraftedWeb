@@ -34,8 +34,8 @@
       <th>Actions</th>
     </tr>
     <?php
-        $result = mysqli_query($conn, "SELECT * FROM votingsites ORDER BY id ASC;");
-        while ($row = mysqli_fetch_assoc($result))
+        $result = $conn->query("SELECT * FROM votingsites ORDER BY id ASC;");
+        while ($row = $result->fetch_assoc())
         {
             ?>
             <tr>

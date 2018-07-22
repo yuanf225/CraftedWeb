@@ -1,7 +1,8 @@
 /.phpintel/*
-/includes/configuration.php
-/includes/scripts/error.log
+/core/includes/configuration.php
+/core/includes/scripts/error.log
 /error.log
 /admin/error.log
 /staff/error.log
-/aasp_includes/scripts/error.log
+/core/aasp_includes/scripts/error.log
+/test.php

@@ -35,22 +35,22 @@
     {
         case "addLink": 
         {
-            $title     = mysqli_real_escape_string($conn, $_POST['title']);
-            $url       = mysqli_real_escape_string($conn, $_POST['url']);
-            $shownWhen = mysqli_real_escape_string($conn, $_POST['shownWhen']);
+            $title     = $conn->escape_string($_POST['title']);
+            $url       = $conn->escape_string($_POST['url']);
+            $shownWhen = $conn->escape_string($_POST['shownWhen']);
 
             if (empty($title) || empty($url) || empty($shownWhen))
             {
                 die("Please enter all fields.");
             }
 
-            if (mysqli_query($conn, "INSERT INTO site_links (title, url, shownWhen) VALUES('". $title ."', '". $url ."', '". $shownWhen ."');"))
+            if ($conn->query("INSERT INTO site_links (title, url, shownWhen) VALUES('". $title ."', '". $url ."', '". $shownWhen ."');"))
             {
                 $GameServer->logThis("Added ". $title ." to the menu");
             }
             else
             {
-                $GameServer->logThis("Could Not Add The Menu - ". mysqli_error($conn));
+                $GameServer->logThis("Could Not Add The Menu - ". $conn->error);
             }
             
             break;
@@ -58,71 +58,71 @@
         
         case "deleteImage":
         {
-            $id = mysqli_real_escape_string($conn, $_POST['id']);
+            $id = $conn->escape_string($_POST['id']);
 
-            if (mysqli_query($conn, "DELETE FROM slider_images WHERE position=". $id .";"))
+            if ($conn->query("DELETE FROM slider_images WHERE position=". $id .";"))
             {
                 $GameServer->logThis("Removed a slideshow image");
             }
             else
             {
-                $GameServer->logThis("Could Not Remove The Selected Slideshow Image - ". mysqli_error($conn));
+                $GameServer->logThis("Could Not Remove The Selected Slideshow Image - ". $conn->error);
             }
             break;
         }
 
         case "deleteLink":
         {
-            $id = mysqli_real_escape_string($conn, $_POST['id']);
+            $id = $conn->escape_string($_POST['id']);
 
-            if(mysqli_query($conn, "DELETE FROM site_links WHERE position=". $id .";"))
+            if($conn->query("DELETE FROM site_links WHERE position=". $id .";"))
             {
                 $GameServer->logThis("Removed a menu link");
             }
             else
             {
-                $GameServer->logThis("Could Not Remove A Menu Link - ". mysqli_error($conn));
+                $GameServer->logThis("Could Not Remove A Menu Link - ". $conn->error);
             }
             break;
         }
 
         case "disablePlugin":
         {
-            $foldername = mysqli_real_escape_string($conn, $_POST['foldername']);
+            $foldername = $conn->escape_string($_POST['foldername']);
 
-            if (mysqli_query($conn, "INSERT INTO disabled_plugins VALUES('". $foldername ."');"))
+            if ($conn->query("INSERT INTO disabled_plugins VALUES('". $foldername ."');"))
             {
-                include('../../plugins/' . $foldername . '/info.php');
+                include('../../core/plugins/' . $foldername . '/info.php');
                 $GameServer->logThis("Disabled the plugin " . $title);
             }
             else
             {
-                $GameServer->logThis("Could Not Disable The Plugin - ". mysqli_error($conn));   
+                $GameServer->logThis("Could Not Disable The Plugin - ". $conn->error);   
             }
             break;
         }
 
         case "enablePlugin":
         {
-            $foldername = mysqli_real_escape_string($conn, $_POST['foldername']);
+            $foldername = $conn->escape_string($_POST['foldername']);
 
-            if (mysqli_query($conn, "DELETE FROM disabled_plugins WHERE foldername='". $foldername ."';"))
+            if ($conn->query("DELETE FROM disabled_plugins WHERE foldername='". $foldername ."';"))
             {
-                include('../../plugins/' . $foldername . '/info.php');
+                include('../../core/plugins/' . $foldername . '/info.php');
                 $GameServer->logThis("Enabled the plugin -" . $title);
             }
             else
             {
-                $GameServer->logThis("Coud Not Enable The Plugin - ". mysqli_error($conn));
+                $GameServer->logThis("Coud Not Enable The Plugin - ". $conn->error);
             }
             break;
         }
 
         case "getMenuEditForm":
         {
-            $id = mysqli_real_escape_string($conn, $_POST['id']);
-            $result = mysqli_query($conn, "SELECT * FROM site_links WHERE position=". $id .";");
-            $rows   = mysqli_fetch_assoc($result);
+            $id = $conn->escape_string($_POST['id']);
+            $result = $conn->query("SELECT * FROM site_links WHERE position=". $id .";");
+            $rows   = $result->fetch_assoc();
             ?>
             Title<br/>
             <input type="text" id="editlink_title" value="<?php echo $rows['title']; ?>"><br/>
@@ -156,38 +156,38 @@
 
         case "installTemplate":
         {
-            $name = mysqli_real_escape_string($conn, trim($_POST['name']));
-            $path = mysqli_real_escape_string($conn, trim($_POST['path']));
-            if (mysqli_query($conn, "INSERT INTO template (`name`, `path`) VALUES('". $name ."', '". $path ."');"))
+            $name = $conn->escape_string(trim($_POST['name']));
+            $path = $conn->escape_string(trim($_POST['path']));
+            if ($conn->query("INSERT INTO template (`name`, `path`) VALUES('". $name ."', '". $path ."');"))
             {
                 $GameServer->logThis("Installed the template ". $_POST['name']);
             }
             else
             {
-                $GameServer->logThis("Error installing the template ". mysqli_error($conn));
+                $GameServer->logThis("Error installing the template ". $conn->error);
             }
             break;
         }
 
         case "saveMenu":
         {
-            $title     = mysqli_real_escape_string($conn, $_POST['title']);
-            $url       = mysqli_real_escape_string($conn, $_POST['url']);
-            $shownWhen = mysqli_real_escape_string($conn, $_POST['shownWhen']);
-            $id        = mysqli_real_escape_string($conn, $_POST['id']);
+            $title     = $conn->escape_string($_POST['title']);
+            $url       = $conn->escape_string($_POST['url']);
+            $shownWhen = $conn->escape_string($_POST['shownWhen']);
+            $id        = $conn->escape_string($_POST['id']);
 
             if (empty($title) || empty($url) || empty($shownWhen))
             {
                 die("Please enter all fields.");
             }
 
-            if (mysqli_query($conn, "UPDATE site_links SET title='". $title ."', url='". $url ."', shownWhen='". $shownWhen ."' WHERE position=". $id .";"))
+            if ($conn->query("UPDATE site_links SET title='". $title ."', url='". $url ."', shownWhen='". $shownWhen ."' WHERE position=". $id .";"))
             {
                 $GameServer->logThis("Modified the menu");
             }
             else
             {
-                $GameServer->logThis("Could Not Modifie The Menu - ". mysqli_error($conn));
+                $GameServer->logThis("Could Not Modifie The Menu - ". $conn->error);
             }
 
             echo TRUE;
@@ -196,33 +196,33 @@
 
         case "setTemplate":
         {
-            $templateId = mysqli_real_escape_string($conn, $_POST['id']);
-            if (mysqli_query($conn, "UPDATE template SET applied='0' WHERE applied='1';") && 
-                mysqli_query($conn, "UPDATE template SET applied='1' WHERE id=". $templateId .";"))
+            $templateId = $conn->escape_string($_POST['id']);
+            if ($conn->query("UPDATE template SET applied='0' WHERE applied='1';") && 
+                $conn->query("UPDATE template SET applied='1' WHERE id=". $templateId .";"))
             {
-                $result = mysqli_query($conn, "SELECT name FROM template WHERE id=". $templateId .";");
-                $GameServer->logThis("Template Changed To `". mysqli_fetch_assoc($result)['name'] ."`");
+                $result = $conn->query("SELECT name FROM template WHERE id=". $templateId .";");
+                $GameServer->logThis("Template Changed To `". $result->fetch_assoc()['name'] ."`");
             }
             else
             {
-                $GameServer->logThis("Could Not Change The Template - ". mysqli_error($conn));
+                $GameServer->logThis("Could Not Change The Template - ". $conn->error);
             }
             break;
         }
 
         case "uninstallTemplate":
         {
-            $templateId = mysqli_real_escape_string($conn, $_POST['id']);
-            $result = mysqli_query($conn, "SELECT name FROM template WHERE id=". $templateId .";");
+            $templateId = $conn->escape_string($_POST['id']);
+            $result = $conn->query("SELECT name FROM template WHERE id=". $templateId .";");
 
-            if (mysqli_query($conn, "DELETE FROM template WHERE id=". $templateId .";") && 
-                mysqli_query($conn, "UPDATE template SET applied='1' ORDER BY id ASC LIMIT 1;"))
+            if ($conn->query("DELETE FROM template WHERE id=". $templateId .";") && 
+                $conn->query("UPDATE template SET applied='1' ORDER BY id ASC LIMIT 1;"))
             {
-                $GameServer->logThis("Uninstalled Template - `". mysqli_fetch_assoc($result)['name'] ."`");
+                $GameServer->logThis("Uninstalled Template - `". $result->fetch_assoc()['name'] ."`");
             }
             else
             {
-                $GameServer->logThis("Could Not Uninstall The Template - ". mysqli_error($conn));
+                $GameServer->logThis("Could Not Uninstall The Template - ". $conn->error);
             }
             break;
         }

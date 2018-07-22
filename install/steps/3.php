@@ -46,3 +46,9 @@ You may remove some of these after the installation proccess has finished as the
     <br/>
     <input type="submit" value="Start the proccess!" onclick="step3()">
 </p>
+
+<?php 
+
+    print_r($_SESSION);
+
+    ?>

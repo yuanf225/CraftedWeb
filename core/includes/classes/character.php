@@ -28,10 +28,11 @@
             global $Connect, $Account, $Server;
             $conn = $Connect->connectToDB();
 
-            $guId   = mysqli_real_escape_string($conn, $guid);
-            $charDb = mysqli_real_escape_string($conn, $char_db);
+            $guId   = $conn->escape_string($guid);
+            $charDb = $conn->escape_string($char_db);
 
             $rid  = $Server->getRealmId($charDb);
+
             $Connect->connectToRealmDB($rid);
 
             if ($this->isOnline($guId) == TRUE)
@@ -64,8 +65,8 @@
                     }
                 }
 
-                $getXYZ = mysqli_query($conn, "SELECT * FROM character_homebind WHERE guid=". $guId .";");
-                $row    = mysqli_fetch_assoc($getXYZ);
+                $getXYZ = $conn->query("SELECT * FROM character_homebind WHERE guid=". $guId .";");
+                $row    = $getXYZ->fetch_assoc();
 
                 $new_x    = $row['posX'];
                 $new_y    = $row['posY'];
@@ -73,7 +74,7 @@
                 $new_zone = $row['zoneId'];
                 $new_map  = $row['mapId'];
 
-                mysqli_query($conn, "UPDATE characters 
+                $conn->query("UPDATE characters 
                     SET position_x='". $new_x ."', 
                     position_y='". $new_y ."', 
                     position_z='". $new_z ."', 
@@ -92,10 +93,11 @@
             global $Connect, $Server, $Account;
             $conn = $Connect->connectToDB();
 
-            $guId = mysqli_real_escape_string($conn, $guid);
-            $charDb = mysqli_real_escape_string($conn, $char_db);
+            $guId   = $conn->escape_string($guid);
+            $charDb = $conn->escape_string($char_db);
 
             $rid  = $Server->getRealmId($charDb);
+
             $Connect->connectToRealmDB($rid);
 
             if ($this->isOnline($guId) == TRUE)
@@ -128,7 +130,7 @@
                     }
                 }
 
-                mysqli_query($conn, "DELETE FROM character_aura WHERE guid=". $guId ." AND spell=20584 OR guid=". $guId ." AND spell=8326;");
+                $conn->query("DELETE FROM character_aura WHERE guid=". $guId ." AND spell=20584 OR guid=". $guId ." AND spell=8326;");
 
                 $Account->logThis("Performed a revive on " . $this->getCharName($guId, $rid), 'Revive', $rid);
 
@@ -142,7 +144,8 @@
             $conn = $Connect->connectToDB();
 
             die("This feature is disabled. <br/><i>Also, you shouldn't be here...</i>");
-            $values = mysqli_real_escape_string($conn, $values);
+
+            $values = $conn->escape_string($values);
             $values = explode("*", $values);
 
             $Connect->connectToRealmDB($values[1]);
@@ -175,7 +178,8 @@
                 {
                     //User got coins. Boost them up to 80 :D
                     $Connect->connectToRealmDB($values[1]);
-                    mysqli_query($conn, "UPDATE characters SET level=80 WHERE guid=". $values[0] .";");
+
+                    $conn->query("UPDATE characters SET level=80 WHERE guid=". $values[0] .";");
 
                     $Account->logThis("Performed an instant max level on " . $this->getCharName($values[0], NULL), 'Instant', NULL);
 
@@ -189,9 +193,9 @@
             global $Connect;
             $conn = $Connect->connectToDB();
 
-            $charGuid = mysqli_real_escape_string($conn, $char_guid);
-            $result    = mysqli_query($conn, "SELECT COUNT('guid') FROM characters WHERE guid=". $charGuid ." AND online=1;");
-            if (mysqli_data_seek($result, 0) == 0)
+            $charGuid = $conn->escape_string($char_guid);
+            $result    = $conn->query("SELECT COUNT('guid') FROM characters WHERE guid=". $charGuid ." AND online=1;");
+            if ($result->data_seek( 0) == 0)
             {
                 return FALSE;
             }
@@ -356,13 +360,13 @@
             global $Connect;
             $conn = $Connect->connectToDB();
 
-            $ID      = mysqli_real_escape_string($conn, $id);
-            $realmID = mysqli_real_escape_string($conn, $realm_id);
+            $ID      = $conn->escape_string($id);
+            $realmID = $conn->escape_string($realm_id);
 
             $Connect->connectToRealmDB($realmID);
 
-            $result = mysqli_query($conn, "SELECT name FROM characters WHERE guid=". $ID .";");
-            $row    = mysqli_fetch_assoc($result);
+            $result = $conn->query("SELECT name FROM characters WHERE guid=". $ID .";");
+            $row    = $result->fetch_assoc();
             return $row['name'];
         }
     }

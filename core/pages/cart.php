@@ -60,8 +60,8 @@
                     $sql .= $entry . ',';
 
                     $Connect->selectDB($GLOBALS['connection']['worlddb']);
-                    $result = mysqli_query($conn, "SELECT maxcount FROM item_template WHERE entry=" . $entry . " AND maxcount>0;");
-                    if (mysqli_data_seek($result, 0) != 0)
+                    $result = $conn->query("SELECT maxcount FROM item_template WHERE entry=" . $entry . " AND maxcount>0;");
+                    if ($result->data_seek(0) != 0)
                         $_SESSION['donateCart'][$entry]['quantity'] = 1;
 
                     $Connect->selectDB($GLOBALS['connection']['webdb']);
@@ -71,12 +71,12 @@
 
         $sql = substr($sql, 0, -1) . ") AND in_shop='donate' ORDER BY `itemlevel` ASC;";
 
-        $query = mysqli_query($conn, $sql);
+        $query = $conn->query($sql);
         ?>
         <table width="100%" >
             <tr id="cartHead"><th>Name</th><th>Quantity</th><th>Price</th><th>Actions</th></tr>
             <?php
-            while ($row   = mysqli_fetch_array($query))
+            while ($row   = $query->fetch_array())
             {
                 ?><tr align="center">
                     <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>"><?php echo $row['name']; ?></a></td>
@@ -114,8 +114,8 @@
                 {
                     $sql                                      .= $entry . ',';
                     $Connect->selectDB($GLOBALS['connection']['worlddb']);
-                    $result                                   = mysqli_query($conn, "SELECT maxcount FROM item_template WHERE entry=". $entry ." AND maxcount>0;");
-                    if (mysqli_data_seek($result, 0) != 0)
+                    $result                                   = $conn->query("SELECT maxcount FROM item_template WHERE entry=". $entry ." AND maxcount>0;");
+                    if ($result->data_seek(0) != 0)
                         $_SESSION['voteCart'][$entry]['quantity'] = 1;
 
                     $Connect->selectDB($GLOBALS['connection']['webdb']);
@@ -125,12 +125,12 @@
 
         $sql = substr($sql, 0, -1) . ") AND in_shop='vote' ORDER BY `itemlevel` ASC";
 
-        $query = mysqli_query($conn, $sql);
+        $query = $conn->query($sql);
         ?>
         <table width="100%" >
             <tr id="cartHead"><th>Name</th><th>Quantity</th><th>Price</th><th>Actions</th></tr>
             <?php
-            while ($row   = mysqli_fetch_array($query))
+            while ($row   = $query->fetch_array())
             {
                 ?><tr align="center">
                     <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>"><?php echo $row['name']; ?></a></td> <td>

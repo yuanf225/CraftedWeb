@@ -31,17 +31,17 @@
         $errors = array();
 
         /* Test Connection */
-        if (!mysqli_connect($GLOBALS['connection']['host'], $GLOBALS['connection']['user'], $GLOBALS['connection']['password']))
+        if (!$conn = new mysqli($GLOBALS['connection']['host'], $GLOBALS['connection']['user'], $GLOBALS['connection']['password']))
             $errors[] = "mySQL connection error. Please check your settings.";
         else
         {
-            if (!mysqli_select_db($GLOBALS['connection']['webdb']))
+            if (!$conn->select_db($GLOBALS['connection']['web']['database']))
                 $errors[] = "Database error. Could not connect to the website database.";
 
-            if (!mysqli_select_db($GLOBALS['connection']['logondb']))
+            if (!$conn->select_db($GLOBALS['connection']['logon']['database']))
                 $errors[] = "Database error. Could not connect to the logon database.";
 
-            if (!mysqli_select_db($GLOBALS['connection']['worlddb']))
+            if (!$conn->select_db($GLOBALS['connection']['world']['database']))
                 $errors[] = "Database error. Could not connect to the world database.";
         }
 

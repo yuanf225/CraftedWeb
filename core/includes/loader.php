@@ -105,8 +105,10 @@
 ###VOTING SYSTEM####
     if (isset($_SESSION['votingUrlID']) && $_SESSION['votingUrlID'] != 0 && $GLOBALS['vote']['type'] == 'confirm')
     {
-        if ($Website->checkIfVoted(mysqli_real_escape_string($conn, $_SESSION['votingUrlID']), $GLOBALS['connection']['webdb']) == TRUE)
+        if ($Website->checkIfVoted($conn->escape_string($_SESSION['votingUrlID']), $GLOBALS['connection']['webdb']) == TRUE)
+        {
             die(htmlentities("?p=vote"));
+        }
 
         $acct_id = $Account->getAccountID($_SESSION['cw_user']);
 
@@ -114,13 +116,13 @@
 
         $Connect->selectDB("webdb", $conn);
 
-        mysqli_query($conn, "INSERT INTO votelog (`siteid`, `userid`, `timestamp`, `next_vote`, `ip`) VALUES 
-            (". mysqli_real_escape_string($conn, $_SESSION['votingUrlID']) .", ". $acct_id .", '" . time() . "', ". $next_vote .", '" . $_SERVER['REMOTE_ADDR'] . "');");
+        $conn->query("INSERT INTO votelog (`siteid`, `userid`, `timestamp`, `next_vote`, `ip`) VALUES 
+            (". $conn->escape_string($_SESSION['votingUrlID']) .", ". $acct_id .", '" . time() . "', ". $next_vote .", '" . $_SERVER['REMOTE_ADDR'] . "');");
 
-        $getSiteData = mysqli_query($conn, "SELECT points,url FROM votingsites WHERE id=". mysqli_real_escape_string($conn, $_SESSION['votingUrlID']) .";");
-        $row         = mysqli_fetch_assoc($getSiteData);
+        $getSiteData = $conn->query("SELECT points,url FROM votingsites WHERE id=". $conn->escape_string($_SESSION['votingUrlID']) .";");
+        $row         = $getSiteData->fetch_assoc();
 
-        if (mysqli_num_rows($getSiteData) == 0)
+        if ($getSiteData->num_rows == 0)
         {
             header("Location: index.php");
             unset($_SESSION['votingUrlID']);
@@ -128,7 +130,7 @@
 
         //Update the points table.
         $add = $row['points'] * $GLOBALS['vote']['multiplier'];
-        mysqli_query($conn, "UPDATE account_data SET vp=vp + ". $add ." WHERE id=". $acct_id .";");
+        $conn->query("UPDATE account_data SET vp=vp + ". $add ." WHERE id=". $acct_id .";");
 
         unset($_SESSION['votingUrlID']);
 

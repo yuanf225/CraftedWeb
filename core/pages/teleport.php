@@ -47,16 +47,16 @@ Choose the character & desired location you wish to teleport.
 <h3 id="choosechar">Choose Character</h3> 
 <?php
     $Connect->selectDB('webdb', $conn);
-    $result = mysqli_query($conn, "SELECT char_db, name FROM realms ORDER BY id ASC;");
-    while ($row = mysqli_fetch_assoc($result))
+    $result = $conn->query("SELECT char_db, name FROM realms ORDER BY id ASC;");
+    while ($row = $result->fetch_assoc())
     {
         $acct_id = $Account->getAccountID($_SESSION['cw_user']);
         $realm   = $row['name'];
         $char_db = $row['char_db'];
 
         $Connect->selectDB($char_db);
-        $result = mysqli_query($conn, "SELECT name, guid, gender, class, race, level, online FROM characters WHERE account=". $acct_id .";");
-        while ($row = mysqli_fetch_assoc($result))
+        $result = $conn->query("SELECT name, guid, gender, class, race, level, online FROM characters WHERE account=". $acct_id .";");
+        while ($row = $result->fetch_assoc())
         {
             ?>
             <div class='charBox' style="cursor:pointer;" id="<?php echo $row['guid'] . '*' . $char_db; ?>"<?php if ($row['online'] != 1)

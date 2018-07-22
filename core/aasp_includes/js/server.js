@@ -3,7 +3,7 @@ function test_settings()
 
     showLoader();
 
-    $.post("../aasp_includes/scripts/test_settings.php", {test: true},
+    $.post("../core/aasp_includes/scripts/test_settings.php", {test: true},
             function (data)
             {
                 $("#loading").html(data + "<br/><a href='#' onclick='hideLoader()'>Close</a>");
@@ -35,7 +35,7 @@ function edit_realmNow(id)
     var chardb  = document.getElementById('editrealm_chardb').value;
 
     $("#loading").html("Saving...");
-    $.post("../aasp_includes/scripts/realms.php", {action: "edit", id: id, name: name, host: host, port: port, chardb: chardb, new_id: new_id},
+    $.post("../core/aasp_includes/scripts/realms.php", {action: "edit", id: id, name: name, host: host, port: port, chardb: chardb, new_id: new_id},
             function (data)
             {
                 window.location = '?p=realms&s=manage'
@@ -46,7 +46,7 @@ function delete_realm(id, name)
 {
 
     $("#loading").html("Are you sure you wish to delete <b>" + name + "</b><br/>\
-	<input type='submit' value='Yes I do' onclick='delete_realmNow(" + id + ")'> <input type='submit' value='No' onclick='hideLoader()'>");
+	<input type='submit' value='Yes' onclick='delete_realmNow(" + id + ")'> <input type='submit' value='No' onclick='hideLoader()'>");
 
     showLoader();
 
@@ -57,7 +57,7 @@ function delete_realmNow(id)
 
     $("#loading").html("Deleting...");
 
-    $.post("../aasp_includes/scripts/realms.php", {action: "delete", id: id},
+    $.post("../core/aasp_includes/scripts/realms.php", {action: "delete", id: id},
             function (data)
             {
                 window.location = '?p=realms&s=manage'
@@ -100,7 +100,7 @@ function edit_consoleNow(id)
     var pass = document.getElementById("console_rank_pass").value;
 
     $("#loading").html("Saving...");
-    $.post("../aasp_includes/scripts/realms.php", {action: "edit_console", id: id, type: type, user: user, pass: pass},
+    $.post("../core/aasp_includes/scripts/realms.php", {action: "edit_console", id: id, type: type, user: user, pass: pass},
             function (data)
             {
                 window.location = '?p=realms&s=manage'
@@ -120,7 +120,7 @@ function loadTickets()
 
     $("#tickets").html("Loading...");
 
-    $.post("../aasp_includes/scripts/realms.php", {action: "loadTickets", offline: offline, realm: realm},
+    $.post("../core/aasp_includes/scripts/realms.php", {action: "loadTickets", offline: offline, realm: realm},
             function (data)
             {
                 $("#tickets").html(data);
@@ -130,7 +130,7 @@ function loadTickets()
 function deleteTicket(id, db)
 {
     $("#loading").html("Are you sure you wish to delete the ticket with ID: " + id + " <br/>\
-	<input type='submit' value='Yes I do' onclick='deleteTicketNow(" + id + ", \"" + db + "\")'> <input type='submit' value='No' onclick='hideLoader()'>");
+	<input type='submit' value='Yes' onclick='deleteTicketNow(" + id + ", \"" + db + "\")'> <input type='submit' value='No' onclick='hideLoader()'>");
 
     showLoader();
 }
@@ -139,7 +139,7 @@ function deleteTicketNow(id, db)
 {
     $("#loading").html("Deleting...");
 
-    $.post("../aasp_includes/scripts/realms.php", {action: "deleteTicket", id: id, db: db},
+    $.post("../core/aasp_includes/scripts/realms.php", {action: "deleteTicket", id: id, db: db},
             function (data)
             {
                 hideLoader();
@@ -150,7 +150,7 @@ function deleteTicketNow(id, db)
 function closeTicket(id, db)
 {
     $("#loading").html("Are you sure you wish to close the ticket with ID: " + id + " <br/>\
-	<input type='submit' value='Yes I do' onclick='closeTicketNow(" + id + ", \"" + db + "\")'> <input type='submit' value='No' onclick='hideLoader()'>");
+	<input type='submit' value='Yes' onclick='closeTicketNow(" + id + ", \"" + db + "\")'> <input type='submit' value='No' onclick='hideLoader()'>");
 
     showLoader();
 }
@@ -159,7 +159,7 @@ function closeTicketNow(id, db)
 {
     $("#loading").html("Closing...");
 
-    $.post("../aasp_includes/scripts/realms.php", {action: "closeTicket", id: id, db: db},
+    $.post("../core/aasp_includes/scripts/realms.php", {action: "closeTicket", id: id, db: db},
             function (data)
             {
                 hideLoader();
@@ -170,7 +170,7 @@ function closeTicketNow(id, db)
 function openTicket(id, db)
 {
     $("#loading").html("Are you sure you wish to open the ticket with ID: " + id + " <br/>\
-	<input type='submit' value='Yes I do' onclick='openTicketNow(" + id + ", \"" + db + "\")'> <input type='submit' value='No' onclick='hideLoader()'>");
+	<input type='submit' value='Yes' onclick='openTicketNow(" + id + ", \"" + db + "\")'> <input type='submit' value='No' onclick='hideLoader()'>");
 
     showLoader();
 }
@@ -179,7 +179,7 @@ function openTicketNow(id, db)
 {
     $("#loading").html("Closing...");
 
-    $.post("../aasp_includes/scripts/realms.php", {action: "openTicket", id: id, db: db},
+    $.post("../core/aasp_includes/scripts/realms.php", {action: "openTicket", id: id, db: db},
             function (data)
             {
                 hideLoader();
@@ -203,7 +203,7 @@ function changePresetRealmStatus()
 
     showLoader();
 
-    $.post("../aasp_includes/scripts/realms.php", {action: "getPresetRealms"},
+    $.post("../core/aasp_includes/scripts/realms.php", {action: "getPresetRealms"},
             function (data)
             {
                 $("#loading").html(data);
@@ -214,7 +214,7 @@ function savePresetRealm(rid)
 {
     $("#loading").html("Saving...");
 
-    $.post("../aasp_includes/scripts/realms.php", {action: "savePresetRealm", rid: rid},
+    $.post("../core/aasp_includes/scripts/realms.php", {action: "savePresetRealm", rid: rid},
             function (data)
             {
                 window.location.reload();

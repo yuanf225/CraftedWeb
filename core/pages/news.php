@@ -23,11 +23,11 @@
     {
         global $Connect, $Website;
         $conn = $Connect->connectToDB();
-        $id = mysqli_real_escape_string($conn, $_GET['newsid']);
+        $id = $conn->escape_string($_GET['newsid']);
         $Connect->selectDB('webdb', $conn);
 
-        $result = mysqli_query($conn, "SELECT * FROM news WHERE id=". $id .";");
-        $row    = mysqli_fetch_assoc($result);
+        $result = $conn->query("SELECT * FROM news WHERE id=". $id .";");
+        $row    = $result->fetch_assoc();
         ?>
         <div class='box_two_title'><?php echo $row['title']; ?></div>
 
@@ -41,8 +41,8 @@
         <?php
         if ($GLOBALS['news']['enableComments'] == true)
         {
-            $result = mysqli_query($conn, "SELECT poster FROM news_comments WHERE newsid=" . $id . " ORDER BY id DESC LIMIT 1;");
-            $rows   = mysqli_fetch_assoc($result);
+            $result = $conn->query("SELECT poster FROM news_comments WHERE newsid=" . $id . " ORDER BY id DESC LIMIT 1;");
+            $rows   = $result->fetch_assoc();
 
             if ($rows['poster'] == $_SESSION['cw_user_id'] && isset($_SESSION['cw_user']) && isset($_SESSION['cw_user_id']))
             {
@@ -80,54 +80,54 @@
             {
                 if (isset($_POST['text']) && isset($_SESSION['cw_user']) && strlen($_POST['text']) <= 1000)
                 {
-                    $text = mysqli_real_escape_string($conn, trim(htmlentities($_POST['text'])));
+                    $text = $conn->escape_string(trim(htmlentities($_POST['text'])));
 
                     $Connect->selectDB("logondb", $conn);
-                    $getAcct = mysqli_query($conn, "SELECT id FROM account WHERE username='" . $_SESSION['cw_user'] . "';");
-                    $row     = mysqli_fetch_assoc($getAcct);
+                    $getAcct = $conn->query("SELECT id FROM account WHERE username='" . $_SESSION['cw_user'] . "';");
+                    $row     = $getAcct->fetch_assoc();
                     $account    = $row['id'];
 
                     $Connect->selectDB('webdb', $conn);
-                    mysqli_query($conn, "INSERT INTO news_comments (`newsid`, `text`, `poster`, `ip`) VALUES 
+                    $conn->query("INSERT INTO news_comments (`newsid`, `text`, `poster`, `ip`) VALUES 
                         (". $id .", '". $text ."', '". $account ."', '". $_SERVER['REMOTE_ADDR'] ."');");
 
                     header("Location: ?p=news&newsid=". $id);
                 }
             }
 
-            $result = mysqli_query($conn, "SELECT * FROM news_comments WHERE newsid=". $row['id'] ." ORDER BY id ASC;");
-            if (mysqli_num_rows($result) == 0)
+            $result = $conn->query("SELECT * FROM news_comments WHERE newsid=". $row['id'] ." ORDER BY id ASC;");
+            if ($result->num_rows == 0)
                 echo "<span class='alert'>No comments has been made yet!</span>";
             else
             {
                 $c   = 0;
-                while ($row = mysqli_fetch_assoc($result))
+                while ($row = $result->fetch_assoc())
                 {
                     $c++;
                     $text = preg_replace("#((http|https|ftp)://(\S*?\.\S*?))(\s|\;|\)|\]|\[|\{|\}|,|\"|'|:|\<|$|\.\s)#ie", "'<a href=\"$1\" target=\"_blank\">http://$3</a>$4'", $row['text']);
 
                     $Connect->selectDB("logondb", $conn);
-                    $query = mysqli_query($conn, "SELECT username, id FROM account WHERE id=". $row['poster'] .";");
-                    $pi    = mysqli_fetch_assoc($query);
+                    $query = $conn->query("SELECT username, id FROM account WHERE id=". $row['poster'] .";");
+                    $pi    = $query->fetch_assoc();
                     $user  = ucfirst(strtolower($pi['username']));
 
-                    $getGM = mysqli_query($conn, "SELECT COUNT(gmlevel) FROM account_access WHERE id=". $pi['id'] ." AND gmlevel>0;");
+                    $getGM = $conn->query("SELECT COUNT(gmlevel) FROM account_access WHERE id=". $pi['id'] ." AND gmlevel>0;");
                     ?>
                     <div class="news_comment" id="comment-<?php echo $row['id']; ?>"> 
                         <div class="news_comment_user"><?php
                             echo $user;
-                            if (mysqli_data_seek($getGM, 0) > 0)
+                            if ($getGM->data_seek(0) > 0)
                                 echo "<br/><span class='blue_text' style='font-size: 11px;'>Staff</span>";
                             ?>
                         </div> 
                         <div class="news_comment_body"><?php 
-                            if (mysqli_data_seek($getGM, 0) > 0)
+                            if ($getGM->data_seek(0) > 0)
                             {
                                 echo "<span class='blue_text'>";
                             } ?>
                             <?php
                             echo nl2br(htmlentities($text));
-                            if (mysqli_data_seek($getGM, 0) > 0)
+                            if ($getGM->data_seek(0) > 0)
                             {
                                 echo "</span>";
                             }
@@ -148,8 +148,8 @@
     }
     else
     {
-        $result = mysqli_query($conn, "SELECT * FROM news ORDER BY id DESC;");
-        while ($row = mysqli_fetch_assoc($result))
+        $result = $conn->query("SELECT * FROM news ORDER BY id DESC;");
+        while ($row = $result->fetch_assoc())
         {
             if (file_exists($row['image']))
             {
@@ -191,11 +191,11 @@
                                         $output .= nl2br($row['body']);
                                     }
 
-                                    $commentsNum = mysqli_query($conn, "SELECT COUNT(id) AS comments FROM news_comments WHERE newsid=". $row['id'] .";");
+                                    $commentsNum = $conn->query("SELECT COUNT(id) AS comments FROM news_comments WHERE newsid=". $row['id'] .";");
 
                                     if ($GLOBALS['news']['enableComments'] == TRUE)
                                     {
-                                        $comments = '| <a href="?p=news&amp;newsid=' . $row['id'] . '">Comments ('. mysqli_fetch_assoc($commentsNum)['comments'] .')</a>';
+                                        $comments = '| <a href="?p=news&amp;newsid=' . $row['id'] . '">Comments ('. $commentsNum->fetch_assoc()['comments'] .')</a>';
                                     }
                                     else
                                     {

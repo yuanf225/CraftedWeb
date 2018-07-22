@@ -40,7 +40,7 @@
     if (isset($_POST['action']) && $_POST['action'] == 'removeComment')
     {
         $Connect->selectDB('webdb', $conn);
-        mysqli_query($conn, "DELETE FROM news_comments WHERE id=". mysqli_real_escape_string($conn, $_POST['id']) .";");
+        $conn->query("DELETE FROM news_comments WHERE id=". $conn->escape_string($_POST['id']) .";");
     }
 ##
 #   Terms Of Service
@@ -96,7 +96,7 @@
     {
         for ($row = 0; $row < count($GLOBALS['donationList']); $row++)
         {
-            $value = mysqli_real_escape_string($conn, $_POST['convertDonationList']);
+            $value = $conn->escape_string($_POST['convertDonationList']);
             if ($value == $GLOBALS['donationList'][$row][1])
             {
                 echo $GLOBALS['donationList'][$row][2];

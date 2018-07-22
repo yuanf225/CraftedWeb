@@ -23,8 +23,8 @@
     $conn = $Connect->connectToDB();
 
     $service  = $_GET['s'];
-    $guid     = mysqli_real_escape_string($conn, $_GET['guid']);
-    $realm_id = mysqli_real_escape_string($conn, $_GET['rid']);
+    $guid     = $conn->escape_string($_GET['guid']);
+    $realm_id = $conn->escape_string($_GET['rid']);
 
     $service_title = ucfirst($service ." Change");
 
@@ -86,14 +86,14 @@
         $Account->isNotLoggedIn();
 
         $Connect->selectDB('webdb', $conn);
-        $result = mysqli_query($conn, "SELECT name FROM realms WHERE id=". $realm_id .";");
-        $row    = mysqli_fetch_assoc($result);
+        $result = $conn->query("SELECT name FROM realms WHERE id=". $realm_id .";");
+        $row    = $result->fetch_assoc();
         $realm  = $row['name'];
 
         $Connect->connectToRealmDB($realm_id);
 
-        $result = mysqli_query($conn, "SELECT name, guid, gender, class, race, level, online FROM characters WHERE guid=". $guid .";");
-        $row    = mysqli_fetch_assoc($result)
+        $result = $conn->query("SELECT name, guid, gender, class, race, level, online FROM characters WHERE guid=". $guid .";");
+        $row    = $result->fetch_assoc()
         ?>
         <h4>Selected character:</h4>
         <div class='charBox'>

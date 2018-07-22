@@ -24,8 +24,8 @@
 ?> 
 <div class="box_right_title">Donation Shop logs</div>
 <?php
-    $result = mysqli_query($conn, "SELECT * FROM shoplog WHERE shop='donate' ORDER BY id DESC LIMIT 10;");
-    if (mysqli_num_rows($result) == 0)
+    $result = $conn->query("SELECT * FROM shoplog WHERE shop='donate' ORDER BY id DESC LIMIT 10;");
+    if ($result->num_rows == 0)
     {
         echo "Seems Like The Donation Shop Log Was Empty!";
     }
@@ -42,7 +42,7 @@
                     <th>Item</th>
                     <th>Date</th>
                 </tr>
-        <?php while ($row = mysqli_fetch_assoc($result))
+        <?php while ($row = $result->fetch_assoc())
         { ?>
                     <tr class="center">
                         <td><?php echo $GameAccount->getAccName($row['account']); ?></td>

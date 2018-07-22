@@ -26,7 +26,7 @@
 Enter your desired donation value, and then click the donation button.<br/><hr/>
 <table align="center">
     <tr>
-        <td align="center"><img src="styles/global/images/paypal.png"></td>
+        <td align="center"><img src="core/styles/global/images/paypal.png"></td>
     </tr>
     <tr>
         <td>
@@ -52,7 +52,7 @@ Enter your desired donation value, and then click the donation button.<br/><hr/>
     <tr><td>
     <center>
         <form target="paypal" action="https://www.paypal.com/cgi-bin/webscr" method="post">
-            <input id="submit" type="image" src="styles/<?php echo $GLOBALS['template']['path']; ?>/images/donate.png" 
+            <input id="submit" type="image" src="core/styles/<?php echo $GLOBALS['template']['path']; ?>/images/donate.png" 
                    border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!" />
             <input type="hidden" name="notify_url" value="<?php echo $GLOBALS['website_domain']; ?>includes/misc/paypal_trigger.php" />
             <input type="hidden" name="add" value="1" />

@@ -27,8 +27,8 @@
             $conn = $Connect->connectToDB();
             $Connect->selectDB('webdb', $conn);
 
-            $get = mysqli_query($conn, "SELECT id FROM realms WHERE char_db='". mysqli_real_escape_string($conn, $char_db) ."';");
-            $row = mysqli_fetch_assoc($get);
+            $get = $conn->query("SELECT id FROM realms WHERE char_db='". $conn->escape_string($char_db) ."';");
+            $row = $get->fetch_assoc();
 
             return $row['id'];
         }
@@ -39,8 +39,8 @@
             $conn = $Connect->connectToDB();
             $Connect->selectDB('webdb', $conn);
 
-            $get = mysqli_query($conn, "SELECT name FROM realms WHERE char_db='". mysqli_real_escape_string($conn, $char_db) ."';");
-            $row = mysqli_fetch_assoc($get);
+            $get = $conn->query("SELECT name FROM realms WHERE char_db='". $conn->escape_string($char_db) ."';");
+            $row = $get->fetch_assoc();
 
             return $row['name'];
         }
@@ -50,7 +50,7 @@
             global $Connect;
             $conn = $Connect->connectToDB();
 
-            $realmId = mysqli_real_escape_string($conn, $realm_id);
+            $realmId = $conn->escape_string($realm_id);
             //Get status
             $fp = fsockopen($GLOBALS['realms'][$realmId]['host'], $GLOBALS['realms'][$realmId]['port'], $errno, $errstr, 1);
             if (!$fp)
@@ -68,8 +68,8 @@
                 {
                     $Connect->selectDB('chardb', $conn, $realmId);
 
-                    $getChars     = mysqli_query($conn, "SELECT COUNT(online) AS online FROM characters WHERE online=1;");
-                    $total_online = mysqli_fetch_assoc($getChars);
+                    $getChars     = $conn->query("SELECT COUNT(online) AS online FROM characters WHERE online=1;");
+                    $total_online = $getChars->fetch_assoc();
 
                     if ($total_online['online'] == 0)
                     {
@@ -81,8 +81,8 @@
                     }
                     else
                     {
-                        $getAlliance = mysqli_query($conn, "SELECT COUNT(online) AS online FROM characters WHERE online=1 AND race IN(3, 4, 7, 11, 1, 22);");
-                        $alliance = mysqli_fetch_assoc($getAlliance);
+                        $getAlliance = $conn->query("SELECT COUNT(online) AS online FROM characters WHERE online=1 AND race IN(3, 4, 7, 11, 1, 22);");
+                        $alliance = $getAlliance->fetch_assoc();
                         if ($alliance['online'] == 0 || empty($alliance['online']))
                         {
                             $per_alliance = 0;
@@ -92,8 +92,8 @@
                             $per_alliance = ($alliance['online'] / $total_online['online']) * 100;
                         }
 
-                        $getHorde = mysqli_query($conn, "SELECT COUNT(online) AS online FROM characters WHERE online=1 AND race IN(2, 5, 6, 8, 10, 9);");
-                        $horde    = mysqli_fetch_assoc($getHorde);
+                        $getHorde = $conn->query("SELECT COUNT(online) AS online FROM characters WHERE online=1 AND race IN(2, 5, 6, 8, 10, 9);");
+                        $horde    = $getHorde->fetch_assoc();
                         if ($horde['online'] == 0 || empty($horde['online']))
                         {
                             $per_horde = 0;
@@ -125,8 +125,10 @@
                 if ($GLOBALS['serverStatus']['playersOnline'] == TRUE)
                 {
                     $Connect->selectDB('chardb', $conn, $realmId);
-                    $getChars = mysqli_query($conn, "SELECT COUNT(online) AS online FROM characters WHERE online=1;");
-                    $pOnline  = mysqli_fetch_assoc($getChars);
+
+                    $getChars = $conn->query("SELECT COUNT(online) AS online FROM characters WHERE online=1;");
+
+                    $pOnline  = $getChars->fetch_assoc();
                     if ($pOnline['online'] > 1) 
                     {
                         echo "<td><b>". $pOnline['online'] ."</b> Players Online</td>";
@@ -146,8 +148,8 @@
                 if ($GLOBALS['serverStatus']['uptime'] == TRUE)
                 {
                     $Connect->selectDB('logondb', $conn);
-                    $getUp = mysqli_query($conn, "SELECT starttime FROM uptime WHERE realmid=". $realmId ." ORDER BY starttime DESC LIMIT 1;");
-                    $row   = mysqli_fetch_assoc($getUp);
+                    $getUp = $conn->query("SELECT starttime FROM uptime WHERE realmid=". $realmId ." ORDER BY starttime DESC LIMIT 1;");
+                    $row   = $getUp->fetch_assoc();
 
                     $time   = time();
                     $uptime = $time - $row['starttime'];
@@ -164,8 +166,8 @@
                 //Arena flush
                 $Connect->selectDB('chardb', $conn, $realmId);
                 
-                $getFlush = mysqli_query($conn, "SELECT value FROM worldstates WHERE comment='NextArenaPointDistributionTime';");
-                $row      = mysqli_fetch_assoc($getFlush);
+                $getFlush = $conn->query("SELECT value FROM worldstates WHERE comment='NextArenaPointDistributionTime';");
+                $row      = $getFlush->fetch_assoc();
                 $flush    = date('d M H:i', $row['value']);
 
                 echo '<tr>

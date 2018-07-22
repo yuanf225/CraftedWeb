@@ -56,8 +56,8 @@ Let's you reset the instance on your characters.<hr/>
                     <td>
                         <select name="ir_realm">
                             <?php
-                            $result = mysqli_query($conn, "SELECT name,char_db FROM realms;");
-                            while ($row    = mysqli_fetch_assoc($result))
+                            $result = $conn->query("SELECT name,char_db FROM realms;");
+                            while ($row    = $result->fetch_assoc())
                             {
                                 if (isset($_POST['ir_realm']) && $_POST['ir_realm'] == $row['char_db'])
                                     echo '<option value="' . $row['char_db'] . '" selected>';
@@ -98,9 +98,9 @@ Let's you reset the instance on your characters.<hr/>
                                 <?php
                                 $acc_id = $Account->getAccountID($_SESSION['username']);
                                 $Connect->selectDB($_POST['ir_realm']);
-                                $result = mysqli_query($conn, "SELECT name, guid FROM characters WHERE account=". $acc_id .";");
+                                $result = $conn->query("SELECT name, guid FROM characters WHERE account=". $acc_id .";");
 
-                                while ($row = mysqli_fetch_assoc($result))
+                                while ($row = $result->fetch_assoc())
                                 {
                                     if (isset($_POST['ir_char']) && $_POST['ir_char'] == $row['guid'])
                                         echo '<option value="' . $row['guid'] . '" selected>';
@@ -137,25 +137,25 @@ Let's you reset the instance on your characters.<hr/>
                         <input type="hidden" name="ir_char" value="<?php echo $_POST['ir_char']; ?>">
                         <select name="ir_instance">
                             <?php
-                            $guid = mysqli_real_escape_string($conn, $_POST['ir_char']);
+                            $guid = $conn->escape_string($_POST['ir_char']);
                             $Connect->selectDB($_POST['ir_realm']);
 
-                            $result = mysqli_query($conn, "SELECT instance FROM character_instance WHERE guid=". $guid ." AND permanent=1;");
-                            if (mysqli_num_rows($result) == 0)
+                            $result = $conn->query("SELECT instance FROM character_instance WHERE guid=". $guid ." AND permanent=1;");
+                            if ($result->num_rows == 0)
                             {
                                 echo "<option value='#'>No instance locks were found</option>";
                                 $nope = true;
                             }
                             else
                             {
-                                while ($row = mysqli_fetch_assoc($result))
+                                while ($row = $result->fetch_assoc())
                                 {
-                                    $getI     = mysqli_query($conn, "SELECT id, map, difficulty FROM instance WHERE id=". $row['instance'] .";");
-                                    $instance = mysqli_fetch_assoc($getI);
+                                    $getI     = $conn->query("SELECT id, map, difficulty FROM instance WHERE id=". $row['instance'] .";");
+                                    $instance = $getI->fetch_assoc();
 
                                     $Connect->selectDB('webdb', $conn);
-                                    $getName = mysqli_query($conn, "SELECT name FROM instance_data WHERE map='" . $instance['map'] . "';");
-                                    $name    = mysqli_fetch_assoc($getName);
+                                    $getName = $conn->query("SELECT name FROM instance_data WHERE map='" . $instance['map'] . "';");
+                                    $name    = $getName->fetch_assoc();
 
                                     if (empty($name['name']))
                                         $name = "Unknown Instance";
@@ -199,8 +199,8 @@ Let's you reset the instance on your characters.<hr/>
 
     if (isset($_POST['ir_step3']))
     {
-        $guid     = mysqli_real_escape_string($conn, $_POST['ir_char']);
-        $instance = mysqli_real_escape_string($conn, $_POST['ir_instance']);
+        $guid     = $conn->escape_string($_POST['ir_char']);
+        $instance = $conn->escape_string($_POST['ir_instance']);
 
         if ($GLOBALS['service'][$service]['currency'] == "vp")
         {
@@ -209,7 +209,7 @@ Let's you reset the instance on your characters.<hr/>
             else
             {
                 $Connect->selectDB($_POST['ir_realm']);
-                mysqli_query($conn, "DELETE FROM instance WHERE id=". $instance .";");
+                $conn->query("DELETE FROM instance WHERE id=". $instance .";");
 
                 $Account->deductVP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service'][$service]['price']);
                 echo '<span class="approved">The instance lock was removed!</span>';
@@ -222,7 +222,7 @@ Let's you reset the instance on your characters.<hr/>
             else
             {
                 $Connect->selectDB($_POST['ir_realm']);
-                mysqli_query($conn, "DELETE FROM instance WHERE id=". $instance .";");
+                $conn->query("DELETE FROM instance WHERE id=". $instance .";");
 
                 $Account->deductDP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service'][$service]['price']);
                 echo '<span class="approved">The instance lock was removed!</span>';

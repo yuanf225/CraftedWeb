@@ -25,9 +25,9 @@
     $conn = $Connect->connectToDB();
     $Connect->selectDB('webdb', $conn);
 
-    $getTemplate = mysqli_query($conn, "SELECT `path` FROM template WHERE applied='1';");
+    $getTemplate = $conn->query("SELECT `path` FROM template WHERE applied='1';");
 
-    $template = mysqli_fetch_assoc($getTemplate);
+    $template = $getTemplate->fetch_assoc();
 
     if (!file_exists("core/styles/". $template['path'] ."/style.css") || !file_exists("core/styles/" . $template['path'] . "/template.html"))
     {

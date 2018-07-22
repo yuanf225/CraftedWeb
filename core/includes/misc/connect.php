@@ -27,14 +27,17 @@
 
         public static function connectToDB()
         {
-            if ($conn = mysqli_connect($GLOBALS['connection']['host'], $GLOBALS['connection']['user'], $GLOBALS['connection']['password']))
+            if ($conn = new mysqli(
+                $GLOBALS['connection']['web']['host'], 
+                $GLOBALS['connection']['web']['user'], 
+                $GLOBALS['connection']['web']['password']))
             {
-                mysqli_set_charset($conn, "utf8");
+                $conn->set_charset("UTF8");
                 return $conn;
             }
             else
             {
-                buildError("<b>Database Connection error:</b> A connection could not be established. Error: " . mysqli_error($conn), NULL);
+                buildError("<b>Database Connection error:</b> A connection could not be established. Error: " . $conn->error, NULL);
                 self::$connectedTo = null;
             }
         }
@@ -48,18 +51,15 @@
                 $GLOBALS['realms'][$realmid]['mysqli_user'] != $GLOBALS['connection']['user'] || 
                 $GLOBALS['realms'][$realmid]['mysqli_pass'] != $GLOBALS['connection']['password'])
             {
-                mysqli_set_charset($conn, "utf8");
-                return mysqli_connect($GLOBALS['realms'][$realmid]['mysqli_host'], 
-                                    $GLOBALS['realms'][$realmid]['mysqli_user'], 
-                                    $GLOBALS['realms'][$realmid]['mysqli_pass'])
-                or buildError("<b>Database Connection error:</b> A connection could not be established to Realm. Error: " . mysqli_error($conn), NULL);
+                $conn->set_charset("UTF8");
+                return new mysqli($GLOBALS['realms'][$realmid]['mysqli_host'], $GLOBALS['realms'][$realmid]['mysqli_user'], $GLOBALS['realms'][$realmid]['mysqli_pass'])
+                or buildError("<b>Database Connection error:</b> A connection could not be established to Realm. Error: " . $conn->error, NULL);
             }
             else
             {
                 self::connectToDB();
             }
-            mysqli_select_db($conn, $GLOBALS['realms'][$realmid]['chardb']) or
-                    buildError("<b>Database Selection error:</b> The realm database could not be selected. Error: " . mysqli_error($conn), NULL);
+            $conn->select_db($GLOBALS['realms'][$realmid]['chardb']) or buildError("<b>Database Selection error:</b> The realm database could not be selected. Error: " . $conn->error, NULL);
             self::$connectedTo = 'chardb';
         }
 
@@ -68,23 +68,38 @@
             switch ($db)
             {
                 default:
-                    if(mysqli_set_charset($conn, "utf8")) mysqli_select_db($conn, $db);
+                    if($conn->set_charset("UTF8"))
+                    {
+                        $conn->select_db($db);
+                    }
                     break;
 
                 case('logondb'):
-                    if(mysqli_set_charset($conn, "utf8")) mysqli_select_db($conn, $GLOBALS['connection']['logondb']);
+                    if($conn->set_charset("UTF8")) 
+                    {
+                        $conn->select_db($GLOBALS['connection']['logon']['database']);
+                    }
                     break;
 
                 case('webdb'):
-                    if(mysqli_set_charset($conn, "utf8")) mysqli_select_db($conn, $GLOBALS['connection']['webdb']);
+                    if($conn->set_charset("UTF8")) 
+                    {
+                        $conn->select_db($GLOBALS['connection']['web']['database']);
+                    }
                     break;
 
                 case('worlddb'):
-                    if(mysqli_set_charset($conn, "utf8")) mysqli_select_db($conn, $GLOBALS['connection']['worlddb']);
+                    if($conn->set_charset("UTF8")) 
+                    {
+                        $conn->select_db($GLOBALS['connection']['world']['database']);
+                    }
                     break;
 
                 case('chardb'):
-                    if(mysqli_set_charset($conn, "utf8")) mysqli_select_db($conn, $GLOBALS['realms'][$realmid]['chardb']);
+                    if($conn->set_charset("UTF8")) 
+                    {
+                        $conn->select_db($GLOBALS['realms'][$realmid]['char']['database']);
+                    }
                     break;
             }
             return TRUE;
@@ -103,35 +118,35 @@
     $realms  = array();
     $service = array();
 
-    mysqli_select_db($conn, $connection['webdb']);
+    $conn->select_db($connection['web']['database']);
 
     //Realms
-    $getRealms = mysqli_query($conn, "SELECT * FROM realms ORDER BY id ASC;");
-    while ($row = mysqli_fetch_assoc($getRealms))
+    $getRealms = $conn->query("SELECT * FROM realms ORDER BY id ASC;");
+    while ($row = $getRealms->fetch_assoc())
     {
-        $realms[$row['id']]['id']          = $row['id'];
-        $realms[$row['id']]['name']        = $row['name'];
-        $realms[$row['id']]['chardb']      = $row['char_db'];
-        $realms[$row['id']]['description'] = $row['description'];
-        $realms[$row['id']]['port']        = $row['port'];
+        $realms[$row['id']]['id']           = $row['id'];
+        $realms[$row['id']]['name']         = $row['name'];
+        $realms[$row['id']]['chardb']       = $row['char_db'];
+        $realms[$row['id']]['description']  = $row['description'];
+        $realms[$row['id']]['port']         = $row['port'];
 
-        $realms[$row['id']]['rank_user'] = $row['rank_user'];
-        $realms[$row['id']]['rank_pass'] = $row['rank_pass'];
-        $realms[$row['id']]['ra_port']   = $row['ra_port'];
-        $realms[$row['id']]['soap_host'] = $row['soap_port'];
+        $realms[$row['id']]['rank_user']    = $row['rank_user'];
+        $realms[$row['id']]['rank_pass']    = $row['rank_pass'];
+        $realms[$row['id']]['ra_port']      = $row['ra_port'];
+        $realms[$row['id']]['soap_port']    = $row['soap_port'];
 
-        $realms[$row['id']]['host'] = $row['host'];
+        $realms[$row['id']]['host']         = $row['host'];
 
-        $realms[$row['id']]['sendType'] = $row['sendType'];
+        $realms[$row['id']]['sendType']     = $row['sendType'];
 
-        $realms[$row['id']]['mysqli_host'] = $row['mysqli_host'];
-        $realms[$row['id']]['mysqli_user'] = $row['mysqli_user'];
-        $realms[$row['id']]['mysqli_pass'] = $row['mysqli_pass'];
+        $realms[$row['id']]['mysqli_host']  = $row['mysqli_host'];
+        $realms[$row['id']]['mysqli_user']  = $row['mysqli_user'];
+        $realms[$row['id']]['mysqli_pass']  = $row['mysqli_pass'];
     }
 
     //Service prices
-    $getServices = mysqli_query($conn, "SELECT enabled, price, currency, service FROM service_prices;");
-    while ($row = mysqli_fetch_assoc($getServices))
+    $getServices = $conn->query("SELECT enabled, price, currency, service FROM service_prices;");
+    while ($row = $getServices->fetch_assoc())
     {
         $service[$row['service']]['status']   = $row['enabled'];
         $service[$row['service']]['price']    = $row['price'];

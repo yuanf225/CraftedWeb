@@ -39,28 +39,28 @@
           die("Please Enter Both Fields.");
         }
 
-        $username     = mysqli_real_escape_string($conn, strtoupper(trim($_POST['username'])));
-        $password     = mysqli_real_escape_string($conn, strtoupper(trim($_POST['password'])));
+        $username     = $conn->escape_string(strtoupper(trim($_POST['username'])));
+        $password     = $conn->escape_string(strtoupper(trim($_POST['password'])));
         $passwordHash = sha1("". $username .":". $password ."");
 
-        if(mysqli_select_db($conn, $GLOBALS['connection']['logondb']) == false)
+        if($conn->select_db($GLOBALS['connection']['logon']['database']) == false)
         {
-          die("Database Error.");
+          die("Database Error. (". $conn->error.")");
         }
 
-        $result = mysqli_query($conn, "SELECT COUNT(id) FROM account WHERE username='". $username ."' AND sha_pass_hash = '". $passwordHash ."';");
+        $result = $conn->query("SELECT COUNT(id) FROM account WHERE username='". $username ."' AND sha_pass_hash = '". $passwordHash ."';");
 
-        $getId    = mysqli_query($conn, "SELECT id FROM account WHERE username='". $username ."';");
-        $row      = mysqli_fetch_assoc($getId);
+        $getId    = $conn->query("SELECT id FROM account WHERE username='". $username ."';");
+        $row      = $getId->fetch_assoc();
         $uid      = $row['id'];
-        $result   = mysqli_query($conn, "SELECT gmlevel FROM account_access WHERE id=$uid AND gmlevel>=". $GLOBALS[$_POST['panel'] . 'Panel_minlvl'] .";");
+        $result   = $conn->query("SELECT gmlevel FROM account_access WHERE id=$uid AND gmlevel>=". $GLOBALS[$_POST['panel'] . 'Panel_minlvl'] .";");
 
-        if (mysqli_num_rows($result) == 0)
+        if ($result->num_rows == 0)
         {
           die("The Specified Account Does Not Have Access To Log In!");
         }
 
-        $rank = mysqli_fetch_assoc($result);
+        $rank = $result->fetch_assoc();
 
         $_SESSION['cw_' . $_POST['panel']]            = ucfirst(strtolower($username));
         $_SESSION['cw_' . $_POST['panel'] . '_id']    = $uid;

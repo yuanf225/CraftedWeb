@@ -48,18 +48,23 @@
             $conn = $this->connect();
             $this->selectDB('logondb', $conn);
 
-            $result = mysqli_query($conn, "SELECT COUNT(id) AS connections FROM account WHERE online=1;");
-            return mysqli_fetch_assoc($result)['connections'];
+            $result = $conn->query("SELECT COUNT(id) AS connections FROM account WHERE online=1;");
+            return $result->fetch_assoc()['connections'];
         }
 
         public function getPlayersOnline($realmId = 1)
         {
             $conn = $this->connect();
             $this->connectToRealmDB($realmId);
-            $result = mysqli_query($conn, "SELECT COUNT(guid) AS online FROM characters WHERE online=1;");
+
+            $result = $conn->query("SELECT COUNT(guid) AS online FROM characters WHERE online=1;");
             if ($this->getServerStatus($realmId, false)) 
             {
-                return round(mysqli_fetch_assoc($result)['online']);
+                return round($result->fetch_assoc()['online']);
+            }
+            else
+            {
+                return 0;
             }
         }
 
@@ -67,13 +72,13 @@
         {
             if (!$this->getServerStatus($realmId, false)) 
             {
-                return "";
+                return 0;
             }
             $conn = $this->connect();
             $this->selectDB('logondb', $conn);
 
-            $getUp = mysqli_query($conn, "SELECT starttime FROM uptime WHERE realmid=". $realmId ." ORDER BY starttime DESC LIMIT 1;");
-            $row   = mysqli_fetch_assoc($getUp);
+            $getUp = $conn->query("SELECT starttime FROM uptime WHERE realmid=". $realmId ." ORDER BY starttime DESC LIMIT 1;");
+            $row   = $getUp->fetch_assoc();
 
             $time   = time();
             $uptime = $time - $row['starttime'];
@@ -103,12 +108,13 @@
         
         public function getServerStatus($realmId, $showText = true)
         {
-            $realmId = mysqli_real_escape_string($conn, $realmId);
             $conn = $this->connect();
             $this->selectDB('webdb', $conn);
 
-            $result = mysqli_query($conn, "SELECT host, port FROM realms WHERE id=". $realmId .";");
-            $row    = mysqli_fetch_assoc($result);
+            $realmId = $conn->escape_string($realmId);
+
+            $result = $conn->query("SELECT host, port FROM realms WHERE id=". $realmId .";");
+            $row    = $result->fetch_assoc();
 
             $fp = fsockopen($row['host'], $row['port'], $errno, $errstr, 1);
             if ($showText) 
@@ -139,18 +145,20 @@
         {
             $conn = $this->connect();
             $this->selectDB('logondb', $conn);
-            $result = mysqli_query($conn, "SELECT COUNT(id) AS GMOnline FROM account WHERE username 
+
+            $result = $conn->query("SELECT COUNT(id) AS GMOnline FROM account WHERE username 
                 IN (SELECT username FROM account WHERE online=1) AND id IN (SELECT id FROM account_access WHERE gmlevel>1);");
 
-            return mysqli_fetch_assoc($result)['GMOnline'];
+            return $result->fetch_assoc()['GMOnline'];
         }
 
         public function getAccountsCreatedToday()
         {
             $conn = $this->connect();
             $this->selectDB('logondb', $conn);
-            $result = mysqli_query($conn, "SELECT COUNT(id) AS accountsCreated FROM account WHERE joindate LIKE '%". date("Y-m-d") ."%';");
-            $row = mysqli_fetch_assoc($result);
+
+            $result = $conn->query("SELECT COUNT(id) AS accountsCreated FROM account WHERE joindate LIKE '%". date("Y-m-d") ."%';");
+            $row = $result->fetch_assoc();
             if ($row['accountsCreated'] == null || empty($row['accountsCreated'])) 
                 $row['accountsCreated'] = 0;
 
@@ -161,8 +169,9 @@
         {
             $conn = $this->connect();
             $this->selectDB('logondb', $conn);
-            $result = mysqli_query($conn, "SELECT COUNT(id) AS activeMonth FROM account WHERE last_login LIKE '%". date("Y-m") ."%';");
-            $row = mysqli_fetch_assoc($result);
+
+            $result = $conn->query("SELECT COUNT(id) AS activeMonth FROM account WHERE last_login LIKE '%". date("Y-m") ."%';");
+            $row = $result->fetch_assoc();
             if ($row['activeMonth'] == null || empty($row['activeMonth'])) 
                 $row['activeMonth'] = 0;
 
@@ -173,10 +182,13 @@
         {
             $conn = $this->connect();
             $this->selectDB('logondb', $conn);
-            $result = mysqli_query($conn, "SELECT COUNT(id) AS activeConnections FROM account WHERE online=1;");
-            $row = mysqli_fetch_assoc($result);
-            if ($row['activeConnections'] == null || empty($row['activeConnections'])) 
+
+            $result = $conn->query("SELECT COUNT(id) AS activeConnections FROM account WHERE online='1';");
+            $row = $result->fetch_assoc();
+            if (empty($row['activeConnections']))
+            {
                 $row['activeConnections'] = 0;
+            }
 
             return $row['activeConnections'];
         }
@@ -185,8 +197,9 @@
         {
             $conn = $this->connect();
             $this->selectDB('webdb', $conn);
-            $result = mysqli_query($conn, "SELECT id FROM realms;");
-            if (mysqli_num_rows($result) == 0)
+
+            $result = $conn->query("SELECT id FROM realms;");
+            if ($result->num_rows == 0)
             {
                 $this->faction_ratio = "Unknown";
             }
@@ -195,17 +208,18 @@
                 $t   = 0;
                 $a   = 0;
                 $h   = 0;
-                while ($row = mysqli_fetch_assoc($result))
+                while ($row = $result->fetch_assoc())
                 {
                     $this->connectToRealmDB($row['id']);
-                    $result = mysqli_query($conn, "SELECT COUNT(*) AS players FROM characters");
-                    $t      = $t + mysqli_fetch_assoc($result)['players'];
 
-                    $result = mysqli_query($conn, "SELECT COUNT(*) AS ally FROM characters WHERE race IN(3,4,7,11,1,22);");
-                    $a      = $a + mysqli_fetch_assoc($result)['ally'];
+                    $result = $conn->query("SELECT COUNT(*) AS players FROM characters");
+                    $t      = $t + $result->fetch_assoc()['players'];
 
-                    $result = mysqli_query($conn, "SELECT COUNT(*) AS horde FROM characters WHERE race IN(2,5,6,8,10,9);");
-                    $h      = $h + mysqli_fetch_assoc($result)['horde'];
+                    $result = $conn->query("SELECT COUNT(*) AS ally FROM characters WHERE race IN(3,4,7,11,1,22);");
+                    $a      = $a + $result->fetch_assoc()['ally'];
+
+                    $result = $conn->query("SELECT COUNT(*) AS horde FROM characters WHERE race IN(2,5,6,8,10,9);");
+                    $h      = $h + $result->fetch_assoc()['horde'];
                 }
                 $a = ($a / $t) * 100;
                 $h = ($h / $t) * 100;
@@ -218,8 +232,8 @@
             $conn = $this->connect();
             $this->selectDB('logondb', $conn);
 
-            $result = mysqli_query($conn, "SELECT COUNT(*) AS accountsToday FROM account WHERE last_login LIKE '%" . date('Y-m-d') . "%'");
-            $row = mysqli_fetch_assoc($result);
+            $result = $conn->query("SELECT COUNT(*) AS accountsToday FROM account WHERE last_login LIKE '%" . date('Y-m-d') . "%'");
+            $row = $result->fetch_assoc();
             if ($row['accountsToday'] == null || empty($row['accountsToday'])) 
                 $row['accountsToday'] = 0;
 
@@ -228,9 +242,12 @@
 
         public function connect()
         {
-            if($conn = mysqli_connect($GLOBALS['connection']['host'], $GLOBALS['connection']['user'], $GLOBALS['connection']['password']))
+            if($conn = new mysqli(
+                $GLOBALS['connection']['web']['host'], 
+                $GLOBALS['connection']['web']['user'], 
+                $GLOBALS['connection']['web']['password']))
             {
-                mysqli_set_charset($conn, "utf8");
+                $conn->set_charset("UTF8");
                 return $conn;
             }
             else
@@ -243,25 +260,26 @@
         {
             $conn = $this->connect();
             $this->selectDB('webdb', $conn);
-            $ID = mysqli_real_escape_string($conn, $realmId);
-            $getRealmData = mysqli_query($conn, "SELECT mysqli_host, mysqli_user, mysqli_pass, char_db FROM realms WHERE id=". $ID .";");
-            if (mysqli_num_rows($getRealmData) > 0)
+
+            $ID = $conn->escape_string($realmId);
+            $getRealmData = $conn->query("SELECT mysqli_host, mysqli_user, mysqli_pass, char_db FROM realms WHERE id=". $ID .";");
+            if ($getRealmData->num_rows > 0)
             {
-                $row = mysqli_fetch_assoc($getRealmData);
-                if ($row['mysqli_host'] != $GLOBALS['connection']['host'] || 
-                    $row['mysqli_user'] != $GLOBALS['connection']['user'] || 
-                    $row['mysqli_pass'] != $GLOBALS['connection']['password'])
+                $row = $getRealmData->fetch_assoc();
+                if ($row['mysqli_host'] != $GLOBALS['connection']['web']['host'] || 
+                    $row['mysqli_user'] != $GLOBALS['connection']['web']['user'] || 
+                    $row['mysqli_pass'] != $GLOBALS['connection']['web']['password'])
                 {
-                    return mysqli_connect($row['mysqli_host'], $row['mysqli_user'], $row['mysqli_pass']) 
-                        or buildError("<b>Database Connection error:</b> A connection could not be established to Realm. Error: ". mysqli_error($conn), NULL);
+                    return $connection = new mysqli($row['mysqli_host'], $row['mysqli_user'], $row['mysqli_pass']) 
+                        or buildError("<b>Database Connection error:</b> A connection could not be established to Realm. Error: ". $connection->error, NULL);
                 }
                 else
                 {
                     return $this->connect();
                 }
 
-                mysqli_select_db($conn, $row['char_db']) 
-                    or buildError("<b>Database Selection error:</b> The realm database could not be selected. Error: " . mysqli_error($conn), NULL);
+                $conn->select_db($row['char_db']) 
+                    or buildError("<b>Database Selection error:</b> The realm database could not be selected. Error: " . $conn->error, NULL);
             }
         }
 
@@ -270,19 +288,19 @@
             switch ($database)
             {
                 default:
-                    if(mysqli_set_charset($connection, "utf8")) mysqli_select_db($connection, $database);
+                    if($connection->set_charset("UTF8")) $connection->select_db($database);
                     break;
 
                 case('logondb'):
-                    if(mysqli_set_charset($connection, "utf8")) mysqli_select_db($connection, $GLOBALS['connection']['logondb']);
+                    if($connection->set_charset("UTF8")) $connection->select_db($GLOBALS['connection']['logon']['database']);
                     break;
 
                 case('webdb'):
-                    if(mysqli_set_charset($connection, "utf8")) mysqli_select_db($connection, $GLOBALS['connection']['webdb']);
+                    if($connection->set_charset("UTF8")) $connection->select_db($GLOBALS['connection']['web']['database']);
                     break;
 
                 case('worlddb'):
-                    if(mysqli_set_charset($connection, "utf8")) mysqli_select_db($connection, $GLOBALS['connection']['worlddb']);
+                    if($connection->set_charset("UTF8")) $connection->select_db($GLOBALS['connection']['world']['database']);
                     break;
             }
         }
@@ -292,8 +310,8 @@
             $conn = $this->connect();
             $this->selectDB('worlddb', $conn);
 
-            $result = mysqli_query($conn, "SELECT name FROM item_template WHERE entry=". $id .";");
-            $row    = mysqli_fetch_assoc($result);
+            $result = $conn->query("SELECT name FROM item_template WHERE entry=". $id .";");
+            $row    = $result->fetch_assoc();
             return $row['name'];
         }
 
@@ -310,19 +328,19 @@
 
             if (isset($_SESSION['cw_admin']))
             {
-                $aid = mysqli_real_escape_string($conn, $_SESSION['cw_admin_id']);
+                $aid = $conn->escape_string($_SESSION['cw_admin_id']);
             }
             elseif (isset($_SESSION['cw_staff']))
             {
-                $aid = mysqli_real_escape_string($conn, $_SESSION['cw_staff_id']);
+                $aid = $conn->escape_string($_SESSION['cw_staff_id']);
             }
 
-            $url        = mysqli_real_escape_string($conn, $url);
-            $action     = mysqli_real_escape_string($conn, $action);
-            $extended   = mysqli_real_escape_string($conn, $extended);
+            $url        = $conn->escape_string($url);
+            $action     = $conn->escape_string($action);
+            $extended   = $conn->escape_string($extended);
 
 
-            mysqli_query($conn, "INSERT INTO admin_log (`full_url`, `ip`, `timestamp`, `action`, `account`, `extended_inf`) VALUES 
+            $conn->query("INSERT INTO admin_log (`full_url`, `ip`, `timestamp`, `action`, `account`, `extended_inf`) VALUES 
                 ('". $url ."', '". $_SERVER['REMOTE_ADDR'] ."', '". time() ."', '". $action ."', '". $aid ."', '". $extended ."');");
         }
 
@@ -330,19 +348,19 @@
         {
 
             $conn      = $this->connect();
-            $name      = mysqli_real_escape_string($conn, $name);
-            $desc      = mysqli_real_escape_string($conn, $desc);
-            $host      = mysqli_real_escape_string($conn, $host);
-            $port      = mysqli_real_escape_string($conn, $port);
-            $chardb    = mysqli_real_escape_string($conn, $chardb);
-            $sendtype  = mysqli_real_escape_string($conn, $sendtype);
-            $rank_user = mysqli_real_escape_string($conn, $rank_user);
-            $rank_pass = mysqli_real_escape_string($conn, $rank_pass);
-            $ra_port   = mysqli_real_escape_string($conn, $ra_port);
-            $soap_port = mysqli_real_escape_string($conn, $soap_port);
-            $m_host    = mysqli_real_escape_string($conn, $m_host);
-            $m_user    = mysqli_real_escape_string($conn, $m_user);
-            $m_pass    = mysqli_real_escape_string($conn, $m_pass);
+            $name      = $conn->escape_string($name);
+            $desc      = $conn->escape_string($desc);
+            $host      = $conn->escape_string($host);
+            $port      = $conn->escape_string($port);
+            $chardb    = $conn->escape_string($chardb);
+            $sendtype  = $conn->escape_string($sendtype);
+            $rank_user = $conn->escape_string($rank_user);
+            $rank_pass = $conn->escape_string($rank_pass);
+            $ra_port   = $conn->escape_string($ra_port);
+            $soap_port = $conn->escape_string($soap_port);
+            $m_host    = $conn->escape_string($m_host);
+            $m_user    = $conn->escape_string($m_user);
+            $m_pass    = $conn->escape_string($m_pass);
 
             if (empty($name) || empty($host) || empty($port) || empty($chardb) || empty($rank_user) || empty($rank_pass))
             {
@@ -356,13 +374,13 @@
             else
             {
                 if (empty($m_host))
-                    $m_host = $GLOBALS['connection']['host'];
+                    $m_host = $GLOBALS['connection']['web']['host'];
 
                 if (empty($m_user))
-                    $m_host = $GLOBALS['connection']['user'];
+                    $m_host = $GLOBALS['connection']['web']['user'];
 
                 if (empty($m_pass))
-                    $m_pass = $GLOBALS['connection']['password'];
+                    $m_pass = $GLOBALS['connection']['web']['password'];
 
                 if (empty($ra_port) || $ra_port == null || !isset($ra_port))
                 {
@@ -377,7 +395,7 @@
                 }
 
                 $this->selectDB('webdb', $conn);
-                if(mysqli_query($conn, "INSERT INTO realms 
+                if($conn->query("INSERT INTO realms 
                     (name, description, char_db, port, rank_user, rank_pass, ra_port, soap_port, host, sendType, mysqli_host, mysqli_user, mysqli_pass) 
                     VALUES 
                     ('". $name ."', 
@@ -400,7 +418,7 @@
                 }
                 else
                 {
-                    echo "<pre><h3>&raquo; Error adding the realm `". mysqli_error($conn) ."`</h3></pre><br/>";
+                    echo "<pre><h3>&raquo; Error adding the realm `". $conn->error ."`</h3></pre><br/>";
                 }
 
                 
@@ -412,15 +430,17 @@
             $conn = $this->connect();
             $this->selectDB('webdb', $conn);
 
-            $ID = mysqli_real_escape_string($conn, $realmId);
+            $ID = $conn->escape_string($realmId);
 
             $value = "<i>Unknown</i>";
 
-            $result = mysqli_query($conn, "SELECT name FROM realms WHERE id=". $ID .";");
-            $row    = mysqli_fetch_assoc($result);
+            $result = $conn->query("SELECT name FROM realms WHERE id=". $ID .";");
+            $row    = $result->fetch_assoc();
 
-            if (!empty($row['name'])) 
+            if (!empty($row['name']))
+            {
                 $value = $row['name'];
+            }
 
             return $value;
         }
@@ -434,13 +454,13 @@
 
             //Check for old votelogs
             $old    = time() - 2592000;
-            $result = mysqli_query($conn, "SELECT COUNT(*) AS records FROM votelog WHERE `timestamp` <= ". $old .";");
+            $result = $conn->query("SELECT COUNT(*) AS records FROM votelog WHERE `timestamp` <= ". $old .";");
 
-            if (mysqli_data_seek($result, 0) > 1)
+            if ($result->data_seek(0) > 1)
             {
                 echo '<div class="box_right">
                   <div class="box_right_title">Notifications</div>';
-                echo "You have " . mysqli_fetch_assoc($result)['records'] . " votelog records that are 30 days or older. Since these are not really needed in general. 
+                echo "You have " . $result->fetch_assoc()['records'] . " votelog records that are 30 days or older. Since these are not really needed in general. 
                      We suggest you clear these. ";
                 echo '</div>';
             }
@@ -452,8 +472,9 @@
             {
                 $conn = $this->connect();
                 $this->selectDB("webdb", $conn);
-                $getRealm = mysqli_query($conn, "SELECT id FROM realms ORDER BY id ASC LIMIT 1;");
-                $row      = mysqli_fetch_assoc($getRealm);
+
+                $getRealm = $conn->query("SELECT id FROM realms ORDER BY id ASC LIMIT 1;");
+                $row      = $getRealm->fetch_assoc();
 
                 $rid = $row['id'];
             }
@@ -517,9 +538,9 @@
             $conn = $GameServer->connect();
             $GameServer->selectDB('logondb', $conn);
 
-            $user   = mysqli_real_escape_string($conn, $user);
-            $result = mysqli_query($conn, "SELECT id FROM account WHERE username='". $user ."';");
-            $row    = mysqli_fetch_assoc($result);
+            $user   = $conn->escape_string($user);
+            $result = $conn->query("SELECT id FROM account WHERE username='". $user ."';");
+            $row    = $result->fetch_assoc();
 
             return $row['id'];
         }
@@ -531,10 +552,10 @@
             $conn = $GameServer->connect();
             $GameServer->selectDB('logondb', $conn);
 
-            $accountId = mysqli_real_escape_string($conn, $id);
+            $accountId = $conn->escape_string($id);
 
-            $result = mysqli_query($conn, "SELECT username FROM account WHERE id=". $accountId .";");
-            $row    = mysqli_fetch_assoc($result);
+            $result = $conn->query("SELECT username FROM account WHERE id='". $accountId ."';");
+            $row    = $result->fetch_assoc();
 
             if (!empty($row['username']))
             {
@@ -549,14 +570,14 @@
 
             $GameServer->connectToRealmDB($realmId);
 
-            $guid = mysqli_real_escape_string($conn, $id);
+            $guid = $conn->escape_string($id);
 
             $return = "<i>Unknown</i>";
 
-            $result = mysqli_query($conn, "SELECT name FROM characters WHERE guid=". $guid .";");
-            if (mysqli_num_rows($result) > 0)
+            $result = $conn->query("SELECT name FROM characters WHERE guid=". $guid .";");
+            if ($result->num_rows > 0)
             {
-                $row = mysqli_fetch_assoc($result);
+                $row = $result->fetch_assoc();
                 if (!empty($row['name']))
                 {
                     return $row['name'];
@@ -572,11 +593,11 @@
             global $GameServer;
             $conn = $GameServer->connect();
 
-            $accountId = mysqli_real_escape_string($conn, $id);
+            $accountId = $conn->escape_string($id);
             $GameServer->selectDB('logondb', $conn);
 
-            $result = mysqli_query($conn, "SELECT email FROM account WHERE id=". $accountId .";");
-            $row    = mysqli_fetch_assoc($result);
+            $result = $conn->query("SELECT email FROM account WHERE id=". $accountId .";");
+            $row    = $result->fetch_assoc();
 
             return $row['email'];
         }
@@ -587,13 +608,13 @@
             $conn = $GameServer->connect();
             $GameServer->selectDB('webdb', $conn);
 
-            $accountId = mysqli_real_escape_string($conn, $id);
+            $accountId = $conn->escape_string($id);
 
-            $result = mysqli_query($conn, "SELECT vp FROM account_data WHERE id=". $accountId .";");
-            if (mysqli_num_rows($result) == 0)
+            $result = $conn->query("SELECT vp FROM account_data WHERE id=". $accountId .";");
+            if ($result->num_rows == 0)
                 return 0;
 
-            $row = mysqli_fetch_assoc($result);
+            $row = $result->fetch_assoc();
             return $row['vp'];
         }
 
@@ -603,13 +624,13 @@
             $conn = $GameServer->connect();
             $GameServer->selectDB('webdb', $conn);
 
-            $accountId = mysqli_real_escape_string($conn, $id);
+            $accountId = $conn->escape_string($id);
 
-            $result = mysqli_query($conn, "SELECT dp FROM account_data WHERE id=". $accountId .";");
-            if (mysqli_num_rows($result) == 0)
+            $result = $conn->query("SELECT dp FROM account_data WHERE id=". $accountId .";");
+            if ($result->num_rows == 0)
                 return 0;
 
-            $row = mysqli_fetch_assoc($result);
+            $row = $result->fetch_assoc();
             return $row['dp'];
         }
 
@@ -619,13 +640,13 @@
             $conn = $GameServer->connect();
             $GameServer->selectDB('logondb', $conn);
 
-            $accountId = mysqli_real_escape_string($conn, $id);
+            $accountId = $conn->escape_string($id);
 
-            $result = mysqli_query($conn, "SELECT * FROM account_banned WHERE id=". $accountId ." AND active=1 ORDER by bandate DESC LIMIT 1;");
-            if (mysqli_num_rows($result) == 0)
+            $result = $conn->query("SELECT * FROM account_banned WHERE id=". $accountId ." AND active=1 ORDER by bandate DESC LIMIT 1;");
+            if ($result->num_rows == 0)
                 return "<span class='green_text'>Active</span>";
 
-            $row  = mysqli_fetch_assoc($result);
+            $row  = $result->fetch_assoc();
             if ($row['unbandate'] < $row['bandate'])
                 $time = "Never";
             else
@@ -698,20 +719,20 @@
         {
             $page    = $_GET['p'];
             $subpage = $_GET['s'];
-            $pages   = scandir('../aasp_includes/pages/subpages');
+            $pages   = scandir('../core/aasp_includes/pages/subpages');
             unset($pages[0], $pages[1]);
 
-            if (!file_exists('../aasp_includes/pages/subpages/' . $page . '-' . $subpage . '.php'))
+            if (!file_exists('../core/aasp_includes/pages/subpages/' . $page . '-' . $subpage . '.php'))
             {
-                include('../aasp_includes/pages/404.php');
+                include('../core/aasp_includes/pages/404.php');
             }
             elseif (in_array($page . '-' . $subpage . '.php', $pages))
             {
-                include('../aasp_includes/pages/subpages/' . $page . '-' . $subpage . '.php');
+                include('../core/aasp_includes/pages/subpages/' . $page . '-' . $subpage . '.php');
             }
             else
             {
-                include('../aasp_includes/pages/404.php');
+                include('../core/aasp_includes/pages/404.php');
             }
         }
 
@@ -726,8 +747,8 @@
             $conn = $GameServer->connect();
 
             $GameServer->selectDB('webdb', $conn);
-            $path = mysqli_real_escape_string($conn, $path);
-            $url  = mysqli_real_escape_string($conn, $url);
+            $path = $conn->escape_string($path);
+            $url  = $conn->escape_string($url);
 
             if (empty($path) || empty($url))
             {
@@ -744,16 +765,16 @@
                         ($upload["type"] == "image/pjpeg") || 
                         ($upload["type"] == "image/png"))
                     {
-                        if (file_exists("../styles/global/slideshow/images/". $upload["name"]))
+                        if (file_exists("../core/styles/global/slideshow/images/". $upload["name"]))
                         {
-                            unlink("../styles/global/slideshow/images/". $upload["name"]);
-                            move_uploaded_file($upload["tmp_name"], "../styles/global/slideshow/images/". $upload["name"]);
-                            $path = "../styles/global/slideshow/images/". $upload["name"];
+                            unlink("../core/styles/global/slideshow/images/". $upload["name"]);
+                            move_uploaded_file($upload["tmp_name"], "../core/styles/global/slideshow/images/". $upload["name"]);
+                            $path = "../core/styles/global/slideshow/images/". $upload["name"];
                         }
                         else
                         {
-                            move_uploaded_file($upload["tmp_name"], "../styles/global/slideshow/images/". $upload["name"]);
-                            $path = "styles/global/slideshow/images/". $upload["name"];
+                            move_uploaded_file($upload["tmp_name"], "../core/styles/global/slideshow/images/". $upload["name"]);
+                            $path = "core/styles/global/slideshow/images/". $upload["name"];
                         }
                     }
                     else
@@ -769,7 +790,7 @@
 
             if (!$abort)
             {
-                mysqli_query($conn, "INSERT INTO slider_images (`path`, `link`) VALUES('". $path ."', '". $url ."');");
+                $conn->query("INSERT INTO slider_images (`path`, `link`) VALUES('". $path ."', '". $url ."');");
             }
         }
     }
