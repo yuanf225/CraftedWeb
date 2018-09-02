@@ -52,9 +52,3 @@
     <br/>
     <input type="submit" value="Apply all database updates" onclick="step4()">
 </p>
-
-<?php 
-
-    print_r($_SESSION);
-
-    ?>

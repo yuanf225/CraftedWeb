@@ -87,7 +87,7 @@
                             $chk = $conn->query("SELECT COUNT(*) FROM disabled_plugins WHERE foldername='". $conn->escape_string($folderName) ."';");
                             if ($chk->field_seek(0) == 0 && file_exists('plugins/'. $folderName .'/'. $type .'/'))
                             {
-                                $folder = scandir('plugins/'. $folderName .'/'. $type .'/');
+                                $folder = scandir('core/plugins/'. $folderName .'/'. $type .'/');
 
                                 foreach ($folder as $fileName)
                                 {

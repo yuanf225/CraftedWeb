@@ -151,7 +151,7 @@
                 $result = $conn->query("SELECT `path`, `link` FROM slider_images ORDER BY position ASC;");
                 while ($row = $result->fetch_assoc())
                 {
-                    echo $outPutPT = '<a href="'. $row['link'] .'"><img border="none" src="core/'. $row['path'] .'" alt="" class="slideshow_image"></a>';
+                    echo $outPutPT = '<a href="'. htmlspecialchars($row['link']) .'"><img border="none" src="core/'. htmlspecialchars($row['path']) .'" alt="" class="slideshow_image"></a>';
                     $output   .= $outPutPT;
                 }
                 $Cache->buildCache('slideshow', $output);
@@ -169,7 +169,7 @@
 
             while ($row = $result->fetch_assoc())
             {
-                echo '<a href="#" rel="' . $x . '">' . $x . '</a>';
+                echo '<a href="#" rel="'. htmlspecialchars($x) .'">'. htmlspecialchars($x) .'</a>';
                 $x++;
             }
             

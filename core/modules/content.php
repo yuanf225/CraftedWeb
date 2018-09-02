@@ -62,7 +62,7 @@
         }
         else
         {
-            include('core/ pages/404.php');
+            include('core/pages/404.php');
         }
     }
 ?>
