@@ -39,5 +39,5 @@
 
     $conn = $GameServer->connect();
 
-    if (isset($_SESSION['cw_staff']) && !isset($_SESSION['cw_staff_id']) && $_GET['p'] != 'notice')
-        header("Location: ?p=notice&e=It seems like a session was not created! You were logged out to prevent any threat against the site.");
+    if (isset($_SESSION['cw_staff']) && !isset($_SESSION['cw_staff_id']) && $_GET['page'] != 'notice')
+        header("Location: ?page=notice&error=It seems like a session was not created! You were logged out to prevent any threat against the site.");

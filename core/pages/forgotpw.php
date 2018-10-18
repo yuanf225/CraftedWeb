@@ -49,7 +49,7 @@
 
                 $Account->changePassword($account_name, $newPass);
 
-                $ignoreForgotForm = true;
+                $ignoreForgotForm = TRUE;
             }
         }
     }
@@ -58,7 +58,7 @@
         ?> 
         To reset your password, please type your username & the Email address you registered with. An email will be sent to you, containing a link to reset your password. <br/><br/>
 
-        <form action="?p=forgotpw" method="post">
+        <form action="?page=forgotpw" method="post">
             <table width="80%">
                 <tr>
                     <td align="right">Username:</td> 

@@ -25,7 +25,7 @@
 
         public static function globalInit()
         {
-            if ($GLOBALS['enablePlugins'] == true)
+            if ($GLOBALS['enablePlugins'] == TRUE)
             {
                 if (!isset($_SESSION['loaded_plugins']))
                 {
@@ -68,7 +68,7 @@
 
         public static function init($type)
         {
-            if ($GLOBALS['enablePlugins'] == true)
+            if ($GLOBALS['enablePlugins'] == TRUE)
             {
                 if ($_SESSION['loaded_plugins'] != NULL)
                 {
@@ -107,7 +107,7 @@
 
         public static function load($type)
         {
-            if ($GLOBALS['enablePlugins'] == true)
+            if ($GLOBALS['enablePlugins'] == TRUE)
             {
                 ##########################
                 if ($type == "pages")
@@ -118,7 +118,7 @@
                         foreach ($_SESSION['loaded_plugins_' . $type] as $filename)
                         {
                             $name = basename(substr($filename, 0, -4));
-                            if ($name == $_GET['p'])
+                            if ($name == $_GET['page'])
                             {
                                 include("core/". $filename);
                                 $count = 1;

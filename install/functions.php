@@ -95,12 +95,12 @@
                 "logon_database"    => $_POST['logon_database'],
                 "logon_checked"     => $_POST['logon_checked'],
 
-                "characters_host"        => $_POST['characters_host'],
-                "characters_port"        => $_POST['characters_port'],
-                "characters_user"        => $_POST['characters_user'],
-                "characters_password"    => $_POST['characters_password'],
-                "characters_database"    => $_POST['characters_database'],
-                "characters_checked"     => $_POST['characters_checked'],
+                "characters_host" => $_POST['characters_host'],
+                "characters_port" => $_POST['characters_port'],
+                "characters_user" => $_POST['characters_user'],
+                "characters_password" => $_POST['characters_password'],
+                "characters_database" => $_POST['characters_database'],
+                "characters_checked" => $_POST['characters_checked'],
 
                 "world_host"        => $_POST['world_host'],
                 "world_port"        => $_POST['world_port'],
@@ -123,7 +123,7 @@
     		# $_POST has been sanatized.
 
             # Auth/Logon Server
-            if ($step['logon_checked'] == true)
+            if ($step['logon_checked'] == TRUE)
             {
                 $_SESSION['install']['logon']['database']['host']       = "127.0.0.1";
                 $_SESSION['install']['logon']['database']['port']       = "3306";
@@ -155,7 +155,7 @@
                 }
             }
 
-            if ($step['characters_checked'] == true)
+            if ($step['characters_checked'] == TRUE)
             {
                 $_SESSION['install']['characters']['database']['host']       = "127.0.0.1";
                 $_SESSION['install']['characters']['database']['port']       = "3306";
@@ -188,7 +188,7 @@
             }
 
             # World Server
-            if ($step['world_checked'] == true)
+            if ($step['world_checked'] == TRUE)
             {
                 $_SESSION['install']['world']['database']['host']       = "127.0.0.1";
                 $_SESSION['install']['world']['database']['port']       = "3306";
@@ -305,7 +305,7 @@
             $_SESSION['install']['web']['paypal']       = $step['paypal'];
             $_SESSION['install']['web']['email']        = $step['email'];
     	}
-        print true;
+        print TRUE;
         exit;
     }
     
@@ -317,25 +317,25 @@
 
         if (is_writable("../core/includes/configuration.php"))
         {
-            $config = true;
+            $config = TRUE;
         }
 
         if (is_readable("sql/CraftedWeb_Base.sql"))
         {
-            $sql = true;
+            $sql = TRUE;
         }
 
-        if ($sql == true && $config == true)
+        if ($sql == TRUE && $config == TRUE)
         {
             exit("Both Configuration file & SQL file are write & readable. <a href=\"?step=3\">Click here to continue</a>");
         }
 
-        if ($sql == true && $config == false)
+        if ($sql == TRUE && $config == false)
         {
             exit("SQL file <i>is</i> readable. Configuration file is <b>NOT</b> writeable. Please check the instructions above.");
         }
 
-        if ($sql == false && $config == true)
+        if ($sql == false && $config == TRUE)
         {
             exit("SQL file is <b>NOT</b> readable. Configuration file <i>is</i> writeable. Please check the instructions above.");
         }
@@ -451,7 +451,7 @@
 	## github.com/alexandre433 ##
 	## ------------------------##
 	## Please note that:       ##
-	## true = Enabled          ##
+	## TRUE = Enabled          ##
 	## false = Disabled        ##
 	#############################
 	
@@ -459,7 +459,7 @@
 	# General settings      
 	#*************************#
 	$useDebug = false; 
-	//If you are having problems with your website, set this to "true", if not, set to \"false\". 
+	//If you are having problems with your website, set this to "TRUE", if not, set to \"false\". 
 	//All errors will be logged and visible in "includes/error-log.php". If set to false, error log will be blank. 
 	//This will also enable/disable errors on the Admin- & Staff panel.
 	 
@@ -475,7 +475,7 @@
 	//Example: http://yourserver.com/
 	//If you have your website in a sub-directory, include that aswell. Ex: http://yourserver.com/cataclysm/
 	 
-	$showLoadTime = true; 
+	$showLoadTime = TRUE; 
 	//Shows the page load time in the footer.
 	 
 	$footer_text = "Copyright &copy; '. $_SESSION['install']['web']['title'] .' ".date("Y")."<br/>
@@ -493,8 +493,8 @@
 	// 4 = Mists Of Pandaria
 	// 5 = Legion
 
-	$adminPanel_enable = true; //Enable or disable the Administrator Panel. Default: true
-	$staffPanel_enable = true; //Enable or disable the Staff Panel. Default: true
+	$adminPanel_enable = TRUE; //Enable or disable the Administrator Panel. Default: TRUE
+	$staffPanel_enable = TRUE; //Enable or disable the Staff Panel. Default: TRUE
 	 
 	$adminPanel_minlvl = 4; //Minimum gm level of which accounts are able to log in to the Admin Panel. Default: 4
 	$staffPanel_minlvl = 3; //Minimum gm level of which accounts are able to log in to the Staff Panel. Default: 3
@@ -503,14 +503,14 @@
 	$staffPanel_permissions[\'News\'] 					= false;
 	$staffPanel_permissions[\'Shop\'] 					= false;
 	$staffPanel_permissions[\'Donations\'] 				= false;
-	$staffPanel_permissions[\'Logs\'] 					= true;
+	$staffPanel_permissions[\'Logs\'] 					= TRUE;
 	$staffPanel_permissions[\'Interface\'] 				= false;
-	$staffPanel_permissions[\'Users\'] 					= true;
+	$staffPanel_permissions[\'Users\'] 					= TRUE;
 	$staffPanel_permissions[\'Realms\'] 				    = false;
 	$staffPanel_permissions[\'Services\'] 				= false;
-	$staffPanel_permissions[\'Tools->Tickets\'] 		    = true;
+	$staffPanel_permissions[\'Tools->Tickets\'] 		    = TRUE;
 	$staffPanel_permissions[\'Tools->Account Access\'] 	= false;
-	$staffPanel_permissions[\'editNewsComments\'] 		= true;
+	$staffPanel_permissions[\'editNewsComments\'] 		= TRUE;
 	$staffPanel_permissions[\'editShopItems\'] 			= false;
 	 
 	//Pages 				= Disable/Enable pages & Create custom pages.
@@ -527,19 +527,19 @@
 	//editNewsComments 		= Edit/Remove news comments.
 	//editShopItems 		= Edit/Remove shop items.
 	 
-	$enablePlugins = true; //Enable or disable the use of plugins. Plugins May slow down your site a bit.
+	$enablePlugins = TRUE; //Enable or disable the use of plugins. Plugins May slow down your site a bit.
 	 
 	#*************************#
 	# 	Slideshow settings 
 	#*************************#
-	$enableSlideShow = true; //Enable or Disable the slideshow. This will only be shown at the home page. 
+	$enableSlideShow = TRUE; //Enable or Disable the slideshow. This will only be shown at the home page. 
 	
 	#*************************#
 	# 	Website compression settings    
 	#*************************#
 	
-	$compression[\'gzip\'] 				= true; //This is very hard to explain, but it may boost your website speed drastically.
-	$compression[\'sanitize_output\'] 	= true; //This will strip all the whitespaces on the HTML code written. This should increase the website speed slightly. 
+	$compression[\'gzip\'] 				= TRUE; //This is very hard to explain, but it may boost your website speed drastically.
+	$compression[\'sanitize_output\'] 	= TRUE; //This will strip all the whitespaces on the HTML code written. This should increase the website speed slightly. 
 	//And "copycats" will have a hard time stealing your HTML code :>
 	
 	$useCache = false; //Enable / Disable the use of caching. It\'s in early developement and is currently only applied to very few things in the core at the moment.
@@ -549,20 +549,20 @@
 	#*************************#
 	# News settings   
 	#*************************#
-	$news[\'enable\'] 				= true;  // Enable/Disable the use of the news system at the homepage. 
+	$news[\'enable\'] 				= TRUE;  // Enable/Disable the use of the news system at the homepage. 
 	$news[\'maxShown\'] 			= 5; 	 // Maximum amount of news posts that will be shown on the home page.
 							 				 // People can still view all posts by clicking the \"All news\" button.
-	$news[\'enableComments\'] 		= true;  // Make people able to comment on your news posts.
+	$news[\'enableComments\'] 		= TRUE;  // Make people able to comment on your news posts.
 	$news[\'limitHomeCharacters\'] 	= false; // This will limit the characters shown in the news post. People will have to click the \"Read more...\" button
 											 //to read the whole news post. 
 	
 	
 	#***** Server status ******#
-	$serverStatus[\'enable\']            = true;  //This will enable/disable the server status box.
+	$serverStatus[\'enable\']            = TRUE;  //This will enable/disable the server status box.
 	$serverStatus[\'nextArenaFlush\']    = false; //This will display the next arena flush for your realm(s).
-	$serverStatus[\'uptime\']	         = true;  //This will display the uptime of your realm(s).
-	$serverStatus[\'playersOnline\']     = true;  //This will show current players online
-	$serverStatus[\'factionBar\']        = true;  //This will show the players online faction bar.
+	$serverStatus[\'uptime\']	         = TRUE;  //This will display the uptime of your realm(s).
+	$serverStatus[\'playersOnline\']     = TRUE;  //This will show current players online
+	$serverStatus[\'factionBar\']        = TRUE;  //This will show the players online faction bar.
 	
 	
 	#*************************#
@@ -631,7 +631,7 @@
 	$registration[\'passMaxLength\'] = 255;
 	$registration[\'passMinLength\'] = 5;
 	$registration[\'validateEmail\'] = false;
-	$registration[\'captcha\']       = true;
+	$registration[\'captcha\']       = TRUE;
 	
 	//userMaxLength = Maximum length of usernames
 	//userMinLength = Minimum length of usernames
@@ -659,8 +659,8 @@
 	$donation[\'paypal_email\']      = "'. $_SESSION['install']['web']['paypal'] .'";
 	$donation[\'coins_name\']        = "Donations Coins";
 	$donation[\'currency\']          = "EUR";
-	$donation[\'emailResponse\']     = true;
-	$donation[\'sendResponseCopy\']  = true;
+	$donation[\'emailResponse\']     = TRUE;
+	$donation[\'sendResponseCopy\']  = TRUE;
 	$donation[\'copyTo\']            = "'. $_SESSION['install']['web']['email'] .'";
 	$donation[\'responseSubject\']   = "Thanks for your support!";
 	$donation[\'donationType\']      = 2;
@@ -669,7 +669,7 @@
 	// coins_name 		= The name of the donation coins that the user will buy.
 	// currency 		= The name of the currency that you want the user to pay with. Default: EUR
 	// emailResponse 	= Enabling this will make the donator to recieve a validation email after their donation, containing the donation information. 
-	// sendResponseCopy = Set this to "true" if you wish to recieve a copy of the email response mentioned above. 
+	// sendResponseCopy = Set this to "TRUE" if you wish to recieve a copy of the email response mentioned above. 
 	// copyTo 			= Enable the sendResponseCopy to activate this function. Enter the email address of wich the payment copy will be sent to. 
 	// responseSubject 	= Enable the sendResponseCopy to activate this function. The subject of the email response sent to the donator.
 	// donationType 	= How the user will donate. 1 = They can enter how many coins they wish to buy, and the value can be increased with the multiplier.
@@ -690,18 +690,18 @@
 	#*************************#
 	# Vote & Donation shop settings
 	#*************************#
-	$voteShop[\'enableShop\']            = true;
-	$voteShop[\'enableAdvancedSearch\']  = true;
+	$voteShop[\'enableShop\']            = TRUE;
+	$voteShop[\'enableAdvancedSearch\']  = TRUE;
 	$voteShop[\'shopType\']              = 1;
 	
-	// enableShop 				= Enables/disables the use of the Vote Shop. "true" = enable, "false" = disable.
-	// enableAdvancedSearch 	= Enabled/disables the use of the advanced search feature. "true" = enable, "false" = disable.
+	// enableShop 				= Enables/disables the use of the Vote Shop. "TRUE" = enable, "false" = disable.
+	// enableAdvancedSearch 	= Enabled/disables the use of the advanced search feature. "TRUE" = enable, "false" = disable.
 	// shopType 				= The type of shop you wish to use. 1 = "Search". 2 = List all items available.
 	
 	
 	#*************************#
-	$donateShop[\'enableShop\']              = true;
-	$donateShop[\'enableAdvancedSearch\']    = true;
+	$donateShop[\'enableShop\']              = TRUE;
+	$donateShop[\'enableAdvancedSearch\']    = TRUE;
 	$donateShop[\'shopType\']	               = 1;
 	
 	// Explanations can be found above.
@@ -712,7 +712,7 @@
 	$social[\'enableFacebookModule\']    = false;
 	$social[\'facebookGroupURL\']        = "http://www.facebook.com/YourServer";
 	
-	// enableFacebookModule = This will create a Facebook box to the left, below the server status. "true" = enable, "false" = disable.
+	// enableFacebookModule = This will create a Facebook box to the left, below the server status. "TRUE" = enable, "false" = disable.
 	// facebookGroupURL 	= The full URL to your facebook group.
 	// NOTE! This feature might be a little buggy due to the width of some themes. I wish you good luck though.
 	

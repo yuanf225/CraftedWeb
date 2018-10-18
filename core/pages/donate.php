@@ -78,7 +78,7 @@ Enter your desired donation value, and then click the donation button.<br/><hr/>
         </tr>
         <?php
             include("documents/refundpolicy.php");
-            if ($rp_enable == true)
+            if ($rp_enable == TRUE)
             {
                 ?>
                 <tr>

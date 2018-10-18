@@ -20,22 +20,24 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    require('core/includes/misc/headers.php'); //Load sessions, erorr reporting & ob.
+    require('core/includes/misc/headers.php'); //Load sessions, error reporting & ob.
 
     if (file_exists("install/index.php"))
     {
         header("Location: install/index.php");
+        exit;
     }
 
     define('INIT_SITE', TRUE);
 
     require('core/includes/configuration.php'); //Load configuration file
 
-    if (isset($GLOBALS['not_installed']) && $GLOBALS['not_installed'] == true)
+    if (isset($GLOBALS['not_installed']) && $GLOBALS['not_installed'] == TRUE)
     {
         if (file_exists('install/index.php'))
         {
             header("Location: install/index.php");
+            exit;
         }
         else
         {
@@ -78,7 +80,7 @@
     $Plugins->init("pages");
 
 //Load configs.
-    if ($GLOBALS['enablePlugins'] == true)
+    if ($GLOBALS['enablePlugins'] == TRUE)
     {
         if ($_SESSION['loaded_plugins'] != NULL)
         {
@@ -96,10 +98,11 @@
     }
 
     $Account->getRemember(); //Remember thingy.
-//This is to prevent the error "Undefined index: p"
-    if (!isset($_GET['p']))
+    
+    //This is to prevent the error "Undefined index: p"
+    if (!isset($_GET['page']))
     {
-        $_GET['p'] = 'home';
+        $_GET['page'] = 'home';
     }
 
 ###VOTING SYSTEM####
@@ -107,7 +110,7 @@
     {
         if ($Website->checkIfVoted($conn->escape_string($_SESSION['votingUrlID']), $GLOBALS['connection']['webdb']) == TRUE)
         {
-            die(htmlentities("?p=vote"));
+            die(htmlentities("?page=vote"));
         }
 
         $acct_id = $Account->getAccountID($_SESSION['cw_user']);
@@ -134,7 +137,7 @@
 
         unset($_SESSION['votingUrlID']);
 
-        header("Location: ?p=vote");
+        header("Location: ?page=vote");
     }
 
 ###SESSION SECURITY###
@@ -146,7 +149,7 @@
     {
         if ($_SESSION['last_ip'] != $_SERVER['REMOTE_ADDR'])
         {
-            header("Location: ?p=logout");
+            header("Location: ?page=logout");
         }
         else
         {

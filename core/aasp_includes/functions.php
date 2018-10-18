@@ -106,7 +106,7 @@
             return ceil($uptime) ." ". $string;
         }
         
-        public function getServerStatus($realmId, $showText = true)
+        public function getServerStatus($realmId, $showText = TRUE)
         {
             $conn = $this->connect();
             $this->selectDB('webdb', $conn);
@@ -136,7 +136,7 @@
                 }
                 else
                 {
-                    return true;
+                    return TRUE;
                 }
             }
         }
@@ -707,9 +707,9 @@
         {
             if (isset($_SESSION['cw_staff']) && !isset($_SESSION['cw_admin']))
             {
-                if ($GLOBALS['staffPanel_permissions'][$page] != true)
+                if ($GLOBALS['staffPanel_permissions'][$page] != TRUE)
                 {
-                    header("Location: ?p=notice&e=<h2>Not authorized!</h2>
+                    header("Location: ?page=notice&error=<h2>Not authorized!</h2>
                     You are not allowed to view this page!");
                 }
             }
@@ -717,7 +717,7 @@
 
         public function outputSubPage($panel = null)
         {
-            $page    = $_GET['p'];
+            $page    = $_GET['page'];
             $subpage = $_GET['s'];
             $pages   = scandir('../core/aasp_includes/pages/subpages');
             unset($pages[0], $pages[1]);
@@ -738,7 +738,7 @@
 
         public function titleLink()
         {
-            return "<a href='?p=". htmlentities($_GET['p']) ."' title='Back to ". htmlentities(ucfirst($_GET['p'])) ."'>". htmlentities(ucfirst($_GET['p'])) ."</a>";
+            return "<a href='?page=". htmlentities($_GET['page']) ."' title='Back to ". htmlentities(ucfirst($_GET['page'])) ."'>". htmlentities(ucfirst($_GET['page'])) ."</a>";
         }
 
         public function addSlideImage($upload, $path, $url)
@@ -756,7 +756,7 @@
                 if ($upload['error'] > 0)
                 {
                     echo "<span class='red_text'><b>Error:</b> File uploading was not successfull!</span>";
-                    $abort = true;
+                    $abort = TRUE;
                 }
                 else
                 {
@@ -779,7 +779,7 @@
                     }
                     else
                     {
-                        $abort = true;
+                        $abort = TRUE;
                     }
                 }
             }
@@ -939,7 +939,7 @@
 
     function activeMenu($p)
     {
-        if (isset($_GET['p']) && $_GET['p'] == $p)
+        if (isset($_GET['page']) && $_GET['page'] == $p)
             echo htmlentities("style='display:block;'");
     }
 

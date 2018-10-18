@@ -33,16 +33,16 @@
 
             while ($page_title = current($GLOBALS['core_pages']))
             {
-                if ($page_title == $_GET['p'] .'.php')
+                if ($page_title == $_GET['page'] .'.php')
                 {
                     echo key($GLOBALS['core_pages']);
-                    $foundPT = true;
+                    $foundPT = TRUE;
                 }
                 next($GLOBALS['core_pages']);
             }
             if (!isset($foundPT))
             {
-                echo htmlentities(ucfirst($_GET['p']));
+                echo htmlentities(ucfirst($_GET['page']));
             }
         ?>
     </title>

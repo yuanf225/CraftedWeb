@@ -33,7 +33,7 @@
                 if (substr($value, -3, 3) == 'sql')
                 {
                     echo '<a href="#">' . $value . '</a><br/>';
-                    $found = true;
+                    $found = TRUE;
                 }
             }
         }

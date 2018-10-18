@@ -68,38 +68,23 @@ class Connect
         switch ($db)
         {
             default:
-                if($conn->set_charset("UTF8"))
-                {
-                    $conn->select_db($db);
-                }
+                $conn->select_db($db);
                 break;
 
-            case "logondb":
-                if($conn->set_charset("UTF8")) 
-                {
-                    $conn->select_db($GLOBALS['connection']['logon']['database']);
-                }
+            case "logondb": 
+                $conn->select_db($GLOBALS['connection']['logon']['database']);
                 break;
 
             case "webdb":
-                if($conn->set_charset("UTF8")) 
-                {
-                    $conn->select_db($GLOBALS['connection']['web']['database']);
-                }
+                $conn->select_db($GLOBALS['connection']['web']['database']);
                 break;
 
             case "worlddb":
-                if($conn->set_charset("UTF8")) 
-                {
-                    $conn->select_db($GLOBALS['connection']['world']['database']);
-                }
+                $conn->select_db($GLOBALS['connection']['world']['database']);
                 break;
 
             case "chardb":
-                if($conn->set_charset("UTF8")) 
-                {
-                    $conn->select_db($GLOBALS['realms'][$realmid]['char']['database']);
-                }
+                $conn->select_db($GLOBALS['realms'][$realmid]['chardb']);
                 break;
         }
         return TRUE;

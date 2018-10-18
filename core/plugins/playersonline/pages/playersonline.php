@@ -19,9 +19,9 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
     global $Connect, $conn;
-    if ($GLOBALS['playersOnline']['enablePage'] != true)
+    if ($GLOBALS['playersOnline']['enablePage'] != TRUE)
     {
-        header("Location: ?p=account");
+        header("Location: ?page=account");
     }
     $Connect->selectDB('webdb', $conn);
     $result    = $conn->query("SELECT id,name FROM realms WHERE id='" . $GLOBALS['playersOnline']['realm_id'] . "'");

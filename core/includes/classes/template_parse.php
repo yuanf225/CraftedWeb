@@ -70,7 +70,7 @@ class Page
 
   function loadCustoms()
   {
-    if ($GLOBALS['enablePlugins'] == true)
+    if ($GLOBALS['enablePlugins'] == TRUE)
     {
       if (isset($_SESSION['loaded_plugins_modules']))
       {

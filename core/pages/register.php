@@ -77,7 +77,7 @@ It's free, join us today! <hr/>
                    id="register"/> 
             <?php
                 include("documents/termsofservice.php");
-                if ($tos_enable == true)
+                if ($tos_enable == TRUE)
                 {
                     ?>
                     <br/>By registering, you accept our <a href="#" onclick="viewTos()">Terms of Service</a>

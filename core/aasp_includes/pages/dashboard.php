@@ -78,6 +78,6 @@
                     </tr>
           <?php } ?>
             </table><br/>
-            <a href="?p=logs&s=admin" title="Get more logs">Older Logs...</a>
+            <a href="?page=logs&selected=admin" title="Get more logs">Older Logs...</a>
     <?php } ?>
 </div>

@@ -68,23 +68,23 @@
         if ($page > 1)
         {
             $prev = $page - 1;
-            echo "<a href='?p=logs&s=admin&page=". $prev ."' title='Previous'>Previous</a> &nbsp;";
+            echo "<a href='?page=logs&selected=admin&log_page=". $prev ."' title='Previous'>Previous</a> &nbsp;";
         }
         for ($x = 1; $x <= $pages; $x++)
         {
             if ($page == $x)
             {
-                echo "<a href='?p=logs&s=admin&page=". $x ."' title='Page ". $x ."'><b>". $x ."</b></a> ";
+                echo "<a href='?page=logs&selected=admin&log_page=". $x ."' title='Page ". $x ."'><b>". $x ."</b></a> ";
             }
             else
             {
-                echo "<a href='?p=logs&s=admin&page=". $x ."' title='Page ". $x ."'>". $x ."</a> ";
+                echo "<a href='?page=logs&selected=admin&log_page=". $x ."' title='Page ". $x ."'>". $x ."</a> ";
             }
         }
 
         if ($page < $x - 1)
         {
             $next = $page + 1;
-            echo "&nbsp; <a href='?p=logs&s=admin&page=". $next ."' title='Next'>Next</a> &nbsp; &nbsp;";
+            echo "&nbsp; <a href='?page=logs&selected=admin&log_page=". $next ."' title='Next'>Next</a> &nbsp; &nbsp;";
         }
     }

@@ -115,7 +115,7 @@
 
             $GameServer->logThis("Updated realm information for " . $name);
 
-            $conn->query("UPDATE realms SET id=". $new_id .", name='". $name ."', host='". $host ."', port='". $port ."', char_db='". $chardb ."' 
+            $conn->query("UPDATE realms SET id=". $new_id .", name='". $name ."', host='". $host ."', port='". $port ."', char_database='". $chardb ."' 
                 WHERE id=". $id .";");
             return TRUE;
 
@@ -201,10 +201,10 @@
                 if ($get->data_seek(0) == 0 && $offline == "on")
                 {
                     echo '<tr>';
-                    echo '<td><a href="?p=tools&s=tickets&guid=' . $row[$ticketString] . '&db=' . $realm . '">' . $row[$ticketString] . '</td>';
-                    echo '<td><a href="?p=tools&s=tickets&guid=' . $row[$ticketString] . '&db=' . $realm . '">' . $row['name'] . '</td>';
-                    echo '<td><a href="?p=tools&s=tickets&guid=' . $row[$ticketString] . '&db=' . $realm . '">' . substr($row['message'], 0, 15) . '...</td>';
-                    echo '<td><a href="?p=tools&s=tickets&guid=' . $row[$ticketString] . '&db=' . $realm . '">' . date('Y-m-d H:i:s', $row['createtime']) . '</a></td>';
+                    echo '<td><a href="?page=tools&selected=tickets&guid=' . $row[$ticketString] . '&database=' . $realm . '">' . $row[$ticketString] . '</td>';
+                    echo '<td><a href="?page=tools&selected=tickets&guid=' . $row[$ticketString] . '&database=' . $realm . '">' . $row['name'] . '</td>';
+                    echo '<td><a href="?page=tools&selected=tickets&guid=' . $row[$ticketString] . '&database=' . $realm . '">' . substr($row['message'], 0, 15) . '...</td>';
+                    echo '<td><a href="?page=tools&selected=tickets&guid=' . $row[$ticketString] . '&database=' . $realm . '">' . date('Y-m-d H:i:s', $row['createtime']) . '</a></td>';
 
                     if ($row[$closedString] == 1)
                     {

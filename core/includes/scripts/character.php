@@ -298,7 +298,7 @@
                 echo $GLOBALS['service']['teleport']['price'] . " " . $GLOBALS['donation']['coins_name'] . " was taken from your account.";
             }
             $Account->logThis("Teleported " . $Character->getCharName($character, $realm_id) . " to " . $location, 'Teleport', $realm_id);
-            echo true;
+            echo TRUE;
         }
     }
 
@@ -309,7 +309,7 @@
         $serviceX = $conn->escape_string($_POST['service']);
 
 
-        if ($Character->isOnline($guid) == true)
+        if ($Character->isOnline($guid) == TRUE)
         {
             die('<b class="red_text">Please log out your character before proceeding.');
         }
@@ -384,6 +384,6 @@
 
         $Account->logThis("Performed a " . $info . " on " . $Character->getCharName($guid, $realm_id), $serviceX, $realm_id);
 
-        echo true;
+        echo TRUE;
     }
 ?>

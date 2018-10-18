@@ -4,7 +4,7 @@ $().ready(function()
     // Step One
     $('#checkbox_logon').click(function() 
     {
-        if (document.getElementById("checkbox_logon").checked == true) 
+        if (document.getElementById("checkbox_logon").checked == TRUE) 
         {
             $("#logon_host").removeAttr('disabled');
             $("#logon_port").removeAttr('disabled');
@@ -13,16 +13,16 @@ $().ready(function()
         }
         else if(document.getElementById("checkbox_logon").checked == false) 
         {
-            $("#logon_host").attr('disabled', true);
-            $("#logon_port").attr('disabled', true);
-            $("#logon_user").attr('disabled', true);
-            $("#logon_password").attr('disabled', true);
+            $("#logon_host").attr('disabled', TRUE);
+            $("#logon_port").attr('disabled', TRUE);
+            $("#logon_user").attr('disabled', TRUE);
+            $("#logon_password").attr('disabled', TRUE);
         }
     });
 
     $('#checkbox_world').click(function() 
     {
-        if (document.getElementById("checkbox_world").checked == true) 
+        if (document.getElementById("checkbox_world").checked == TRUE) 
         {
             $("#world_host").removeAttr('disabled');
             $("#world_port").removeAttr('disabled');
@@ -31,16 +31,16 @@ $().ready(function()
         }
         else if(document.getElementById("checkbox_world").checked == false) 
         {
-            $("#world_host").attr('disabled', true);
-            $("#world_port").attr('disabled', true);
-            $("#world_user").attr('disabled', true);
-            $("#world_password").attr('disabled', true);
+            $("#world_host").attr('disabled', TRUE);
+            $("#world_port").attr('disabled', TRUE);
+            $("#world_user").attr('disabled', TRUE);
+            $("#world_password").attr('disabled', TRUE);
         }
     });
 
     $('#checkbox_characters').click(function() 
     {
-        if (document.getElementById("checkbox_characters").checked == true) 
+        if (document.getElementById("checkbox_characters").checked == TRUE) 
         {
             $("#characters_host").removeAttr('disabled');
             $("#characters_port").removeAttr('disabled');
@@ -49,10 +49,10 @@ $().ready(function()
         }
         else if(document.getElementById("checkbox_characters").checked == false) 
         {
-            $("#characters_host").attr('disabled', true);
-            $("#characters_port").attr('disabled', true);
-            $("#characters_user").attr('disabled', true);
-            $("#characters_password").attr('disabled', true);
+            $("#characters_host").attr('disabled', TRUE);
+            $("#characters_port").attr('disabled', TRUE);
+            $("#characters_user").attr('disabled', TRUE);
+            $("#characters_password").attr('disabled', TRUE);
         }
     });
 
@@ -63,11 +63,11 @@ $().ready(function()
     var realmSp = document.getElementById("realm_soap");
     var realmRa = document.getElementById("realm_ra");
 
-    realmSp.disabled = true;
-    realmSp.hidden = true;
+    realmSp.disabled = TRUE;
+    realmSp.hidden = TRUE;
 
-    realmRa.disabled    = true;
-    realmRa.hidden      = true;
+    realmRa.disabled    = TRUE;
+    realmRa.hidden      = TRUE;
 
     $('#realm_sendtype').change(function(event)
     {
@@ -79,8 +79,8 @@ $().ready(function()
             if (realmSp.disabled == false && 
                 realmSp.hidden == false)
             {
-                realmSp.disabled = true;
-                realmSp.hidden = true;
+                realmSp.disabled = TRUE;
+                realmSp.hidden = TRUE;
             }
         }
         else if (realmSt.options[realmSt.selectedIndex].text == "SOAP")
@@ -91,17 +91,17 @@ $().ready(function()
             if (realmRa.disabled == false && 
                 realmRa.hidden == false)
             {
-                realmRa.disabled = true;
-                realmRa.hidden = true;
+                realmRa.disabled = TRUE;
+                realmRa.hidden = TRUE;
             }
         }
         else if (realmSt.options[realmSt.selectedIndex].value == "none")
         {
-            realmSp.disabled = true;
-            realmSp.hidden = true;
+            realmSp.disabled = TRUE;
+            realmSp.hidden = TRUE;
 
-            realmRa.disabled = true;
-            realmRa.hidden = true;
+            realmRa.disabled = TRUE;
+            realmRa.hidden = TRUE;
         }
     });
 });
@@ -193,11 +193,11 @@ function step1()
     },
     function (data)
     {
-        if (data != true)
+        if (data != TRUE)
         {
             $("#info").html("<p><code>"+ data +"</code></p>");
         }
-        else if (data == true)
+        else if (data == TRUE)
         {
             window.location = "?step=2";
         }
@@ -258,11 +258,11 @@ function step5()
     var ra_port     = document.getElementById("realm_ra_port");    
     var port        = null;
 
-    if (ra_port.disabled == true) 
+    if (ra_port.disabled == TRUE) 
     {
         port = soap_port.value;
     }
-    else if (soap_port.disabled == true) 
+    else if (soap_port.disabled == TRUE) 
     {
         port = ra_port.value;
     }
@@ -288,7 +288,7 @@ function step5()
         },
         function (data)
         {
-            if (data != true)
+            if (data != TRUE)
             {
                 $("#info").html("<p><code>"+ data +"</code></p>");
             }

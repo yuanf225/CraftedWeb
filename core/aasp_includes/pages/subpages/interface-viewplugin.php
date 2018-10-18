@@ -27,7 +27,7 @@
     include("../core/plugins/". $filename ."/info.php");
 ?>
 <div class="box_right_title">
-    <a href="?p=interface&s=plugins">Plugins</a> 
+    <a href="?page=interface&selected=plugins">Plugins</a> 
     &raquo; 
     <?php echo $title; ?>
 </div>

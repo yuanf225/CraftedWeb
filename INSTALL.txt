@@ -22,10 +22,10 @@ AUTOMATIC WAY TO INSTALL:
 4. When you are finished with the Installer. Rename or Delete(Most secure) the /install directory. When you do this, you website Will be enabled.
 5. Browse the page and check for any problems. 
 	If you encounter errors/problems.
-		5.1: Open up your configuration file and set 'useDebug' to true
+		5.1: Open up your configuration file and set 'useDebug' to TRUE
 		5.2: Browse your website again. The script Should exit the website if any errors are found. The error will be shown directly on to the site.
 		5.3: (Info)Errors should always be stored in your error.log file(Your CHMOD must be set to 777 on the error.log file). To view these errors. 
-		First off, Open up your configuration file and set 'useDebug' to true.
+		First off, Open up your configuration file and set 'useDebug' to TRUE.
 		In your browser, go into: '{YOUR WEBSITE URL}/includes/error-log.php'. If no errors are reported, you're good. Set the useDebug back to false. 
 		But if you still encounter problems with your site, but no errors are returned, ask for help at the forum.
 		If you do find errors, check the date on them, are they fresh? If yes, read the error, try to solve it on your own if you can. Otherwise, ask for help at 		the forum. 
@@ -43,10 +43,10 @@ If somehow, the automatic installation does not work. Try this one.
 7. Edit the configuration file to fit your needs.
 8. Browse the page and check for any problems. 
 	If you encounter errors/problems.
-		8.1: Open up your configuration file and set 'useDebug' to true
+		8.1: Open up your configuration file and set 'useDebug' to TRUE
 		8.2: Browse your website again. The script Should exit the website if any errors are found. The error will be shown directly on to the site.
 		8.3: (Info)Errors should always be stored in your error.log file(Your CHMOD must be set to 777 on the error.log file). To view these errors. 
-		First off, Open up your configuration file and set 'useDebug' to true.
+		First off, Open up your configuration file and set 'useDebug' to TRUE.
 		In your browser, go into: '{YOUR WEBSITE URL}/includes/error-log.php'. If no errors are reported, you're good. Set the useDebug back to false. 
 		But if you still encounter problems with your site, but no errors are returned, ask for help at the forum.
 		If you do find errors, check the date on them, are they fresh? If yes, read the error, try to solve it on your own if you can. Otherwise, ask for help at 					the forum. 

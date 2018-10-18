@@ -110,11 +110,11 @@
                 ?>
             </table>
             <?php
-            if ($GLOBALS['playersOnline']['enablePage'] == true)
+            if ($GLOBALS['playersOnline']['enablePage'] == TRUE)
             {
                 ?>
                 <hr/>
-                <a href="?p=playersonline">View more...</a>
+                <a href="?page=playersonline">View more...</a>
                 <?php
             }
         }

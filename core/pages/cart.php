@@ -27,11 +27,11 @@
     $Account->loadVP($_SESSION['cw_user']) . '<br/>
 ' . $GLOBALS['donation']['coins_name'] . ': '. $Account->loadDP($_SESSION['cw_user']) . '</span>';
 
-    if (isset($_GET['return']) && $_GET['return'] == "true")
+    if (isset($_GET['return']) && $_GET['return'] == "TRUE")
     {
         echo "<span class='accept'>The item/s was/were sent to the selected character!</span>";
     }
-    elseif (isset($_GET['return']) && $_GET['return'] != "true")
+    elseif (isset($_GET['return']) && $_GET['return'] != "TRUE")
     {
         echo "<span class='alert'>" . $_GET['return'] . "</span>";
     }
