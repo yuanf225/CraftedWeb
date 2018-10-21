@@ -20,9 +20,9 @@
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
     define('INIT_SITE', TRUE);
-    include('../../includes/misc/headers.php');
-    include('../../includes/configuration.php');
-    include('../functions.php');
+    include "../../includes/misc/headers.php";
+    include "../../includes/configuration.php";
+    include "../functions.php";
 
     global $GameServer, $GameAccount;
     $conn = $GameServer->connect();
@@ -145,7 +145,7 @@
         case "getPresetRealms":
         {
             echo '<h3>Select a realm</h3><hr/>';
-            $GameServer->selectDB('webdb', $conn);
+            $GameServer->selectDB("webdb", $conn);
 
             $result = $conn->query("SELECT id, name, description FROM realms ORDER BY id ASC;");
             while ($row = $result->fetch_assoc())

@@ -21,7 +21,7 @@
   � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
 
-require('../ext_scripts_class_loader.php');
+require "../ext_scripts_class_loader.php";
 
 if (isset($_POST['siteid']))
 {
@@ -38,7 +38,7 @@ if (isset($_POST['siteid']))
     die("?page=vote");
   }
 
-  $Connect->selectDB('webdb', $conn);
+  $Connect->selectDB("webdb", $conn);
   $check = $conn->query("SELECT COUNT(*) FROM votingsites WHERE id=". $siteid .";");
   if ($check->data_seek(0) == 0)
   {
@@ -71,7 +71,7 @@ if (isset($_POST['siteid']))
   }
   elseif ($GLOBALS['vote']['type'] == 'confirm')
   {
-    $Connect->selectDB('webdb', $conn);
+    $Connect->selectDB("webdb", $conn);
     $getSiteData = $conn->query("SELECT points, url FROM votingsites WHERE id=". $siteid .";");
     $row = $getSiteData->fetch_assoc();
 

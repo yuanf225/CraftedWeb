@@ -25,16 +25,15 @@
 ## ------------------------##
 #############################
 
-	require('../core/includes/misc/headers.php'); //Load headers
+	require "../core/includes/misc/headers.php"; //Load headers
 
 	define('INIT_SITE', TRUE);
-	include('../core/includes/configuration.php');
+	include "../core/includes/configuration.php";
 
-	if ($GLOBALS['adminPanel_enable'] == FALSE)
-		exit();
+	if ($GLOBALS['adminPanel_enable'] == FALSE) exit();
 
-	require('../core/includes/misc/compress.php'); //Load compression file
-	include('../core/aasp_includes/functions.php');
+	require "../core/includes/misc/compress.php"; //Load compression file
+	include "../core/aasp_includes/functions.php";
 
 	global $GameServer, $GameAccount, $GamePage;
 

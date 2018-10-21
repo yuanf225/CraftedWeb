@@ -34,7 +34,7 @@
             echo "<b class='red_text'>Link error, one or more required values are missing.</b>";
         else
         {
-            $Connect->selectDB('webdb', $conn);
+            $Connect->selectDB("webdb", $conn);
             $code    = $conn->escape_string($_GET['code']);
             $account = $conn->escape_string($_GET['account']);
             $result  = $conn->query("SELECT COUNT('id') FROM password_reset WHERE code='" . $code . "' AND account_id=". $account .";");

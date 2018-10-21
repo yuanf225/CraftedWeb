@@ -309,20 +309,20 @@
     date_default_timezone_set($GLOBALS['timezone']);
 
     //Set the error handling.
-    if (file_exists('includes/classes/error.php'))
-        require('includes/classes/error.php');
+    if ( file_exists('includes/classes/error.php') )
+        require "includes/classes/error.php";
 
-    elseif (file_exists('../classes/error.php'))
-        require('../classes/error.php');
+    elseif ( file_exists('../classes/error.php') )
+        require "../classes/error.php";
 
-    elseif (file_exists('../includes/classes/error.php'))
-        require('../includes/classes/error.php');
+    elseif ( file_exists('../includes/classes/error.php') )
+        require "../includes/classes/error.php";
 
-    elseif (file_exists('../../includes/classes/error.php'))
-        require('../../includes/classes/error.php');
+    elseif ( file_exists('../../includes/classes/error.php') )
+        require "../../includes/classes/error.php";
 
-    elseif (file_exists('../../../includes/classes/error.php'))
-        require('../../../includes/classes/error.php');
+    elseif ( file_exists('../../../includes/classes/error.php') )
+        require "../../../includes/classes/error.php";
 
     loadCustomErrors(); //Load custom errors
 ?>

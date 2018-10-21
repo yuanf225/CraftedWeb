@@ -21,7 +21,7 @@
 
   global $GamePage, $GameServer;
   $conn = $GameServer->connect();
-  $GameServer->selectDB('webdb', $conn);
+  $GameServer->selectDB("webdb", $conn);
 ?>
 <div class="box_right_title">Plugins</div>
 <table>
@@ -45,7 +45,7 @@
                 {
                     if (file_exists("../core/plugins/". $folderName ."/info.php"))
                     {
-                        include("../core/plugins/" . $folderName . "/info.php");
+                        include "../core/plugins/" . $folderName . "/info.php";
 
                         ?> <tr class="center" onclick="window.location = '?page=interface&selected=viewplugin&plugin=<?php echo $folderName; ?>'"> <?php
                             echo "<td><a href='?page=interface&selected=viewplugin&plugin=". $folderName ."'>". $title ."</a></td>";

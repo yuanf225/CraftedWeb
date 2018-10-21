@@ -42,10 +42,10 @@
                         {
                             if (!in_array($folderName, $bad))
                             {
-                                $Connect->selectDB('webdb', $conn);
+                                $Connect->selectDB("webdb", $conn);
                                 if (file_exists('core/plugins/'. $folderName .'/config.php'))
                                 {
-                                    include('core/plugins/'. $folderName .'/config.php');
+                                    include "core/plugins/". $folderName ."/config.php";
                                 }
 
                                 $loaded_plugins[] = $folderName;
@@ -120,13 +120,13 @@
                             $name = basename(substr($filename, 0, -4));
                             if ($name == $_GET['page'])
                             {
-                                include("core/". $filename);
+                                include "core/". $filename;
                                 $count = 1;
                             }
                         }
                     }
 
-                    if ($count == 0) include('core/pages/404.php');
+                    if ($count == 0) include "core/pages/404.php";
                 }
                 ###########################
                 elseif ($type == 'javascript')
@@ -157,7 +157,7 @@
                     {
                         foreach ($_SESSION['loaded_plugins_' . $type] as $filename)
                         {
-                            include("core/". $filename);
+                            include "core/". $filename;
                         }
                     }
                 }

@@ -19,11 +19,11 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
 
-    require("core/includes/classes/template_parse.php");
+    require "core/includes/classes/template_parse.php";
 
     global $Connect, $Plugins;
     $conn = $Connect->connectToDB();
-    $Connect->selectDB('webdb', $conn);
+    $Connect->selectDB("webdb", $conn);
 
     if ($getTemplate = $conn->query("SELECT `path` FROM template WHERE applied='1';"))
     {

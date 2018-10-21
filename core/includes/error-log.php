@@ -21,7 +21,7 @@
 ?>
 <?php
     define('INIT_SITE', TRUE);
-    require('configuration.php');
+    require "configuration.php";
 
     if ($GLOBALS['useDebug'] == false)
     {

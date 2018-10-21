@@ -356,23 +356,23 @@
 	//Set the error handling.
 	if(file_exists("core/includes/classes/error.php"))
 	{
-		require("core/includes/classes/error.php");
+		require "core/includes/classes/error.php";
 	}		
 	elseif(file_exists("../core/classes/error.php"))
 	{
-		require("../core/classes/error.php");
+		require "../core/classes/error.php";
 	}		
 	elseif(file_exists("../core/includes/classes/error.php"))
 	{
-		require("../core/includes/classes/error.php");
+		require "../core/includes/classes/error.php";
 	}	
 	elseif(file_exists("../../core/includes/classes/error.php"))
 	{
-		require("../../core/includes/classes/error.php");
+		require "../../core/includes/classes/error.php";
 	}	
 	elseif(file_exists("../../../core/includes/classes/error.php"))
 	{
-		require("../../../core/includes/classes/error.php");
+		require "../../../core/includes/classes/error.php";
 	}
 	
 	loadCustomErrors(); //Load custom errors

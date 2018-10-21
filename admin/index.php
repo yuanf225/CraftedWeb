@@ -19,7 +19,7 @@
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
     
-    require('includes/loader.php'); 
+    require "includes/loader.php"; 
     global $GameServer;
     $conn = $GameServer->connect();
 ?>
@@ -164,15 +164,15 @@
 
                             if (!file_exists('../core/aasp_includes/pages/' . $page . '.php'))
                             {
-                                include('../core/aasp_includes/pages/404.php');
+                                include "../core/aasp_includes/pages/404.php";
                             }
                             elseif (in_array($page . '.php', $pages))
                             {
-                                include('../core/aasp_includes/pages/' . $page . '.php');
+                                include "../core/aasp_includes/pages/" . $page . ".php";
                             }
                             else
                             {
-                                include('../core/aasp_includes/pages/404.php');
+                                include "../core/aasp_includes/pages/404.php";
                             }
                         }
                     ?>
@@ -258,7 +258,7 @@
                                         <td><?php echo $GLOBALS['connection']['world']['database']; ?></td>
                                         <td>
                                             <?php
-                                                $GameServer->selectDB('webdb', $conn);
+                                                $GameServer->selectDB("webdb", $conn);
                                                 $get = $conn->query("SELECT version FROM db_version;");
                                                 $row = $get->fetch_assoc();
                                                 if ($row['version'] == null || empty($row['version'])) $row['version'] = '1.0';
@@ -275,7 +275,7 @@
         </div>               
     </div> 
     <?php
-        include("../core/aasp_includes/javascript_loader.php");
+        include "../core/aasp_includes/javascript_loader.php";
         if (!isset($_SESSION['cw_admin']))
         { ?>
             <script type="text/javascript">

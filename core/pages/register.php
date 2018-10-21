@@ -76,7 +76,7 @@ It's free, join us today! <hr/>
     else echo 0; ?>)" 
                    id="register"/> 
             <?php
-                include("documents/termsofservice.php");
+                include "documents/termsofservice.php";
                 if ($tos_enable == TRUE)
                 {
                     ?>

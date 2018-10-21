@@ -22,7 +22,7 @@
 
     global $Connect, $Plugins;
     $conn = $Connect->connectToDB();
-    $Connect->selectDB('webdb', $conn);
+    $Connect->selectDB("webdb", $conn);
 
     $pages = scandir('core/pages');
     unset($pages[0], $pages[1]);
@@ -30,7 +30,7 @@
 
     if (!isset($page))
     {
-        include("core/pages/home.php");
+        include "core/pages/home.php";
     }
     elseif (isset($_SESSION['loaded_plugins_pages']) && $GLOBALS['enablePlugins'] == TRUE && !in_array($page . '.php', $pages))
     {
@@ -41,11 +41,11 @@
         $result = $conn->query("SELECT COUNT(filename) AS filename FROM disabled_pages WHERE filename='" . $page . "';");
         if ($result->data_seek(0) == 1)
         {
-            include("core/pages/". $page .".php");
+            include "core/pages/". $page .".php";
         }
         else
         {
-            include("core/pages/404.php");
+            include "core/pages/404.php";
         }
     }
     else
@@ -62,7 +62,7 @@
         }
         else
         {
-            include('core/pages/404.php');
+            include "core/pages/404.php";
         }
     }
 ?>

@@ -21,10 +21,10 @@
 
     global $GameServer;
     $conn = $GameServer->connect();
-    $GameServer->selectDB('webdb', $conn);
+    $GameServer->selectDB("webdb", $conn);
 
     $filename = $_GET['plugin'];
-    include("../core/plugins/". $filename ."/info.php");
+    include "../core/plugins/". $filename ."/info.php";
 ?>
 <div class="box_right_title">
     <a href="?page=interface&selected=plugins">Plugins</a> 

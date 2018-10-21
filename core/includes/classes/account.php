@@ -80,7 +80,7 @@
                     $_SESSION['cw_user']    = ucfirst(strtolower($username));
                     $_SESSION['cw_user_id'] = $id;
 
-                    $Connect->selectDB('webdb', $conn);
+                    $Connect->selectDB("webdb", $conn);
 
                     $count = $conn->query("SELECT COUNT(*) FROM account_data WHERE id=". $id .";");
                     if ($count->data_seek(0) == 0)
@@ -105,7 +105,7 @@
             //Unused function
             $user_info = array();
             global $Connect, $conn;
-            $Connect->selectDB('logondb', $conn);
+            $Connect->selectDB("logondb", $conn);
 
             $account_info = $conn->query("SELECT id, username, email, joindate, locked, last_ip, expansion FROM account WHERE username='". $_SESSION['cw_user'] ."';");
             while ($row = $account_info->fetch_array())
@@ -206,7 +206,7 @@
             $raf             = $conn->escape_string($raf);
 
 
-            $Connect->selectDB('logondb', $conn);
+            $Connect->selectDB("logondb", $conn);
             //Check for existing user
             $result = $conn->query("SELECT COUNT(id) FROM account WHERE username='". $username ."';");
 
@@ -241,17 +241,17 @@
 
                 if ( empty($raf) ) $raf = 0;
 
-                $Connect->selectDB('logondb', $conn);
+                $Connect->selectDB("logondb", $conn);
                 $conn->query("INSERT INTO account (username, email, sha_pass_hash, joindate, expansion, recruiter) VALUES
                     ('". $username ."', '". $email ."', '". $password ."', '". date("Y-m-d H:i:s") ."', '". $GLOBALS['core_expansion'] ."', ". $raf .");");
 
                 $getID = $conn->query("SELECT id FROM account WHERE username='". $username ."';");
                 $row   = $getID->fetch_assoc();
 
-                $Connect->selectDB('webdb', $conn);
+                $Connect->selectDB("webdb", $conn);
                 $conn->query("INSERT INTO account_data (id) VALUES(". $row['id'] .");");
 
-                $Connect->selectDB('logondb', $conn);
+                $Connect->selectDB("logondb", $conn);
                 $result = $conn->query( "SELECT id FROM account WHERE username='". $username_clean ."';");
                 $id     = $result->fetch_assoc();
                 $id     = $id['id'];
@@ -282,9 +282,9 @@
 
                 if (file_exists($phpbb_root_path . 'common.' . $phpEx) && file_exists($phpbb_root_path . 'includes/functions_user.' . $phpEx))
                 {
-                    include($phpbb_root_path . 'common.' . $phpEx);
+                    include $phpbb_root_path ."common.". $phpEx);
 
-                    include($phpbb_root_path . 'includes/functions_user.' . $phpEx);
+                    include $phpbb_root_path ."includes/functions_user.". $phpEx);
 
                     $arrTime  = getdate();
                     $unixTime = strtotime($arrTime['year'] . "-" . $arrTime['mon'] . '-' . $arrTime['mday'] . " " . $arrTime['hours'] . ":" .
@@ -354,7 +354,7 @@
         {
             global $Connect;
             $conn = $Connect->connectToDB();
-            $Connect->selectDB('logondb', $conn);
+            $Connect->selectDB("logondb", $conn);
 
             $acct_id = $this->getAccountID($user);
 
@@ -393,7 +393,7 @@
 
             $user   = $conn->escape_string($user);
 
-            $Connect->selectDB('logondb', $conn);
+            $Connect->selectDB("logondb", $conn);
 
             $result = $conn->query("SELECT id FROM account WHERE username='". $user ."';");
             $row    = $result->fetch_assoc();
@@ -408,7 +408,7 @@
 
             $id = $conn->escape_string($id);
 
-            $Connect->selectDB('logondb', $conn);
+            $Connect->selectDB("logondb", $conn);
 
             $result = $conn->query("SELECT username FROM account WHERE id=". $id .";");
             $row    = $result->fetch_assoc();
@@ -442,7 +442,7 @@
             $accountName    = $conn->escape_string($account_name);
             $acct_id        = $this->getAccountID($accountName);
 
-            $Connect->selectDB('webdb', $conn);
+            $Connect->selectDB("webdb", $conn);
 
             $result = $conn->query("SELECT vp FROM account_data WHERE id=". $acct_id .";");
             if ($result->num_rows == 0)
@@ -465,7 +465,7 @@
             $accountName    = $conn->escape_string($account_name);
             $acct_id        = $this->getAccountID($accountName);
 
-            $Connect->selectDB('webdb', $conn);
+            $Connect->selectDB("webdb", $conn);
 
             $result  = $conn->query("SELECT dp FROM account_data WHERE id=". $acct_id .";");
             if ($result->num_rows == 0)
@@ -491,7 +491,7 @@
 
             $accountName = $conn->escape_string($account_name);
 
-            $Connect->selectDB('logondb', $conn);
+            $Connect->selectDB("logondb", $conn);
 
             $result       = $conn->query("SELECT email FROM account WHERE username='". $accountName ."';");
             $row          = $result->fetch_assoc();
@@ -510,7 +510,7 @@
 
             $accountName = $conn->escape_string($account_name);
 
-            $Connect->selectDB('logondb', $conn);
+            $Connect->selectDB("logondb", $conn);
 
             $result       = $conn->query("SELECT COUNT(online) FROM account WHERE username='" . $accountName . "' AND online=1;");
             if ($result->data_seek(0) == 0)
@@ -534,7 +534,7 @@
 
             $accountName = $conn->escape_string($account_name);
 
-            $Connect->selectDB('logondb', $conn);
+            $Connect->selectDB("logondb", $conn);
 
             $result       = $conn->query("SELECT joindate FROM account WHERE username='". $account_name ."';");
             $row          = $result->fetch_assoc();
@@ -550,7 +550,7 @@
         {
             global $Connect;
             $conn = $Connect->connectToDB();
-            $Connect->selectDB('logondb', $conn);
+            $Connect->selectDB("logondb", $conn);
 
             $accountName = $conn->escape_string($account_name);
 
@@ -573,7 +573,7 @@
 
             $acct_id = $this->getAccountID($accountName);
 
-            $Connect->selectDB('webdb', $conn);
+            $Connect->selectDB("webdb", $conn);
 
             $getRealms = $conn->query("SELECT id, name FROM realms;");
             while ($row = $getRealms->fetch_assoc())
@@ -612,7 +612,7 @@
                 global $Connect;
                 $conn = $Connect->connectToDB();
 
-                $Connect->selectDB('logondb', $conn);
+                $Connect->selectDB("logondb", $conn);
 
                 $username = $conn->escape_string(trim(strtoupper($_SESSION['cw_user'])));
                 $password = $conn->escape_string(trim(strtoupper($current_pass)));
@@ -696,7 +696,7 @@
                         //Lets check if the old password is correct!
                         $username = $conn->escape_string(strtoupper($_SESSION['cw_user']));
 
-                        $Connect->selectDB('logondb', $conn);
+                        $Connect->selectDB("logondb", $conn);
 
                         $getPass = $conn->query("SELECT `sha_pass_hash` FROM `account` WHERE `username`='". $username ."';");
 
@@ -740,7 +740,7 @@
 
             $pass_hash = sha1($username . ':' . $pass);
 
-            $Connect->selectDB('logondb', $conn);
+            $Connect->selectDB("logondb", $conn);
 
             $conn->query("UPDATE `account` SET `sha_pass_hash`='". $pass_hash ."' WHERE `username`='". $username ."';");
             $conn->query("UPDATE `account` SET `v`=0 AND `s`=0 WHERE username='". $username ."';");
@@ -762,7 +762,7 @@
             }
             else
             {
-                $Connect->selectDB('logondb', $conn);
+                $Connect->selectDB("logondb", $conn);
 
                 $result = $conn->query("SELECT COUNT('id') FROM account WHERE username='". $accountName ."' AND email='". $accountEmail ."';");
 
@@ -791,7 +791,7 @@
 
                     $account_id = $this->getAccountID($accountName);
 
-                    $Connect->selectDB('webdb', $conn);
+                    $Connect->selectDB("webdb", $conn);
 
                     $conn->query("DELETE FROM password_reset WHERE account_id=". $account_id .";");
                     $conn->query("INSERT INTO password_reset (code, account_id) VALUES ('". $code ."', ". $account_id .");");
@@ -811,7 +811,7 @@
 
                 $account_id = $this->getAccountID($accountName);
 
-                $Connect->selectDB('webdb', $conn);
+                $Connect->selectDB("webdb", $conn);
 
                 $result = $conn->query("SELECT COUNT(id) FROM account_data WHERE vp >= ". $points ." AND id=". $account_id .";");
 
@@ -835,7 +835,7 @@
 
                 $account_id = $this->getAccountID($accountName);
 
-                $Connect->selectDB('webdb', $conn);
+                $Connect->selectDB("webdb", $conn);
 
                 $result = $conn->query("SELECT COUNT('id') FROM account_data WHERE dp >=". $points ." AND id=". $account_id .";");
 
@@ -857,7 +857,7 @@
                 $points     = $conn->escape_string($points);
                 $accountId  = $conn->escape_string($account_id);
 
-                $Connect->selectDB('webdb', $conn);
+                $Connect->selectDB("webdb", $conn);
 
                 $conn->query("UPDATE account_data SET vp=vp - ". $points ." WHERE id=". $accountId .";");
             }
@@ -870,7 +870,7 @@
                 $points     = $conn->escape_string($points);
                 $accountId  = $conn->escape_string($account_id);
 
-                $Connect->selectDB('webdb', $conn);
+                $Connect->selectDB("webdb", $conn);
 
                 $conn->query("UPDATE account_data SET dp=dp - ". $points ." WHERE id=". $accountId .";");
             }
@@ -883,7 +883,7 @@
                 $accountId  = $conn->escape_string($account_id);
                 $points     = $conn->escape_string($points);
 
-                $Connect->selectDB('webdb', $conn);
+                $Connect->selectDB("webdb", $conn);
 
                 $conn->query("UPDATE account_data SET dp=dp + ". $points ." WHERE id=". $accountId .";");
             }
@@ -896,7 +896,7 @@
                 $accountId  = $conn->escape_string($account_id);
                 $points     = $conn->escape_string($points);
 
-                $Connect->selectDB('webdb', $conn);
+                $Connect->selectDB("webdb", $conn);
 
                 $conn->query("UPDATE account_data SET dp=dp + ". $points ." WHERE id=". $accountId .";");
             }
@@ -909,7 +909,7 @@
                 $charId  = $conn->escape_string($char_id);
                 $realmId = $conn->escape_string($realm_id);
 
-                $Connect->selectDB('webdb', $conn);
+                $Connect->selectDB("webdb", $conn);
                 $Connect->connectToRealmDB($realmId);
 
                 $result = $conn->query("SELECT account FROM characters WHERE guid=". $charId .";");
@@ -948,7 +948,7 @@
                 $service = $conn->escape_string($service);
                 $account = $conn->escape_string($_SESSION['cw_user_id']);
 
-                $Connect->selectDB('webdb', $conn);
+                $Connect->selectDB("webdb", $conn);
 
                 $conn->query("INSERT INTO user_log (`account`, `service`, `timestamp`, `ip`, `realmid`, `desc`) 
                     VALUES('". $account ."', '". $service ."', '". time() ."', '". $_SERVER['REMOTE_ADDR'] ."', '". $realmId ."', '". $desc ."');");

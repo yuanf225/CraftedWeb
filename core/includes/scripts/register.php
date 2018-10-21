@@ -21,7 +21,7 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
 
-    require('../ext_scripts_class_loader.php');
+    require "../ext_scripts_class_loader.php";
 
     global $Connect, $Account;
     $conn = $Connect->connectToDB();

@@ -22,7 +22,7 @@
 
     global $Connect;
     $conn = $Connect->connectToDB();
-    $Connect->selectDB('webdb', $conn);
+    $Connect->selectDB("webdb", $conn);
 
     if (!isset($_SESSION['cw_user']))
     {

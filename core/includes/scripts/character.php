@@ -20,7 +20,7 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
 
-    require('../ext_scripts_class_loader.php');
+    require "../ext_scripts_class_loader.php";
 
     global $Connect, $Server, $Character, $Account;
     $conn = $Connect->connectToDB();
@@ -355,19 +355,19 @@
                 break;
         }
 
-        $Connect->selectDB('webdb', $conn);
+        $Connect->selectDB("webdb", $conn);
         $getRA = $conn->query("SELECT sendType, host, ra_port, soap_port, rank_user, rank_pass FROM realms WHERE id=". $realm_id .";");
         $row   = $getRA->fetch_assoc();
 
         if ($row['sendType'] == 'ra')
         {
-            require('../misc/ra.php');
+            require "../misc/ra.php";
 
             sendRa("character " . $command . " " . $Character->getCharname($guid, $realm_id), $row['rank_user'], $row['rank_pass'], $row['host'], $row['ra_port']);
         }
         elseif ($row['sendType'] == "soap")
         {
-            require('../misc/soap.php');
+            require "../misc/soap.php";
 
             sendSoap("character " . $command . " " . $Character->getCharname($guid, $realm_id), $row['rank_user'], $row['rank_pass'], $row['host'], $row['soap_port']);
         }
