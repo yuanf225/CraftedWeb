@@ -39,21 +39,21 @@
           die("Please Enter Both Fields.");
         }
 
-        $username     = $conn->escape_string(strtoupper(trim($_POST['username'])));
-        $password     = $conn->escape_string(strtoupper(trim($_POST['password'])));
+        $username     = $Database->conn->escape_string(strtoupper(trim($_POST['username'])));
+        $password     = $Database->conn->escape_string(strtoupper(trim($_POST['password'])));
         $passwordHash = sha1("". $username .":". $password ."");
 
-        if($conn->select_db($GLOBALS['connection']['logon']['database']) == false)
+        if($Database->conn->select_db($GLOBALS['connection']['logon']['database']) == false)
         {
-          die("Database Error. (". $conn->error.")");
+          die("Database Error. (". $Database->conn->error.")");
         }
 
-        $result = $conn->query("SELECT COUNT(id) FROM account WHERE username='". $username ."' AND sha_pass_hash = '". $passwordHash ."';");
+        $result = $Database->select( COUNT(id) FROM account WHERE username='". $username ."' AND sha_pass_hash = '". $passwordHash ."';");
 
-        $getId    = $conn->query("SELECT id FROM account WHERE username='". $username ."';");
+        $getId    = $Database->select( id FROM account WHERE username='". $username ."';");
         $row      = $getId->fetch_assoc();
         $uid      = $row['id'];
-        $result   = $conn->query("SELECT gmlevel FROM account_access WHERE id=$uid AND gmlevel>=". $GLOBALS[$_POST['panel'] . 'Panel_minlvl'] .";");
+        $result   = $Database->select( gmlevel FROM account_access WHERE id=$uid AND gmlevel>=". $GLOBALS[$_POST['panel'] . 'Panel_minlvl'] .";");
 
         if ($result->num_rows == 0)
         {

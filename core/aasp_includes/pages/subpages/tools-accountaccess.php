@@ -41,7 +41,7 @@ All GM Accounts Are Listed Below.
         <th>Actions</th>
     </tr>
     <?php
-        $result = $conn->query("SELECT * FROM account_access;");
+        $result = $Database->select( * FROM account_access;");
         if ($result->num_rows == 0)
         {
             echo "<b>No GM Accounts Found!</b>";
@@ -63,7 +63,7 @@ All GM Accounts Are Listed Below.
                         }
                         else
                         {
-                            $getRealm = $conn->query("SELECT name FROM realmlist WHERE id=". $row['RealmID'] .";");
+                            $getRealm = $Database->select( name FROM realmlist WHERE id=". $row['RealmID'] .";");
                             #if ($getRealm->num_rows == 0) echo 'Unknown';
                             $rows     = $getRealm->fetch_assoc();
                             echo $rows['name'];
@@ -72,7 +72,7 @@ All GM Accounts Are Listed Below.
                     </td>
                     <td>
                         <?php
-                        $getData = $conn->query("SELECT last_login, online FROM account WHERE id=". $row['id'] .";");
+                        $getData = $Database->select( last_login, online FROM account WHERE id=". $row['id'] .";");
                         $rows    = $getData->fetch_assoc();
                         if ($rows['online'] == 0)
                         {

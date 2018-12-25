@@ -57,7 +57,7 @@
         <div class='account_func' onclick="acct_services('settings')">Settings</div>
 
         <div class='hidden_content' id='character'>
-            <?php if ($GLOBALS['service']['unstuck']['status'] == 'TRUE')
+            <?php if ($GLOBALS['service']['unstuck']['status'] == TRUE)
                 { ?>
                     <div class='service' onclick='redirect("?page=unstuck")'>
                         <div class='service_icon'><img src='core/styles/global/images/icons/character_migration.png'></div>

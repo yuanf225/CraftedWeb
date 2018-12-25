@@ -29,13 +29,13 @@
 
     $GameServer->selectDB("webdb", $conn);
 
-    $pages_query = $conn->query("SELECT COUNT(*) AS voteLogs FROM shoplog WHERE shop='vote';");
+    $pages_query = $Database->select( COUNT(*) AS voteLogs FROM shoplog WHERE shop='vote';");
     $pages       = ceil($pages_query->fetch_assoc()['voteLogs'] / $per_page);
 
-    $page  = ( isset($_GET['page']) ) ? $conn->escape_string($_GET['page']) : 1;
+    $page  = ( isset($_GET['page']) ) ? $Database->conn->escape_string($_GET['page']) : 1;
     $start = ($page - 1) * $per_page;
 
-    $result = $conn->query("SELECT * FROM shoplog WHERE shop='vote' ORDER BY id DESC LIMIT ". $start .", ". $per_page .";");
+    $result = $Database->select( * FROM shoplog WHERE shop='vote' ORDER BY id DESC LIMIT ". $start .", ". $per_page .";");
     if ($result->num_rows == 0)
     {
         echo "Seems Like The Vote Shop Log Was Empty!";

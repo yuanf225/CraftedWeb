@@ -108,7 +108,7 @@ Author: <?php echo $author; ?> - <?php echo $created; ?>
     }
     
 //Plugins
-    $chk = $conn->query("SELECT COUNT(*) AS disabledPlugins FROM disabled_plugins WHERE foldername='". $conn->escape_string($filename) ."';");
+    $chk = $Database->select( COUNT(*) AS disabledPlugins FROM disabled_plugins WHERE foldername='". $Database->conn->escape_string($filename) ."';");
     if ($chk->fetch_assoc()['disabledPlugins'] > 0)
     {
         echo "<input type=\"submit\" value=\"Enable Plugin\" onclick=\"enablePlugin('$filename')\">";

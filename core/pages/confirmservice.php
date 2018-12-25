@@ -19,12 +19,12 @@
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    global $Account, $Website, $Connect, $Character;
-    $conn = $Connect->connectToDB();
+    global $Account, $Website, $Database, $Character;
+    $conn = $Database->database();
 
     $service  = $_GET['s'];
-    $guid     = $conn->escape_string($_GET['guid']);
-    $realm_id = $conn->escape_string($_GET['rid']);
+    $guid     = $Database->conn->escape_string($_GET['guid']);
+    $realm_id = $Database->conn->escape_string($_GET['rid']);
 
     $service_title = ucfirst($service ." Change");
 
@@ -85,14 +85,14 @@
 
         $Account->isNotLoggedIn();
 
-        $Connect->selectDB("webdb", $conn);
-        $result = $conn->query("SELECT name FROM realms WHERE id=". $realm_id .";");
+        $Database->selectDB("webdb", $conn);
+        $result = $Database->select( name FROM realms WHERE id=". $realm_id .";");
         $row    = $result->fetch_assoc();
         $realm  = $row['name'];
 
-        $Connect->connectToRealmDB($realm_id);
+        $Database->realm($realm_id);
 
-        $result = $conn->query("SELECT name, guid, gender, class, race, level, online FROM characters WHERE guid=". $guid .";");
+        $result = $Database->select( name, guid, gender, class, race, level, online FROM characters WHERE guid=". $guid .";");
         $row    = $result->fetch_assoc()
         ?>
         <h4>Selected character:</h4>

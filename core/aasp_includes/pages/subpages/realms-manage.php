@@ -36,7 +36,7 @@
     </tr>
     <?php
         
-        $result = $conn->query("SELECT * FROM realms ORDER BY id DESC;");
+        $result = $Database->select( * FROM realms ORDER BY id DESC;");
         while ($row = $result->fetch_assoc())
         {
             ?>

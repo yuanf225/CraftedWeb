@@ -1,7 +1,9 @@
 
 <?php
-	if(!defined('INIT_SITE'))
+	if( !defined('INIT_SITE') )
+	{
 		exit();
+	}
 		
 	#############################
 	## CRAFTEDWEB CONFIG FILE  ##
@@ -131,42 +133,42 @@
 	# Website DB connection settings
 	#*************************#
 	
-	$connection['web']['host']        = "127.0.0.1";
-    $connection['web']['port']        = "3306";
-	$connection['web']['user']        = "root";
-	$connection['web']['password']    = "";
-	$connection['web']['database']    = "craftedcms";
+	$Databaseion['web']['host']        = "127.0.0.1";
+    $Databaseion['web']['port']        = "3306";
+	$Databaseion['web']['user']        = "root";
+	$Databaseion['web']['password']    = "";
+	$Databaseion['web']['database']    = "craftedcms";
 
 
     #*************************#
     # Logon DB connection settings
     #*************************#
 
-    $connection['logon']['host']        = "127.0.0.1";
-    $connection['logon']['port']        = "3306";
-    $connection['logon']['user']        = "root";
-    $connection['logon']['password']    = "";
-    $connection['logon']['database']    = "3_auth";
+    $Databaseion['logon']['host']        = "127.0.0.1";
+    $Databaseion['logon']['port']        = "3306";
+    $Databaseion['logon']['user']        = "root";
+    $Databaseion['logon']['password']    = "";
+    $Databaseion['logon']['database']    = "3_auth";
 
     #*************************#
     # Characters DB connection settings
     #*************************#
 
-    $connection['characters']['host']        = "127.0.0.1";
-    $connection['characters']['port']        = "3306";
-    $connection['characters']['user']        = "root";
-    $connection['characters']['password']    = "";
-    $connection['characters']['database']    = "3_characters";
+    $Databaseion['characters']['host']        = "127.0.0.1";
+    $Databaseion['characters']['port']        = "3306";
+    $Databaseion['characters']['user']        = "root";
+    $Databaseion['characters']['password']    = "";
+    $Databaseion['characters']['database']    = "3_characters";
 
     #*************************#
     # World DB connection settings
     #*************************#
 
-    $connection['world']['host']        = "127.0.0.1";
-    $connection['world']['port']        = "3306";
-    $connection['world']['user']        = "root";
-    $connection['world']['password']    = "";
-    $connection['world']['database']    = "3_world";
+    $Databaseion['world']['host']        = "127.0.0.1";
+    $Databaseion['world']['port']        = "3306";
+    $Databaseion['world']['user']        = "root";
+    $Databaseion['world']['password']    = "";
+    $Databaseion['world']['database']    = "3_world";
 
 	// host 		= Either an IP address or a DNS address
 	// user 		= A mysqli user with access to view/write the entire database.
@@ -178,7 +180,7 @@
     # Realmlist
     #*************************#
 
-	$connection['realmlist']   = "localhost";
+	$Databaseion['realmlist']   = "localhost";
 	
 	#*************************#
 	# Registration settings

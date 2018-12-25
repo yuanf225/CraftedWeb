@@ -19,16 +19,16 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    global $Connect, $conn;
-    $Connect->selectDB("webdb", $conn);
-    $result    = $conn->query("SELECT id,name FROM realms WHERE id='" . $GLOBALS['playersOnline']['realm_id'] . "';");
+    global $Database, $conn;
+    $Database->selectDB("webdb", $conn);
+    $result    = $Database->select("realms", "id,name", null, "id='" . $GLOBALS['playersOnline']['realm_id'] . "';")->get_result();
     $row       = $result->fetch_assoc();
     $rid       = $row['id'];
     $realmname = $row['name'];
 
-    $Connect->connectToRealmDB($rid);
+    $Database->realm($rid);
 
-    $count = $conn->query("SELECT COUNT(*) AS online FROM characters WHERE name!='' AND online=1;");
+    $count = $Database->select("characters", "COUNT(*) AS online", null, "name!='' AND online=1;")->get_result();
 ?>
 <div class="box_one">
     <div class="box_one_title">Online Players - <?php echo $realmname; ?></div>
@@ -58,24 +58,22 @@
 
                     $rand = rand(1, $count);
 
-                    $result = $conn->query("SELECT guid, name, totalKills, level, race, class, gender, account FROM characters WHERE name!='' 
-								AND online=1 LIMIT " . $rand . "," . $GLOBALS['playersOnline']['moduleResults']);
+                    $result = $Database->select("characters", "guid, name, totalKills, level, race, class, gender, account", null, "name!='' AND online=1 LIMIT " . $rand . "," . $GLOBALS['playersOnline']['moduleResults'])->get_result();
                 }
                 else
                 {
-                    $result = $conn->query("SELECT guid, name, totalKills, level, race, class, gender, account FROM characters WHERE name!='' 
-								  AND online=1");
+                    $result = $Database->select("characters", "guid, name, totalKills, level, race, class, gender, account", null, "name!=''AND online=1")->get_result();
                 }
                 while ($row = $result->fetch_assoc())
                 {
-                    $Connect->connectToRealmDB($rid);
-                    $getGuild = $conn->query("SELECT guildid FROM guild_member WHERE guid='" . $row['guid'] . "'");
+                    $Database->realm($rid);
+                    $getGuild = $Database->select("guild_member", "guildid", "guid='" . $row['guid'] . "'")->get_result();
                     if ($getGuild->num_rows == 0)
                         $guild    = "None";
                     else
                     {
                         $g        = $getGuild->fetch_assoc();
-                        $getGName = $conn->query("SELECT name FROM guild WHERE guildid='" . $g['guildid'] . "'");
+                        $getGName = $Database->select("guild", "name", null, "guildid='" . $g['guildid'] . "'")->get_result();
                         $x        = $getGName->fetch_assoc();
                         $guild    = '&lt; ' . $x['name'] . ' &gt;';
                     }
@@ -83,28 +81,28 @@
                     if ($GLOBALS['playersOnline']['display_GMS'] == false)
                     {
                         //Check if GM.
-                        $Connect->selectDB("logondb", $conn);
-                        $checkGM = $conn->query("SELECT COUNT(*) FROM account_access WHERE id='" . $row['account'] . "' AND gmlevel >0");
+                        $Database->selectDB("logondb", $conn);
+                        $checkGM = $Database->select("account_access", "COUNT(*)", null, "id='" . $row['account'] . "' AND gmlevel >0")->get_result();
                         if ($checkGM->data_seek(0) == 0)
                         {
                             echo
                             '<tr style="text-align: center;">
-						<td>' . $row['name'] . '</td>
-						<td>' . $guild . '</td>
-						<td>' . $row['totalKills'] . '</td>
-						<td>' . $row['level'] . '</td>
-					</tr>';
+        						<td>' . $row['name'] . '</td>
+        						<td>' . $guild . '</td>
+        						<td>' . $row['totalKills'] . '</td>
+        						<td>' . $row['level'] . '</td>
+        					</tr>';
                         }
                     }
                     else
                     {
                         echo
                         '<tr style="text-align: center;">
-					<td>' . $row['name'] . '</td>
-					<td>' . $guild . '</td>
-					<td>' . $row['totalKills'] . '</td>
-					<td>' . $row['level'] . '</td>
-				</tr>';
+        					<td>' . $row['name'] . '</td>
+        					<td>' . $guild . '</td>
+        					<td>' . $row['totalKills'] . '</td>
+        					<td>' . $row['level'] . '</td>
+        				</tr>';
                     }
                 }
                 ?>

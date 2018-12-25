@@ -36,7 +36,7 @@
                     <?php
                     $GameServer->selectDB("webdb", $conn);
 
-                    $result = $conn->query("SELECT char_db, name, description FROM realms;");
+                    $result = $Database->select( char_db, name, description FROM realms;");
                     if ($result->num_rows == 0)
                     {
                         echo "<option value='NULL'>No Realms Found.</option>";
@@ -94,7 +94,7 @@
             ############################
 
             $offline = $_SESSION['lastTicketRealmOffline'];
-            $realm   = $conn->escape_string($_SESSION['lastTicketRealm']);
+            $realm   = $Database->conn->escape_string($_SESSION['lastTicketRealm']);
 
 
             if ($realm == "NULL")
@@ -102,9 +102,9 @@
                 die("<pre>Please Select A Realm.</pre>");
             }
 
-            $conn->select_db($realm);
+            $Database->conn->select_db($realm);
 
-            $result = $conn->query("SELECT ". $ticketString .", name, message, createtime, ". $guidString .", ". $closedString ." 
+            $result = $Database->select( ". $ticketString .", name, message, createtime, ". $guidString .", ". $closedString ." 
                 FROM gm_tickets ORDER BY ticketId DESC;");
             if ($result->num_rows == 0)
             {
@@ -126,7 +126,7 @@
 
             while ($row = $result->fetch_assoc())
             {
-                $get = $conn->query("SELECT COUNT(online) FROM characters WHERE guid='" . $row[$guidString] . "' AND online='1';");
+                $get = $Database->select( COUNT(online) FROM characters WHERE guid='" . $row[$guidString] . "' AND online='1';");
                 if ($get->data_seek(0) == 0 && $offline == "on")
                 {
                     echo "<tr>";
@@ -144,7 +144,7 @@
                         echo "<td><font color='green'>Open</font></td>";
                     }
 
-                    $get = $conn->query("SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
+                    $get = $Database->select( COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
                     if ($get->data_seek(0) > 0)
                     {
                         echo "<td><font color='green'>Online</font></td>";
@@ -213,9 +213,9 @@
         }
         ##############################
 
-        $conn->select_db($_GET['db']);
-        $result = $conn->query("SELECT name, message, createtime, ". $guidString .", ". $closedString ." 
-            FROM gm_tickets WHERE ". $ticketString ."='" . $conn->escape_string($_GET['guid']) ."';");
+        $Database->conn->select_db($_GET['db']);
+        $result = $Database->select( name, message, createtime, ". $guidString .", ". $closedString ." 
+            FROM gm_tickets WHERE ". $ticketString ."='" . $Database->conn->escape_string($_GET['guid']) ."';");
         $row = $result->fetch_assoc();
         ?>
     <table style="width: 100%;" class="center">
@@ -255,7 +255,7 @@
             </td>
             <td>
                 <?php
-                $get = $conn->query("SELECT COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
+                $get = $Database->select( COUNT(online) FROM characters WHERE guid=". $row[$guidString] ." AND online=1;");
                 if ($get->data_seek(0) > 0)
                 {
                     echo "<font color='green'>Online</font>";

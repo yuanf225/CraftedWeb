@@ -19,12 +19,12 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    global $Account, $Shop, $Connect;
-    $conn = $Connect->connectToDB();
+    global $Account, $Shop, $Database;
+    $conn = $Database->database();
     $Account->isNotLoggedIn();
 
     /* Declare some general variables */
-    $shopPage     = $conn->escape_string($_GET['page']);
+    $shopPage     = $Database->conn->escape_string($_GET['page']);
     $shopVar      = "vote";
     $shopCurrency = "Vote Points";
 

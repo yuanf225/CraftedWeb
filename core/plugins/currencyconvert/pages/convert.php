@@ -21,8 +21,8 @@
     $divide = 40;
 ##############
 
-    global $Account, $Connect;
-    $conn = $Connect->connectToDB();
+    global $Account, $Database;
+    $conn = $Database->database();
     $Account->isNotLoggedIn();
 ?>
 
@@ -76,7 +76,7 @@ You currently have <b><?php echo $Account->loadVP($_SESSION['cw_user']); ?></b> 
 <?php
     if (isset($_POST['convert']))
     {
-        $vp = round($conn->escape_string($_POST['conv_vp']));
+        $vp = round($Database->conn->escape_string($_POST['conv_vp']));
 
         if ($Account->hasVP($_SESSION['cw_user'], $vp) == FALSE)
             echo "<span class='alert'>You do not have enough Vote Points!</span>";

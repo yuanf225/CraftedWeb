@@ -35,13 +35,13 @@
             $errors[] = "mySQL connection error. Please check your settings.";
         else
         {
-            if (!$conn->select_db($GLOBALS['connection']['web']['database']))
+            if (!$Database->conn->select_db($GLOBALS['connection']['web']['database']))
                 $errors[] = "Database error. Could not connect to the website database.";
 
-            if (!$conn->select_db($GLOBALS['connection']['logon']['database']))
+            if (!$Database->conn->select_db($GLOBALS['connection']['logon']['database']))
                 $errors[] = "Database error. Could not connect to the logon database.";
 
-            if (!$conn->select_db($GLOBALS['connection']['world']['database']))
+            if (!$Database->conn->select_db($GLOBALS['connection']['world']['database']))
                 $errors[] = "Database error. Could not connect to the world database.";
         }
 

@@ -52,10 +52,10 @@
 
         $content->loadCustoms(); //Load custom modules
 
-        $content->replace_tags( array('content' 		=> 'core/modules/content.php') ); //Main content 
+        $content->replace_tags( array('content' 	=> 'core/modules/content.php') ); //Main content 
         $content->replace_tags( array('menu' 		=> 'core/modules/menu.php') );
         $content->replace_tags( array('login' 		=> 'core/modules/login.php') );
-        $content->replace_tags( array('account' 		=> 'core/modules/account.php') );
+        $content->replace_tags( array('account' 	=> 'core/modules/account.php') );
         $content->replace_tags( array('serverstatus' => 'core/modules/server_status.php') );
         $content->replace_tags( array('slideshow' 	=> 'core/modules/slideshow.php') );
         $content->replace_tags( array('footer' 		=> 'core/modules/footer.php') );

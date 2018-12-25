@@ -20,13 +20,13 @@
 #                  anywhere unless you were given permission.                 
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    global $Connect, $Plugins;
-    $conn = $Connect->connectToDB();
-    $Connect->selectDB("webdb", $conn);
+    global $Database, $Plugins;
+    $conn = $Database->database();
+    $Database->selectDB("webdb", $conn);
 
     $pages = scandir('core/pages');
     unset($pages[0], $pages[1]);
-    $page  = $conn->escape_string($_GET['page']);
+    $page  = $Database->conn->escape_string($_GET['page']);
 
     if (!isset($page))
     {
@@ -38,7 +38,7 @@
     }
     elseif (in_array($page . ".php", $pages))
     {
-        $result = $conn->query("SELECT COUNT(filename) AS filename FROM disabled_pages WHERE filename='" . $page . "';");
+        $result = $Database->select( COUNT(filename) AS filename FROM disabled_pages WHERE filename='" . $page . "';");
         if ($result->data_seek(0) == 1)
         {
             include "core/pages/". $page .".php";
@@ -50,10 +50,10 @@
     }
     else
     {
-        $result = $conn->query("SELECT * FROM custom_pages WHERE filename='". $page ."';");
+        $result = $Database->select( * FROM custom_pages WHERE filename='". $page ."';");
         if ($result->num_rows > 0)
         {
-            $check = $conn->query("SELECT COUNT(filename) AS filename FROM disabled_pages WHERE filename='" . $page . "';");
+            $check = $Database->select( COUNT(filename) AS filename FROM disabled_pages WHERE filename='" . $page . "';");
             if ($check->fetch_assoc()['filename'] == 0)
             {
                 $row = $result->fetch_assoc();

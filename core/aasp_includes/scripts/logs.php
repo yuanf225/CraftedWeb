@@ -34,7 +34,7 @@
     {
         case "dshop":
         {
-            $result = $conn->query("SELECT * FROM shoplog WHERE account=". $conn->escape_string($_POST['id']) ." AND shop='donate';");
+            $result = $Database->select( * FROM shoplog WHERE account=". $Database->conn->escape_string($_POST['id']) ." AND shop='donate';");
             if ($result->num_rows == 0)
             {
                 echo "<b color='red'>No logs was found for this account.</b>";
@@ -70,7 +70,7 @@
         
         case "payments":
         {
-            $result = $conn->query("SELECT paymentstatus, mc_gross, datecreation FROM payments_log WHERE userid=". $conn->escape_string($_POST['id']) .";");
+            $result = $Database->select( paymentstatus, mc_gross, datecreation FROM payments_log WHERE userid=". $Database->conn->escape_string($_POST['id']) .";");
             if ($result->num_rows == 0)
             {
                 echo "<b color='red'>No payments was found for this account.</b>";
@@ -100,8 +100,8 @@
 
         case "search":
         {
-            $input      = $conn->escape_string($_POST['input']);
-            $shop       = $conn->escape_string($_POST['shop']); ?>
+            $input      = $Database->conn->escape_string($_POST['input']);
+            $shop       = $Database->conn->escape_string($_POST['shop']); ?>
             <table width="100%">
                 <tr>
                     <th>User</th>
@@ -114,16 +114,16 @@
 
                 <?php
                 //Search via character name...
-                $loopRealms = $conn->query("SELECT id FROM realms;");
+                $loopRealms = $Database->select( id FROM realms;");
                 while ($row = $loopRealms->fetch_assoc())
                 {
-                    $GameServer->connectToRealmDB($row['id']);
-                    $result = $conn->query("SELECT guid FROM characters WHERE name LIKE '%". $input ."%';");
+                    $GameServer->realm($row['id']);
+                    $result = $Database->select( guid FROM characters WHERE name LIKE '%". $input ."%';");
                     if ($result->num_rows > 0)
                     {
                         $row    = $result->fetch_assoc();
                         $GameServer->selectDB('webdb');
-                        $result = $conn->query("SELECT * FROM shoplog WHERE shop='". $shop ."' AND char_id=". $row['guid'] .";");
+                        $result = $Database->select( * FROM shoplog WHERE shop='". $shop ."' AND char_id=". $row['guid'] .";");
 
                         while ($row = $result->fetch_assoc())
                         { ?>
@@ -144,12 +144,12 @@
                 }
                 //Search via account name
                 $GameServer->selectDB("logondb");
-                $result = $conn->query("SELECT id FROM account WHERE username LIKE '%". $input ."%';");
+                $result = $Database->select( id FROM account WHERE username LIKE '%". $input ."%';");
                 if ($result->num_rows > 0)
                 {
                     $row    = $result->fetch_assoc();
                     $GameServer->selectDB("webdb");
-                    $result = $conn->query("SELECT * FROM shoplog WHERE shop='". $shop ."' AND account=". $row['id'] .";");
+                    $result = $Database->select( * FROM shoplog WHERE shop='". $shop ."' AND account=". $row['id'] .";");
 
                     while ($row = $result->fetch_assoc())
                     { ?>
@@ -170,12 +170,12 @@
 
                 //Search via item name
                 $GameServer->selectDB('worlddb');
-                $result = $conn->query("SELECT entry FROM item_template WHERE name LIKE '%". $input ."%';");
+                $result = $Database->select( entry FROM item_template WHERE name LIKE '%". $input ."%';");
                 if ($result->num_rows > 0)
                 {
                     $row    = $result->fetch_assoc();
                     $GameServer->selectDB('webdb');
-                    $result = $conn->query("SELECT * FROM shoplog WHERE shop='". $shop ."' AND entry=". $row['entry'] .";");
+                    $result = $Database->select( * FROM shoplog WHERE shop='". $shop ."' AND entry=". $row['entry'] .";");
 
                     while ($row = $result->fetch_assoc())
                     { ?>
@@ -196,7 +196,7 @@
 
                 //Search via date
                 $GameServer->selectDB('webdb');
-                $result = $conn->query("SELECT * FROM shoplog WHERE shop='". $shop ."' AND date LIKE '%". $input ."%';");
+                $result = $Database->select( * FROM shoplog WHERE shop='". $shop ."' AND date LIKE '%". $input ."%';");
 
                 while ($row = $result->fetch_assoc())
                 { ?>
@@ -218,7 +218,7 @@
                 {
                     //View last 10 logs
                     $GameServer->selectDB('webdb');
-                    $result = $conn->query("SELECT * FROM shoplog WHERE shop='". $shop ."' ORDER BY id DESC LIMIT 10;");
+                    $result = $Database->select( * FROM shoplog WHERE shop='". $shop ."' ORDER BY id DESC LIMIT 10;");
 
                     while ($row = $result->fetch_assoc())
                     { ?>
@@ -244,7 +244,7 @@
 
         case "vshop":
         {
-            $result = $conn->query("SELECT * FROM shoplog WHERE account=". $conn->escape_string($_POST['id']) ." AND shop='vote';");
+            $result = $Database->select( * FROM shoplog WHERE account=". $Database->conn->escape_string($_POST['id']) ." AND shop='vote';");
             if ($result->num_rows == 0)
             {
                 echo "<b color='red'>No logs was found for this account.</b>";

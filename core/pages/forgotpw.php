@@ -19,8 +19,8 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    global $Account, $Connect;
-    $conn = $Connect->connectToDB();
+    global $Account, $Database;
+    $conn = $Database->database();
 ?>
 <div class='box_two_title'>Forgot Password</div>
 <?php
@@ -34,17 +34,17 @@
             echo "<b class='red_text'>Link error, one or more required values are missing.</b>";
         else
         {
-            $Connect->selectDB("webdb", $conn);
-            $code    = $conn->escape_string($_GET['code']);
-            $account = $conn->escape_string($_GET['account']);
-            $result  = $conn->query("SELECT COUNT('id') FROM password_reset WHERE code='" . $code . "' AND account_id=". $account .";");
+            $Database->selectDB("webdb", $conn);
+            $code    = $Database->conn->escape_string($_GET['code']);
+            $account = $Database->conn->escape_string($_GET['account']);
+            $result  = $Database->select( COUNT('id') FROM password_reset WHERE code='" . $code . "' AND account_id=". $account .";");
             if ($result->data_seek(0) == 0)
                 echo "<b class='red_text'>The values specified does not match the ones in the database.</b>";
             else
             {
                 $newPass      = RandomString();
                 echo "<b class='yellow_text'>Your new password is: " . $newPass . " <br/><br/>Please sign in and change your password.</b>";
-                $conn->query("DELETE FROM password_reset WHERE account_id=". $account .";");
+                $Database->conn->query("DELETE FROM password_reset WHERE account_id=". $account .";");
                 $account_name = $Account->getAccountName($account);
 
                 $Account->changePassword($account_name, $newPass);

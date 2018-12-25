@@ -23,37 +23,42 @@
     {
         public function getRealmId($char_db)
         {
-            global $Connect;
-            $conn = $Connect->connectToDB();
-            $Connect->selectDB("webdb", $conn);
+            global $Database;
+            $Database->selectDB("webdb");
 
-            $get = $conn->query("SELECT id FROM realms WHERE char_db='". $conn->escape_string($char_db) ."';");
-            $row = $get->fetch_assoc();
+            $char_db = $Database->conn->escape_string($char_db);
+
+            $statement = $Database->select("realms", "id", null, "char_db=$char_db");
+            $result = $statement->get_result();
+            $row = $result->fetch_assoc();
 
             return $row['id'];
+            $statement->close();
         }
 
         public function getRealmName($char_db)
         {
-            global $Connect;
-            $conn = $Connect->connectToDB();
-            $Connect->selectDB("webdb", $conn);
+            global $Database;
+            $Database->selectDB("webdb");
 
-            $get = $conn->query("SELECT name FROM realms WHERE char_db='". $conn->escape_string($char_db) ."';");
-            $row = $get->fetch_assoc();
+            $char_db = $Database->conn->escape_string($char_db);
+
+            $statement = $Database->select("realms", "name", null, "char_db=$char_db");
+            $result = $statement->get_result();
+            $row = $result->fetch_assoc();
 
             return $row['name'];
+            $statement->close();
         }
 
         public function serverStatus($realm_id)
         {
-            global $Connect;
-            $conn = $Connect->connectToDB();
+            global $Database;
 
-            $realmId = $conn->escape_string($realm_id);
+            $realmId = $Database->conn->escape_string($realm_id);
             //Get status
-            $fp = fsockopen($GLOBALS['realms'][$realmId]['host'], $GLOBALS['realms'][$realmId]['port'], $errno, $errstr, 1);
-            if (!$fp)
+            $server_response = fsockopen($GLOBALS['realms'][$realmId]['host'], $GLOBALS['realms'][$realmId]['port'], $errno, $errstr, 1);
+            if ( $server_response === false )
             {
                 echo $status = "<h4 class='realm_status_title_offline'>" . $GLOBALS['realms'][$realmId]['name'] . " -  Offline</h4>";
             }
@@ -64,14 +69,16 @@
                 echo "<span class='realm_status_text'>";
 
                 /* Players online bar */
-                if ($GLOBALS['serverStatus']['factionBar'] == TRUE)
+                if ( $GLOBALS['serverStatus']['factionBar'] == true )
                 {
-                    $Connect->selectDB('chardb', $conn, $realmId);
+                    $Database->selectDB('chardb', $realmId);
 
-                    $getChars     = $conn->query("SELECT COUNT(online) AS online FROM characters WHERE online=1;");
-                    $total_online = $getChars->fetch_assoc();
+                    $statement = $Database->select("characters", "COUNT(online) AS online", null, "online=1");
+                    $result = $statement->get_result();
+                    $total_online = $result->fetch_assoc();
+                    $statement->close();
 
-                    if ($total_online['online'] == 0)
+                    if ( $total_online['online'] == 0 )
                     {
                         $per_alliance = 50;
                         $per_horde    = 50;
@@ -81,10 +88,12 @@
                     }
                     else
                     {
-                        $getAlliance = $conn->query("SELECT COUNT(online) AS online FROM characters WHERE online=1 AND race IN(3, 4, 7, 11, 1, 22);");
+                        $statement = $Database->select("characters", "COUNT(online) AS online", null, "online=1 AND race IN(3, 4, 7, 11, 1, 22)");
+                        $getAlliance = $statement->get_result();
                         $alliance = $getAlliance->fetch_assoc();
+                        $statement->close();
 
-                        if ($alliance['online'] == 0 || empty($alliance['online']))
+                        if ( $alliance['online'] == 0 || empty($alliance['online']) )
                         {
                             $per_alliance = 0;
                         }
@@ -93,9 +102,11 @@
                             $per_alliance = ($alliance['online'] / $total_online['online']) * 100;
                         }
 
-                        $getHorde = $conn->query("SELECT COUNT(online) AS online FROM characters WHERE online=1 AND race IN(2, 5, 6, 8, 10, 9);");
+                        $statement = $Database->select("characters", "COUNT(online) AS online", null, "online=1 AND race IN(2, 5, 6, 8, 10, 9)");
+                        $getHorde = $statement->get_result();
                         $horde    = $getHorde->fetch_assoc();
-                        if ($horde['online'] == 0 || empty($horde['online']))
+                        $statement->close();
+                        if ( $horde['online'] == 0 || empty($horde['online']) )
                         {
                             $per_horde = 0;
                         }
@@ -104,10 +115,6 @@
                             $per_horde = (($horde['online'] / $total_online['online']) * 100);
                         }
                     }
-                    /*if ($per_alliance + $per_horde > 100)
-                    {
-                        $per_horde = $per_horde - 1;
-                    }*/
                     ?>
                     <div class='srv_status_po'>
                         <div class='srv_status_po_alliance' style="width: <?php echo $per_alliance; ?>%;"></div>
@@ -122,30 +129,36 @@
                 }
 
                 echo "<table width='100%'><tr>";
-                //Get players online
-                if ($GLOBALS['serverStatus']['playersOnline'] == TRUE)
+
+                /** Get players online
+                */
+                if ( $GLOBALS['serverStatus']['playersOnline'] == true )
                 {
-                    $Connect->selectDB('chardb', $conn, $realmId);
+                    $Database->selectDB('chardb', $conn, $realmId);
 
-                    $getChars = $conn->query("SELECT COUNT(online) AS online FROM characters WHERE online=1;");
-
+                    $statement = $Database->select("characters", "COUNT(online) AS online", null, "online=1");
+                    $getChars = $statement->get_result();
                     $pOnline  = $getChars->fetch_assoc();
-                    if ($pOnline['online'] > 1 || $pOnline['online'] == 0) 
+                    $statement->close();
+                    if ( $pOnline['online'] > 1 || $pOnline['online'] == 0 ) 
                     {
                         echo "<td><b>". $pOnline['online'] ."</b> Players Online</td>";
                     }
-                    elseif ($pOnline['online'] == 1)
+                    elseif ( $pOnline['online'] == 1 )
                     {
                         echo "<td><b>". $pOnline['online'] ."</b> Player Online</td>";
                     }
                 }
 
-                //Get uptime
-                if ($GLOBALS['serverStatus']['uptime'] == TRUE)
+                /** Get uptime
+                */
+                if ( $GLOBALS['serverStatus']['uptime'] == true )
                 {
-                    $Connect->selectDB("logondb", $conn);
-                    $getUp = $conn->query("SELECT starttime FROM uptime WHERE realmid=". $realmId ." ORDER BY starttime DESC LIMIT 1;");
+                    $Database->selectDB("logondb");
+                    $statement = $Database->select("uptime", "starttime", "realmid=$realmId ORDER BY starttime DESC LIMIT 1";
+                    $getUp = $statement->get_result();
                     $row   = $getUp->fetch_assoc();
+                    $statement->close();
 
                     $time   = time();
                     $uptime = $time - $row['starttime'];
@@ -157,14 +170,15 @@
 					</tr>';
                 }
             }
-            if ($GLOBALS['serverStatus']['nextArenaFlush'] == TRUE)
+            if ( $GLOBALS['serverStatus']['nextArenaFlush'] == true )
             {
                 //Arena flush
-                $Connect->selectDB('chardb', $conn, $realmId);
+                $Database->selectDB('chardb', $realmId);
                 
-                $getFlush = $conn->query("SELECT value FROM worldstates WHERE comment='NextArenaPointDistributionTime';");
+                $statement = $Database->select("worldstates", "value", null, "comment='NextArenaPointDistributionTime'");
                 $row      = $getFlush->fetch_assoc();
                 $flush    = date('d M H:i', $row['value']);
+                $statement->close();
 
                 echo '<tr>
 			 	   <td>

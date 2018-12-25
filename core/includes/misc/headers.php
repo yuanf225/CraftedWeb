@@ -19,25 +19,19 @@
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
-##############
-# Start session
-############## 
-    if (!isset($_SESSION))
-    {
-        session_start();
-    }
 
-############
-# Start ob
-############
-    ob_start();
+	# Start session
+	if ( !isset($_SESSION) )
+	{
+	    session_start();
+	}
 
-############
-# Enable all errors. None will be shown due to our custom errors.
-############
-    ini_set('display_errors', 1);
-    error_reporting(E_ALL);
+	# Start ob
+	ob_start();
 
-// Start microtime.
-    $start = microtime(TRUE);
-    
+	# Enable all errors. None will be shown due to our custom errors.
+	ini_set('display_errors', 1);
+	error_reporting(E_ALL);
+
+	# Start microtime.
+	$start = microtime(TRUE);

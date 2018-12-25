@@ -106,7 +106,7 @@
         <script type="text/javascript">
             $(document).ready(function ()
             {
-                $.post("core/includes/scripts/misc.php", {serverStatus: TRUE},
+                $.post("core/includes/scripts/misc.php", {serverStatus: true},
                         function (data)
                         {
                             $("#server_status").html(data);

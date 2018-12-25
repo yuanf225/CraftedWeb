@@ -19,19 +19,18 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    global $Account, $Website, $Connect;
-    $conn = $Connect->connectToDB();
-?>
+    global $Account, $Website, $Database; ?>
 <div class='box_two_title'>Character Unstuck</div>
 Choose the character you wish to unstuck. The character will be teleported to your character's home location.<hr/>
 <?php
     $service = "unstuck";
 
     if ($GLOBALS['service'][$service]['price'] == 0)
-        echo '<span class="attention">Unstuck is free of charge.</span>';
-    else
     {
-        ?>
+        echo '<span class="attention">Unstuck is free of charge.</span>';
+    }
+    else
+    { ?>
         <span class="attention">Unstuck costs 
             <?php echo $GLOBALS['service'][$service]['price'] . ' ' . $Website->convertCurrency($GLOBALS['service'][$service]['currency']); ?></span>
         <?php
@@ -42,17 +41,17 @@ Choose the character you wish to unstuck. The character will be teleported to yo
     }
 
     $Account->isNotLoggedIn();
-    $Connect->selectDB("webdb", $conn);
+    $Database->selectDB("webdb");
     $num    = 0;
-    $result = $conn->query("SELECT char_db, name FROM realms ORDER BY id ASC;");
+    $result = $Database->select("realms", "char_db, name", null, null, "ORDER BY id ASC;")->get_result();
     while ($row = $result->fetch_assoc())
     {
         $acct_id = $Account->getAccountID($_SESSION['cw_user']);
         $realm   = $row['name'];
         $char_db = $row['char_db'];
 
-        $Connect->selectDB($char_db);
-        $result = $conn->query("SELECT name, guid, gender, class, race, level, online FROM characters WHERE account=". $acct_id .";");
+        $Database->selectDB($char_db);
+        $result = $Database->select("characters", "name, guid, gender, class, race, level, online", null, "account=". $acct_id .";")->get_result();
         while ($row = $result->fetch_assoc())
         {
             ?><div class='charBox'>

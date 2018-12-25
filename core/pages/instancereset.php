@@ -19,8 +19,8 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    global $Account, $Website, $Server, $Character, $Connect;
-    $conn = $Connect->connectToDB();
+    global $Account, $Website, $Server, $Character, $Database;
+    $conn = $Database->database();
 ?>
 <div class='box_two_title'>Instance Reset</div>
 Let's you reset the instance on your characters.<hr/>
@@ -56,7 +56,7 @@ Let's you reset the instance on your characters.<hr/>
                     <td>
                         <select name="ir_realm">
                             <?php
-                            $result = $conn->query("SELECT name,char_db FROM realms;");
+                            $result = $Database->select( name,char_db FROM realms;");
                             while ($row    = $result->fetch_assoc())
                             {
                                 if (isset($_POST['ir_realm']) && $_POST['ir_realm'] == $row['char_db'])
@@ -97,8 +97,8 @@ Let's you reset the instance on your characters.<hr/>
                             <select name="ir_char">
                                 <?php
                                 $acc_id = $Account->getAccountID($_SESSION['username']);
-                                $Connect->selectDB($_POST['ir_realm']);
-                                $result = $conn->query("SELECT name, guid FROM characters WHERE account=". $acc_id .";");
+                                $Database->selectDB($_POST['ir_realm']);
+                                $result = $Database->select( name, guid FROM characters WHERE account=". $acc_id .";");
 
                                 while ($row = $result->fetch_assoc())
                                 {
@@ -137,10 +137,10 @@ Let's you reset the instance on your characters.<hr/>
                         <input type="hidden" name="ir_char" value="<?php echo $_POST['ir_char']; ?>">
                         <select name="ir_instance">
                             <?php
-                            $guid = $conn->escape_string($_POST['ir_char']);
-                            $Connect->selectDB($_POST['ir_realm']);
+                            $guid = $Database->conn->escape_string($_POST['ir_char']);
+                            $Database->selectDB($_POST['ir_realm']);
 
-                            $result = $conn->query("SELECT instance FROM character_instance WHERE guid=". $guid ." AND permanent=1;");
+                            $result = $Database->select( instance FROM character_instance WHERE guid=". $guid ." AND permanent=1;");
                             if ($result->num_rows == 0)
                             {
                                 echo "<option value='#'>No instance locks were found</option>";
@@ -150,11 +150,11 @@ Let's you reset the instance on your characters.<hr/>
                             {
                                 while ($row = $result->fetch_assoc())
                                 {
-                                    $getI     = $conn->query("SELECT id, map, difficulty FROM instance WHERE id=". $row['instance'] .";");
+                                    $getI     = $Database->select( id, map, difficulty FROM instance WHERE id=". $row['instance'] .";");
                                     $instance = $getI->fetch_assoc();
 
-                                    $Connect->selectDB("webdb", $conn);
-                                    $getName = $conn->query("SELECT name FROM instance_data WHERE map='" . $instance['map'] . "';");
+                                    $Database->selectDB("webdb", $conn);
+                                    $getName = $Database->select( name FROM instance_data WHERE map='" . $instance['map'] . "';");
                                     $name    = $getName->fetch_assoc();
 
                                     if (empty($name['name']))
@@ -199,8 +199,8 @@ Let's you reset the instance on your characters.<hr/>
 
     if (isset($_POST['ir_step3']))
     {
-        $guid     = $conn->escape_string($_POST['ir_char']);
-        $instance = $conn->escape_string($_POST['ir_instance']);
+        $guid     = $Database->conn->escape_string($_POST['ir_char']);
+        $instance = $Database->conn->escape_string($_POST['ir_instance']);
 
         if ($GLOBALS['service'][$service]['currency'] == "vp")
         {
@@ -208,8 +208,8 @@ Let's you reset the instance on your characters.<hr/>
                 echo '<span class="alert">You do not have enough Vote Points!';
             else
             {
-                $Connect->selectDB($_POST['ir_realm']);
-                $conn->query("DELETE FROM instance WHERE id=". $instance .";");
+                $Database->selectDB($_POST['ir_realm']);
+                $Database->conn->query("DELETE FROM instance WHERE id=". $instance .";");
 
                 $Account->deductVP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service'][$service]['price']);
                 echo '<span class="approved">The instance lock was removed!</span>';
@@ -221,8 +221,8 @@ Let's you reset the instance on your characters.<hr/>
                 echo '<span class="alert">You do not have enough ' . $GLOBALS['donation']['coins_name'];
             else
             {
-                $Connect->selectDB($_POST['ir_realm']);
-                $conn->query("DELETE FROM instance WHERE id=". $instance .";");
+                $Database->selectDB($_POST['ir_realm']);
+                $Database->conn->query("DELETE FROM instance WHERE id=". $instance .";");
 
                 $Account->deductDP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service'][$service]['price']);
                 echo '<span class="approved">The instance lock was removed!</span>';

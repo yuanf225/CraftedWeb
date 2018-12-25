@@ -32,7 +32,7 @@
     require "../classes/character.php";
     require "../classes/server.php";
 
-    global $Connect;
+    global $Database;
 
-    $Connect->connectToDB();
+    $Database->database();
     

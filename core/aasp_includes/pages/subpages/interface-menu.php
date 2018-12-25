@@ -34,7 +34,7 @@
     </tr>
     <?php
         $x      = 1;
-        $result = $conn->query("SELECT * FROM site_links ORDER BY position ASC;");
+        $result = $Database->select( * FROM site_links ORDER BY position ASC;");
         while ( $row = $result->fetch_assoc() )
         { ?>
             <tr>

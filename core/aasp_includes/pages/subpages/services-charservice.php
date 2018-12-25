@@ -34,7 +34,7 @@
     </tr>
     <?php
       $GameServer->selectDB("webdb", $conn);
-        $result = $conn->query("SELECT * FROM service_prices;");
+        $result = $Database->select( * FROM service_prices;");
         while ($row = $result->fetch_assoc())
         {
             ?>

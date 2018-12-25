@@ -31,7 +31,6 @@
 
     if ($compression['sanitize_output'] == TRUE)
     {
-
         function sanitize_output($buffer)
         {
             $search  = array(

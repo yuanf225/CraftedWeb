@@ -23,66 +23,71 @@
 
     require "../ext_scripts_class_loader.php";
 
-    global $Connect, $Account, $Shop, $Character;
-    $conn = $Connect->connectToDB();
+    global $Database, $Account, $Shop, $Character;
 
-    if (isset($_POST['item_entry']))
+    if ( isset($_POST['item_entry']) )
     {
-        $entry           = $conn->escape_string($_POST['item_entry']);
-        $character_realm = $conn->escape_string($_POST['character_realm']);
-        $type            = $conn->escape_string($_POST['send_mode']);
+        $entry           = $Database->conn->escape_string($_POST['item_entry']);
+        $character_realm = $Database->conn->escape_string($_POST['character_realm']);
+        $type            = $Database->conn->escape_string($_POST['send_mode']);
 
-        if (empty($entry) || empty($character_realm) || empty($type))
+        if ( empty($entry) || empty($character_realm) || empty($type) )
         {
             echo '<b class="red_text">Please specify a character.</b>';
         }
         else
         {
-            $Connect->selectDB("webdb", $conn);
+            $Database->selectDB("webdb");
 
             $realm = explode("*", $character_realm);
 
-            $result       = $conn->query("SELECT price FROM shopitems WHERE entry=". $entry .";");
+            $statement       = $Database->select("shopitems", "price", null, "entry=$entry");
+            $result       = $statement->get_result(); 
             $row          = $result->fetch_assoc();
             $account_id   = $Account->getAccountIDFromCharId($realm[0], $realm[1]);
             $account_name = $Account->getAccountName($account_id);
 
-            if ($type == 'vote')
+            if ( $type == 'vote' )
             {
-                if ($Account->hasVP($account_name, $row['price']) == FALSE)
+                if ( $Account->hasVP($account_name, $row['price']) == FALSE )
                 {
                     die('<b class="red_text">You do not have enough Vote Points</b>');
                 }
 
                 $Account->deductVP($account_id, $row['price']);
             }
-            elseif ($type == 'donate')
+            elseif ( $type == 'donate' )
             {
-                if ($Account->hasDP($account_name, $row['price']) == FALSE)
+                if ( $Account->hasDP($account_name, $row['price']) == FALSE )
                 {
                     die('<b class="red_text">You do not have enough ' . $GLOBALS['donation']['coins_name'] . '</b>');
                 }
 
                 $Account->deductDP($account_id, $row['price']);
             }
+            $statement->close();
+
 
             $Shop->logItem($type, $entry, $realm[0], $account_id, $realm[1], 1);
-            $result = $conn->query("SELECT * FROM realms WHERE id=". $realm[1] .";");
+            $statement = $Database->select("realms", null, null, "id=". $realm[1]);
+            $result = $statement->get_result();
             $row    = $result->fetch_assoc();
 
-            if ($row['sendType'] == 'ra')
+            if ( $row['sendType'] == 'ra' )
             {
                 require "../misc/ra.php";
                 require "../classes/character.php";
 
                 sendRa("send items " . $Character->getCharname($realm[0]) . " \"Your requested item\" \"Thanks for supporting us!\" " . $entry . " ", $row['rank_user'], $row['rank_pass'], $row['host'], $row['ra_port']);
+                $statement->close();
             }
-            elseif ($row['sendType'] == 'soap')
+            elseif ( $row['sendType'] == 'soap' )
             {
                 require "../misc/soap.php";
                 require "../classes/character.php";
 
                 sendSoap("send items " . $Character->getCharname($realm[0]) . " \"Your requested item\" \"Thanks for supporting us!\" " . $entry . " ", $row['rank_user'], $row['rank_pass'], $row['host'], $row['soap_port']);
+                $statement->close();
             }
         }
     }

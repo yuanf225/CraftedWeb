@@ -24,7 +24,7 @@
 ?> 
 <div class="box_right_title">Donation Shop logs</div>
 <?php
-    $result = $conn->query("SELECT * FROM shoplog WHERE shop='donate' ORDER BY id DESC LIMIT 10;");
+    $result = $Database->select( * FROM shoplog WHERE shop='donate' ORDER BY id DESC LIMIT 10;");
     if ($result->num_rows == 0)
     {
         echo "Seems Like The Donation Shop Log Was Empty!";

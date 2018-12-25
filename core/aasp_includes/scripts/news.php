@@ -40,8 +40,8 @@ $GameServer->selectDB("webdb", $conn);
         die('No ID Specified. Aborting...');
       }
 
-      $conn->query("DELETE FROM news WHERE id=". $conn->escape_string($_POST['id']) .";");
-      $conn->query("DELETE FROM news_comments WHERE id=". $conn->escape_string($_POST['id']) .";");
+      $Database->conn->query("DELETE FROM news WHERE id=". $Database->conn->escape_string($_POST['id']) .";");
+      $Database->conn->query("DELETE FROM news_comments WHERE id=". $Database->conn->escape_string($_POST['id']) .";");
       $GameServer->logThis("Deleted A News Post");
 
       break;
@@ -49,10 +49,10 @@ $GameServer->selectDB("webdb", $conn);
 
     case "edit":
     {
-      $id      = $conn->escape_string($_POST['id']);
-      $title   = $conn->escape_string(ucfirst($_POST['title']));
-      $author  = $conn->escape_string(ucfirst($_POST['author']));
-      $content = $conn->escape_string($_POST['content']);
+      $id      = $Database->conn->escape_string($_POST['id']);
+      $title   = $Database->conn->escape_string(ucfirst($_POST['title']));
+      $author  = $Database->conn->escape_string(ucfirst($_POST['author']));
+      $content = $Database->conn->escape_string($_POST['content']);
 
       if (empty($id) || empty($title) || empty($content))
       {
@@ -60,7 +60,7 @@ $GameServer->selectDB("webdb", $conn);
       }
       else
       {
-          $conn->query("UPDATE news SET title='". $title ."', author='". $author ."', body='". $content ."' WHERE id=". $id .";");
+          $Database->conn->query("UPDATE news SET title='". $title ."', author='". $author ."', body='". $content ."' WHERE id=". $id .";");
           $GameServer->logThis("Updated news post with ID: <b>". $id ."</b>");
           return TRUE;
       }
@@ -70,7 +70,7 @@ $GameServer->selectDB("webdb", $conn);
 
     case "getNewsContent":
     {
-      $result  = $conn->query("SELECT * FROM news WHERE id=". $conn->escape_string($_POST['id']) .";");
+      $result  = $Database->select( * FROM news WHERE id=". $Database->conn->escape_string($_POST['id']) .";");
       $row     = $result->fetch_assoc();
       $content = str_replace('<br />', "\n", $row['body']);
 
@@ -88,13 +88,13 @@ $GameServer->selectDB("webdb", $conn);
         die('<span class="red_text">Please enter all fields.</span>');
       }
       
-      $title    = $conn->escape_string($_POST['title']);
-      $content  = $conn->escape_string($_POST['content']);
-      $author   = $conn->escape_string($_SESSION['cw_user']);
-      $img      = $conn->escape_string($_POST['image']);
+      $title    = $Database->conn->escape_string($_POST['title']);
+      $content  = $Database->conn->escape_string($_POST['content']);
+      $author   = $Database->conn->escape_string($_SESSION['cw_user']);
+      $img      = $Database->conn->escape_string($_POST['image']);
       $date     = date("Y-m-d H:i:s");
 
-      $result = $conn->query("INSERT INTO news (`title`, `body`, `author`, `image`, `date`) VALUES 
+      $result = $Database->conn->query("INSERT INTO news (`title`, `body`, `author`, `image`, `date`) VALUES 
         ('". $title ."','". $content ."', '". $author ."','". $img ."', '". $date ."');");
       if ($result) 
       {
@@ -103,7 +103,7 @@ $GameServer->selectDB("webdb", $conn);
       }
       else
       {
-        die("Error - ". $conn->error);
+        die("Error - ". $Database->conn->error);
       }
 
       break;

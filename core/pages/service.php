@@ -19,8 +19,8 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    global $Account, $Connect, $Character, $Website;
-    $conn = $Connect->connectToDB();
+    global $Account, $Database, $Character, $Website;
+    $conn = $Database->database();
     $service = $_GET['s'];
 
     $service_title = ucfirst($service . " Change");
@@ -56,9 +56,9 @@
             }
 
             $Account->isNotLoggedIn();
-            $Connect->selectDB("webdb", $conn);
+            $Database->selectDB("webdb", $conn);
             $num    = 0;
-            $result = $conn->query("SELECT char_db, name, id FROM realms ORDER BY id ASC;");
+            $result = $Database->select( char_db, name, id FROM realms ORDER BY id ASC;");
             while ($row    = $result->fetch_assoc())
             {
                 $acct_id  = $Account->getAccountID($_SESSION['cw_user']);
@@ -66,8 +66,8 @@
                 $char_db  = $row['char_db'];
                 $realm_id = $row['id'];
 
-                $Connect->selectDB($char_db);
-                $result = $conn->query("SELECT name, guid, gender, class, race, level, online FROM characters WHERE account=". $acct_id .";");
+                $Database->selectDB($char_db);
+                $result = $Database->select( name, guid, gender, class, race, level, online FROM characters WHERE account=". $acct_id .";");
                 while ($row    = $result->fetch_assoc())
                 {
                     ?><div class='charBox'>

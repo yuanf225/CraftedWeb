@@ -32,10 +32,10 @@
     {   
         $conn = $GameServer->connect();
         $GameServer->selectDB("webdb", $conn);
-        $inShop     = $conn->query("SELECT COUNT(id) AS items FROM shopitems;");
-        $purchToday = $conn->query("SELECT COUNT(id) AS purchases FROM shoplog WHERE date LIKE '%". date('Y-m-d') ."%';");
-        $getAvg     = $conn->query("SELECT AVG(price) AS priceAvg FROM shopitems;");
-        $totalPurch = $conn->query("SELECT COUNT(id) AS purchasesTotal FROM shoplog;");
+        $inShop     = $Database->select( COUNT(id) AS items FROM shopitems;");
+        $purchToday = $Database->select( COUNT(id) AS purchases FROM shoplog WHERE date LIKE '%". date('Y-m-d') ."%';");
+        $getAvg     = $Database->select( AVG(price) AS priceAvg FROM shopitems;");
+        $totalPurch = $Database->select( COUNT(id) AS purchasesTotal FROM shoplog;");
 
 
 

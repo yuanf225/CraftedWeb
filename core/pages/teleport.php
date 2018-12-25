@@ -20,8 +20,7 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 ?>
 <?php
-    global $Account, $Website, $Connect;
-    $conn = $Connect->connectToDB();
+    global $Account, $Website, $Database;
     $Account->isNotLoggedIn();
 ?>
 <div class='box_two_title'>Character Teleport</div>
@@ -46,16 +45,16 @@ Choose the character & desired location you wish to teleport.
 <hr/>
 <h3 id="choosechar">Choose Character</h3> 
 <?php
-    $Connect->selectDB("webdb", $conn);
-    $result = $conn->query("SELECT char_db, name FROM realms ORDER BY id ASC;");
+    $Database->selectDB("webdb", $conn);
+    $result = $Database->select("realms", "char_db, name", null, null, "ORDER BY id ASC;")->get_result();
     while ($row = $result->fetch_assoc())
     {
         $acct_id = $Account->getAccountID($_SESSION['cw_user']);
         $realm   = $row['name'];
         $char_db = $row['char_db'];
 
-        $Connect->selectDB($char_db);
-        $result = $conn->query("SELECT name, guid, gender, class, race, level, online FROM characters WHERE account=". $acct_id .";");
+        $Database->selectDB($char_db);
+        $result = $Database->select("characters", "name, guid, gender, class, race, level, online", null, "account=". $acct_id .";")->get_result();
         while ($row = $result->fetch_assoc())
         {
             ?>

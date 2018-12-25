@@ -5,10 +5,10 @@ function login(panel)
 
     showLoader();
 
-    $.post("../core/aasp_includes/scripts/login.php", {login: TRUE, username: username, password: password, panel: panel},
+    $.post("../core/aasp_includes/scripts/login.php", {login: true, username: username, password: password, panel: panel},
             function (data)
             {
-                if (data == TRUE)
+                if (data == true)
                 {
                     window.location = "index.php";
                 } else

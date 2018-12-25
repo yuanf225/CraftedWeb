@@ -21,11 +21,11 @@
 
     require "core/includes/classes/template_parse.php";
 
-    global $Connect, $Plugins;
-    $conn = $Connect->connectToDB();
-    $Connect->selectDB("webdb", $conn);
+    global $Database, $Plugins;
+    $conn = $Database->database();
+    $Database->selectDB("webdb", $conn);
 
-    if ($getTemplate = $conn->query("SELECT `path` FROM template WHERE applied='1';"))
+    if ($getTemplate = $Database->select( `path` FROM template WHERE applied='1';"))
     {
 
       $template = $getTemplate->fetch_assoc();
@@ -43,6 +43,6 @@
   }
   else
   {
-    buildError("<b>Error getting the template's path, see logs for more info.</b>", NULL, $conn->error);
+    buildError("<b>Error getting the template's path, see logs for more info.</b>", NULL, $Database->conn->error);
   }
 ?>

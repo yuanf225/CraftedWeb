@@ -25,9 +25,9 @@
     $GameServer->selectDB("webdb", $conn);
     if (isset($_POST['newpage']))
     {
-        $name     = $conn->escape_string($_POST['newpage_name']);
-        $filename = $conn->escape_string(trim(strtolower($_POST['newpage_filename'])));
-        $content  = $conn->escape_string(htmlentities($_POST['newpage_content']));
+        $name     = $Database->conn->escape_string($_POST['newpage_name']);
+        $filename = $Database->conn->escape_string(trim(strtolower($_POST['newpage_filename'])));
+        $content  = $Database->conn->escape_string(htmlentities($_POST['newpage_content']));
 
         if (empty($name) || empty($filename) || empty($content))
         {
@@ -35,7 +35,7 @@
         }
         else
         {
-            $conn->query("INSERT INTO custom_pages (name, filename, content, date) VALUES 
+            $Database->conn->query("INSERT INTO custom_pages (name, filename, content, date) VALUES 
               ('". $name ."', '". $filename ."', '". $content ."', '". date("Y-m-d H:i:s") ."');");
 
             echo "<h3>The Page Was Successfully Created.</h3><a href='../?page=". $filename ."' target='_blank'>View Page</a><br/><br/>";

@@ -25,9 +25,9 @@
 <div class="box_right_title"><?php echo $GamePage->titleLink(); ?> &raquo; Manage Character</div>
 Selected Character:  <?php echo $GameAccount->getCharName($_GET['guid'], $_GET['rid']); ?>
 <?php
-    $GameServer->connectToRealmDB($_GET['rid']);
+    $GameServer->realm($_GET['rid']);
 
-    $usersTotal = $conn->query("SELECT * FROM characters WHERE guid=". $conn->escape_string($_GET['guid']) .";");
+    $usersTotal = $Database->select( * FROM characters WHERE guid=". $Database->conn->escape_string($_GET['guid']) .";");
     $row        = $usersTotal->fetch_assoc();
 ?>
 <hr/>

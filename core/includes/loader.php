@@ -47,15 +47,12 @@
 
     if ( $GLOBALS['maintainance'] == TRUE && !in_array($_SERVER['REMOTE_ADDR'], $GLOBALS['maintainance_allowIPs']) )
     {
-        die(
-            htmlentities("<center><h3>Website Maintainance</h3>". $GLOBALS['website_title'] ." is currently undergoing some major maintainance and will be available as soon as possible.<br/><br/>Sincerely</center>"));
+        die("<center><h3>Website Maintainance</h3>". $GLOBALS['website_title'] ." is currently undergoing some major maintainance and will be available as soon as possible.<br/><br/>Sincerely</center>");
     }
 
     require "core/includes/misc/connect.php"; //Load connection class
 
-    global $Connect;
-
-    $conn = $Connect->connectToDB();
+    global $Database;
 
     require "core/includes/misc/func_lib.php";
     require "core/includes/misc/compress.php";
@@ -108,24 +105,33 @@
 ###VOTING SYSTEM####
     if ( isset($_SESSION['votingUrlID']) && $_SESSION['votingUrlID'] != 0 && $GLOBALS['vote']['type'] == 'confirm' )
     {
-        if ( $Website->checkIfVoted($conn->escape_string($_SESSION['votingUrlID']), $GLOBALS['connection']['webdb']) == TRUE )
+        if ( $Website->checkIfVoted($Database->conn->escape_string($_SESSION['votingUrlID']), $GLOBALS['connection']['webdb']) == TRUE )
         {
             die(htmlentities("?page=vote"));
         }
 
-        $acct_id = $Account->getAccountID($_SESSION['cw_user']);
+        $accound_id = $Account->getAccountID($_SESSION['cw_user']);
 
         $next_vote = time() + $GLOBALS['vote']['timer'];
 
-        $Connect->selectDB("webdb", $conn);
+        $Database->selectDB("webdb");
 
-        $conn->query("INSERT INTO votelog (`siteid`, `userid`, `timestamp`, `next_vote`, `ip`) VALUES 
-            (". $conn->escape_string($_SESSION['votingUrlID']) .", ". $acct_id .", '" . time() . "', ". $next_vote .", '" . $_SERVER['REMOTE_ADDR'] . "');");
+        $insert_values = array
+        (
+            "siteid" => $Database->conn->escape_string($_SESSION['votingUrlID']),
+            "userid" => $accound_id,
+            "timestamp" => time(),
+            "next_vote" => $next_vote,
+            "ip" => $_SERVER['REMOTE_ADDR']
+        );
 
-        $getSiteData = $conn->query("SELECT points,url FROM votingsites WHERE id=". $conn->escape_string($_SESSION['votingUrlID']) .";");
-        $row         = $getSiteData->fetch_assoc();
+        $Database->insert("votelog", $insert_values);
 
-        if ($getSiteData->num_rows == 0)
+        $statement = $Database->select("votingsites", "points, url", null, "id=". $Database->conn->escape_string($_SESSION['votingUrlID']));
+        $siteData = $statement->get_result();
+        $row = $siteData->fetch_assoc();
+
+        if ( $siteData->num_rows == 0 )
         {
             header("Location: index.php");
             unset($_SESSION['votingUrlID']);
@@ -133,7 +139,7 @@
 
         //Update the points table.
         $add = $row['points'] * $GLOBALS['vote']['multiplier'];
-        $conn->query("UPDATE account_data SET vp=vp + ". $add ." WHERE id=". $acct_id .";");
+        $Database->update("account_data", array("vp" => "vp+$add"), array("id"=>$accound_id));
 
         unset($_SESSION['votingUrlID']);
 
@@ -141,13 +147,13 @@
     }
 
 ###SESSION SECURITY###
-    if (!isset($_SESSION['last_ip']) && isset($_SESSION['cw_user']))
+    if ( !isset($_SESSION['last_ip']) && isset($_SESSION['cw_user']) )
     {
         $_SESSION['last_ip'] = $_SERVER['REMOTE_ADDR'];
     }
-    elseif (isset($_SESSION['last_ip']) && isset($_SESSION['cw_user']))
+    elseif ( isset($_SESSION['last_ip']) && isset($_SESSION['cw_user']) )
     {
-        if ($_SESSION['last_ip'] != $_SERVER['REMOTE_ADDR'])
+        if ( $_SESSION['last_ip'] != $_SERVER['REMOTE_ADDR'] )
         {
             header("Location: ?page=logout");
         }

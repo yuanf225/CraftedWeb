@@ -19,7 +19,7 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    global $Account, $Connect;
+    global $Account, $Database;
 ?>
 <div class='box_two_title'>Shopping Cart</div>
 <?php
@@ -36,9 +36,9 @@
         echo "<span class='alert'>" . $_GET['return'] . "</span>";
     }
 
-    $conn = $Connect->connectToDB();
+    $conn = $Database->database();
     $Account->isNotLoggedIn();
-    $Connect->selectDB("webdb", $conn);
+    $Database->selectDB("webdb", $conn);
 
     $counter = 0;
     $totalDP = 0;
@@ -59,19 +59,19 @@
                 {
                     $sql .= $entry . ',';
 
-                    $Connect->selectDB($GLOBALS['connection']['worlddb']);
-                    $result = $conn->query("SELECT maxcount FROM item_template WHERE entry=" . $entry . " AND maxcount>0;");
+                    $Database->selectDB($GLOBALS['connection']['worlddb']);
+                    $result = $Database->select( maxcount FROM item_template WHERE entry=" . $entry . " AND maxcount>0;");
                     if ($result->data_seek(0) != 0)
                         $_SESSION['donateCart'][$entry]['quantity'] = 1;
 
-                    $Connect->selectDB($GLOBALS['connection']['webdb']);
+                    $Database->selectDB($GLOBALS['connection']['webdb']);
                 }
             }
         }
 
         $sql = substr($sql, 0, -1) . ") AND in_shop='donate' ORDER BY `itemlevel` ASC;";
 
-        $query = $conn->query($sql);
+        $query = $Database->conn->query($sql);
         ?>
         <table width="100%" >
             <tr id="cartHead"><th>Name</th><th>Quantity</th><th>Price</th><th>Actions</th></tr>
@@ -113,19 +113,19 @@
                 if ($_SESSION['voteCart'][$entry]['quantity'] != 0)
                 {
                     $sql                                      .= $entry . ',';
-                    $Connect->selectDB($GLOBALS['connection']['worlddb']);
-                    $result                                   = $conn->query("SELECT maxcount FROM item_template WHERE entry=". $entry ." AND maxcount>0;");
+                    $Database->selectDB($GLOBALS['connection']['worlddb']);
+                    $result                                   = $Database->select( maxcount FROM item_template WHERE entry=". $entry ." AND maxcount>0;");
                     if ($result->data_seek(0) != 0)
                         $_SESSION['voteCart'][$entry]['quantity'] = 1;
 
-                    $Connect->selectDB($GLOBALS['connection']['webdb']);
+                    $Database->selectDB($GLOBALS['connection']['webdb']);
                 }
             }
         }
 
         $sql = substr($sql, 0, -1) . ") AND in_shop='vote' ORDER BY `itemlevel` ASC";
 
-        $query = $conn->query($sql);
+        $query = $Database->conn->query($sql);
         ?>
         <table width="100%" >
             <tr id="cartHead"><th>Name</th><th>Quantity</th><th>Price</th><th>Actions</th></tr>

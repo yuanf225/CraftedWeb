@@ -1,13 +1,12 @@
 <?php
-
     session_start();
 
-    if (!isset($_GET['step']))
+    if ( !isset($_GET['step']) )
     {
         header("Location: index.php");
     }
 
-    if (file_exists("../core/includes/classes/validator.php"))
+    if ( file_exists("../core/includes/classes/validator.php") )
     {
         include_once "../core/includes/classes/validator.php";
 
@@ -16,7 +15,7 @@
         $_GET = $validator->sanatize($_GET);
         $step = $_GET['step'];
     }
-    elseif (is_numeric($_GET['step']))
+    elseif ( is_numeric($_GET['step']) )
     {
         $step = $_GET['step'];
     }
@@ -43,6 +42,11 @@
         <title>CraftedWeb Installer</title>
 
         <link rel="stylesheet" type="text/css" href="main.css">
+
+        <!-- Boostrap Includes 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     </head>
     <body>
     <center>

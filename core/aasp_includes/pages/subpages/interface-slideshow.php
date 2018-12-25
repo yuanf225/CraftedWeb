@@ -29,7 +29,7 @@
     $status = 'Disabled';
     if ($GLOBALS['enableSlideShow']) $status = 'Enabled';
 
-    $count = $conn->query("SELECT COUNT(*) AS sliderImages FROM slider_images;");
+    $count = $Database->select( COUNT(*) AS sliderImages FROM slider_images;");
 ?>
 The Slideshow Is <b><?php echo $status; ?></b>. You Have <b><?php echo round($count->fetch_assoc()['sliderImages']); ?></b> Images In The Slideshow.
 <hr/>
@@ -57,7 +57,7 @@ The Slideshow Is <b><?php echo $status; ?></b>. You Have <b><?php echo round($co
 </div>
 <br/>&nbsp;<br/>
 <?php
-    $result = $conn->query("SELECT * FROM slider_images ORDER BY position ASC;");
+    $result = $Database->select( * FROM slider_images ORDER BY position ASC;");
     if ($result->num_rows == 0)
     {
         echo "You don't have any images in the slideshow!";

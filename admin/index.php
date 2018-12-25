@@ -190,15 +190,15 @@
                         </tr>
                         <?php
                         $GameServer->selectDB($GLOBALS['forum']['forum_db']);
-                        $result = $conn->query("SELECT poster_id, post_text, post_time, topic_id FROM phpbb_posts ORDER BY post_id DESC LIMIT 10");
+                        $result = $Database->select( poster_id, post_text, post_time, topic_id FROM phpbb_posts ORDER BY post_id DESC LIMIT 10");
                         while ($row    = $result->fetch_assoc())
                         {
                             $string   = $row['post_text'];
                             //Lets get the username     
-                            $getUser  = $conn->query("SELECT username FROM phpbb_users WHERE user_id=". $row['poster_id'] .";");
+                            $getUser  = $Database->select( username FROM phpbb_users WHERE user_id=". $row['poster_id'] .";");
                             $user     = $getUser->fetch_assoc();
                             //Get topic
-                            $getTopic = $conn->query("SELECT topic_title FROM phpbb_topics WHERE topic_id=". $row['topic_id'] .";");
+                            $getTopic = $Database->select( topic_title FROM phpbb_topics WHERE topic_id=". $row['topic_id'] .";");
                             $topic    = $getTopic->fetch_assoc();
                             ?>
                             <tr class="center">
@@ -259,7 +259,7 @@
                                         <td>
                                             <?php
                                                 $GameServer->selectDB("webdb", $conn);
-                                                $get = $conn->query("SELECT version FROM db_version;");
+                                                $get = $Database->select( version FROM db_version;");
                                                 $row = $get->fetch_assoc();
                                                 if ($row['version'] == null || empty($row['version'])) $row['version'] = '1.0';
                                                 echo $row['version'];

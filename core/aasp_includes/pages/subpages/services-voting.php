@@ -34,7 +34,7 @@
       <th>Actions</th>
     </tr>
     <?php
-        $result = $conn->query("SELECT * FROM votingsites ORDER BY id ASC;");
+        $result = $Database->select( * FROM votingsites ORDER BY id ASC;");
         while ($row = $result->fetch_assoc())
         {
             ?>

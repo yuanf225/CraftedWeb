@@ -23,8 +23,7 @@
 
     require "../ext_scripts_class_loader.php";
 
-    global $Account, $Connect, $Server;
-    $conn = $Connect->connectToDB();
+    global $Account, $Database, $Server;
 
     if (isset($_POST['element']) && $_POST['element'] == 'vote')
     {
@@ -39,33 +38,33 @@
 ##
     if (isset($_POST['action']) && $_POST['action'] == 'removeComment')
     {
-        $Connect->selectDB("webdb", $conn);
-        $conn->query("DELETE FROM news_comments WHERE id=". $conn->escape_string($_POST['id']) .";");
+        $Database->selectDB("webdb");
+        $Database->conn->query("DELETE FROM news_comments WHERE id=". $Database->conn->escape_string($_POST['id']) .";");
     }
 ##
 #   Terms Of Service
 ##
-    if (isset($_POST['getTos']))
+    if ( isset($_POST['getTos']) )
     {
-        include "../../documents/termsofservice.php";
+        include "../../core/documents/termsofservice.php";
         echo $tos_message;
     }
 ##
 #   Refund Policy
 ##
-    if (isset($_POST['getRefundPolicy']))
+    if ( isset($_POST['getRefundPolicy']) )
     {
-        include "../../documents/refundpolicy.php";
+        include "../../core/documents/refundpolicy.php";
         echo $rp_message;
     }
 ##
 #   Server Status
 ##
-    if (isset($_POST['serverStatus']))
+    if ( isset($_POST['serverStatus']) )
     {
         echo "<div class='box_one_title'>Server status</div>";
         $num = 0;
-        if (is_array($GLOBALS['realms']) || is_object($GLOBALS['realms']))
+        if ( is_array($GLOBALS['realms']) || is_object($GLOBALS['realms']) )
         {
             foreach ($GLOBALS['realms'] as $k => $v)
             {
@@ -77,7 +76,7 @@
                 $num++;
             }
         }
-        if ($num == 0)
+        if ( $num == 0 )
         {
             buildError("<b>No realms found: </b> Please setup your database and add your realm(s)!", NULL);
             echo "No realms found.";
@@ -92,16 +91,15 @@
 ##
 #   Donation List
 ##
-    if (isset($_POST['convertDonationList']))
+    if ( isset($_POST['convertDonationList']) )
     {
         for ($row = 0; $row < count($GLOBALS['donationList']); $row++)
         {
-            $value = $conn->escape_string($_POST['convertDonationList']);
-            if ($value == $GLOBALS['donationList'][$row][1])
+            $value = $Database->conn->escape_string($_POST['convertDonationList']);
+            if ( $value == $GLOBALS['donationList'][$row][1] )
             {
                 echo $GLOBALS['donationList'][$row][2];
                 exit();
             }
         }
     }
-?>

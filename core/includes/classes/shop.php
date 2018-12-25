@@ -23,9 +23,9 @@
     {
         public function search($value, $shop, $quality, $type, $ilevelfrom, $ilevelto, $results, $faction, $class, $subtype)
         {
-            global $Connect;
-            $conn = $Connect->connectToDB();
-            $Connect->selectDB("webdb", $conn);
+            global $Database;
+            $conn = $Database->database();
+            $Database->selectDB("webdb", $conn);
 
             if ($shop == 'vote')
             {
@@ -36,16 +36,16 @@
                 $shopGlobalVar = $GLOBALS['donateShop'];
             }
 
-            $value      = $conn->escape_string($value);
-            $shop       = $conn->escape_string($shop);
-            $quality    = $conn->escape_string($quality);
-            $ilevelfrom = $conn->escape_string($ilevelfrom);
-            $ilevelto   = $conn->escape_string($ilevelto);
-            $results    = $conn->escape_string($results);
-            $faction    = $conn->escape_string($faction);
-            $class      = $conn->escape_string($class);
-            $type       = $conn->escape_string($type);
-            $subtype    = $conn->escape_string($subtype);
+            $value      = $Database->conn->escape_string($value);
+            $shop       = $Database->conn->escape_string($shop);
+            $quality    = $Database->conn->escape_string($quality);
+            $ilevelfrom = $Database->conn->escape_string($ilevelfrom);
+            $ilevelto   = $Database->conn->escape_string($ilevelto);
+            $results    = $Database->conn->escape_string($results);
+            $faction    = $Database->conn->escape_string($faction);
+            $class      = $Database->conn->escape_string($class);
+            $type       = $Database->conn->escape_string($type);
+            $subtype    = $Database->conn->escape_string($subtype);
 
             if ($value == "Search for an item...")
             {
@@ -96,7 +96,7 @@
                     $advanced .= " AND itemlevel<='" . $ilevelto . "'";
                 }
 
-                $count = $conn->query("SELECT COUNT(id) AS item FROM shopitems 
+                $count = $Database->select( COUNT(id) AS item FROM shopitems 
                                         WHERE name LIKE '%". $value ."%' AND in_shop = '". $shop ."' ". $advanced .";");
 
                 if ($count->data_seek(0) == 0)
@@ -118,8 +118,8 @@
                 }
             }
 
-            $result = $conn->query("SELECT entry, displayid, name, quality, price, faction, class FROM shopitems 
-                                            WHERE name LIKE '%". $value ."%' AND in_shop = '". $conn->escape_string($shop) ."' ". $advanced .";");
+            $result = $Database->select( entry, displayid, name, quality, price, faction, class FROM shopitems 
+                                            WHERE name LIKE '%". $value ."%' AND in_shop = '". $Database->conn->escape_string($shop) ."' ". $advanced .";");
 
             if ($results != "--Results--")
             {
@@ -177,16 +177,16 @@
                             break;
                     }
 
-                    $getIcon = $conn->query("SELECT icon FROM item_icons WHERE displayid=". $row['displayid'] .";");
+                    $getIcon = $Database->select( icon FROM item_icons WHERE displayid=". $row['displayid'] .";");
                     if ($getIcon->num_rows == 0)
                     {
                         //No icon found. Probably cataclysm item. Get the icon from wowhead instead.
                         $sxml = new SimpleXmlElement(file_get_contents('http://www.wowhead.com/item='. $entry .'&xml'));
 
-                        $icon = $conn->escape_string(strtolower($sxml->item->icon));
+                        $icon = $Database->conn->escape_string(strtolower($sxml->item->icon));
                         //Now that we have it loaded. Add it into database for future use.
                         //Note that WoWHead XML is extremely slow. This is the main reason why we're adding it into the db.
-                        $conn->query("INSERT INTO item_icons VALUES(". $row['displayid'] .", '". $icon ."');");
+                        $Database->conn->query("INSERT INTO item_icons VALUES(". $row['displayid'] .", '". $icon ."');");
                     }
                     else
                     {
@@ -277,13 +277,13 @@
 
         public function listAll($shop)
         {
-            global $Connect;
-            $conn = $Connect->connectToDB();
-            $Connect->selectDB("webdb", $conn);
+            global $Database;
+            $conn = $Database->database();
+            $Database->selectDB("webdb", $conn);
 
-            $shop = $conn->escape_string($shop);
+            $shop = $Database->conn->escape_string($shop);
 
-            $result = $conn->query("SELECT entry, displayid, name, quality, price, faction, class FROM shopitems WHERE in_shop='". $shop ."';");
+            $result = $Database->select( entry, displayid, name, quality, price, faction, class FROM shopitems WHERE in_shop='". $shop ."';");
 
             if ($result->num_rows == 0)
             {
@@ -294,16 +294,16 @@
                 while ($row = $result->fetch_assoc())
                 {
                     $entry   = $row['entry'];
-                    $getIcon = $conn->query("SELECT icon FROM item_icons WHERE displayid=". $row['displayid'] .";");
+                    $getIcon = $Database->select( icon FROM item_icons WHERE displayid=". $row['displayid'] .";");
                     if ($getIcon->num_rows == 0)
                     {
                         //No icon found. Probably cataclysm item. Get the icon from wowhead instead.
                         $sxml = new SimpleXmlElement(file_get_contents('http://www.wowhead.com/item=' . $entry . '&xml'));
 
-                        $icon = $conn->escape_string(strtolower($sxml->item->icon));
+                        $icon = $Database->conn->escape_string(strtolower($sxml->item->icon));
                         //Now that we have it loaded. Add it into database for future use.
                         //Note that WoWHead XML is extremely slow. This is the main reason why we're adding it into the db.
-                        $conn->query("INSERT INTO item_icons VALUES(". $row['displayid'] .", '". $icon ."');");
+                        $Database->conn->query("INSERT INTO item_icons VALUES(". $row['displayid'] .", '". $icon ."');");
                     }
                     else
                     {
@@ -392,22 +392,22 @@
 
         public function logItem($shop, $entry, $char_id, $account, $realm_id, $amount)
         {
-            global $Connect;
-            $conn = $Connect->connectToDB();;
-            $Connect->selectDB("webdb", $conn);
+            global $Database;
+            $conn = $Database->database();;
+            $Database->selectDB("webdb", $conn);
 
             date_default_timezone_set($GLOBALS['timezone']);
 
-            $entry      = $conn->escape_string($entry);
-            $char_id    = $conn->escape_string($char_id);
-            $shop       = $conn->escape_string($shop);
-            $account    = $conn->escape_string($account);
-            $realm_id   = $conn->escape_string($realm_id);
-            $amount     = $conn->escape_string($amount);
+            $entry      = $Database->conn->escape_string($entry);
+            $char_id    = $Database->conn->escape_string($char_id);
+            $shop       = $Database->conn->escape_string($shop);
+            $account    = $Database->conn->escape_string($account);
+            $realm_id   = $Database->conn->escape_string($realm_id);
+            $amount     = $Database->conn->escape_string($amount);
 
 
 
-            $conn->query("INSERT INTO shoplog (`entry`, `char_id`, `date`, `ip`, `shop`, `account`, `realm_id`, `amount`) VALUES 
+            $Database->conn->query("INSERT INTO shoplog (`entry`, `char_id`, `date`, `ip`, `shop`, `account`, `realm_id`, `amount`) VALUES 
                 (". $entry .", '". $char_id ."', '". date("Y-m-d H:i:s") ."', '". $_SERVER['REMOTE_ADDR'] ."', '". $shop ."', '". $account ."', ". $realm_id .", '". $amount ."')");
         }
 

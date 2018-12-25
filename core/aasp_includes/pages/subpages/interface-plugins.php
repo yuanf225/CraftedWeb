@@ -53,7 +53,7 @@
                             echo "<td>". $author ."</td>";
                             echo "<td>". $created ."</td>";
                             
-                            $chk = $conn->query("SELECT COUNT(*) AS disabledPlugins FROM disabled_plugins WHERE foldername='". $conn->escape_string($folderName) ."';");
+                            $chk = $Database->select( COUNT(*) AS disabledPlugins FROM disabled_plugins WHERE foldername='". $Database->conn->escape_string($folderName) ."';");
                             if ($chk->fetch_assoc()['disabledPlugins'] == 0) echo "<td>Enabled</td>";
                             else echo "<td>Disabled</td>";
                             echo "</tr>";

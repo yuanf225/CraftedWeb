@@ -25,18 +25,18 @@
         <meta charset="utf-8">
         <title>CraftedWeb Installation</title>
         <link rel="stylesheet" type="text/css" href="main.css">
+        <!-- Boostrap Includes -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
     <style type="text/css">
-      #main_box
-      {
-        width: 750px;
-      }
+      #main_box { width: 750px; }
     </style>
     <body>
     <center>
         <div id="main_box">
             <h1>Welcome To The CraftedWeb Installer!</h1>
-
             <div id="content">
                 <p id="steps"><b>Introduction</b> &raquo; MySQL Info &raquo; Configure &raquo; Database &raquo; Realm Info &raquo; Finished<p>
                 <hr/>

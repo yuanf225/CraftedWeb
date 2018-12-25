@@ -120,10 +120,10 @@ Filter:
 </a> 
 <p/>
 <?php
-    $GameServer->connectToRealmDB($_GET['rid']);
+    $GameServer->realm($_GET['rid']);
     $equip_array = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18);
 
-    $result = $conn->query("SELECT guid, itemEntry, count FROM item_instance WHERE owner_guid=". $conn->escape_string($_GET['guid']) .";");
+    $result = $Database->select( guid, itemEntry, count FROM item_instance WHERE owner_guid=". $Database->conn->escape_string($_GET['guid']) .";");
     if ($result->num_rows == 0)
     {
         echo "No Items Were Found!";
@@ -139,28 +139,28 @@ Filter:
             {
                 if ($_GET['f'] == 'equip')
                 {
-                    $getPos = $conn->query("SELECT slot, bag FROM character_inventory 
-                        WHERE item='". $row['guid'] ."' AND bag='0' AND slot RANGE(0,18) AND guid=". $conn->escape_string($_GET['guid']) .";");
+                    $getPos = $Database->select( slot, bag FROM character_inventory 
+                        WHERE item='". $row['guid'] ."' AND bag='0' AND slot RANGE(0,18) AND guid=". $Database->conn->escape_string($_GET['guid']) .";");
                 }
                 elseif ($_GET['f'] == 'bank')
                 {
-                    $getPos = $conn->query("SELECT slot, bag FROM character_inventory 
+                    $getPos = $Database->select( slot, bag FROM character_inventory 
                         WHERE item='". $row['guid'] ."' AND slot>=39 AND slot<=73;");
                 }
                 elseif ($_GET['f'] == 'keyring')
                 {
-                    $getPos = $conn->query("SELECT slot, bag FROM character_inventory 
+                    $getPos = $Database->select( slot, bag FROM character_inventory 
                         WHERE item='". $row['guid'] ."' AND slot>=86 AND slot<=117;");
                 }
                 elseif ($_GET['f'] == 'currency')
                 {
-                    $getPos = $conn->query("SELECT slot, bag FROM character_inventory 
+                    $getPos = $Database->select( slot, bag FROM character_inventory 
                         WHERE item='". $row['guid'] ."' AND slot>=118 AND slot<=135;");
                 }
             }
             else
             {
-                $getPos = $conn->query("SELECT slot, bag FROM character_inventory WHERE item='". $row['guid'] ."';");
+                $getPos = $Database->select( slot, bag FROM character_inventory WHERE item='". $row['guid'] ."';");
             }
 
             if ($getPos->data_seek(0) > 0)
@@ -168,20 +168,20 @@ Filter:
                 $pos =$getPos->fetch_assoc();
 
                 $GameServer->selectDB('worlddb');
-                $get = $conn->query("SELECT name, entry, quality, displayid FROM item_template WHERE entry='". $entry ."';");
+                $get = $Database->select( name, entry, quality, displayid FROM item_template WHERE entry='". $entry ."';");
                 $r   = $get->fetch_assoc();
 
                 $GameServer->selectDB('webdb');
-                $getIcon = $conn->query("SELECT icon FROM item_icons WHERE displayid='". $r['displayid'] ."';");
+                $getIcon = $Database->select( icon FROM item_icons WHERE displayid='". $r['displayid'] ."';");
                 if ($getIcon->num_rows == 0)
                 {
                     //No icon found. Probably cataclysm item. Get the icon from wowhead instead.
                     $sxml = new SimpleXmlElement(file_get_contents("http://www.wowhead.com/item=". $entry ."&xml"));
 
-                    $icon = strtolower($conn->escape_string($sxml->item->icon));
+                    $icon = strtolower($Database->conn->escape_string($sxml->item->icon));
                     //Now that we have it loaded. Add it into database for future use.
                     //Note that WoWHead XML is extremely slow. This is the main reason why we're adding it into the db.
-                    $conn->query("INSERT INTO item_icons VALUES('". $row['displayid'] ."', '". $icon ."');");
+                    $Database->conn->query("INSERT INTO item_icons VALUES('". $row['displayid'] ."', '". $icon ."');");
                 }
                 else
                 {
@@ -189,7 +189,7 @@ Filter:
                     $icon    = strtolower($iconrow['icon']);
                 }
 
-                $GameServer->connectToRealmDB($_GET['rid']);
+                $GameServer->realm($_GET['rid']);
                 ?>
                 <tr bgcolor="#e9e9e9">
                     <td width="36"><img src="http://static.wowhead.com/images/wow/icons/medium/<?php echo $icon; ?>.jpg"></td>

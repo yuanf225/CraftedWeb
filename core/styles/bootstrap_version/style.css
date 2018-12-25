@@ -1,0 +1,36 @@
+.logo {margin: 40px 0;}
+
+.logo:hover { opacity: 0.85;}
+
+body
+{
+    background-color: #090909; 
+    background-image: url(images/bg.jpg);
+    color: #fff; 
+    font-family: 'Calibri', 'newCalibri', 'Arial'; 
+    font-size: 15px; 
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: top center;
+    margin: 0; 
+    padding: 0; 
+    top: 0;
+}
+
+input[type="button"] { 
+    height: 26px; 
+    margin-top: 4px; 
+    background-color: #f1f1f1; 
+    
+    font-family: Verdana; 
+    text-shadow: #0C3985 1px 1px 1px;
+    background-image:url(images/submit_bg.png); 
+    background-repeat:repeat-x; 
+    color: #fff; 
+    padding-left: 18px;  
+    padding-right: 18px; 
+    border: none; 
+    cursor:pointer;  
+    padding-bottom: 4px; 
+    font-family: 'Calibri', 'newCalibri', 'Arial'; 
+}

@@ -29,8 +29,8 @@
         public function getNews()
         {
             
-            global $Cache, $Connect, $Website;
-            $conn = $Connect->connectToDB();
+            global $Cache, $Database, $Website;
+            $conn = $Database->database();
 
             if ($GLOBALS['news']['enable'] == TRUE)
             {
@@ -42,9 +42,9 @@
                 }
                 else
                 {
-                    $Connect->selectDB("webdb", $conn);
+                    $Database->selectDB("webdb", $conn);
 
-                    $result = $conn->query("SELECT * FROM news ORDER BY id DESC LIMIT ". $GLOBALS['news']['maxShown'] .";");
+                    $result = $Database->select( * FROM news ORDER BY id DESC LIMIT ". $GLOBALS['news']['maxShown'] .";");
 
                     if ($result->num_rows == 0)
                     {
@@ -107,7 +107,7 @@
                                     $output .= nl2br($row['body']);
                                 }
 
-                                $result      = $conn->query("SELECT COUNT(id) FROM news_comments WHERE newsid=". $row['id'] .";");
+                                $result      = $Database->select( COUNT(id) FROM news_comments WHERE newsid=". $row['id'] .";");
                                 $commentsNum = $result->fetch_row();
 
                                 if ($GLOBALS['news']['enableComments'] == TRUE)
@@ -138,8 +138,8 @@
 
         public function getSlideShowImages()
         {
-            global $Cache, $Connect;
-            $conn = $Connect->connectToDB();
+            global $Cache, $Database;
+            $conn = $Database->database();
 
             if ($Cache->exists("slideshow") == TRUE)
             {
@@ -147,8 +147,8 @@
             }
             else
             {
-                $Connect->selectDB("webdb", $conn);
-                $result = $conn->query("SELECT `path`, `link` FROM slider_images ORDER BY position ASC;");
+                $Database->selectDB("webdb", $conn);
+                $result = $Database->select( `path`, `link` FROM slider_images ORDER BY position ASC;");
                 while ($row = $result->fetch_assoc())
                 {
                     echo $outPutPT = '<a href="'. htmlspecialchars($row['link']) .'"><img border="none" src="core/'. htmlspecialchars($row['path']) .'" alt="" class="slideshow_image"></a>';
@@ -160,11 +160,11 @@
 
         public function getSlideShowImageNumbers()
         {
-            global $Connect;
-            $conn = $Connect->connectToDB();
-            $Connect->selectDB("webdb", $conn);
+            global $Database;
+            $conn = $Database->database();
+            $Database->selectDB("webdb", $conn);
 
-            $result = $conn->query("SELECT `position` FROM slider_images ORDER BY position ASC;");
+            $result = $Database->select( `position` FROM slider_images ORDER BY position ASC;");
             $x      = 1;
 
             while ($row = $result->fetch_assoc())
@@ -192,15 +192,15 @@
 
         public function loadVotingLinks()
         {
-            global $Connect, $Account, $Website;
-            $conn = $Connect->connectToDB();
-            $Connect->selectDB("webdb", $conn);
+            global $Database, $Account, $Website;
+            $conn = $Database->database();
+            $Database->selectDB("webdb", $conn);
 
-            $result = $conn->query("SELECT * FROM votingsites ORDER BY id DESC;");
+            $result = $Database->select( * FROM votingsites ORDER BY id DESC;");
 
             if ($result->num_rows == 0)
             {
-                buildError("Couldnt Fetch Any Voting Links From The Database. ". $conn->error);
+                buildError("Couldnt Fetch Any Voting Links From The Database. ". $Database->conn->error);
             }
             else
             {
@@ -219,7 +219,7 @@
                                     }
                                     else
                                     {
-                                        $getNext = $conn->query("SELECT next_vote FROM ". $GLOBALS['connection']['webdb'] .".votelog 
+                                        $getNext = $Database->select( next_vote FROM ". $GLOBALS['connection']['webdb'] .".votelog 
 													    WHERE userid=". $Account->getAccountID($_SESSION['cw_user']) ." 
 														AND siteid=". $row['id'] ." ORDER BY id DESC LIMIT 1;");
 
@@ -244,15 +244,15 @@
 
         public function checkIfVoted($siteid)
         {
-            global $Account, $Connect;
-            $conn = $Connect->connectToDB();
+            global $Account, $Database;
+            $conn = $Database->database();
 
-            $siteId  = $conn->escape_string($siteid);
+            $siteId  = $Database->conn->escape_string($siteid);
 
             $acct_id = $Account->getAccountID($_SESSION['cw_user']);
-            $Connect->selectDB("webdb", $conn);
+            $Database->selectDB("webdb", $conn);
 
-            $result = $conn->query("SELECT COUNT(id) AS voted FROM votelog WHERE userid=". $acct_id ." AND siteid=". $siteId ." AND next_vote > ". time() .";");
+            $result = $Database->select( COUNT(id) AS voted FROM votelog WHERE userid=". $acct_id ." AND siteid=". $siteId ." AND next_vote > ". time() .";");
 
             if ($result->fetch_assoc()['voted'] == 0)
             {

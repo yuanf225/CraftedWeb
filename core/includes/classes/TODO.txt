@@ -1,0 +1,8 @@
+Core
+	Includes
+		Classes
+			Account.php
+				- Change the output of `isLoggedIn` to boolean
+				- Remove `isNotLoggedIn`
+				- Rename `isNotGmLoggedIn` to `isAdmin` with `boolean` output
+				

@@ -141,13 +141,13 @@
     /* mySQL connection settings
       /************************ */
 
-    $connection['host']      = '127.0.0.1';
-    $connection['user']      = 'root';
-    $connection['password']  = 'ascent';
-    $connection['logondb']   = 'auth';
-    $connection['webdb']     = 'craftedweb';
-    $connection['worlddb']   = 'world';
-    $connection['realmlist'] = 'logon.yourserver.com';
+    $Databaseion['host']      = '127.0.0.1';
+    $Databaseion['user']      = 'root';
+    $Databaseion['password']  = 'ascent';
+    $Databaseion['logondb']   = 'auth';
+    $Databaseion['webdb']     = 'craftedweb';
+    $Databaseion['worlddb']   = 'world';
+    $Databaseion['realmlist'] = 'logon.yourserver.com';
 
     // host = Either an IP address or a DNS address
     // user = A mySQL user with access to view/write the entire database.

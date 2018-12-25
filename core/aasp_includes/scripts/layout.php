@@ -35,22 +35,22 @@
     {
         case "addLink": 
         {
-            $title     = $conn->escape_string($_POST['title']);
-            $url       = $conn->escape_string($_POST['url']);
-            $shownWhen = $conn->escape_string($_POST['shownWhen']);
+            $title     = $Database->conn->escape_string($_POST['title']);
+            $url       = $Database->conn->escape_string($_POST['url']);
+            $shownWhen = $Database->conn->escape_string($_POST['shownWhen']);
 
             if (empty($title) || empty($url) || empty($shownWhen))
             {
                 die("Please enter all fields.");
             }
 
-            if ($conn->query("INSERT INTO site_links (title, url, shownWhen) VALUES('". $title ."', '". $url ."', '". $shownWhen ."');"))
+            if ($Database->conn->query("INSERT INTO site_links (title, url, shownWhen) VALUES('". $title ."', '". $url ."', '". $shownWhen ."');"))
             {
                 $GameServer->logThis("Added ". $title ." to the menu");
             }
             else
             {
-                $GameServer->logThis("Could Not Add The Menu - ". $conn->error);
+                $GameServer->logThis("Could Not Add The Menu - ". $Database->conn->error);
             }
             
             break;
@@ -58,70 +58,70 @@
         
         case "deleteImage":
         {
-            $id = $conn->escape_string($_POST['id']);
+            $id = $Database->conn->escape_string($_POST['id']);
 
-            if ($conn->query("DELETE FROM slider_images WHERE position=". $id .";"))
+            if ($Database->conn->query("DELETE FROM slider_images WHERE position=". $id .";"))
             {
                 $GameServer->logThis("Removed a slideshow image");
             }
             else
             {
-                $GameServer->logThis("Could Not Remove The Selected Slideshow Image - ". $conn->error);
+                $GameServer->logThis("Could Not Remove The Selected Slideshow Image - ". $Database->conn->error);
             }
             break;
         }
 
         case "deleteLink":
         {
-            $id = $conn->escape_string($_POST['id']);
+            $id = $Database->conn->escape_string($_POST['id']);
 
-            if($conn->query("DELETE FROM site_links WHERE position=". $id .";"))
+            if($Database->conn->query("DELETE FROM site_links WHERE position=". $id .";"))
             {
                 $GameServer->logThis("Removed a menu link");
             }
             else
             {
-                $GameServer->logThis("Could Not Remove A Menu Link - ". $conn->error);
+                $GameServer->logThis("Could Not Remove A Menu Link - ". $Database->conn->error);
             }
             break;
         }
 
         case "disablePlugin":
         {
-            $foldername = $conn->escape_string($_POST['foldername']);
+            $foldername = $Database->conn->escape_string($_POST['foldername']);
 
-            if ($conn->query("INSERT INTO disabled_plugins VALUES('". $foldername ."');"))
+            if ($Database->conn->query("INSERT INTO disabled_plugins VALUES('". $foldername ."');"))
             {
                 include "../../core/plugins/" . $foldername . "/info.php";
                 $GameServer->logThis("Disabled the plugin " . $title);
             }
             else
             {
-                $GameServer->logThis("Could Not Disable The Plugin - ". $conn->error);   
+                $GameServer->logThis("Could Not Disable The Plugin - ". $Database->conn->error);   
             }
             break;
         }
 
         case "enablePlugin":
         {
-            $foldername = $conn->escape_string($_POST['foldername']);
+            $foldername = $Database->conn->escape_string($_POST['foldername']);
 
-            if ($conn->query("DELETE FROM disabled_plugins WHERE foldername='". $foldername ."';"))
+            if ($Database->conn->query("DELETE FROM disabled_plugins WHERE foldername='". $foldername ."';"))
             {
                 include "../../core/plugins/" . $foldername . "/info.php";
                 $GameServer->logThis("Enabled the plugin -" . $title);
             }
             else
             {
-                $GameServer->logThis("Coud Not Enable The Plugin - ". $conn->error);
+                $GameServer->logThis("Coud Not Enable The Plugin - ". $Database->conn->error);
             }
             break;
         }
 
         case "getMenuEditForm":
         {
-            $id = $conn->escape_string($_POST['id']);
-            $result = $conn->query("SELECT * FROM site_links WHERE position=". $id .";");
+            $id = $Database->conn->escape_string($_POST['id']);
+            $result = $Database->select( * FROM site_links WHERE position=". $id .";");
             $rows   = $result->fetch_assoc();
             ?>
             Title<br/>
@@ -156,38 +156,38 @@
 
         case "installTemplate":
         {
-            $name = $conn->escape_string(trim($_POST['name']));
-            $path = $conn->escape_string(trim($_POST['path']));
-            if ($conn->query("INSERT INTO template (`name`, `path`) VALUES('". $name ."', '". $path ."');"))
+            $name = $Database->conn->escape_string(trim($_POST['name']));
+            $path = $Database->conn->escape_string(trim($_POST['path']));
+            if ($Database->conn->query("INSERT INTO template (`name`, `path`) VALUES('". $name ."', '". $path ."');"))
             {
                 $GameServer->logThis("Installed the template ". $_POST['name']);
             }
             else
             {
-                $GameServer->logThis("Error installing the template ". $conn->error);
+                $GameServer->logThis("Error installing the template ". $Database->conn->error);
             }
             break;
         }
 
         case "saveMenu":
         {
-            $title     = $conn->escape_string($_POST['title']);
-            $url       = $conn->escape_string($_POST['url']);
-            $shownWhen = $conn->escape_string($_POST['shownWhen']);
-            $id        = $conn->escape_string($_POST['id']);
+            $title     = $Database->conn->escape_string($_POST['title']);
+            $url       = $Database->conn->escape_string($_POST['url']);
+            $shownWhen = $Database->conn->escape_string($_POST['shownWhen']);
+            $id        = $Database->conn->escape_string($_POST['id']);
 
             if (empty($title) || empty($url) || empty($shownWhen))
             {
                 die("Please enter all fields.");
             }
 
-            if ($conn->query("UPDATE site_links SET title='". $title ."', url='". $url ."', shownWhen='". $shownWhen ."' WHERE position=". $id .";"))
+            if ($Database->conn->query("UPDATE site_links SET title='". $title ."', url='". $url ."', shownWhen='". $shownWhen ."' WHERE position=". $id .";"))
             {
                 $GameServer->logThis("Modified the menu");
             }
             else
             {
-                $GameServer->logThis("Could Not Modifie The Menu - ". $conn->error);
+                $GameServer->logThis("Could Not Modifie The Menu - ". $Database->conn->error);
             }
 
             echo TRUE;
@@ -196,33 +196,33 @@
 
         case "setTemplate":
         {
-            $templateId = $conn->escape_string($_POST['id']);
-            if ($conn->query("UPDATE template SET applied='0' WHERE applied='1';") && 
-                $conn->query("UPDATE template SET applied='1' WHERE id=". $templateId .";"))
+            $templateId = $Database->conn->escape_string($_POST['id']);
+            if ($Database->conn->query("UPDATE template SET applied='0' WHERE applied='1';") && 
+                $Database->conn->query("UPDATE template SET applied='1' WHERE id=". $templateId .";"))
             {
-                $result = $conn->query("SELECT name FROM template WHERE id=". $templateId .";");
+                $result = $Database->select( name FROM template WHERE id=". $templateId .";");
                 $GameServer->logThis("Template Changed To `". $result->fetch_assoc()['name'] ."`");
             }
             else
             {
-                $GameServer->logThis("Could Not Change The Template - ". $conn->error);
+                $GameServer->logThis("Could Not Change The Template - ". $Database->conn->error);
             }
             break;
         }
 
         case "uninstallTemplate":
         {
-            $templateId = $conn->escape_string($_POST['id']);
-            $result = $conn->query("SELECT name FROM template WHERE id=". $templateId .";");
+            $templateId = $Database->conn->escape_string($_POST['id']);
+            $result = $Database->select( name FROM template WHERE id=". $templateId .";");
 
-            if ($conn->query("DELETE FROM template WHERE id=". $templateId .";") && 
-                $conn->query("UPDATE template SET applied='1' ORDER BY id ASC LIMIT 1;"))
+            if ($Database->conn->query("DELETE FROM template WHERE id=". $templateId .";") && 
+                $Database->conn->query("UPDATE template SET applied='1' ORDER BY id ASC LIMIT 1;"))
             {
                 $GameServer->logThis("Uninstalled Template - `". $result->fetch_assoc()['name'] ."`");
             }
             else
             {
-                $GameServer->logThis("Could Not Uninstall The Template - ". $conn->error);
+                $GameServer->logThis("Could Not Uninstall The Template - ". $Database->conn->error);
             }
             break;
         }

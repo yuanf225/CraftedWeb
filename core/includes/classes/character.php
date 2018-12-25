@@ -23,27 +23,26 @@
     class Character
     {
 
-        public function unstuck($guid, $char_db)
+        public function unstuck ($guid, $char_db)
         {
-            global $Connect, $Account, $Server;
-            $conn = $Connect->connectToDB();
+            global $Database, $Account, $Server;
 
-            $guId   = $conn->escape_string($guid);
-            $charDb = $conn->escape_string($char_db);
+            $guId   = $Database->conn->escape_string($guid);
+            $charDb = $Database->conn->escape_string($char_db);
 
             $rid  = $Server->getRealmId($charDb);
 
-            $Connect->connectToRealmDB($rid);
+            $Database->realm($rid);
 
-            if ($this->isOnline($guId) == TRUE)
+            if ( $this->isOnline($guId) == TRUE )
             {
                 echo '<b class="red_text">Please log out your character before proceeding.';
             }
             else
             {
-                if ($GLOBALS['service']['unstuck']['currency'] == 'vp')
+                if ( $GLOBALS['service']['unstuck']['currency'] == 'vp' )
                 {
-                    if ($Account->hasVP($_SESSION['cw_user'], $GLOBALS['service']['unstuck']['price']) == FALSE)
+                    if ( $Account->hasVP($_SESSION['cw_user'], $GLOBALS['service']['unstuck']['price']) == FALSE )
                     {
                         die('<b class="red_text">Not enough Vote Points!</b>');
                     }
@@ -53,9 +52,9 @@
                     }
                 }
 
-                if ($GLOBALS['service']['unstuck']['currency'] == 'dp')
+                if ( $GLOBALS['service']['unstuck']['currency'] == 'dp' )
                 {
-                    if ($Account->hasDP($_SESSION['cw_user'], $GLOBALS['service']['unstuck']['price']) == FALSE)
+                    if ( $Account->hasDP($_SESSION['cw_user'], $GLOBALS['service']['unstuck']['price']) == FALSE )
                     {
                         die('<b class="red_text">Not enough ' . $GLOBALS['donation']['coins_name'] . '</b>');
                     }
@@ -65,7 +64,8 @@
                     }
                 }
 
-                $getXYZ = $conn->query("SELECT * FROM character_homebind WHERE guid=". $guId .";");
+                $statement = $Database->select("character_homebind", null, null, "guild=$guId");
+                $getXYZ = $statement->get_result();
                 $row    = $getXYZ->fetch_assoc();
 
                 $new_x    = $row['posX'];
@@ -74,41 +74,35 @@
                 $new_zone = $row['zoneId'];
                 $new_map  = $row['mapId'];
 
-                $conn->query("UPDATE characters 
-                    SET position_x='". $new_x ."', 
-                    position_y='". $new_y ."', 
-                    position_z='". $new_z ."', 
-                    zone='". $new_zone ."',
-                    map='". $new_map ."' 
-                    WHERE guid=". $guId .";");
+                $Database->update("characters", array("position_x","position_y","position_z","zone","map"), array($new_x, $new_y, $new_z, $new_zone, $new_map, $guId), "guid", $guId);
 
                 $Account->logThis("Performed unstuck on " . $this->getCharName($guId, $rid), 'Unstuck', $rid);
 
                 return TRUE;
+                $statement->close();
             }
         }
 
         public function revive($guid, $char_db)
         {
-            global $Connect, $Server, $Account;
-            $conn = $Connect->connectToDB();
+            global $Database, $Server, $Account;
 
-            $guId   = $conn->escape_string($guid);
-            $charDb = $conn->escape_string($char_db);
+            $guId   = $Database->conn->escape_string($guid);
+            $charDb = $Database->conn->escape_string($char_db);
 
             $rid  = $Server->getRealmId($charDb);
 
-            $Connect->connectToRealmDB($rid);
+            $Database->realm($rid);
 
-            if ($this->isOnline($guId) == TRUE)
+            if ( $this->isOnline($guId) == TRUE )
             {
                 echo '<b class="red_text">Please log out your character before proceeding.';
             }
             else
             {
-                if ($GLOBALS['service']['revive']['currency'] == 'vp')
+                if ( $GLOBALS['service']['revive']['currency'] == 'vp' )
                 {
-                    if ($Account->hasVP($_SESSION['cw_user'], $GLOBALS['service']['unstuck']['price']) == FALSE)
+                    if ( $Account->hasVP($_SESSION['cw_user'], $GLOBALS['service']['unstuck']['price']) == FALSE )
                     {
                         die('<b class="red_text">Not enough Vote Points!</b>');
                     }
@@ -118,9 +112,9 @@
                     }
                 }
 
-                if ($GLOBALS['service']['revive']['currency'] == 'dp')
+                if ( $GLOBALS['service']['revive']['currency'] == 'dp' )
                 {
-                    if ($Account->hasDP($_SESSION['cw_user'], $GLOBALS['service']['unstuck']['price']) == FALSE)
+                    if ( $Account->hasDP($_SESSION['cw_user'], $GLOBALS['service']['unstuck']['price']) == FALSE )
                     {
                         die('<b class="red_text">Not enough ' . $GLOBALS['donation']['coins_name'] . '</b>');
                     }
@@ -130,7 +124,7 @@
                     }
                 }
 
-                $conn->query("DELETE FROM character_aura WHERE guid=". $guId ." AND spell=20584 OR guid=". $guId ." AND spell=8326;");
+                $Database->conn->query("DELETE FROM character_aura WHERE guid=". $guId ." AND spell=20584 OR guid=". $guId ." AND spell=8326;");
 
                 $Account->logThis("Performed a revive on " . $this->getCharName($guId, $rid), 'Revive', $rid);
 
@@ -140,46 +134,45 @@
 
         public function instant80($values)
         {
-            global $Connect, $Account;
-            $conn = $Connect->connectToDB();
+            global $Database, $Account;
 
             die("This feature is disabled. <br/><i>Also, you shouldn't be here...</i>");
 
-            $values = $conn->escape_string($values);
+            $values = $Database->conn->escape_string($values);
             $values = explode("*", $values);
 
-            $Connect->connectToRealmDB($values[1]);
+            $Database->realm($values[1]);
 
-            if ($this->isOnline($values[0]) == TRUE)
+            if ( $this->isOnline($values[0]) == TRUE )
             {
                 echo '<b class="red_text">Please log out your character before proceeding.';
             }
             else
             {
                 $service_values = explode("*", $GLOBALS['service']['instant80']);
-                if ($service_values[1] == "dp")
+                if ( $service_values[1] == "dp" )
                 {
-                    if ($Account->hasDP($_SESSION['cw_user'], $GLOBALS['service']['instant80']['price']) == FALSE)
+                    if ( $Account->hasDP($_SESSION['cw_user'], $GLOBALS['service']['instant80']['price']) == FALSE )
                     {
                         echo '<b class="red_text">Not enough ' . $GLOBALS['donation']['coins_name'] . '</b>';
                         $error = TRUE;
                     }
                 }
-                elseif ($service_values[1] == "vp")
+                elseif ( $service_values[1] == "vp" )
                 {
-                    if ($Account->hasVP($_SESSION['cw_user'], $GLOBALS['service']['instant80']['price']) == FALSE)
+                    if ( $Account->hasVP($_SESSION['cw_user'], $GLOBALS['service']['instant80']['price']) == FALSE )
                     {
                         echo '<b class="red_text">Not enough Vote Points.</b>';
                         $error = TRUE;
                     }
                 }
 
-                if ($error != TRUE)
+                if ( $error != true )
                 {
                     //User got coins. Boost them up to 80 :D
-                    $Connect->connectToRealmDB($values[1]);
+                    $Database->realm($values[1]);
 
-                    $conn->query("UPDATE characters SET level=80 WHERE guid=". $values[0] .";");
+                    $Database->update("characters", "level", 80, "guid", $values[0]);
 
                     $Account->logThis("Performed an instant max level on " . $this->getCharName($values[0], NULL), 'Instant', NULL);
 
@@ -190,19 +183,20 @@
 
         public function isOnline($char_guid)
         {
-            global $Connect;
-            $conn = $Connect->connectToDB();
+            global $Database;
 
-            $charGuid = $conn->escape_string($char_guid);
-            $result    = $conn->query("SELECT COUNT('guid') FROM characters WHERE guid=". $charGuid ." AND online=1;");
-            if ($result->data_seek( 0) == 0)
+            $charGuid   = $Database->conn->escape_string($char_guid);
+            $statement = $Database->select("characters", "COUNT('guid')", null, "guid=". $charGuid ." AND online=1"); #("SELECT COUNT('guid') FROM characters WHERE guid=". $charGuid ." AND online=1;");
+            $result = $statement->get_result();
+            if ( $result->data_seek( 0) == 0 )
             {
-                return FALSE;
+                return false;
             }
             else
             {
-                return TRUE;
+                return true;
             }
+            $statement->close();
         }
 
         public function getRace($value)
@@ -266,7 +260,7 @@
 
         public function getGender($value)
         {
-            if ($value == 1)
+            if ( $value == 1 )
             {
                 return 'Female';
             }
@@ -345,11 +339,11 @@
             $a = array(1, 3, 4, 7, 11, 22);
             $h = array(2, 5, 6, 8, 9, 10);
 
-            if (in_array($value, $a))
+            if ( in_array($value, $a) )
             {
                 return '<img src="styles/global/images/icons/faction/0.gif" />';
             }
-            elseif (in_array($value, $h))
+            elseif ( in_array($value, $h) )
             {
                 return '<img src="styles/global/images/icons/faction/1.gif" />';
             }
@@ -357,17 +351,17 @@
 
         public function getCharName($id, $realm_id)
         {
-            global $Connect;
-            $conn = $Connect->connectToDB();
+            global $Database;
 
-            $ID      = $conn->escape_string($id);
-            $realmID = $conn->escape_string($realm_id);
+            $ID      = $Database->conn->escape_string($id);
+            $realmID = $Database->conn->escape_string($realm_id);
 
-            $Connect->connectToRealmDB($realmID);
+            $Database->realm($realmID);
 
-            $result = $conn->query("SELECT name FROM characters WHERE guid=". $ID .";");
-            $row    = $result->fetch_assoc();
+            $statement = $Database->select("characters", "name", null, "guid=". $ID);
+            $row    = $statement->get_result()->fetch_assoc();
             return $row['name'];
+            $statement->close();
         }
     }
 
