@@ -52,14 +52,14 @@
 
     }
 
-    if ($GLOBALS['enableSlideShow'] == TRUE)
+    if ( DATA['use']['slideshow'] == TRUE )
     {
         ?>
         <script type="text/javascript" src="core/javascript/slideshow.js"></script>
         <?php
 
     }
-    if ($GLOBALS['core_expansion'] > 2)
+    if ( DATA['website']['expansion'] > 2 )
     {
         echo '<script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script>';
     }
@@ -85,7 +85,7 @@
     }
 
 ####FACEBOOK####
-    if ($GLOBALS['social']['enableFacebookModule'] == TRUE)
+    if ( DATA['social']['facebook_module'] == true )
     {
         ?>
         <script type="text/javascript">
@@ -100,7 +100,7 @@
     }
 
 ####SERVER STATUS######
-    if ($GLOBALS['serverStatus']['enable'] == TRUE)
+    if ( DATA['website']['server_status']['enable'] == true )
     {
         ?>
         <script type="text/javascript">

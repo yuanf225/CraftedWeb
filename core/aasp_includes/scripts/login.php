@@ -43,17 +43,17 @@
         $password     = $Database->conn->escape_string(strtoupper(trim($_POST['password'])));
         $passwordHash = sha1("". $username .":". $password ."");
 
-        if($Database->conn->select_db($GLOBALS['connection']['logon']['database']) == false)
+        if($Database->conn->select_db(DATA['logon']['database']) == false)
         {
           die("Database Error. (". $Database->conn->error.")");
         }
 
-        $result = $Database->select( COUNT(id) FROM account WHERE username='". $username ."' AND sha_pass_hash = '". $passwordHash ."';");
+        $result = $Database->select("account", "COUNT(id)", null, "username='$username' AND sha_pass_hash = '$passwordHash'")->get_result();
 
-        $getId    = $Database->select( id FROM account WHERE username='". $username ."';");
+        $getId    = $Database->select("account", "id", null, "username='$username'")->get_result();
         $row      = $getId->fetch_assoc();
         $uid      = $row['id'];
-        $result   = $Database->select( gmlevel FROM account_access WHERE id=$uid AND gmlevel>=". $GLOBALS[$_POST['panel'] . 'Panel_minlvl'] .";");
+        $result   = $Database->select("account_access", "gmlevel", null, "id=$uid AND gmlevel>=". DATA[$_POST['panel']]['minlvl'] )->get_result();
 
         if ($result->num_rows == 0)
         {
@@ -71,6 +71,5 @@
           die('The Scripts Encountered An Error. (1 Or More Sessions Were Set To NULL)');
         }
 
-        sleep(1);
         die(TRUE);        
     }

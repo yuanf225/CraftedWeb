@@ -46,7 +46,6 @@
         }
     }
 
-
     $head .= "POST /cgi-bin/webscr HTTP/1.0\r\n";
     $head .= "Content-Type: application/x-www-form-urlencoded\r\n";
     $head .= 'Content-Length: ' . strlen($send) . "\r\n\r\n";
@@ -85,7 +84,7 @@
 
         if ($resp == 'VERIFIED')
         {
-            if ( $reciever != $GLOBALS['donation']['paypal_email'] )
+            if ( $reciever != DATA['website']['donation']['paypal_email'] )
             {
                 exit();
             }
@@ -93,7 +92,7 @@
             $Database->insert("payments_log", $values, array_keys($values));
 
             $to      = $values['payer_email'];
-            $subject = $GLOBALS['donation']['emailResponse'];
+            $subject = DATA['website']['donation']['email_response'];
             $message = 
                 'Hello '. $values['first_name'] .'
         		We would like to inform you that the recent payment you did was successfull.
@@ -110,38 +109,37 @@
         		
         		Thank you, the Management.';
 
-            $headers = 'From: ' . $GLOBALS['default_email'] . '' . "\r\n" .
+            $headers = 'From: ' . DATA['website']['email'] . '' . "\r\n" .
                     'X-Mailer: PHP/' . phpversion();
 
-            if ($GLOBALS['donation']['emailResponse'] == TRUE)
+            if ( DATA['website']['donation']['email_response'] == true )
             {
                 mail($to, $subject, $message, $headers);
-                if ($GLOBALS['donation']['sendResponseCopy'] == TRUE)
+                if (DATA['website']['donation']['send_response_copy'] == true)
                 {
-                    mail($GLOBALS['donation']['copyTo'], $subject, $message, $headers);
+                    mail(DATA['website']['donation']['copy_to'], $subject, $message, $headers);
                 }
             }
 
             $res = fgets($fp, 1024);
             if ( $value['payment_status'] == "Completed" )
             {
-                if ($GLOBALS['donation']['donationType'] == 2)
+                if ( DATA['website']['donation']['type'] == 2 )
                 {
                     $variables = array($values['custom'], $values['mc_gross'], $values['payer_email'], $values['first_name'], $values['last_name'], $values['mc_gross'], $values['payment_date'], $values['fecha']);
                     $columns = array("userid", "paymentstatus", "buyer_email", "firstname", "lastname", "mc_gross", "paymentdate", "datecreation");
                     $Database->insert("payments_log", $variables, $columns);
 
-                    for ($row = 0; $row < count($GLOBALS['donationList']); $row++)
+                    for ($row = 0; $row < count(DATA['website']['donation_list']); $row++)
                     {
                         $coins = $values['mc_gross'];
-                        if ($coins == $GLOBALS['donationList'][$row][2])
+                        if ($coins == DATA['website']['donation_list'][$row][2])
                         {
-
-                            $Database->update("account_data", array("dp" =>"dp +".$GLOBALS['donationList'][$row][1]), array("id" => $values['custom']));
+                            $Database->update("account_data", array("dp" =>"dp +".DATA['website']['donation_list'][$row][1]), array("id" => $values['custom']));
                         }
                     }
                 }
-                elseif ($GLOBALS['donation']['donationType'] == 2)
+                elseif ( DATA['website']['donation']['type'] == 2 )
                 {
                     $coins = ceil($mc_gross);
                     $Database->update("account_data", array("dp"=>"dp +".$values['coins']), array("id"=> $values['custom']));
@@ -150,21 +148,21 @@
         }
         else if ($resp == 'INVALID')
         {
-            if ($GLOBALS['donation']['donationType'] == 2)
+            if ( DATA['website']['donation']['type'] == 2 )
             {
                 $variables = array($values['custom'], $values['payment_status'], $values['payment_status'] . " - INVALID FUUUU " . $values['mc_gross'], $values['payer_email'], $values['first_name'], $values['last_name'], $values['mc_gross'], $values['payment_date'], $values['fecha']);
                 $columns = array("userid", "paymentstatus", "buyer_email", "firstname", "lastname", "mc_gross", "paymentdate", "datecreation");
                 $Database->insert("payments_log", $variables, $columns);
             }
 
-            mail($GLOBALS['donation']['copyTo'], "INVALID Donation", "A payment was invalid. Information is shown below: <br/>
+            mail(DATA['website']['donation']['copy_to'], "INVALID Donation", "A payment was invalid. Information is shown below: <br/>
 			User ID : " . $values['custom'] . "
 			Buyer Email: " . $values['payer_email'] . "
 			Amount: " . $values['mc_gross'] . " USD
 			Date: " . $values['payment_date'] . "
 			First name: " . $values['first_name'] . "
 			Last name: " . $values['last_name'] . "
-			", "From: " . $GLOBALS['donation']['responseFrom'] . "");
+			", "From: " . DATA['website']['email'] . "");
 
             mail($values['payer_email'], "Hello there. Unfortunately, the latest payment you did was invalid. Please contact us for more information. 
 		  

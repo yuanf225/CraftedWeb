@@ -27,9 +27,9 @@
 <div class="box_right_title"><?php echo $GamePage->titleLink(); ?> &raquo; Slideshow</div>
 <?php
     $status = 'Disabled';
-    if ($GLOBALS['enableSlideShow']) $status = 'Enabled';
+    if ( DATA['website']['use']['slideshow'] ) $status = 'Enabled';
 
-    $count = $Database->select( COUNT(*) AS sliderImages FROM slider_images;");
+    $count = $Database->select("slider_images", "COUNT(*) AS sliderImages")->get_result();
 ?>
 The Slideshow Is <b><?php echo $status; ?></b>. You Have <b><?php echo round($count->fetch_assoc()['sliderImages']); ?></b> Images In The Slideshow.
 <hr/>
@@ -57,7 +57,7 @@ The Slideshow Is <b><?php echo $status; ?></b>. You Have <b><?php echo round($co
 </div>
 <br/>&nbsp;<br/>
 <?php
-    $result = $Database->select( * FROM slider_images ORDER BY position ASC;");
+    $result = $Database->select("slider_images", null, null, null, "ORDER BY position ASC;");
     if ($result->num_rows == 0)
     {
         echo "You don't have any images in the slideshow!";

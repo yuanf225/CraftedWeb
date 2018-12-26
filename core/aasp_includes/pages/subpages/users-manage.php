@@ -32,13 +32,13 @@
 
         $character = $Database->conn->escape_string($_GET['char']);
 
-        $result = $Database->select( name, id FROM realms;");
+        $result = $Database->select("realms", "name, id")->get_result();
         
         while ($row = $result->fetch_assoc())
         {
             #$GameServer->realm($row['id']);
             $Database->conn->select_db("characters");
-            $get = $Database->select( account, name FROM characters WHERE name='". ucfirst($character) ."' OR guid='$character';");
+            $get = $Database->select("characters", "account, name", null, "name='". ucfirst($character) ."' OR guid='$character'")->get_result();
 
             if ($get->num_rows > 0)
             {
@@ -57,7 +57,7 @@
     {
         $GameServer->selectDB("logondb", $conn);
         $value  = $Database->conn->escape_string(strtoupper($_GET['user']));
-        $result = $Database->select( * FROM account WHERE username='$value' OR id='$value';");
+        $result = $Database->select("account", null, null, "username='$value' OR id='$value'")->get_result();
         if ($result->num_rows == 0)
         {
             echo "<span class='red_text'>No Results Were Found!</span>";
@@ -85,7 +85,7 @@
                     <td><span class='blue_text'>Account Status</span></td>
                     <td><?php echo $GameAccount->getBan($row['id']); ?></td>
                     
-                    <td><span class='blue_text'><?php echo $GLOBALS['donation']['coins_name']; ?></span></td>
+                    <td><span class='blue_text'><?php echo DATA['website']['donation']['coins_name']; ?></span></td>
                     <td><?php echo $GameAccount->getDP($row['id']); ?></td>
                 </tr>
                 <tr><td><a href='?page=users&selected=manage&getlogs=<?php echo $row['id']; ?>'>Account Payments & Shop Logs</a><br />
@@ -108,7 +108,7 @@
                 </tr>
                 <?php
                 $GameServer->selectDB("webdb", $conn);
-                $result = $Database->select( name, id FROM realms;");
+                $result = $Database->select("realms", "name, id")->get_result();
 
                 if (is_numeric($_GET['user']))
                 {
@@ -127,8 +127,7 @@
                     #$conn = $GameServer->realm($row['id']);
                     $Database->conn->select_db("characters");
 
-                    $result  = $Database->select( name, guid, level, class, race, gender, online FROM characters 
-                        WHERE name='$user' OR account='$account_id';");
+                    $result  = $Database->select("characters", null, null, "name='$user' OR account='$account_id'")->get_result();
 
                     if (!$result) die($Database->conn->error);
 
@@ -197,7 +196,7 @@
                 <td><input type="text" id="edit_vp" value="<?php echo $GameAccount->getVP($_GET['editaccount']); ?>" class='noremove'/> 
             </tr>
             <tr>
-                <td><?php echo $GLOBALS['donation']['coins_name']; ?></td> 
+                <td><?php echo DATA['website']['donation']['coins_name']; ?></td> 
                 <td><input type="text" id="edit_dp" value="<?php echo $GameAccount->getDP($_GET['editaccount']); ?>" class='noremove'/></td>
             </tr>
             <tr>
@@ -222,7 +221,7 @@
             </tr>
             <?php
             $GameServer->selectDB("webdb", $conn);
-            $result = $Database->select( * FROM user_log WHERE account=". $getLogs .";");
+            $result = $Database->select("user_log", null, null, "account=$getLogs")->get_result();
             if ($result->num_rows == 0)
             {
                 echo "No Logs Were Found For This Account!";

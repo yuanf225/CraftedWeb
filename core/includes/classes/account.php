@@ -157,7 +157,7 @@ class Account
         else
         {
             session_start();
-            if ( $GLOBALS['registration']['captcha'] == TRUE )
+            if ( DATA['website']['registration']['captcha'] == TRUE )
             {
                 if ( $captcha != $_SESSION['captcha_numero'] )
                 {
@@ -165,13 +165,13 @@ class Account
                 }
             }
 
-            if ( strlen($username) > $GLOBALS['registration']['userMaxLength'] || strlen($username) < $GLOBALS['registration']['userMinLength'] )
-                $errors[] = 'The username must be between ' . $GLOBALS['registration']['userMinLength'] . ' and ' . $GLOBALS['registration']['userMaxLength'] . ' letters.';
+            if ( strlen($username) > DATA['website']['registration']['user_max_length'] || strlen($username) < DATA['website']['registration']['user_min_length'] )
+                $errors[] = 'The username must be between ' . DATA['website']['registration']['user_minlength'] .' and '. DATA['website']['registration']['user_max_length'] .' letters.';
 
-            if ( strlen($password) > $GLOBALS['registration']['passMaxLength'] || strlen($password) < $GLOBALS['registration']['passMinLength'] )
-                $errors[] = 'The password must be between ' . $GLOBALS['registration']['passMinLength'] . ' and ' . $GLOBALS['registration']['passMaxLength'] . ' letters.';
+            if ( strlen($password) > DATA['website']['registration']['pass_max_length'] || strlen($password) < DATA['website']['registration']['pass_min_length'] )
+                $errors[] = 'The password must be between ' . DATA['website']['registration']['pass_min_length'] . ' and ' . DATA['website']['registration']['pass_max_length'] . ' letters.';
 
-            if ( $GLOBALS['registration']['validateEmail'] == TRUE )
+            if ( DATA['website']['registration']['validate_email'] == TRUE )
             {
                 if ( filter_var($email, FILTER_VALIDATE_EMAIL) === false )
                 {
@@ -228,7 +228,7 @@ class Account
 
             $Database->selectDB("logondb");
 
-            $result = $Database->insert("account", array("username", "email", "sha_pass_hash", "joindate", "expansion", "recruiter"), array($username, $email, $password, date("Y-m-d H:i:s"), $GLOBALS['core_expansion']), $raf)->get_result();
+            $result = $Database->insert("account", array("username", "email", "sha_pass_hash", "joindate", "expansion", "recruiter"), array($username, $email, $password, date("Y-m-d H:i:s"), DATA['website']['core_expansion']), $raf)->get_result();
 
             if ( !$result )
             {
@@ -259,14 +259,14 @@ class Account
     // Unused
     public function forumRegister($username, $password, $email)
     {
-        date_default_timezone_set($GLOBALS['timezone']);
+        date_default_timezone_set(DATA['website']['timezone']);
 
         global $phpbb_root_path, $phpEx, $user, $db, $config, $cache, $template;
-        if ( $GLOBALS['forum']['type'] == 'phpbb' && $GLOBALS['forum']['autoAccountCreate'] == TRUE )
+        if ( DATA['website']['forum']['type'] == 'phpbb' && DATA['website']['forum']['auto_account_create'] == TRUE )
         {
             ////////PHPBB INTEGRATION//////////////
             define('IN_PHPBB', TRUE);
-            define('ROOT_PATH', '../..' . $GLOBALS['forum']['forum_path']);
+            define('ROOT_PATH', '../..' . DATA['website']['forum']['path']);
 
             $phpEx           = "php";
             $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : ROOT_PATH;
@@ -598,7 +598,7 @@ class Account
                 $errors[] = 'The current password is incorrect.';
             }
 
-            if ( $GLOBALS['registration']['validateEmail'] == TRUE )
+            if ( DATA['website']['registration']['validate_email'] == TRUE )
             {
                 if ( filter_var($email, FILTER_VALIDATE_EMAIL) === false )
                 {
@@ -655,12 +655,12 @@ class Account
             }
             else
             {
-                if (strlen($_POST['new_password']) < $GLOBALS['registration']['passMinLength'] || 
-                    strlen($_POST['new_password']) > $GLOBALS['registration']['passMaxLength'])
+                if (strlen($_POST['new_password']) < DATA['website']['registration']['pass_min_length'] || 
+                    strlen($_POST['new_password']) > DATA['website']['registration']['pass_max_length'])
                 {
                     echo "<b class='red_text'>
-                            Your password must be between ". $GLOBALS['registration']['passMinLength'] ." 
-                            and ". $GLOBALS['registration']['passMaxLength'] ." letters.
+                            Your password must be between ". DATA['website']['registration']['pass_min_length'] ." 
+                            and ". DATA['website']['registration']['pass_max_length'] ." letters.
                         </b>";
                 }
                 else
@@ -750,12 +750,12 @@ class Account
                 //Success, lets send an email & add the forgotpw thingy.
                 $code = RandomString();
 
-                $Website->sendEmail($accountEmail, $GLOBALS['default_email'], 'Forgot Password', "
+                $Website->sendEmail($accountEmail, DATA['website']['email'], 'Forgot Password', "
     				Hello there. <br/><br/>
     				A password reset has been requested for the account ". $accountName ." <br/>
     				If you wish to reset your password, click the following link: <br/>
-    				<a href='". $GLOBALS['website_domain'] ."?page=forgotpw&code=". $code ."&account=". $this->getAccountID($accountName) ."'>
-    				". $GLOBALS['website_domain'] ."?page=forgotpw&code=". $code ."&account=". $this->getAccountID($accountName) ."</a>
+    				<a href='". DATA['website']['domain'] ."?page=forgotpw&code=". $code ."&account=". $this->getAccountID($accountName) ."'>
+    				". DATA['website']['domain'] ."?page=forgotpw&code=". $code ."&account=". $this->getAccountID($accountName) ."</a>
 			
 			<br/><br/>
 			

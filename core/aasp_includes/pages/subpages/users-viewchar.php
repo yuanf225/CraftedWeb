@@ -27,7 +27,7 @@ Selected Character:  <?php echo $GameAccount->getCharName($_GET['guid'], $_GET['
 <?php
     $GameServer->realm($_GET['rid']);
 
-    $usersTotal = $Database->select( * FROM characters WHERE guid=". $Database->conn->escape_string($_GET['guid']) .";");
+    $usersTotal = $Database->select("characters", null, null, "guid=". $Database->conn->escape_string($_GET['guid']))->get_result();
     $row        = $usersTotal->fetch_assoc();
 ?>
 <hr/>
@@ -51,7 +51,7 @@ Selected Character:  <?php echo $GameAccount->getCharName($_GET['guid'], $_GET['
                 <option <?php if ($row['race'] == 7) echo 'selected'; ?> value="7">Gnome</option>
                 <option <?php if ($row['race'] == 11) echo 'selected'; ?> value="11">Dranei</option>
 
-                <?php if ($GLOBALS['core_expansion'] >= 3)  ?>
+                <?php if (DATA['website']['expansion'] >= 3)  ?>
                     <option <?php if ($row['race'] == 22) echo 'selected'; ?> value="22">Worgen</option>
                     <option <?php if ($row['race'] == 2) echo 'selected'; ?> value="2">Orc</option>
                     <option <?php if ($row['race'] == 6) echo 'selected'; ?> value="6">Tauren</option>
@@ -59,10 +59,10 @@ Selected Character:  <?php echo $GameAccount->getCharName($_GET['guid'], $_GET['
                     <option <?php if ($row['race'] == 5) echo 'selected'; ?> value="5">Undead</option>
                     <option <?php if ($row['race'] == 10) echo 'selected'; ?> value="10">Blood Elf</option>
 
-                <?php if ($GLOBALS['core_expansion'] >= 3)  ?>
+                <?php if (DATA['website']['expansion'] >= 3)  ?>
                     <option <?php if ($row['race'] == 9) echo 'selected'; ?> value="9">Goblin</option>
 
-                <?php if ($GLOBALS['core_expansion'] >= 4)  ?>
+                <?php if (DATA['website']['expansion'] >= 4)  ?>
                     <option <?php if ($row['race'] == NULL) echo 'selected'; ?> value="NULL">Pandaren</option>
             </select>
         </td>
@@ -77,17 +77,17 @@ Selected Character:  <?php echo $GameAccount->getCharName($_GET['guid'], $_GET['
                 <option <?php if ($row['class'] == 3) echo 'selected'; ?> value="3">Hunter</option>
                 <option <?php if ($row['class'] == 5) echo 'selected'; ?> value="5">Priest</option>
                 
-                <?php if ($GLOBALS['core_expansion'] >= 2)  ?>
+                <?php if (DATA['website']['expansion'] >= 2)  ?>
                     <option <?php if ($row['class'] == 6) echo 'selected'; ?> value="6">Death Knight</option>
                     <option <?php if ($row['class'] == 9) echo 'selected'; ?> value="9">Warlock</option>
                     <option <?php if ($row['class'] == 7) echo 'selected'; ?> value="7">Shaman</option>
                     <option <?php if ($row['class'] == 4) echo 'selected'; ?> value="4">Rogue</option>
                     <option <?php if ($row['class'] == 8) echo 'selected'; ?> value="8">Mage</option>
                     
-                <?php if ($GLOBALS['core_expansion'] >= 4)  ?>
+                <?php if (DATA['website']['expansion'] >= 4)  ?>
                     <option <?php if ($row['class'] == 12) echo 'selected'; ?> value="12">Monk</option>
                     
-                <?php if ($GLOBALS['core_expansion'] >= 5)  ?>
+                <?php if (DATA['website']['expansion'] >= 5)  ?>
                     <option <?php if ($row['class'] == 13) echo 'selected'; ?> value="13">Demon Hunter</option>
             </select>
         </td>

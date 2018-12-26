@@ -32,13 +32,13 @@
     {
         include "core/pages/home.php";
     }
-    elseif (isset($_SESSION['loaded_plugins_pages']) && $GLOBALS['enablePlugins'] == TRUE && !in_array($page . '.php', $pages))
+    elseif (isset($_SESSION['loaded_plugins_pages']) && DATA['website']['enable_plugins'] == TRUE && !in_array($page . '.php', $pages))
     {
         $Plugins->load("pages");
     }
     elseif (in_array($page . ".php", $pages))
     {
-        $result = $Database->select( COUNT(filename) AS filename FROM disabled_pages WHERE filename='" . $page . "';");
+        $result = $Database->select("disabled_pages", "COUNT(filename) AS filename", null, "filename='$page'")->get_result();
         if ($result->data_seek(0) == 1)
         {
             include "core/pages/". $page .".php";

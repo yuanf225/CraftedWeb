@@ -34,7 +34,7 @@
       <th>Actions</th>
     </tr>
     <?php
-        $result = $Database->select( * FROM votingsites ORDER BY id ASC;");
+        $result = $Database->select("votingsites", null, null, null, "ORDER BY id ASC")->get_result();
         while ($row = $result->fetch_assoc())
         {
             ?>

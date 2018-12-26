@@ -39,7 +39,7 @@
         <h3>Choose Template</h3>
         <select id="choose_template">
             <?php
-            $result = $Database->select( * FROM template ORDER BY id ASC;");
+            $result = $Database->select("template", null, null, null, "ORDER BY id ASC");
             while ($row = $result->fetch_assoc())
             {
                 if ($row['applied'] == 1)
@@ -70,7 +70,7 @@
         <h3>Uninstall a template</h3>
         <select id="uninstall_template_id">
             <?php
-            $result = $Database->select( * FROM template ORDER BY id ASC;");
+            $result = $Database->select("template", null, null, null, "ORDER BY id ASC");
             while ($row = $result->fetch_assoc())
             {
                 if ($row['applied'] == 1)

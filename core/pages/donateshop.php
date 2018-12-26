@@ -26,7 +26,7 @@
     /* Declare some general variables */
     $shopPage     = $Database->conn->escape_string($_GET['page']);
     $shopVar      = "donate";
-    $shopCurrency = $GLOBALS['donation']['coins_name'];
+    $shopCurrency = DATA['website']['donation']['coins_name'];
 
     $selected = 'selected="selected"';
     ///////////////////////////////
@@ -39,8 +39,10 @@
 </div>
 
 <?php
-    if ($GLOBALS[$shopVar . 'Shop']['enableShop'] == FALSE)
+    if ( DATA['website']['shop'][$shopVar]['enable'] == false )
+    {
         echo "<span class='attention'><b>Attention! </b>The shop is currently closed. Please check back later.</span>";
+    }
     else
     {
         ?>
@@ -57,7 +59,7 @@
             $inputValue = $_GET['search_value'];
         }
 
-        if ($GLOBALS[$shopVar . 'Shop']['shopType'] == 1)
+        if (DATA['website']['shop'][$shopVar]['type'] == 1)
         {
             //Search enabled.
             ?>
@@ -69,7 +71,7 @@
                             <td><input type="submit" value="Search" name="search"></td>
                         <tr>
                     </table>
-                    <?php if ($GLOBALS[$shopVar . 'Shop']['enableAdvancedSearch'] == TRUE)
+                    <?php if (DATA['website']['shop'][$shopVar]['enable_advanced_search'] == true)
                     {?> 
                     <br/>Advanced Search<br/>
                     <table width="56%">
@@ -145,7 +147,7 @@
                                 <select name="ilfrom" style="width: 100%">
                                     <option>--Item level from--</option>
                                     <?php
-                                    for ($i = 1; $i <= $GLOBALS['maxItemLevel']; $i++)
+                                    for ($i = 1; $i <= DATA['website']['max_ilvl']; $i++)
                                     {
                                         if ($_GET['ilfrom'] == $i)
                                             echo "<option selected='selected'>";
@@ -161,7 +163,7 @@
                                 <select name="ilto" style="width: 100%">
                                     <option>--Item level to--</option>
                                     <?php
-                                    for ($i = $GLOBALS['maxItemLevel']; $i >= 1; $i--)
+                                    for ($i = DATA['website']['max_ilvl']; $i >= 1; $i--)
                                     {
                                         if ($_GET['ilto'] == $i)
                                             echo "<option selected='selected'>";
@@ -184,7 +186,7 @@
                 $Shop->search($_GET['search_value'], $shopVar, $_GET['q'], $_GET['t'], $_GET['ilfrom'], $_GET['ilto'], $_GET['r'], $_GET['f'], $_GET['c'], $_GET['st']);
             }
         }
-        elseif ($GLOBALS[$shopVar . 'Shop']['shopType'] == 2)
+        elseif (DATA['website']['shop'][$shopVar]['type'] == 2)
         {
             //List all items.
             $Shop->listAll($shopVar);

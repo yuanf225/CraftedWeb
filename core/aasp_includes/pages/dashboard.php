@@ -55,7 +55,7 @@
     <div class="box_right_title">Admin Panel Log</div>
     <?php
         $GameServer->selectDB("webdb", $conn);
-        $result = $Database->select( * FROM admin_log ORDER BY id DESC LIMIT 25;");
+        $result = $Database->select("admin_log", null, null, null, "ORDER BY id DESC LIMIT 25");
         if ($result->num_rows == 0)
         {
             echo "The admin log is empty!";

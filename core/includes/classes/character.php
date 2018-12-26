@@ -40,27 +40,27 @@
             }
             else
             {
-                if ( $GLOBALS['service']['unstuck']['currency'] == 'vp' )
+                if ( DATA['service']['unstuck']['currency'] == 'vp' )
                 {
-                    if ( $Account->hasVP($_SESSION['cw_user'], $GLOBALS['service']['unstuck']['price']) == FALSE )
+                    if ( $Account->hasVP($_SESSION['cw_user'], DATA['service']['unstuck']['price']) == FALSE )
                     {
                         die('<b class="red_text">Not enough Vote Points!</b>');
                     }
                     else
                     {
-                        $Account->deductVP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service']['unstuck']['price']);
+                        $Account->deductVP($Account->getAccountID($_SESSION['cw_user']), DATA['service']['unstuck']['price']);
                     }
                 }
 
-                if ( $GLOBALS['service']['unstuck']['currency'] == 'dp' )
+                if ( DATA['service']['unstuck']['currency'] == 'dp' )
                 {
-                    if ( $Account->hasDP($_SESSION['cw_user'], $GLOBALS['service']['unstuck']['price']) == FALSE )
+                    if ( $Account->hasDP($_SESSION['cw_user'], DATA['service']['unstuck']['price']) == FALSE )
                     {
-                        die('<b class="red_text">Not enough ' . $GLOBALS['donation']['coins_name'] . '</b>');
+                        die('<b class="red_text">Not enough ' . DATA['donation']['coins_name'] . '</b>');
                     }
                     else
                     {
-                        $Account->deductDP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service']['unstuck']['price']);
+                        $Account->deductDP($Account->getAccountID($_SESSION['cw_user']), DATA['service']['unstuck']['price']);
                     }
                 }
 
@@ -100,27 +100,27 @@
             }
             else
             {
-                if ( $GLOBALS['service']['revive']['currency'] == 'vp' )
+                if ( DATA['service']['revive']['currency'] == 'vp' )
                 {
-                    if ( $Account->hasVP($_SESSION['cw_user'], $GLOBALS['service']['unstuck']['price']) == FALSE )
+                    if ( $Account->hasVP($_SESSION['cw_user'], DATA['service']['unstuck']['price']) == FALSE )
                     {
                         die('<b class="red_text">Not enough Vote Points!</b>');
                     }
                     else
                     {
-                        $Account->deductVP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service']['revive']['price']);
+                        $Account->deductVP($Account->getAccountID($_SESSION['cw_user']), DATA['service']['revive']['price']);
                     }
                 }
 
-                if ( $GLOBALS['service']['revive']['currency'] == 'dp' )
+                if ( DATA['service']['revive']['currency'] == 'dp' )
                 {
-                    if ( $Account->hasDP($_SESSION['cw_user'], $GLOBALS['service']['unstuck']['price']) == FALSE )
+                    if ( $Account->hasDP($_SESSION['cw_user'], DATA['service']['unstuck']['price']) == FALSE )
                     {
-                        die('<b class="red_text">Not enough ' . $GLOBALS['donation']['coins_name'] . '</b>');
+                        die('<b class="red_text">Not enough ' . DATA['donation']['coins_name'] . '</b>');
                     }
                     else
                     {
-                        $Account->deductDP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service']['revive']['price']);
+                        $Account->deductDP($Account->getAccountID($_SESSION['cw_user']), DATA['service']['revive']['price']);
                     }
                 }
 
@@ -149,18 +149,18 @@
             }
             else
             {
-                $service_values = explode("*", $GLOBALS['service']['instant80']);
+                $service_values = explode("*", DATA['service']['instant80']);
                 if ( $service_values[1] == "dp" )
                 {
-                    if ( $Account->hasDP($_SESSION['cw_user'], $GLOBALS['service']['instant80']['price']) == FALSE )
+                    if ( $Account->hasDP($_SESSION['cw_user'], DATA['service']['instant80']['price']) == FALSE )
                     {
-                        echo '<b class="red_text">Not enough ' . $GLOBALS['donation']['coins_name'] . '</b>';
+                        echo '<b class="red_text">Not enough ' . DATA['website']['donation']['coins_name'] . '</b>';
                         $error = TRUE;
                     }
                 }
                 elseif ( $service_values[1] == "vp" )
                 {
-                    if ( $Account->hasVP($_SESSION['cw_user'], $GLOBALS['service']['instant80']['price']) == FALSE )
+                    if ( $Account->hasVP($_SESSION['cw_user'], DATA['service']['instant80']['price']) == FALSE )
                     {
                         echo '<b class="red_text">Not enough Vote Points.</b>';
                         $error = TRUE;

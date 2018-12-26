@@ -60,7 +60,7 @@
             {
                 if ( $Account->hasDP($account_name, $row['price']) == FALSE )
                 {
-                    die('<b class="red_text">You do not have enough ' . $GLOBALS['donation']['coins_name'] . '</b>');
+                    die('<b class="red_text">You do not have enough ' . DATA['website']['donation']['coins_name'] . '</b>');
                 }
 
                 $Account->deductDP($account_id, $row['price']);

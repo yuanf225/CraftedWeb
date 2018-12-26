@@ -19,7 +19,7 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-	if ($GLOBALS['serverStatus']['enable'] == TRUE)
+	if ( DATA['website']['server_status']['enable'] == true )
     { ?>
         <div class="box_one" id="server_status">
             Loading Server status...

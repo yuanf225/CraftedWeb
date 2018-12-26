@@ -34,12 +34,12 @@
     else
     {
         $GameServer->selectDB("logondb", $conn);
-        $usersTotal       = $Database->select( COUNT(*) AS totalUsers FROM account;");
-        $usersToday       = $Database->select( COUNT(*) AS dailyUsers FROM account WHERE joindate LIKE '%". date("Y-m-d") ."%';");
-        $usersMonth       = $Database->select( COUNT(*) AS monthlyUsers FROM account WHERE joindate LIKE '%". date("Y-m") ."%';");
-        $usersOnline      = $Database->select( COUNT(*) AS onlineUsers FROM account WHERE online=1;");
-        $usersActive      = $Database->select( COUNT(*) AS activeUsers FROM account WHERE last_login LIKE '%". date("Y-m") ."%';");
-        $usersActiveToday = $Database->select( COUNT(*) AS activeUsersToday FROM account WHERE last_login LIKE '%". date("Y-m-d") ."%';");
+        $usersTotal       = $Database->select("account", "COUNT(*) AS totalUsers");
+        $usersToday       = $Database->select("account", "COUNT(*) AS dailyUsers", null, "joindate LIKE '%". date("Y-m-d") ."%'");
+        $usersMonth       = $Database->select("account", "COUNT(*) AS monthlyUsers", null, "joindate LIKE '%". date("Y-m") ."%'");
+        $usersOnline      = $Database->select("account", "COUNT(*) AS onlineUsers", null, "online=1");
+        $usersActive      = $Database->select("account", "COUNT(*) AS activeUsers", null, "last_login LIKE '%". date("Y-m") ."%'");
+        $usersActiveToday = $Database->select("account", "COUNT(*) AS activeUsersToday", null, "last_login LIKE '%". date("Y-m-d") ."%'");
         ?>
         <div class="box_right_title">Users Overview</div>
         <table style="width: 100%;">

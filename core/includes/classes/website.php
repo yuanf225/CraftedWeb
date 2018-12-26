@@ -32,7 +32,7 @@
             global $Cache, $Database, $Website;
             $conn = $Database->database();
 
-            if ($GLOBALS['news']['enable'] == TRUE)
+            if ( DATA['website']['news']['enable'] == TRUE )
             {
                 echo "<div class='box_two_title'>Latest News</div>";
 
@@ -44,7 +44,7 @@
                 {
                     $Database->selectDB("webdb", $conn);
 
-                    $result = $Database->select( * FROM news ORDER BY id DESC LIMIT ". $GLOBALS['news']['maxShown'] .";");
+                    $result = $Database->select("news", null, null, null, "ORDER BY id DESC LIMIT ". DATA['website']['news']['max_shown'])->get_result();
 
                     if ($result->num_rows == 0)
                     {
@@ -96,7 +96,7 @@
                                 $Validator = new Validator(array(), array($row['body']), array($row['body']));
                                 $sanatized_text = $Validator->sanatize($row['body'], "string");
 
-                                if ($GLOBALS['news']['limitHomeCharacters'] == TRUE)
+                                if ( DATA['website']['news']['limit_home_characters'] == TRUE )
                                 {
                                     echo $Website->limit_characters($sanatized_text, 200);
                                     $output .= $Website->limit_characters($row['body'], 200);
@@ -107,10 +107,10 @@
                                     $output .= nl2br($row['body']);
                                 }
 
-                                $result      = $Database->select( COUNT(id) FROM news_comments WHERE newsid=". $row['id'] .";");
+                                $result = $Database->select("news_comments", "COUNT(id)", null, "newsid=". $row['id'])->get_result();
                                 $commentsNum = $result->fetch_row();
 
-                                if ($GLOBALS['news']['enableComments'] == TRUE)
+                                if ( DATA['website']['news']['enable_comments'] == true )
                                 {
                                     $comments = '| <a href="?page=news&amp;newsid=' . $row['id'] . '">Comments ('. $commentsNum[0] .')</a>';
                                 }
@@ -148,7 +148,7 @@
             else
             {
                 $Database->selectDB("webdb", $conn);
-                $result = $Database->select( `path`, `link` FROM slider_images ORDER BY position ASC;");
+                $result = $Database->select("slider_images", "path,link", null, null, "ORDER BY position ASC")->get_result();
                 while ($row = $result->fetch_assoc())
                 {
                     echo $outPutPT = '<a href="'. htmlspecialchars($row['link']) .'"><img border="none" src="core/'. htmlspecialchars($row['path']) .'" alt="" class="slideshow_image"></a>';
@@ -196,7 +196,7 @@
             $conn = $Database->database();
             $Database->selectDB("webdb", $conn);
 
-            $result = $Database->select( * FROM votingsites ORDER BY id DESC;");
+            $result = $Database->select("votingsites", null, null, null, "ORDER BY id DESC")->get_result();
 
             if ($result->num_rows == 0)
             {
@@ -206,7 +206,7 @@
             {
                 while ($row = $result->fetch_assoc())
                 { ?>
-                    <div class='votelink'>
+                    <div class="votelink">
                         <table width="100%">
                             <tr>
                                 <td width="20%"><img src="<?php echo $row['image']; ?>" /></td>
@@ -219,9 +219,7 @@
                                     }
                                     else
                                     {
-                                        $getNext = $Database->select( next_vote FROM ". $GLOBALS['connection']['webdb'] .".votelog 
-													    WHERE userid=". $Account->getAccountID($_SESSION['cw_user']) ." 
-														AND siteid=". $row['id'] ." ORDER BY id DESC LIMIT 1;");
+                                        $getNext = $Database->select(DATA['website']['connection']['name'].".votelog", "next_vote", null, " WHERE userid=". $Account->getAccountID($_SESSION['cw_user']) ." AND siteid=". $row['id'] ." ORDER BY id DESC LIMIT 1;")->get_result();
 
                                         $row  = $getNext->fetch_assoc();
                                         $time = $row['next_vote'] - time();
@@ -252,7 +250,7 @@
             $acct_id = $Account->getAccountID($_SESSION['cw_user']);
             $Database->selectDB("webdb", $conn);
 
-            $result = $Database->select( COUNT(id) AS voted FROM votelog WHERE userid=". $acct_id ." AND siteid=". $siteId ." AND next_vote > ". time() .";");
+            $result = $Database->select("votelog", "COUNT(id) AS voted", null, "userid=". $acct_id ." AND siteid=". $siteId ." AND next_vote > ". time())->get_result();
 
             if ($result->fetch_assoc()['voted'] == 0)
             {
@@ -275,7 +273,7 @@
 
         public function convertCurrency($currency)
         {
-            if ($currency == "dp") return $GLOBALS['donation']['coins_name'];
+            if ($currency == "dp") return DATA['website']['donation']['coins_name'];
             elseif ($currency == "vp") return "Vote Points";
         }
 

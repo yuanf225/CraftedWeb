@@ -1,5 +1,3 @@
-
-
 DROP TABLE IF EXISTS `account_data`;
 CREATE TABLE IF NOT EXISTS `account_data` 
 (
@@ -47,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `db_version`
   PRIMARY KEY (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `db_version` VALUES ('1.5');
+INSERT INTO `db_version` VALUES ('1.0');
 
 -- ----
 
@@ -201,9 +199,9 @@ CREATE TABLE IF NOT EXISTS `shopitems`
   `in_shop` varchar(255) DEFAULT NULL,
   `displayid` int(16) DEFAULT NULL,
   `type` int(100) DEFAULT NULL,
-  `itemlevel` int(5) DEFAULT '0',
-  `quality` int(1) DEFAULT '0',
-  `price` int(5) DEFAULT '0',
+  `itemlevel` INT(5) NULL DEFAULT NULL,
+  `quality` INT(1) NULL DEFAULT NULL,
+  `price` INT(5) NULL DEFAULT NULL,
   `class` varchar(50) DEFAULT NULL,
   `faction` int(1) DEFAULT NULL,
   `subtype` int(100) DEFAULT NULL,

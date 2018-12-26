@@ -31,28 +31,78 @@
     define('INIT_SITE', TRUE);
 
     require "core/includes/configuration.php"; //Load configuration file
+    $config_file = file_get_contents("core/includes/configuration.json");
+    define("DATA", json_decode($config_file, true));
 
-    if ( isset($GLOBALS['not_installed']) && $GLOBALS['not_installed'] == TRUE )
+
+    ###LOAD MAXIMUM ITEM LEVEL DEPENDING ON EXPANSION###
+    switch(DATA['website']['expansion']) 
     {
-        if ( file_exists('install/index.php') )
-        {
-            header("Location: install/index.php");
-            exit;
-        }
-        else
-        {
-            die("<b>Error</b>. It seems like your website is not yet installed, but no installer could be found!");
-        }
+        case 0:
+            $maxItemLevel = 100;
+            break;
+
+        case 1:
+            $maxItemLevel = 175;
+            break;
+
+        default:
+        case 2:
+            $maxItemLevel = 284;
+            break;
+
+        case 3:
+            $maxItemLevel = 416;
+            break;
+
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+            break;
     }
-
-    if ( $GLOBALS['maintainance'] == TRUE && !in_array($_SERVER['REMOTE_ADDR'], $GLOBALS['maintainance_allowIPs']) )
+    
+    if( DATA['website']['expansion'] > 2 )
     {
-        die("<center><h3>Website Maintainance</h3>". $GLOBALS['website_title'] ." is currently undergoing some major maintainance and will be available as soon as possible.<br/><br/>Sincerely</center>");
+        $tooltip_href = "www.wowhead.com/";
+    }
+    else
+    {
+        $tooltip_href = "www.openwow.com/?";
+    }
+    
+    //Set the error handling.
+    if(file_exists("core/includes/classes/error.php"))
+    {
+        require "core/includes/classes/error.php";
+    }       
+    elseif(file_exists("../core/classes/error.php"))
+    {
+        require "../core/classes/error.php";
+    }       
+    elseif(file_exists("../core/includes/classes/error.php"))
+    {
+        require "../core/includes/classes/error.php";
+    }   
+    elseif(file_exists("../../core/includes/classes/error.php"))
+    {
+        require "../../core/includes/classes/error.php";
+    }   
+    elseif(file_exists("../../../core/includes/classes/error.php"))
+    {
+        require "../../../core/includes/classes/error.php";
+    }
+    
+    loadCustomErrors(); //Load custom errors
+
+    if ( DATA['maintainance']['state'] == TRUE && !in_array($_SERVER['REMOTE_ADDR'], DATA['maintainance']['allowed_ips']) )
+    {
+        die("<center><h3>Website Maintainance</h3>". DATA['website']['title'] ." is currently undergoing some major maintainance and will be available as soon as possible.<br/><br/>Sincerely</center>");
     }
 
     require "core/includes/misc/connect.php"; //Load connection class
 
-    global $Database;
+    $Database = new Database();
 
     require "core/includes/misc/func_lib.php";
     require "core/includes/misc/compress.php";
@@ -77,7 +127,7 @@
     $Plugins->init("pages");
 
 //Load configs.
-    if ( $GLOBALS['enablePlugins'] == TRUE )
+    if ( DATA['website']['enable_plugins'] == true )
     {
         if ( $_SESSION['loaded_plugins'] != NULL )
         {
@@ -103,16 +153,16 @@
     }
 
 ###VOTING SYSTEM####
-    if ( isset($_SESSION['votingUrlID']) && $_SESSION['votingUrlID'] != 0 && $GLOBALS['vote']['type'] == 'confirm' )
+    if ( isset($_SESSION['votingUrlID']) && $_SESSION['votingUrlID'] != 0 && DATA['website']['vote']['type'] == "confirm" )
     {
-        if ( $Website->checkIfVoted($Database->conn->escape_string($_SESSION['votingUrlID']), $GLOBALS['connection']['webdb']) == TRUE )
+        if ( $Website->checkIfVoted($Database->conn->escape_string($_SESSION['votingUrlID'])) == TRUE )
         {
-            die(htmlentities("?page=vote"));
+            die("?page=vote");
         }
 
         $accound_id = $Account->getAccountID($_SESSION['cw_user']);
 
-        $next_vote = time() + $GLOBALS['vote']['timer'];
+        $next_vote = time() + DATA['website']['vote']['timer'];
 
         $Database->selectDB("webdb");
 
@@ -138,7 +188,7 @@
         }
 
         //Update the points table.
-        $add = $row['points'] * $GLOBALS['vote']['multiplier'];
+        $add = $row['points'] * DATA['website']['vote']['multiplier'];
         $Database->update("account_data", array("vp" => "vp+$add"), array("id"=>$accound_id));
 
         unset($_SESSION['votingUrlID']);

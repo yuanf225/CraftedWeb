@@ -57,19 +57,19 @@
 
             $realmId = $Database->conn->escape_string($realm_id);
             //Get status
-            $server_response = fsockopen($GLOBALS['realms'][$realmId]['host'], $GLOBALS['realms'][$realmId]['port'], $errno, $errstr, 1);
+            $server_response = fsockopen(DATA['characters']['host'], DATA['characters']['port'], $errno, $errstr, 1);
             if ( $server_response === false )
             {
-                echo $status = "<h4 class='realm_status_title_offline'>" . $GLOBALS['realms'][$realmId]['name'] . " -  Offline</h4>";
+                echo $status = "<h4 class='realm_status_title_offline'>Offline</h4>";
             }
             else
             {
-                echo $status = "<h4 class='realm_status_title_online'>" . $GLOBALS['realms'][$realmId]['name'] . " - Online</h4>";
+                echo $status = "<h4 class='realm_status_title_online'>Online</h4>";
 
                 echo "<span class='realm_status_text'>";
 
                 /* Players online bar */
-                if ( $GLOBALS['serverStatus']['factionBar'] == true )
+                if ( DATA['website']['server_status']['faction_bar'] == true )
                 {
                     $Database->selectDB('chardb', $realmId);
 
@@ -132,7 +132,7 @@
 
                 /** Get players online
                 */
-                if ( $GLOBALS['serverStatus']['playersOnline'] == true )
+                if ( DATA['website']['server_status']['players_online'] == true )
                 {
                     $Database->selectDB('chardb', $conn, $realmId);
 
@@ -152,10 +152,10 @@
 
                 /** Get uptime
                 */
-                if ( $GLOBALS['serverStatus']['uptime'] == true )
+                if ( DATA['website']['server_status']['uptime'] == true )
                 {
                     $Database->selectDB("logondb");
-                    $statement = $Database->select("uptime", "starttime", "realmid=$realmId ORDER BY starttime DESC LIMIT 1";
+                    $statement = $Database->select("uptime", "starttime", "realmid=$realmId ORDER BY starttime DESC LIMIT 1");
                     $getUp = $statement->get_result();
                     $row   = $getUp->fetch_assoc();
                     $statement->close();
@@ -170,7 +170,7 @@
 					</tr>';
                 }
             }
-            if ( $GLOBALS['serverStatus']['nextArenaFlush'] == true )
+            if ( DATA['website']['server_status']['next_arena_flush'] == true )
             {
                 //Arena flush
                 $Database->selectDB('chardb', $realmId);

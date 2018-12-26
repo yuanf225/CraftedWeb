@@ -32,7 +32,7 @@ if ( isset($_POST['siteid']) )
 
   $Database->selectDB("webdb");
 
-  if ( $Website->checkIfVoted($siteid, $GLOBALS['connection']['webdb']) )
+  if ( $Website->checkIfVoted($siteid))
   {
     die("?page=vote");
   }
@@ -46,7 +46,7 @@ if ( isset($_POST['siteid']) )
   }
   $statement->close();
 
-  if ( $GLOBALS['vote']['type'] == "instant" )
+  if ( DATA['website']['vote']['type'] == "instant" )
   {
     $account_id = $Account->getAccountID($_SESSION['cw_user']);
 
@@ -55,7 +55,7 @@ if ( isset($_POST['siteid']) )
       exit();
     }
 
-    $next_vote = time() + $GLOBALS['vote']['timer'];
+    $next_vote = time() + DATA['website']['vote']['timer'];
 
     $Database->selectDB("webdb");
 
@@ -66,13 +66,13 @@ if ( isset($_POST['siteid']) )
     $row         = $getSiteData->fetch_assoc($getSiteData);
 
     //Update the points table.
-    $add = $row['points'] * $GLOBALS['vote']['multiplier'];
+    $add = $row['points'] * DATA['website']['vote']['multiplier'];
     $Database->update("account_data", array("vp"=>"vp + $add"), array("id"=>$account_id));
 
     echo $row['url'];
     $statement->close();
   }
-  elseif ( $GLOBALS['vote']['type'] == 'confirm' )
+  elseif ( DATA['website']['vote']['type'] == 'confirm' )
   {
     $Database->selectDB("webdb");
     $statement = $Database->select("votingsites", "points, url", null, "id=$siteid");

@@ -41,7 +41,7 @@
             Between Item Level<br/>
             <select style="width: 140px;" id="addmulti_il_from">
                 <?php
-                    for ($i = 1; $i <= $GLOBALS['maxItemLevel']; $i++)
+                    for ($i = 1; $i <= DATA['website']['item_level'][3]; $i++)
                     {
                         echo "<option>". $i ."</option>";
                     }
@@ -50,7 +50,7 @@
             &
             <select style="width: 140px;" id="addmulti_il_to">
 <?php
-    for ($i = $GLOBALS['maxItemLevel']; $i >= 1; $i--)
+    for ($i = DATA['website']['item_level'][3]; $i >= 1; $i--)
     {
         echo "<option>". $i ."</option>";
     }

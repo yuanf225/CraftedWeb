@@ -20,7 +20,7 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
 
-    if ($GLOBALS['social']['enableFacebookModule'] == TRUE)
+    if ( DATA['website']['social']['facebook_module'] == true )
     {
         ?>
         <div class="box_one">
@@ -41,6 +41,6 @@
                 }(document, 'script', 'facebook-jssdk'));
             </script>
 
-            <div class="fb-like-box" data-href="<?php echo $GLOBALS['social']['facebookGroupURL']; ?>" id="fb" data-colorscheme="dark" data-show-faces="false" 			data-border-color="#333" data-stream="true" data-header="false"></div>
+            <div class="fb-like-box" data-href="<?php echo DATA['website']['social']['facebook_group_url']; ?>" id="fb" data-colorscheme="dark" data-show-faces="false" 			data-border-color="#333" data-stream="true" data-header="false"></div>
         </div>
     <?php } ?>

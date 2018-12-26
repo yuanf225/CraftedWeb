@@ -25,7 +25,7 @@
 
         public static function globalInit()
         {
-            if ( $GLOBALS['enablePlugins'] == TRUE )
+            if ( DATA['website']['enable_plugins'] == TRUE )
             {
                 if ( !isset($_SESSION['loaded_plugins']) )
                 {
@@ -68,7 +68,7 @@
 
         public static function init($type)
         {
-            if ( $GLOBALS['enablePlugins'] == TRUE )
+            if ( DATA['website']['enable_plugins'] == TRUE )
             {
                 if ( $_SESSION['loaded_plugins'] != NULL )
                 {
@@ -108,7 +108,7 @@
 
         public static function load($type)
         {
-            if ( $GLOBALS['enablePlugins'] == TRUE )
+            if ( DATA['website']['enable_plugins'] == TRUE )
             {
                 ##########################
                 if ( $type == "pages" )

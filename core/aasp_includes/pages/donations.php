@@ -31,21 +31,21 @@
     }
     else
     {
-        $donationsTotal       = $Database->select( mc_gross FROM payments_log;");
+        $donationsTotal       = $Database->select("payments_log", "mc_gross");
         $donationsTotalAmount = 0;
         while ($row                  = $donationsTotal->fetch_assoc())
         {
             $donationsTotalAmount = $donationsTotalAmount + $row['mc_gross'];
         }
 
-        $donationsThisMonth       = $Database->select( mc_gross FROM payments_log WHERE paymentdate LIKE '%". date('Y-md') ."%';");
+        $donationsThisMonth       = $Database->select("payments_log", "mc_gross", "paymentdate LIKE '%". date('Y-md') ."%'");
         $donationsThisMonthAmount = 0;
         while ($row = $donationsThisMonth->fetch_assoc())
         {
           $donationsThisMonthAmount = $donationsThisMonthAmount + $row['mc_gross'];
         }
 
-        $q                    = $Database->select( mc_gross, userid FROM payments_log ORDER BY paymentdate DESC LIMIT 1;");
+        $q                    = $Database->select("payments_log", "mc_gross, userid", null, null, "ORDER BY paymentdate DESC LIMIT 1");
         $row                  = $q->fetch_assoc();
         $donationLatestAmount = $row['mc_gross'];
 

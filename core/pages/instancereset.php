@@ -29,18 +29,20 @@ Let's you reset the instance on your characters.<hr/>
 
     $service = "reset";
 
-    if ($GLOBALS['service'][$service]['price'] == 0)
+    if ( DATA['service'][$service]['price'] == 0 )
+    {
         echo '<span class="attention">Instance Reset is free of charge.</span>';
+    }
     else
     {
         ?>
         <span class="attention">Instance Reset costs 
-            <?php echo $GLOBALS['service'][$service]['price'] .' '. $Website->convertCurrency($GLOBALS['service'][$service]['currency']); ?></span>
+            <?php echo DATA['service'][$service]['price'] .' '. $Website->convertCurrency(DATA['service'][$service]['currency']); ?></span>
         <?php
-        if ($GLOBALS['service'][$service]['currency'] == "vp")
+        if (DATA['service'][$service]['currency'] == "vp")
             echo "<span class='currency'>Vote Points: " . $Account->loadVP($_SESSION['cw_user']) . "</span>";
-        elseif ($GLOBALS['service'][$service]['currency'] == "dp")
-            echo "<span class='currency'>" . $GLOBALS['donation']['coins_name'] . ": " . $Account->loadDP($_SESSION['cw_user']) . "</span>";
+        elseif (DATA['service'][$service]['currency'] == "dp")
+            echo "<span class='currency'>" . DATA['website']['donation']['coins_name'] . ": " . $Account->loadDP($_SESSION['cw_user']) . "</span>";
     }
 
     if (isset($_POST['ir_step1']) || isset($_POST['ir_step2']))
@@ -202,29 +204,29 @@ Let's you reset the instance on your characters.<hr/>
         $guid     = $Database->conn->escape_string($_POST['ir_char']);
         $instance = $Database->conn->escape_string($_POST['ir_instance']);
 
-        if ($GLOBALS['service'][$service]['currency'] == "vp")
+        if (DATA['service'][$service]['currency'] == "vp")
         {
-            if ($Account->hasVP($_SESSION['cw_user'], $GLOBALS['service'][$service]['price']) == FALSE)
+            if ($Account->hasVP($_SESSION['cw_user'], DATA['service'][$service]['price']) == FALSE)
                 echo '<span class="alert">You do not have enough Vote Points!';
             else
             {
                 $Database->selectDB($_POST['ir_realm']);
                 $Database->conn->query("DELETE FROM instance WHERE id=". $instance .";");
 
-                $Account->deductVP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service'][$service]['price']);
+                $Account->deductVP($Account->getAccountID($_SESSION['cw_user']), DATA['service'][$service]['price']);
                 echo '<span class="approved">The instance lock was removed!</span>';
             }
         }
-        elseif ($GLOBALS['service'][$service]['currency'] == "dp")
+        elseif (DATA['service'][$service]['currency'] == "dp")
         {
-            if ($Account->hasDP($_SESSION['cw_user'], $GLOBALS['service'][$service]['price']) == FALSE)
-                echo '<span class="alert">You do not have enough ' . $GLOBALS['donation']['coins_name'];
+            if ($Account->hasDP($_SESSION['cw_user'], DATA['service'][$service]['price']) == FALSE)
+                echo '<span class="alert">You do not have enough ' . DATA['website']['donation']['coins_name'];
             else
             {
                 $Database->selectDB($_POST['ir_realm']);
                 $Database->conn->query("DELETE FROM instance WHERE id=". $instance .";");
 
-                $Account->deductDP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service'][$service]['price']);
+                $Account->deductDP($Account->getAccountID($_SESSION['cw_user']), DATA['service'][$service]['price']);
                 echo '<span class="approved">The instance lock was removed!</span>';
 
                 $Account->logThis("Performed an Instance reset on " . $Character->getCharName($guid, $Server->getRealmId($_POST['ir_realm'])), "instancereset", $Server->getRealmId($_POST['ir_realm']));

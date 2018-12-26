@@ -32,12 +32,10 @@
     {   
         $conn = $GameServer->connect();
         $GameServer->selectDB("webdb", $conn);
-        $inShop     = $Database->select( COUNT(id) AS items FROM shopitems;");
-        $purchToday = $Database->select( COUNT(id) AS purchases FROM shoplog WHERE date LIKE '%". date('Y-m-d') ."%';");
-        $getAvg     = $Database->select( AVG(price) AS priceAvg FROM shopitems;");
-        $totalPurch = $Database->select( COUNT(id) AS purchasesTotal FROM shoplog;");
-
-
+        $inShop     = $Database->select("shopitems", "COUNT(id) AS items");
+        $purchToday = $Database->select("shoplog", "COUNT(id) AS purchases", null, "date LIKE '%". date('Y-m-d') ."%'");
+        $getAvg     = $Database->select("shopitems", "AVG(price) AS priceAvg");
+        $totalPurch = $Database->select("shoplog", "COUNT(id) AS purchasesTotal");
 
         //Note: The round() function will return 0 if no value is set :)
         ?>

@@ -24,12 +24,12 @@
             <div class="box_one_title">Account Management</div>
             <span style="z-index: 99;">Welcome back <?php echo $_SESSION['cw_user']; ?>
                 <?php
-                if (isset($_SESSION['cw_gmlevel']) && $_SESSION['cw_gmlevel'] >= $GLOBALS['adminPanel_minlvl'] && $GLOBALS['adminPanel_enable'] == TRUE)
+                if (isset($_SESSION['cw_gmlevel']) && $_SESSION['cw_gmlevel'] >= DATA['website']['admin']['minlvl'] && DATA['admin']['enable'] == TRUE)
                 {
                     echo ' <a href="admin/">(Admin Panel)</a>';
                 }
 
-                if (isset($_SESSION['cw_gmlevel']) && $_SESSION['cw_gmlevel'] >= $GLOBALS['staffPanel_minlvl'] && $GLOBALS['staffPanel_enable'] == TRUE)
+                if (isset($_SESSION['cw_gmlevel']) && $_SESSION['cw_gmlevel'] >= DATA['website']['staff']['minlvl'] && DATA['staff']['enable'] == TRUE)
                 {
                     echo ' <a href="staff/">(Staff Panel)</a>';
                 }

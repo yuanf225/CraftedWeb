@@ -45,11 +45,11 @@
                 </tr>
 
             <?php 
-                $result = $Database->select( * FROM custom_pages ORDER BY id ASC;");
+                $result = $Database->select("custom_pages", null, null, null, "ORDER BY id ASC");
                 while ($row = $result->fetch_assoc())
                 {
                     $disabled = false;
-                    $check = $Database->select( COUNT(filename) AS filename FROM disabled_pages WHERE filename='". $row['filename'] ."';");
+                    $check = $Database->select("disabled_pages", "COUNT(filename) AS filename", null, "filename='". $row['filename'] ."'");
                     if ($check->fetch_assoc()['filename'] == 1)
                     {
                         $disabled = TRUE;
@@ -77,13 +77,13 @@
                 <?php
             }
 
-            if (is_array($GLOBALS['core_pages']) || is_object($GLOBALS['core_pages']))
+            if (is_array(DATA['website']['core_pages']) || is_object(DATA['website']['core_pages']))
             {
-                foreach ($GLOBALS['core_pages'] as $pageName => $fileName)
+                foreach (DATA['website']['core_pages'] as $pageName => $fileName)
                 {
                     $filename = substr($fileName, 0, -4);
                     unset($check);
-                    $check = $Database->select( COUNT(filename) AS filename FROM disabled_pages WHERE filename='". $filename ."';");
+                    $check = $Database->select("disabled_pages", "COUNT(filename) AS filename", null, "filename='". $filename ."';");
                     if ($check->fetch_assoc()['filename'] == 1)
                     {
                         $disabled = TRUE;
@@ -142,11 +142,11 @@
                             SET name='". $name ."', filename='". $filename ."', content='". $content ."' 
                             WHERE filename='". $Database->conn->escape_string($_GET['filename']) ."';");
 
-                        echo "<h3>The Page Was Successfully Updated.</h3> <a href='". $GLOBALS['website_domain'] ."?page=". $filename ."' target='_blank'>View Page</a>";
+                        echo "<h3>The Page Was Successfully Updated.</h3> <a href='". DATA['website']['domain'] ."?page=". $filename ."' target='_blank'>View Page</a>";
                     }
                 }
 
-                $result = $Database->select( * FROM custom_pages WHERE filename='". $Database->conn->escape_string($_GET['filename']) ."';");
+                $result = $Database->select("custom_pages", null, null, null, "filename='". $Database->conn->escape_string($_GET['filename']) ."'");
                 $row    = $result->fetch_assoc();
                 ?>
 

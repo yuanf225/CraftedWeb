@@ -34,5 +34,5 @@
 
     global $Database;
 
-    $Database->database();
+    $Database->connect();
     

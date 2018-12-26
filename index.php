@@ -31,11 +31,11 @@
         <?php
             echo $website_title ." - ";
 
-            while ( $page_title = current($GLOBALS['core_pages']) )
+            while ( $page_title = current(DATA['website']['core_pages']) )
             {
                 if ( $page_title == $_GET['page'] .'.php' )
                 {
-                    echo key( $GLOBALS['core_pages'] );
+                    echo key( DATA['website']['core_pages'] );
                     $foundPT = TRUE;
                 }
                 next( $GLOBALS['core_pages'] );
@@ -66,8 +66,6 @@
 </head>
 
 <body>
-    <?php
-        $content->output();
-    ?>
+    <?php $content->output(); ?>
 </body>
 </html>

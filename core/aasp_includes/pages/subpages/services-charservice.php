@@ -34,7 +34,7 @@
     </tr>
     <?php
       $GameServer->selectDB("webdb", $conn);
-        $result = $Database->select( * FROM service_prices;");
+        $result = $Database->select("service_prices")->get_result();
         while ($row = $result->fetch_assoc())
         {
             ?>
@@ -43,7 +43,7 @@
                 <td><input type="text" value="<?php echo $row['price']; ?>" style="width: 50px;" id="<?php echo $row['service']; ?>_price" class="noremove"/></td>
                 <td><select style="width: 200px;" id="<?php echo $row['service']; ?>_currency">
                         <option value="vp" <?php if ($row['currency'] == 'vp') echo 'selected'; ?>>Vote Points</option>
-                        <option value="dp" <?php if ($row['currency'] == 'dp') echo 'selected'; ?>><?php echo $GLOBALS['donation']['coins_name']; ?></option>
+                        <option value="dp" <?php if ($row['currency'] == 'dp') echo 'selected'; ?>><?php echo DATA['website']['donation']['coins_name']; ?></option>
                     </select></td>
                 <td><select style="width: 150px;" id="<?php echo $row['service']; ?>_enabled">
                         <option value="TRUE" <?php if ($row['enabled'] == 'TRUE') echo 'selected'; ?>>Enabled</option>

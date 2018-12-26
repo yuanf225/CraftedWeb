@@ -23,7 +23,7 @@
     define('INIT_SITE', TRUE);
     require "configuration.php";
 
-    if ($GLOBALS['useDebug'] == false)
+    if ( DATA['use_debug'] == false )
     {
         exit();
     }

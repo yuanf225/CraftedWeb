@@ -29,13 +29,13 @@
 
     $GameServer->selectDB("webdb", $conn);
 
-    $pages_query = $Database->select( COUNT(*) AS voteLogs FROM shoplog WHERE shop='vote';");
+    $pages_query = $Database->select("shoplog", "COUNT(*) AS voteLogs", null, "shop='vote'")->get_result();
     $pages       = ceil($pages_query->fetch_assoc()['voteLogs'] / $per_page);
 
     $page  = ( isset($_GET['page']) ) ? $Database->conn->escape_string($_GET['page']) : 1;
     $start = ($page - 1) * $per_page;
 
-    $result = $Database->select( * FROM shoplog WHERE shop='vote' ORDER BY id DESC LIMIT ". $start .", ". $per_page .";");
+    $result = $Database->select("shoplog", null, null, "shop='vote'", "ORDER BY id DESC LIMIT $start,$per_page")->get_result();
     if ($result->num_rows == 0)
     {
         echo "Seems Like The Vote Shop Log Was Empty!";
@@ -63,7 +63,7 @@
                         <td><?php echo $GameAccount->getAccName($row['account']); ?></td>
                         <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
                         <td><?php echo $GameServer->getRealmName($row['realm_id']); ?></td>
-                        <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
+                        <td><a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
                                 <?php echo $GameServer->getItemName($row['entry']); ?></a></td>
                         <td><?php echo $row['date']; ?></td>
                     </tr>	

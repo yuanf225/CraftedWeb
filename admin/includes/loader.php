@@ -30,7 +30,7 @@
 	define('INIT_SITE', TRUE);
 	include "../core/includes/configuration.php";
 
-	if ($GLOBALS['adminPanel_enable'] == FALSE) exit();
+	if ( DATA['admin']['enabled'] == FALSE ) exit();
 
 	require "../core/includes/misc/compress.php"; //Load compression file
 	include "../core/aasp_includes/functions.php";

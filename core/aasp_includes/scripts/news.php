@@ -70,7 +70,7 @@ $GameServer->selectDB("webdb", $conn);
 
     case "getNewsContent":
     {
-      $result  = $Database->select( * FROM news WHERE id=". $Database->conn->escape_string($_POST['id']) .";");
+      $result  = $Database->select("news", null, null, "id=". $Database->conn->escape_string($_POST['id']))->get_result();
       $row     = $result->fetch_assoc();
       $content = str_replace('<br />', "\n", $row['body']);
 

@@ -26,7 +26,7 @@
     }
 
     define('THIS_SCRIPT', 'vb_register.php');
-    $root_path = '../..' . $GLOBALS['forum']['forum_path'];
+    $root_path = '../..' . DATA['website']['forum']['path'];
 
 
     require_once $root_path ."global.php";

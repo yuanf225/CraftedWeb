@@ -23,33 +23,45 @@
 class Database
 {
 
-    public static $DatabaseedTo = "global";
-    public static $conn = null;
+    public $connectedTo = "global";
+    public $conn = null;
 
-    public static function connect()
+    public function __construct()
     {
-        if ($this->conn = new mysqli($GLOBALS['connection']['web']['host'], $GLOBALS['connection']['web']['user'], $GLOBALS['connection']['web']['password']))
+        $this->connect();
+    }
+
+    public function connect()
+    {
+        $this->conn = mysqli_connect(
+            DATA['website']['connection']['host'], 
+            DATA['website']['connection']['username'], 
+            DATA['website']['connection']['password']);
+
+        if ( $this->conn != null && $this->conn != false )
         {
             $this->conn->set_charset("UTF8");
-            $this->conn = $conn;
         }
         else
         {
-            buildError("<b>Database Connection error:</b> A connection could not be established. Error: " . $Database->conn->error, NULL);
-            self::$DatabaseedTo = null;
+            buildError("<b>Database Connection error:</b> A connection could not be established. Error: " . $this->conn->error, NULL);
+            $this->connectedTo = null;
         }
     }
 
-    public static function realm($realmid)
+    public function realm($realmid)
     {
         self::selectDB("webdb");
 
-        if ($GLOBALS['realms'][$realmid]['mysqli_host'] != $GLOBALS['connection']['host'] || 
-            $GLOBALS['realms'][$realmid]['mysqli_user'] != $GLOBALS['connection']['user'] || 
-            $GLOBALS['realms'][$realmid]['mysqli_pass'] != $GLOBALS['connection']['password'])
+        if (DATA['characters']['host'] != DATA['website']['connection']['host'] || 
+            DATA['characters']['user'] != DATA['website']['connection']['user'] || 
+            DATA['characters']['pass'] != DATA['website']['connection']['password'])
         {
             $this->conn->set_charset("UTF8");
-            return new mysqli($GLOBALS['realms'][$realmid]['mysqli_host'], $GLOBALS['realms'][$realmid]['mysqli_user'], $GLOBALS['realms'][$realmid]['mysqli_pass'])
+            return mysqli_connect(
+                DATA['characters']['host'], 
+                DATA['characters']['user'], 
+                DATA['characters']['pass'])
             or buildError("<b>Database Connection error:</b> A connection could not be established to Realm. Error: " . $this->conn->error, NULL);
         }
         else
@@ -57,13 +69,13 @@ class Database
             self::connect();
         }
 
-        $this->conn->select_db($GLOBALS['realms'][$realmid]['chardb']) 
+        $this->conn->select_db(DATA['characters']['database']) 
             or buildError("<b>Database Selection error:</b> The realm database could not be selected. Error: " . $this->conn->error, NULL);
 
-        self::$DatabaseedTo = 'chardb';
+        $this->connectedTo = "chardb";
     }
 
-    public static function selectDB($db, $realmid = 1)
+    public function selectDB($db, $realmid = 1)
     {
         switch ($db)
         {
@@ -72,19 +84,19 @@ class Database
                 break;
 
             case "logondb": 
-                $this->conn->select_db($GLOBALS['connection']['logon']['database']);
+                $this->conn->select_db(DATA['logon']['database']);
                 break;
 
             case "webdb":
-                $this->conn->select_db($GLOBALS['connection']['web']['database']);
+                $this->conn->select_db(DATA['website']['connection']['name']);
                 break;
 
             case "worlddb":
-                $this->conn->select_db($GLOBALS['connection']['world']['database']);
+                $this->conn->select_db(DATA['world']['database']);
                 break;
 
             case "chardb":
-                $this->conn->select_db($GLOBALS['realms'][$realmid]['chardb']);
+                $this->conn->select_db(DATA['characters']['database']);
                 break;
         }
         return TRUE;
@@ -535,8 +547,6 @@ class Database
             return $statement;
         }
     }
-
-
 }
 
 $Database = new Database();
@@ -591,5 +601,5 @@ try
 }
 catch( Exception $e )
 {
-    buildError();
+    buildError($e, null);
 }

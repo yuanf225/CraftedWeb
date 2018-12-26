@@ -56,24 +56,24 @@
             $id       = $Database->conn->escape_string($_POST['id']);
             $extended = NULL;
 
-            $chk1 = $Database->select( COUNT(*) FROM account WHERE email='". $email ."' AND id=". $id .";");
+            $chk1 = $Database->select("account", "COUNT(*)", null, "email='$email' AND id=$id")->get_result();
             if ($chk1->data_seek(0) > 1)
             {
                 $extended .= "Changed email to". $email ."<br/>";
             }
-            $Database->conn->query("UPDATE account SET email='". $email ."' WHERE id=". $id .";");
+            $Database->conn->query("UPDATE account SET email='". $email ."' WHERE id=$id");
 
             $GameServer->selectDB("webdb", $conn);
 
             $Database->conn->query("INSERT INTO account_data (id) VALUES(". $id .");");
 
-            $chk2 = $Database->select( COUNT(*) FROM account_data WHERE vp=". $vp ." AND id=". $id .";");
+            $chk2 = $Database->select("account_data", "COUNT(*)", null, "vp=$vp AND id=$id")->get_result();
             if ($chk2->data_seek(0) > 1)
             {
                 $extended .= "Updated Vote Points to ". $vp ."<br/>";
             }
 
-            $chk3 = $Database->select( COUNT(*) FROM account_data WHERE dp=". $dp ." AND id=". $id .";");
+            $chk3 = $Database->select("account_data", "COUNT(*)", null, "dp=$dp AND id=$id")->get_result();
             if ($chk3->data_seek(0) > 1)
             {
                 $extended .= "Updated Donation Coins to ". $dp ."<br/>";
@@ -117,7 +117,7 @@
 
             $GameServer->realm($rid);
 
-            $online = $Database->select( COUNT(*) FROM characters WHERE guid=". $guid ." AND online=1;");
+            $online = $Database->select("characters", "COUNT(*)", null, "guid=$guid AND online=1")->get_result();
             if ($online->data_seek(0) > 0)
             {
                 exit('The character must be online for any change to take effect!');
@@ -127,7 +127,7 @@
 
             echo 'The character was saved!';
 
-            $chk = $Database->select( COUNT(*) FROM characters WHERE name='". $name ."';");
+            $chk = $Database->select("characters", "COUNT(*)", null, "name='$name'")->get_result();
 
             if ($chk->data_seek(0) > 1)
             {
@@ -155,7 +155,7 @@
             $rank  = $Database->conn->escape_string($_POST['rank']);
             $realm = $Database->conn->escape_string($_POST['realm']);
 
-            $Database->conn->query("UPDATE account_access SET gmlevel=". $rank .", RealmID=". $realm ." WHERE id=". $id .";");
+            $Database->conn->query("UPDATE account_access SET gmlevel=$rank , RealmID=$realm  WHERE id=$id;");
             $GameServer->logThis("Modified account access for " . ucfirst(strtolower($GameAccount->getAccName($id))));
 
             break;

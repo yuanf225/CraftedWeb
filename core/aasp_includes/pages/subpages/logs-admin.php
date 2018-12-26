@@ -26,7 +26,7 @@
 
     $per_page = 20;
 
-    $pages_query = $Database->select( COUNT(*) AS logs FROM admin_log;");
+    $pages_query = $Database->select("admin_log", "COUNT(*) AS logs")->get_result();
     $pages       = ceil($pages_query->fetch_assoc()['logs'] / $per_page);
 
     $page  = ( isset($_GET['page']) ) ? $Database->conn->escape_string($_GET['page']) : 1;
@@ -34,7 +34,7 @@
 
     if (isset($_SESSION['cw_staff']) && !isset($_SESSION['cw_admin']))
     {
-      if ($_SESSION['cw_staff_level'] < $GLOBALS['adminPanel_minlvl'])
+      if ($_SESSION['cw_staff_level'] < DATA['website']['admin']['minlvl'])
       {
         exit("Hey! You Shouldn't Be Here!");
       }
@@ -50,7 +50,7 @@
     </tr>
     <?php
         $GameServer->selectDB("webdb", $conn);
-        $result = $Database->select( * FROM admin_log ORDER BY id DESC LIMIT ". $start .", ". $per_page .";");
+        $result = $Database->select("admin_log", null, null, null, "ORDER BY id DESC LIMIT $start, $per_page")->get_result();
         while ($row    = $result->fetch_assoc())
         { ?>
             <tr>

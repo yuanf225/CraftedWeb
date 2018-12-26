@@ -18,8 +18,10 @@
       or any other files are protected. You cannot re-release
       anywhere unless you were given permission.
       � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
+ 
+ $_SESSION = array();
+ session_destroy(); 
+ echo $_GET['error']; 
 ?>
-<?php session_destroy(); ?>
-<?php echo $_GET['error']; ?>
 <hr/>
 <a href="index.php" title="Log in again">Click Here To Log In Again</a>

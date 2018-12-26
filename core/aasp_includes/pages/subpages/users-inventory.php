@@ -123,7 +123,7 @@ Filter:
     $GameServer->realm($_GET['rid']);
     $equip_array = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18);
 
-    $result = $Database->select( guid, itemEntry, count FROM item_instance WHERE owner_guid=". $Database->conn->escape_string($_GET['guid']) .";");
+    $result = $Database->select("item_instance", "guid, itemEntry, count", null, "owner_guid=". $Database->conn->escape_string($_GET['guid']))->get_result();
     if ($result->num_rows == 0)
     {
         echo "No Items Were Found!";
@@ -139,28 +139,24 @@ Filter:
             {
                 if ($_GET['f'] == 'equip')
                 {
-                    $getPos = $Database->select( slot, bag FROM character_inventory 
-                        WHERE item='". $row['guid'] ."' AND bag='0' AND slot RANGE(0,18) AND guid=". $Database->conn->escape_string($_GET['guid']) .";");
+                    $getPos = $Database->select("character_inventory", "slot, bag", null, "item='". $row['guid'] ."' AND bag='0' AND slot RANGE(0,18) AND guid=". $Database->conn->escape_string($_GET['guid']))->get_result();
                 }
                 elseif ($_GET['f'] == 'bank')
                 {
-                    $getPos = $Database->select( slot, bag FROM character_inventory 
-                        WHERE item='". $row['guid'] ."' AND slot>=39 AND slot<=73;");
+                    $getPos = $Database->select("character_inventory", "slot, bag", null, "WHERE item='". $row['guid'] ."' AND slot>=39 AND slot<=73")->get_result();
                 }
                 elseif ($_GET['f'] == 'keyring')
                 {
-                    $getPos = $Database->select( slot, bag FROM character_inventory 
-                        WHERE item='". $row['guid'] ."' AND slot>=86 AND slot<=117;");
+                    $getPos = $Database->select("character_inventory", "slot, bag", null, "WHERE item='". $row['guid'] ."' AND slot>=86 AND slot<=117")->get_result();
                 }
                 elseif ($_GET['f'] == 'currency')
                 {
-                    $getPos = $Database->select( slot, bag FROM character_inventory 
-                        WHERE item='". $row['guid'] ."' AND slot>=118 AND slot<=135;");
+                    $getPos = $Database->select("character_inventory", "slot, bag", null, "WHERE item='". $row['guid'] ."' AND slot>=118 AND slot<=135")->get_result();
                 }
             }
             else
             {
-                $getPos = $Database->select( slot, bag FROM character_inventory WHERE item='". $row['guid'] ."';");
+                $getPos = $Database->select("character_inventory", "slot, bag", null, "item='". $row['guid'] ."'")->get_result();
             }
 
             if ($getPos->data_seek(0) > 0)
@@ -168,11 +164,11 @@ Filter:
                 $pos =$getPos->fetch_assoc();
 
                 $GameServer->selectDB('worlddb');
-                $get = $Database->select( name, entry, quality, displayid FROM item_template WHERE entry='". $entry ."';");
+                $get = $Database->select("item_template", "name, entry, quality, displayid", null, "entry='$entry'")->get_result();
                 $r   = $get->fetch_assoc();
 
                 $GameServer->selectDB('webdb');
-                $getIcon = $Database->select( icon FROM item_icons WHERE displayid='". $r['displayid'] ."';");
+                $getIcon = $Database->select("item_icons", "icon", null, "displayid='". $r['displayid'] ."'")->get_result();
                 if ($getIcon->num_rows == 0)
                 {
                     //No icon found. Probably cataclysm item. Get the icon from wowhead instead.
@@ -194,7 +190,7 @@ Filter:
                 <tr bgcolor="#e9e9e9">
                     <td width="36"><img src="http://static.wowhead.com/images/wow/icons/medium/<?php echo $icon; ?>.jpg"></td>
                     <td>
-                        <a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $r['entry']; ?>" title="" target="_blank"><?php echo $r['name']; ?></a>
+                        <a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $r['entry']; ?>" title="" target="_blank"><?php echo $r['name']; ?></a>
                     </td>
                     <td>x<?php echo $row['count']; ?> 
 

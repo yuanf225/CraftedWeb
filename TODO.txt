@@ -1,0 +1,4 @@
+configuration.json
+	Remove ['website']
+	Change use_debug to ['use']
+	Add ['tooltip_href']

@@ -195,7 +195,7 @@ function step1()
     {
         if (data != true)
         {
-            $("#info").html("<p><code>"+ data +"</code></p>");
+            $("#info").html("<div class='alert alert-danger'>"+ data +"</div>");
         }
         else if (data == true)
         {
@@ -213,7 +213,7 @@ function step2()
     $.post("functions.php", {step: 2, sent_submit: submit},
         function (data)
         {
-            $("#info").html("<p><code>" + data + "</code></p>");
+            $("#info").html("<div class='alert alert-danger'>"+ data +"</div>");
         }
     );
 }
@@ -227,7 +227,7 @@ function step3()
     $.post("functions.php", {step: 3, submit: sent_submit},
         function (data)
         {
-            $("#info").html("<p><code>" + data + "</code></p>");
+            $("#info").html("<div class='alert alert-danger'>"+ data +"</div>");
         }
     );
 }
@@ -241,7 +241,7 @@ function step4()
     $.post("functions.php", {step: 4, submit: sent_submit},
         function (data)
         {
-            $("#info").html("<p><code>" + data + "</code></p>");
+            $("#info").html("<div class='alert alert-danger'>"+ data +"</div>");
         }
     );
 }
@@ -290,7 +290,7 @@ function step5()
         {
             if (data != true)
             {
-                $("#info").html("<p><code>"+ data +"</code></p>");
+                $("#info").html("<div class='alert alert-danger'>"+ data +"</div>");
             }
         }
     );

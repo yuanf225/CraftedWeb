@@ -31,7 +31,7 @@
     }
     elseif (isset($_POST['element']) && $_POST['element'] == 'donate')
     {
-        echo $GLOBALS['donation']['coins_name'] . ': ' . $Account->loadDP($_POST['account']);
+        echo DATA['website']['donation']['coins_name'] . ': ' . $Account->loadDP($_POST['account']);
     }
 ##
 #
@@ -64,9 +64,9 @@
     {
         echo "<div class='box_one_title'>Server status</div>";
         $num = 0;
-        if ( is_array($GLOBALS['realms']) || is_object($GLOBALS['realms']) )
+        if ( is_array(DATA['realms']) || is_object(DATA['realms']) )
         {
-            foreach ($GLOBALS['realms'] as $k => $v)
+            foreach (DATA['realms'] as $k => $v)
             {
                 if ($num != 0)
                 {
@@ -84,7 +84,7 @@
         unset($num);
         ?>
         <hr/>
-        <span id="realmlist">set realmlist <?php echo $GLOBALS['connection']['realmlist']; ?></span>
+        <span id="realmlist">set realmlist <?php echo DATA['website']['realmlist']; ?></span>
         </div>
         <?php
     }
@@ -93,12 +93,12 @@
 ##
     if ( isset($_POST['convertDonationList']) )
     {
-        for ($row = 0; $row < count($GLOBALS['donationList']); $row++)
+        for ($row = 0; $row < count(DATA['website']['donationList']); $row++)
         {
             $value = $Database->conn->escape_string($_POST['convertDonationList']);
-            if ( $value == $GLOBALS['donationList'][$row][1] )
+            if ( $value == DATA['website']['donationList'][$row][1] )
             {
-                echo $GLOBALS['donationList'][$row][2];
+                echo DATA['website']['donationList'][$row][2];
                 exit();
             }
         }

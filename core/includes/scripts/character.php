@@ -148,18 +148,18 @@
             $race  = $row['race'];
             $level = $row['level'];
 
-            if ( $GLOBALS['service']['teleport']['currency'] == "vp" && $GLOBALS['service']['teleport']['price'] > 0 )
+            if ( DATA['service']['teleport']['currency'] == "vp" && DATA['service']['teleport']['price'] > 0 )
             {
-                if ($Account->hasVP($_SESSION['cw_user'], $GLOBALS['service']['teleport']['price']) == false)
+                if ($Account->hasVP($_SESSION['cw_user'], DATA['service']['teleport']['price']) == false)
                 {
                     die("Insufficent Vote Points!");
                 }
             }
-            elseif ( $GLOBALS['service']['teleport']['currency'] == "dp" && $GLOBALS['service']['teleport']['price'] > 0 )
+            elseif ( DATA['service']['teleport']['currency'] == "dp" && DATA['service']['teleport']['price'] > 0 )
             {
-                if ( $Account->hasDP($_SESSION['cw_user'], $GLOBALS['service']['teleport']['price']) == false )
+                if ( $Account->hasDP($_SESSION['cw_user'], DATA['service']['teleport']['price']) == false )
                 {
-                    die("Insufficent " . $GLOBALS['donation']['coins_name'] . "!");
+                    die("Insufficent " . DATA['website']['donation']['coins_name'] . "!");
                 }
             }
 
@@ -272,13 +272,13 @@
                 die("Aborting...<br/><span class='alert'>Your character must be level 68 or higher to teleport to Northrend!</span>");
             }
 
-            if ( $GLOBALS['service']['teleport']['currency'] == "vp" )
+            if ( DATA['service']['teleport']['currency'] == "vp" )
             {
-                $Account->deductVP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service']['teleport']['price']);
+                $Account->deductVP($Account->getAccountID($_SESSION['cw_user']), DATA['service']['teleport']['price']);
             }
-            elseif ( $GLOBALS['service']['teleport']['currency'] == "dp" )
+            elseif ( DATA['service']['teleport']['currency'] == "dp" )
             {
-                $Account->deductDP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service']['teleport']['price']);
+                $Account->deductDP($Account->getAccountID($_SESSION['cw_user']), DATA['service']['teleport']['price']);
             }
 
             $Database->realm($realm_id);
@@ -304,13 +304,13 @@
             );
             $Database->update("characters", $set, array("account" => $acct, "guid" => $character));
 
-            if ( $GLOBALS['service']['teleport']['currency'] == "vp" )
+            if ( DATA['service']['teleport']['currency'] == "vp" )
             {
-                echo $GLOBALS['service']['teleport']['price'] . " Vote Points was taken from your account.";
+                echo DATA['service']['teleport']['price'] . " Vote Points was taken from your account.";
             }
-            elseif ( $GLOBALS['service']['teleport']['currency'] == "dp" )
+            elseif ( DATA['service']['teleport']['currency'] == "dp" )
             {
-                echo $GLOBALS['service']['teleport']['price'] . " " . $GLOBALS['donation']['coins_name'] . " was taken from your account.";
+                echo DATA['service']['teleport']['price'] . " " . DATA['website']['donation']['coins_name'] . " was taken from your account.";
             }
             $Account->logThis("Teleported " . $Character->getCharName($character, $realm_id) . " to " . $location, 'Teleport', $realm_id);
             echo TRUE;
@@ -329,17 +329,17 @@
             die('<b class="red_text">Please log out your character before proceeding.');
         }
 
-        if ( $GLOBALS['service'][$serviceX]['currency'] == 'vp' )
+        if ( DATA['service'][$serviceX]['currency'] == 'vp' )
         {
-            if ($Account->hasVP($_SESSION['cw_user'], $GLOBALS['service'][$serviceX]['price']) == false)
+            if ($Account->hasVP($_SESSION['cw_user'], DATA['service'][$serviceX]['price']) == false)
                 die('<b class="red_text">Not enough Vote Points!</b>');
         }
 
-        if ( $GLOBALS['service'][$serviceX]['currency'] == 'dp' )
+        if ( DATA['service'][$serviceX]['currency'] == 'dp' )
         {
-            if ($Account->hasDP($_SESSION['cw_user'], $GLOBALS['service'][$serviceX]['price']) == false)
+            if ($Account->hasDP($_SESSION['cw_user'], DATA['service'][$serviceX]['price']) == false)
             {
-                die('<b class="red_text">Not enough ' . $GLOBALS['donation']['coins_name'] . '</b>');
+                die('<b class="red_text">Not enough ' . DATA['website']['donation']['coins_name'] . '</b>');
             }
         }
 
@@ -388,14 +388,14 @@
             sendSoap("character " . $command . " " . $Character->getCharname($guid, $realm_id), $row['rank_user'], $row['rank_pass'], $row['host'], $row['soap_port']);
         }
 
-        if ( $GLOBALS['service'][$serviceX]['currency'] == 'vp' )
+        if ( DATA['service'][$serviceX]['currency'] == 'vp' )
         {
-            $Account->deductVP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service'][$serviceX]['price']);
+            $Account->deductVP($Account->getAccountID($_SESSION['cw_user']), DATA['service'][$serviceX]['price']);
         }
 
-        if ( $GLOBALS['service'][$serviceX]['currency'] == 'dp' )
+        if ( DATA['service'][$serviceX]['currency'] == 'dp' )
         {
-            $Account->deductDP($Account->getAccountID($_SESSION['cw_user']), $GLOBALS['service'][$serviceX]['price']);
+            $Account->deductDP($Account->getAccountID($_SESSION['cw_user']), DATA['service'][$serviceX]['price']);
         }
 
         $Account->logThis("Performed a " . $info . " on " . $Character->getCharName($guid, $realm_id), $serviceX, $realm_id);

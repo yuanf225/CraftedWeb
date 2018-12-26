@@ -27,15 +27,6 @@
             $conn = $Database->database();
             $Database->selectDB("webdb", $conn);
 
-            if ($shop == 'vote')
-            {
-                $shopGlobalVar = $GLOBALS['voteShop'];
-            }
-            elseif ($shop == 'donate')
-            {
-                $shopGlobalVar = $GLOBALS['donateShop'];
-            }
-
             $value      = $Database->conn->escape_string($value);
             $shop       = $Database->conn->escape_string($shop);
             $quality    = $Database->conn->escape_string($quality);
@@ -55,7 +46,7 @@
             $advanced = NULL;
 
             ####Advanced Search
-            if ($GLOBALS[$shop . 'Shop']['enableAdvancedSearch'] == TRUE)
+            if ( DATA['website']['shop'][$shop]['enable_advanced_search'] == TRUE )
             {
                 if ($quality != "--Quality--")
                 {
@@ -96,8 +87,7 @@
                     $advanced .= " AND itemlevel<='" . $ilevelto . "'";
                 }
 
-                $count = $Database->select( COUNT(id) AS item FROM shopitems 
-                                        WHERE name LIKE '%". $value ."%' AND in_shop = '". $shop ."' ". $advanced .";");
+                $count = $Database->select("shopitems", "COUNT(id) AS item", null, "name LIKE '%$value%' AND in_shop='$shop' $advanced")->get_result();
 
                 if ($count->data_seek(0) == 0)
                 {
@@ -118,8 +108,7 @@
                 }
             }
 
-            $result = $Database->select( entry, displayid, name, quality, price, faction, class FROM shopitems 
-                                            WHERE name LIKE '%". $value ."%' AND in_shop = '". $Database->conn->escape_string($shop) ."' ". $advanced .";");
+            $result = $Database->select("shopitems", null, null, "name LIKE '%$value%' AND in_shop='". $Database->conn->escape_string($shop) ."' $advanced")->get_result();
 
             if ($results != "--Results--")
             {
@@ -177,7 +166,7 @@
                             break;
                     }
 
-                    $getIcon = $Database->select( icon FROM item_icons WHERE displayid=". $row['displayid'] .";");
+                    $getIcon = $Database->select("item_icons", "icon", null, "displayid=". $row['displayid'])->get_result();
                     if ($getIcon->num_rows == 0)
                     {
                         //No icon found. Probably cataclysm item. Get the icon from wowhead instead.
@@ -205,7 +194,7 @@
                                     </div>
                                 </td>
                                 <td width="380">
-                                    <a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $entry; ?>" 
+                                    <a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $entry; ?>" 
                                        class="<?php echo $class; ?>_tooltip" target="_blank">
                                         <?php echo $row['name']; ?></a>
                                 </td>
@@ -234,15 +223,15 @@
                                     }
 
 
-                                    if (isset($_SESSION['cw_gmlevel']) && $_SESSION['cw_gmlevel'] >= $GLOBALS['adminPanel_minlvl'] ||
-                                        isset($_SESSION['cw_gmlevel']) && $_SESSION['cw_gmlevel'] >= $GLOBALS['staffPanel_minlvl'] && $GLOBALS['editShopItems'] == TRUE)
+                                    if (isset($_SESSION['cw_gmlevel']) && $_SESSION['cw_gmlevel'] >= DATA['website']['admin']['minlvl'] ||
+                                        isset($_SESSION['cw_gmlevel']) && $_SESSION['cw_gmlevel'] >= DATA['website']['staff']['minlvl'] && DATA['website']['staff']['permissions']['editShopItems'] == TRUE)
                                     {
                                         ?>
                                         <font size="-2">( 
                                         <a onclick="editShopItem('<?php echo $entry; ?>', '<?php echo $shop; ?>', '<?php echo $row['price']; ?>')">Edit</a> | 
                                         <a onclick="removeShopItem('<?php echo $entry; ?>', '<?php echo $shop; ?>')">Remove</a> 
                                         )</font>
-                                        &nbsp; &nbsp; &nbsp; &nbsp;   
+                                        &nbsp; &nbsp; &nbsp; &nbsp;
                                         <?php
                                     }
                                     ?>
@@ -250,7 +239,7 @@
                                     <?php
                                     if ($shop == "donate")
                                     {
-                                        echo $GLOBALS['donation']['coins_name'];
+                                        echo DATA['website']['donation']['coins_name'];
                                     }
                                     else
                                     {
@@ -283,7 +272,7 @@
 
             $shop = $Database->conn->escape_string($shop);
 
-            $result = $Database->select( entry, displayid, name, quality, price, faction, class FROM shopitems WHERE in_shop='". $shop ."';");
+            $result = $Database->select("shopitems", null, null, "in_shop='$shop'")->get_result();
 
             if ($result->num_rows == 0)
             {
@@ -294,7 +283,7 @@
                 while ($row = $result->fetch_assoc())
                 {
                     $entry   = $row['entry'];
-                    $getIcon = $Database->select( icon FROM item_icons WHERE displayid=". $row['displayid'] .";");
+                    $getIcon = $Database->select("item_icons", "icon", null, "displayid=". $row['displayid'])->get_result();
                     if ($getIcon->num_rows == 0)
                     {
                         //No icon found. Probably cataclysm item. Get the icon from wowhead instead.
@@ -321,7 +310,7 @@
                                     </div>
                                 </td>
                                 <td width="380">
-                                    <a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $entry; ?>" class="<?php echo $class; ?>_tooltip" target="_blank">
+                                    <a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $entry; ?>" class="<?php echo $class; ?>_tooltip" target="_blank">
                                         <?php echo $row['name']; ?>
                                     </a>
                                 </td>
@@ -364,7 +353,7 @@
                                     <?php
                                     if ($shop == "donate")
                                     {
-                                        echo $GLOBALS['donation']['coins_name'];
+                                        echo DATA['website']['donation']['coins_name'];
                                     }
                                     else
                                     {
@@ -396,7 +385,7 @@
             $conn = $Database->database();;
             $Database->selectDB("webdb", $conn);
 
-            date_default_timezone_set($GLOBALS['timezone']);
+            date_default_timezone_set(DATA['website']['timezone']);
 
             $entry      = $Database->conn->escape_string($entry);
             $char_id    = $Database->conn->escape_string($char_id);

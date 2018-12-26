@@ -44,7 +44,8 @@
                 die("Please enter all fields.");
             }
 
-            if ($Database->conn->query("INSERT INTO site_links (title, url, shownWhen) VALUES('". $title ."', '". $url ."', '". $shownWhen ."');"))
+            if ($Database->conn->query("INSERT INTO site_links (title, url, shownWhen) VALUES
+                ('$title', '$url', '$shownWhen');"))
             {
                 $GameServer->logThis("Added ". $title ." to the menu");
             }
@@ -60,7 +61,7 @@
         {
             $id = $Database->conn->escape_string($_POST['id']);
 
-            if ($Database->conn->query("DELETE FROM slider_images WHERE position=". $id .";"))
+            if ($Database->conn->query("DELETE FROM slider_images WHERE position=$id;"))
             {
                 $GameServer->logThis("Removed a slideshow image");
             }
@@ -75,7 +76,7 @@
         {
             $id = $Database->conn->escape_string($_POST['id']);
 
-            if($Database->conn->query("DELETE FROM site_links WHERE position=". $id .";"))
+            if($Database->conn->query("DELETE FROM site_links WHERE position=$id;"))
             {
                 $GameServer->logThis("Removed a menu link");
             }
@@ -90,7 +91,7 @@
         {
             $foldername = $Database->conn->escape_string($_POST['foldername']);
 
-            if ($Database->conn->query("INSERT INTO disabled_plugins VALUES('". $foldername ."');"))
+            if ($Database->conn->query("INSERT INTO disabled_plugins VALUES('$foldername');"))
             {
                 include "../../core/plugins/" . $foldername . "/info.php";
                 $GameServer->logThis("Disabled the plugin " . $title);
@@ -106,7 +107,7 @@
         {
             $foldername = $Database->conn->escape_string($_POST['foldername']);
 
-            if ($Database->conn->query("DELETE FROM disabled_plugins WHERE foldername='". $foldername ."';"))
+            if ($Database->conn->query("DELETE FROM disabled_plugins WHERE foldername='$foldername';"))
             {
                 include "../../core/plugins/" . $foldername . "/info.php";
                 $GameServer->logThis("Enabled the plugin -" . $title);
@@ -121,7 +122,7 @@
         case "getMenuEditForm":
         {
             $id = $Database->conn->escape_string($_POST['id']);
-            $result = $Database->select( * FROM site_links WHERE position=". $id .";");
+            $result = $Database->select("site_links", null, null, "position=$id")->get_result();
             $rows   = $result->fetch_assoc();
             ?>
             Title<br/>
@@ -158,7 +159,7 @@
         {
             $name = $Database->conn->escape_string(trim($_POST['name']));
             $path = $Database->conn->escape_string(trim($_POST['path']));
-            if ($Database->conn->query("INSERT INTO template (`name`, `path`) VALUES('". $name ."', '". $path ."');"))
+            if ($Database->conn->query("INSERT INTO template (`name`, `path`) VALUES('$name', '$path');"))
             {
                 $GameServer->logThis("Installed the template ". $_POST['name']);
             }
@@ -181,7 +182,7 @@
                 die("Please enter all fields.");
             }
 
-            if ($Database->conn->query("UPDATE site_links SET title='". $title ."', url='". $url ."', shownWhen='". $shownWhen ."' WHERE position=". $id .";"))
+            if ($Database->conn->query("UPDATE site_links SET title='$title', url='$url', shownWhen='$shownWhen' WHERE position=$position;"))
             {
                 $GameServer->logThis("Modified the menu");
             }
@@ -200,7 +201,7 @@
             if ($Database->conn->query("UPDATE template SET applied='0' WHERE applied='1';") && 
                 $Database->conn->query("UPDATE template SET applied='1' WHERE id=". $templateId .";"))
             {
-                $result = $Database->select( name FROM template WHERE id=". $templateId .";");
+                $result = $Database->select("template", "name", null, "id=$templateId")->get_result();
                 $GameServer->logThis("Template Changed To `". $result->fetch_assoc()['name'] ."`");
             }
             else
@@ -213,9 +214,9 @@
         case "uninstallTemplate":
         {
             $templateId = $Database->conn->escape_string($_POST['id']);
-            $result = $Database->select( name FROM template WHERE id=". $templateId .";");
+            $result = $Database->select("template", "name", null, "id=$templateId")->get_result();
 
-            if ($Database->conn->query("DELETE FROM template WHERE id=". $templateId .";") && 
+            if ($Database->conn->query("DELETE FROM template WHERE id=$templateId;") && 
                 $Database->conn->query("UPDATE template SET applied='1' ORDER BY id ASC LIMIT 1;"))
             {
                 $GameServer->logThis("Uninstalled Template - `". $result->fetch_assoc()['name'] ."`");

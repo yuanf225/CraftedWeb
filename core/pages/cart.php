@@ -24,8 +24,8 @@
 <div class='box_two_title'>Shopping Cart</div>
 <?php
     echo '<span class="currency">Vote Points: '. 
-    $Account->loadVP($_SESSION['cw_user']) . '<br/>
-' . $GLOBALS['donation']['coins_name'] . ': '. $Account->loadDP($_SESSION['cw_user']) . '</span>';
+    $Account->loadVP($_SESSION['cw_user']) . '<br/>' . 
+    DATA['website']['donation']['coins_name'] . ': '. $Account->loadDP($_SESSION['cw_user']) . '</span>';
 
     if (isset($_GET['return']) && $_GET['return'] == "TRUE")
     {
@@ -59,12 +59,12 @@
                 {
                     $sql .= $entry . ',';
 
-                    $Database->selectDB($GLOBALS['connection']['worlddb']);
-                    $result = $Database->select( maxcount FROM item_template WHERE entry=" . $entry . " AND maxcount>0;");
+                    $Database->selectDB(DATA['world']['database']);
+                    $result = $Database->select("item_template", "maxcount", null, "entry=$entry AND maxcount>0")->get_result();
                     if ($result->data_seek(0) != 0)
                         $_SESSION['donateCart'][$entry]['quantity'] = 1;
 
-                    $Database->selectDB($GLOBALS['connection']['webdb']);
+                    $Database->selectDB(DATA['website']['connection']['name']);
                 }
             }
         }
@@ -79,7 +79,7 @@
             while ($row   = $query->fetch_array())
             {
                 ?><tr align="center">
-                    <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>"><?php echo $row['name']; ?></a></td>
+                    <td><a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $row['entry']; ?>"><?php echo $row['name']; ?></a></td>
                     <td>
                         <input type="text" value="<?php echo $_SESSION['donateCart'][$row['entry']]['quantity']; ?>" style="width: 30px;"
                                onFocus="$(this).next('.quantitySave').fadeIn()" id="donateCartQuantity-<?php echo $row['entry']; ?>" />
@@ -89,7 +89,7 @@
                     </td>
                     <td>
                         <?php echo $_SESSION['donateCart'][$row['entry']]['quantity'] * $row['price']; ?> 
-                        <?php echo $GLOBALS['donation']['coins_name']; ?>
+                        <?php echo DATA['website']['donation']['coins_name']; ?>
                     </td>
                     <td><a href="#" onclick="removeItemFromCart('donateCart',<?php echo $row['entry']; ?>)">Remove</a></td>
                 </tr>
@@ -113,12 +113,12 @@
                 if ($_SESSION['voteCart'][$entry]['quantity'] != 0)
                 {
                     $sql                                      .= $entry . ',';
-                    $Database->selectDB($GLOBALS['connection']['worlddb']);
-                    $result                                   = $Database->select( maxcount FROM item_template WHERE entry=". $entry ." AND maxcount>0;");
+                    $Database->selectDB(DATA['world']['database']);
+                    $result                                   = $Database->select("item_template", "maxcount", null, "entry=$entry AND maxcount>0")->get_result();
                     if ($result->data_seek(0) != 0)
                         $_SESSION['voteCart'][$entry]['quantity'] = 1;
 
-                    $Database->selectDB($GLOBALS['connection']['webdb']);
+                    $Database->selectDB(DATA['website']['connection']['name']);
                 }
             }
         }
@@ -133,7 +133,7 @@
             while ($row   = $query->fetch_array())
             {
                 ?><tr align="center">
-                    <td><a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>"><?php echo $row['name']; ?></a></td> <td>
+                    <td><a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $row['entry']; ?>"><?php echo $row['name']; ?></a></td> <td>
                         <input type="text" value="<?php echo $_SESSION['voteCart'][$row['entry']]['quantity']; ?>" style="width: 30px;"
                                onFocus="$(this).next('.quantitySave').fadeIn()" id="voteCartQuantity-<?php echo $row['entry']; ?>" />
                         <div class="quantitySave" style="display:none;">
@@ -151,7 +151,7 @@
         <?php
     }
 ?>
-<br/>Total cost: <?php echo $totalVP; ?> Vote Points, <?php echo $totalDP. ' ' .$GLOBALS['donation']['coins_name']; ?>
+<br/>Total cost: <?php echo $totalVP; ?> Vote Points, <?php echo $totalDP. ' ' .DATA['website']['donation']['coins_name']; ?>
 <hr/>
 
 <?php

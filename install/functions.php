@@ -6,31 +6,21 @@
     {
         switch ($_POST['step'])
         {
-            case 1:
-                step1();
-                break;
+            case 1: step1(); break;
 
-            case 2:
-                step2();
-                break;
+            case 2: step2(); break;
 
-            case 3:
-                step3();
-                break;
+            case 3: step3(); break;
 
-            case 4:
-                step4();
-                break;
+            case 4: step4(); break;
 
-            case 5:
-                step5();
-                break;
+            case 5: step5(); break;
         }
     }
 
     function step1()
     {
-        if ( !isset($_POST['submit']) && $_POST['submit'] != "step1" )
+        if ( $_POST['submit'] != "step1" )
         {
             return NULL;
             exit;
@@ -46,238 +36,147 @@
             die("Please Enter All Fields!");
         }
 
-        if ( file_exists("../core/includes/classes/validator.php") )
+        # Auth/Logon Server
+        if ( $_POST['logon_checked'] == true )
         {
-        	include "../core/includes/classes/validator.php";
-
-            $step1_required = array
-            (
-                "web_host",
-                "web_port",
-                "web_user",
-                "web_password",
-                "web_database",
-
-                "logon_host",
-                "logon_port",
-                "logon_user",
-                "logon_password",
-                "logon_database",
-
-                "world_host",
-                "world_port",
-                "world_user",
-                "world_password",
-                "world_database",
-
-                "realmlist",
-                "title",
-                "domain",
-                "expansion",
-                "paypal",
-                "email"
-            );
-
-            $step = array
-            (
-                "web_host"          => $_POST['web_host'],
-                "web_port"          => $_POST['web_port'],
-                "web_user"          => $_POST['web_user'],
-                "web_password"      => $_POST['web_password'],
-                "web_database"      => $_POST['web_database'],
-
-                "logon_host"        => $_POST['logon_host'],
-                "logon_port"        => $_POST['logon_port'],
-                "logon_user"        => $_POST['logon_user'],
-                "logon_password"    => $_POST['logon_password'],
-                "logon_database"    => $_POST['logon_database'],
-                "logon_checked"     => $_POST['logon_checked'],
-
-                "characters_host" => $_POST['characters_host'],
-                "characters_port" => $_POST['characters_port'],
-                "characters_user" => $_POST['characters_user'],
-                "characters_password" => $_POST['characters_password'],
-                "characters_database" => $_POST['characters_database'],
-                "characters_checked" => $_POST['characters_checked'],
-
-                "world_host"        => $_POST['world_host'],
-                "world_port"        => $_POST['world_port'],
-                "world_user"        => $_POST['world_user'],
-                "world_password"    => $_POST['world_password'],
-                "world_database"    => $_POST['world_database'],
-                "world_checked"     => $_POST['world_checked'],
-
-                "realmlist"         => $_POST['realmlist'],
-                "title"             => $_POST['title'],
-                "domain"            => $_POST['domain'],
-                "expansion"         => $_POST['expansion'],
-                "paypal"            => $_POST['paypal'],
-                "email"             => $_POST['email']
-            );
-
-        	$Validator = new Validator(null, $step1_required, $step1_required);
-
-            # $_POST has been sanatized.
-    		$_POST = $Validator->sanatize($_POST);
-
-            # Auth/Logon Server
-            if ( $step['logon_checked'] == true )
-            {
-                $_SESSION['install']['logon']['database']['host']       = "127.0.0.1";
-                $_SESSION['install']['logon']['database']['port']       = "3306";
-                $_SESSION['install']['logon']['database']['username']   = "root";
-                $_SESSION['install']['logon']['database']['password']   = "";
-
-                # Host
-                if ( !empty($step['logon_host']) )
-                    $_SESSION['install']['logon']['database']['host'] = $step['logon_host'];
-
-                # Port
-                if ( !empty($step['logon_port']) )
-                    $_SESSION['install']['logon']['database']['port'] = $step['logon_port'];
-
-                # Username
-                if ( !empty($step['logon_user']) )
-                    $_SESSION['install']['logon']['database']['username'] = $step['logon_user'];
-
-                # Password
-                if ( !empty($step['logon_password']) )
-                    $_SESSION['install']['logon']['database']['password'] = $step['logon_password'];
-            }
-
-            if ( $step['characters_checked'] == true )
-            {
-                $_SESSION['install']['characters']['database']['host']       = "127.0.0.1";
-                $_SESSION['install']['characters']['database']['port']       = "3306";
-                $_SESSION['install']['characters']['database']['username']   = "root";
-                $_SESSION['install']['characters']['database']['password']   = "";
-
-                # Host
-                if (!empty($step['characters_host']))
-                    $_SESSION['install']['characters']['database']['host'] = $step['characters_host'];
-
-                # Port
-                if (!empty($step['characters_port']))
-                    $_SESSION['install']['characters']['database']['port'] = $step['characters_port'];
-
-                # Username
-                if (!empty($step['characters_user']))
-                    $_SESSION['install']['characters']['database']['username'] = $step['characters_user'];
-
-                # Password
-                if (!empty($step['characters_password']))
-                    $_SESSION['install']['characters']['database']['password'] = $step['characters_password'];
-            }
-
-            # World Server
-            if ( $step['world_checked'] == true )
-            {
-                $_SESSION['install']['world']['database']['host']       = "127.0.0.1";
-                $_SESSION['install']['world']['database']['port']       = "3306";
-                $_SESSION['install']['world']['database']['username']   = "root";
-                $_SESSION['install']['world']['database']['password']   = "";
-
-                # Host
-                if ( !empty($step['logon_host']) )
-                    $_SESSION['install']['world']['database']['host'] = $step['logon_host'];
-
-                # Port
-                if ( !empty($step['logon_port']) )
-                    $_SESSION['install']['world']['database']['port'] = $step['logon_port'];
-
-                # Username
-                if ( !empty($step['logon_user']) )
-                    $_SESSION['install']['world']['database']['username'] = $step['logon_user'];
-
-                # Password
-                if ( !empty($step['logon_password']) )
-                    $_SESSION['install']['world']['database']['password'] = $step['logon_password'];
-            }
-
-            # Web
-            $_SESSION['install']['web']['database']['host']     = "127.0.0.1";
-            $_SESSION['install']['web']['database']['port']     = "3306";
-            $_SESSION['install']['web']['database']['username'] = "root";
-            $_SESSION['install']['web']['database']['password'] = "";
-            $_SESSION['install']['web']['database']['name']     = "craftedcms";
-
-            # Database
-            if ( !empty($step['web_database']) )
-                $_SESSION['install']['web']['database']['name'] = $step['web_database'];
+            $_SESSION['install']['logon']['database']['host']       = "127.0.0.1";
+            $_SESSION['install']['logon']['database']['port']       = "3306";
+            $_SESSION['install']['logon']['database']['username']   = "root";
+            $_SESSION['install']['logon']['database']['password']   = "";
 
             # Host
-            if ( !empty($step['web_host']) )
-                $_SESSION['install']['web']['database']['port'] = $step['web_host'];
+            if ( !empty($_POST['logon_host']) ) $_SESSION['install']['logon']['database']['host'] = $_POST['logon_host'];
 
             # Port
-            if ( !empty($step['web_port']) )
-                $_SESSION['install']['web']['database']['port'] = $step['web_port'];
+            if ( !empty($_POST['logon_port']) ) $_SESSION['install']['logon']['database']['port'] = $_POST['logon_port'];
 
             # Username
-            if ( !empty($step['web_user']) )
-                $_SESSION['install']['web']['database']['username'] = $step['web_user'];
+            if ( !empty($_POST['logon_user']) ) $_SESSION['install']['logon']['database']['username'] = $_POST['logon_user'];
 
             # Password
-            if ( !empty($step['web_password']) )
-                $_SESSION['install']['web']['database']['password'] = $step['web_password'];
+            if ( !empty($_POST['logon_password']) ) $_SESSION['install']['logon']['database']['password'] = $_POST['logon_password'];
+        }
 
-            # Auth/Logon
-            if ( $step['logon_checked'] == false && $step['world_checked'] == false && $step['characters_checked'] )
-            {
-                $_SESSION['install']['logon']['database']['host']       = $_SESSION['install']['web']['database']['host'];
-                $_SESSION['install']['logon']['database']['port']       = $_SESSION['install']['web']['database']['port'];
-                $_SESSION['install']['logon']['database']['username']   = $_SESSION['install']['web']['database']['username'];
-                $_SESSION['install']['logon']['database']['password']   = $_SESSION['install']['web']['database']['password'];
+        if ( $_POST['characters_checked'] == true )
+        {
+            $_SESSION['install']['characters']['database']['host']       = "127.0.0.1";
+            $_SESSION['install']['characters']['database']['port']       = "3306";
+            $_SESSION['install']['characters']['database']['username']   = "root";
+            $_SESSION['install']['characters']['database']['password']   = "";
 
-                $_SESSION['install']['characters']['database']['host']  = $_SESSION['install']['web']['database']['host'];
-                $_SESSION['install']['characters']['database']['port']  = $_SESSION['install']['web']['database']['port'];
-                $_SESSION['install']['characters']['database']['username'] = $_SESSION['install']['web']['database']['username'];
-                $_SESSION['install']['characters']['database']['password'] = $_SESSION['install']['web']['database']['password'];
+            # Host
+            if (!empty($_POST['characters_host'])) $_SESSION['install']['characters']['database']['host'] = $_POST['characters_host'];
 
-                $_SESSION['install']['world']['database']['host']       = $_SESSION['install']['web']['database']['host'];
-                $_SESSION['install']['world']['database']['port']       = $_SESSION['install']['web']['database']['port'];
-                $_SESSION['install']['world']['database']['username']   = $_SESSION['install']['web']['database']['username'];
-                $_SESSION['install']['world']['database']['password']   = $_SESSION['install']['web']['database']['password'];
-            }
+            # Port
+            if (!empty($_POST['characters_port'])) $_SESSION['install']['characters']['database']['port'] = $_POST['characters_port'];
 
-            # Check If Auth Database Value is empty or not
-            if ( empty($step['logon_database']) )
-            {
-                $_SESSION['install']['logon']['database']['name'] = "auth";
-            }
-            else
-            {
-                $_SESSION['install']['logon']['database']['name'] = $step['logon_database'];
-            }
+            # Username
+            if (!empty($_POST['characters_user'])) $_SESSION['install']['characters']['database']['username'] = $_POST['characters_user'];
 
-            # Check If World Database Value is empty or not
-            if ( empty($step['world_database']) )
-            {
-                $_SESSION['install']['world']['database']['name'] = "world";
-            }
-            else
-            {
-                $_SESSION['install']['world']['database']['name'] = $step['world_database'];
-            }
+            # Password
+            if (!empty($_POST['characters_password'])) $_SESSION['install']['characters']['database']['password'] = $_POST['characters_password'];
+        }
 
-            # Check If Characters Database Value is empty or not
-            if ( empty($step['characters_database']) )
-            {
-                $_SESSION['install']['characters']['database']['name'] = "characters";
-            }
-            else
-            {
-                $_SESSION['install']['characters']['database']['name'] = $step['characters_database'];
-            }
+        # World Server
+        if ( $_POST['world_checked'] == true )
+        {
+            $_SESSION['install']['world']['database']['host']       = "127.0.0.1";
+            $_SESSION['install']['world']['database']['port']       = "3306";
+            $_SESSION['install']['world']['database']['username']   = "root";
+            $_SESSION['install']['world']['database']['password']   = "";
 
-            # Set all of the session variables
-            $_SESSION['install']['web']['realmlist']    = $step['realmlist'];
-            $_SESSION['install']['web']['title']        = $step['title'];
-            $_SESSION['install']['web']['domain']       = $step['domain'];
-            $_SESSION['install']['web']['expansion']    = $step['expansion'];
-            $_SESSION['install']['web']['paypal']       = $step['paypal'];
-            $_SESSION['install']['web']['email']        = $step['email'];
-    	}
+            # Host
+            if ( !empty($_POST['logon_host']) ) $_SESSION['install']['world']['database']['host'] = $_POST['logon_host'];
+
+            # Port
+            if ( !empty($_POST['logon_port']) ) $_SESSION['install']['world']['database']['port'] = $_POST['logon_port'];
+
+            # Username
+            if ( !empty($_POST['logon_user']) ) $_SESSION['install']['world']['database']['username'] = $_POST['logon_user'];
+
+            # Password
+            if ( !empty($_POST['logon_password']) ) $_SESSION['install']['world']['database']['password'] = $_POST['logon_password'];
+        }
+
+        # Web
+        $_SESSION['install']['web']['database']['host']     = "127.0.0.1";
+        $_SESSION['install']['web']['database']['port']     = "3306";
+        $_SESSION['install']['web']['database']['username'] = "root";
+        $_SESSION['install']['web']['database']['password'] = "";
+        $_SESSION['install']['web']['database']['name']     = "craftedcms";
+
+        # Database
+        if ( !empty($_POST['web_database']) ) $_SESSION['install']['web']['database']['name'] = $_POST['web_database'];
+
+        # Host
+        if ( !empty($_POST['web_host']) ) $_SESSION['install']['web']['database']['port'] = $_POST['web_host'];
+
+        # Port
+        if ( !empty($_POST['web_port']) ) $_SESSION['install']['web']['database']['port'] = $_POST['web_port'];
+
+        # Username
+        if ( !empty($_POST['web_user']) ) $_SESSION['install']['web']['database']['username'] = $_POST['web_user'];
+
+        # Password
+        if ( !empty($_POST['web_password']) ) $_SESSION['install']['web']['database']['password'] = $_POST['web_password'];
+
+        # Auth/Logon
+        if ( $_POST['logon_checked'] == false && $_POST['world_checked'] == false && $_POST['characters_checked'] )
+        {
+            $_SESSION['install']['logon']['database']['host']       = $_SESSION['install']['web']['database']['host'];
+            $_SESSION['install']['logon']['database']['port']       = $_SESSION['install']['web']['database']['port'];
+            $_SESSION['install']['logon']['database']['username']   = $_SESSION['install']['web']['database']['username'];
+            $_SESSION['install']['logon']['database']['password']   = $_SESSION['install']['web']['database']['password'];
+
+            $_SESSION['install']['characters']['database']['host']  = $_SESSION['install']['web']['database']['host'];
+            $_SESSION['install']['characters']['database']['port']  = $_SESSION['install']['web']['database']['port'];
+            $_SESSION['install']['characters']['database']['username'] = $_SESSION['install']['web']['database']['username'];
+            $_SESSION['install']['characters']['database']['password'] = $_SESSION['install']['web']['database']['password'];
+
+            $_SESSION['install']['world']['database']['host']       = $_SESSION['install']['web']['database']['host'];
+            $_SESSION['install']['world']['database']['port']       = $_SESSION['install']['web']['database']['port'];
+            $_SESSION['install']['world']['database']['username']   = $_SESSION['install']['web']['database']['username'];
+            $_SESSION['install']['world']['database']['password']   = $_SESSION['install']['web']['database']['password'];
+        }
+
+        # Check If Auth Database Value is empty or not
+        if ( empty($_POST['logon_database']) )
+        {
+            $_SESSION['install']['logon']['database']['name'] = "auth";
+        }
+        else
+        {
+            $_SESSION['install']['logon']['database']['name'] = $_POST['logon_database'];
+        }
+
+        # Check If World Database Value is empty or not
+        if ( empty($_POST['world_database']) )
+        {
+            $_SESSION['install']['world']['database']['name'] = "world";
+        }
+        else
+        {
+            $_SESSION['install']['world']['database']['name'] = $_POST['world_database'];
+        }
+
+        # Check If Characters Database Value is empty or not
+        if ( empty($_POST['characters_database']) )
+        {
+            $_SESSION['install']['characters']['database']['name'] = "characters";
+        }
+        else
+        {
+            $_SESSION['install']['characters']['database']['name'] = $_POST['characters_database'];
+        }
+
+        # Set all of the session variables
+        $_SESSION['install']['web']['realmlist']    = $_POST['realmlist'];
+        $_SESSION['install']['web']['title']        = $_POST['title'];
+        $_SESSION['install']['web']['domain']       = $_POST['domain'];
+        $_SESSION['install']['web']['expansion']    = $_POST['expansion'];
+        $_SESSION['install']['web']['paypal']       = $_POST['paypal'];
+        $_SESSION['install']['web']['email']        = $_POST['email'];
+            
         print true;
         exit;
     }
@@ -328,18 +227,20 @@
             null,
             (int)$_SESSION['install']['web']['database']['port']);
 
-        if ( $Database->conn->connect_errno != 0 )
+        if ( $conn->connect_errno != 0 )
+        {
             die("<br/>[FAILURE] Could not connect to the database. Please <a href=\"./index.php\">restart</a> the installation. ");
+        }
 
         echo "<br>[Success] Connected to database.<br>[Info] Creating Website database...";
 
-        if ( !$Database->conn->query("CREATE DATABASE IF NOT EXISTS ". $Database->conn->escape_string($_SESSION['install']['web']['database']['name']) .";") )
-            die("<br>[FAILURE] Could not create the website database. ". $Database->conn->error." .Please <a href=\"./index.php\">restart</a> the installation.");
+        if ( !$conn->query("CREATE DATABASE IF NOT EXISTS ". $conn->escape_string($_SESSION['install']['web']['database']['name']) .";") )
+            die("<br>[FAILURE] Could not create the website database. ". $conn->error." .Please <a href=\"./index.php\">restart</a> the installation.");
 
         echo "<br>[Success] Created Website database.
         <br>[Info] Connecting to Website database";
 
-        if ( !$Database->conn->select_db($_SESSION['install']['web']['database']['name']) )
+        if ( !$conn->select_db($_SESSION['install']['web']['database']['name']) )
         	die("<br>[FAILURE] Could not connect to the Website database. Please <a href=\"./index.php\">restart</a> the installation.");
 
         echo "<br>[Success] Connected to Website database.
@@ -355,8 +256,8 @@
             {
                 if ( strlen($stmt) > 3 )
                 {
-                    if ( !$Database->conn->query($stmt) )
-                        die("<br>[FAILURE] Could not run SQL file for the Website database. Please <a href=\"./index.php\"restart</a> the installation. (". $Database->conn->error .")");
+                    if ( !$conn->query($stmt) )
+                        die("<br>[FAILURE] Could not run SQL file for the Website database. Please <a href=\"./index.php\"restart</a> the installation. (". $conn->error .")");
                 }
             }
         }
@@ -374,7 +275,7 @@
             {
                 if ( strlen($stmt) > 3 )
                 {
-                    if ( !$Database->conn->query($stmt) ) $err = 1;
+                    if ( !$conn->query($stmt) ) $err = 1;
                 }
             }
         }
@@ -384,388 +285,217 @@
         }
         else
         {
-            echo "<br/>[Info] <i>item_icons</i> was not imported. (". $Database->conn->error .")";
+            echo "<br/>[Info] <i>item_icons</i> was not imported. (". $conn->error .")";
         }
 
         echo "<br/>[Info] Writing configuration file...";
 
 
-        $config = '
-<?php
-	if( !defined("INIT_SITE") )
-		exit();
-		
-	#############################
-	## CRAFTEDWEB CONFIG FILE  ##
-	## GENERATION 1            ##
-	## Author:				   ##
-	## Anthony @ CraftedDev    ##
-	## Edited/Modified:        ##
-	## Alexandre @ SkyLiner    ##
-	## github.com/alexandre433 ##
-	## ------------------------##
-	## Please note that:       ##
-	## true = Enabled          ##
-	## false = Disabled        ##
-	#############################
-	
-	#*************************#
-	# General settings      
-	#*************************#
-	$useDebug = false; 
-	//If you are having problems with your website, set this to "true", if not, set to \"false\". 
-	//All errors will be logged and visible in "includes/error-log.php". If set to false, error log will be blank. 
-	//This will also enable/disable errors on the Admin- & Staff panel.
-	 
-	$maintainance = false; //Maintainance mode, will close the website for everyone. True = enable, false = disable
-	$maintainance_allowIPs = array(\'herp.derp.13.37\'); //Allow specific IP addresses to view the website even though you have maintainance mode enabled.
-	//Example: \'123.456.678\', \'987.654.321\'
-	 
-	$website_title = "'. $_SESSION['install']['web']['title'] .'"; //The title of your website, shown in the users browser.
-	 
-	$default_email = "'. $_SESSION['install']['web']['email'] .'"; //The default email address from wich Emails will be sent.
+        $config = array
+        (
+            "maintainance" => array
+                (
+                    "state" => false,
+                    "allowed_ips" => array("1.1.1.1", "127.0.0.1")
+                ),
+            "use" => array
+                (
+                    "slideshow" => true,
+                    "cache" => true,
+                    "debug" => false
+                ),
+            "website" => array
+                (
+                    "title" => $_SESSION['install']['web']['title'],
+                    "domain" => $_SESSION['install']['web']['domain'],
+                    "email" => $_SESSION['install']['web']['email'],
+                    "show_load_time" => true,
+                    "footer" => "Copyright &copy; ". $_SESSION['install']['web']['title'] ." ".date("Y")."<br/>All rights reserved.",
+                    "timezone" => date_default_timezone_get(),
+                    "expansion" => $_SESSION['install']['web']['expansion'],
+                    "enable_plugins" => true,
+                    "compression" => array
+                        (
+                            "gzip" => true,
+                            "sanitize_output" => true
+                        ),
+                    "news" => array
+                        (
+                            "enable" => true,
+                            "max_shown" => 5,
+                            "enable_comments" => true,
+                            "limit_home_characters" => false,
+                        ),
+                    "server_status" => array
+                        (
+                            "enable" => true,
+                            "next_arena_flush" => false,
+                            "uptime" => true,
+                            "players_online" => true,
+                            "faction_bar" => true
+                        ),
+                    "connection" => array
+                        (
+                            "host" => $_SESSION['install']['web']['database']['host'],
+                            "port" => $_SESSION['install']['web']['database']['port'],
+                            "username" => $_SESSION['install']['web']['database']['username'],
+                            "password" => $_SESSION['install']['web']['database']['password'],
+                            "name" => $_SESSION['install']['web']['database']['name']
+                        ),
+                    "realmlist" => $_SESSION['install']['web']['realmlist'],
+                    "registration" => array
+                        (
+                            "user_max_length" => 16,
+                            "user_min_length" => 3,
+                            "pass_max_length" => 255,
+                            "pass_min_length" => 5,
+                            "validate_email" => false,
+                            "captcha"       => true
+                        ),
+                    "vote" => array
+                        (
+                            "timer" => 43200,
+                            "type" => "confirm",
+                            "multiplier" => 2
+                        ),
+                    "donation" => array
+                        (
+                            "paypal_email"      => $_SESSION['install']['web']['paypal'],
+                            "coins_name"        => "Donations Coins",
+                            "currency"          => "EUR",
+                            "email_response"     => true,
+                            "send_response_copy"  => true,
+                            "copy_to"            => $_SESSION['install']['web']['email'],
+                            "response_subject"   => "Thanks for your support!",
+                            "donation_type"      => 2
+                        ),
+                    "donation_list" => array
+                        (
+                            array("10 Donation Coins - 5€", 10, 5),
+                            array("20 Donation Coins - 8€", 20, 8),
+                            array("50 Donation Coins - 20€", 50, 20),
+                            array("100 Donation Coins - 35€", 100, 35 ),
+                            array("200 Donation Coins - 70€", 200, 70 )
+                        ),
+                    "shop" => array
+                    (
+                        "vote" => array
+                            (
+                                "enabled" => true,
+                                "advanced_search" => true,
+                                "type" => 1
+                            ),
+                        "donate" => array
+                            (
+                                "enabled" => true,
+                                "advanced_search" => true,
+                                "type" => 1
+                            )
+                    ),
+                    "social" => array
+                        (
+                            "facebook_module" => false,
+                            "facebook_group_url" => "http://www.facebook.com/YourServer"
+                        ),
+                    "forum" => array
+                        (
+                            "type" => "phpbb",
+                            "auto_account_create" => false,
+                            "path" => "/forum/",
+                            "db" => "phpbb"
+                        ),
+                    "core_pages" => array
+                        (
+                            "account_panel"       => "account.php",
+                            "shopping_cart"       => "cart.php", 
+                            "change_password"     => "changepass.php",
+                            "donate"              => "donate.php",
+                            "donation_shop"       => "donateshop.php",
+                            "forgot_password"     => "forgotpw.php",
+                            "home"                => "home.php",
+                            "logout"              => "logout.php",
+                            "news"                => "news.php",
+                            "refer_a_friend"      => "raf.php",
+                            "register"            => "register.php", 
+                            "character_revive"    => "revive.php",
+                            "change_email"        => "settings.php",
+                            "support"             => "support.php", 
+                            "character_teleport"  => "teleport.php",    
+                            "character_unstucker" => "unstuck.php",
+                            "vote"                => "vote.php",
+                            "vote_shop"           => "voteshop.php",
+                            "confirm_service"     => "confirmservice.php"
+                        ),
+                    "item_level" => array
+                        (
+                            1 => 86,
+                            2 => 146,
+                            3 => 251,
+                            4 => 397,
+                            5 => 553,
+                            6 => 621,
+                            7 => 1000,
+                            8 => 450,
+                        ),
+                ),
+            "admin" => array("enabled" => true, "minlvl" => 4),
+            "staff" => array
+                (
+                    "enabled" => true, 
+                    "minlvl" => 3,
+                    "permissions" => array
+                        (
+                            "Pages"                  => false,
+                            "News"                   => false,
+                            "Shop"                   => false,
+                            "Donations"              => false,
+                            "Logs"                   => true,
+                            "Interface"              => false,
+                            "Users"                  => true,
+                            "Realms"                 => false,
+                            "Services"               => false,
+                            "Tools->Tickets"         => true,
+                            "Tools->Account Access"  => false,
+                            "editNewsComments"       => true,
+                            "editShopItems"          => false,
+                        )
+                ),
 
-	$website_domain = "'. $_SESSION['install']['web']['domain'] .'"; //Provide the domain name AND PATH to your website.
-	//Example: http://yourserver.com/
-	//If you have your website in a sub-directory, include that aswell. Ex: http://yourserver.com/cataclysm/
-	 
-	$showLoadTime = true; 
-	//Shows the page load time in the footer.
-	 
-	$footer_text = "Copyright &copy; '. $_SESSION['install']['web']['title'] .' ".date("Y")."<br/>
-	All rights reserved"; //Set the footer text, displayed at the bottom.
-	//Tips: &copy; = Copyright symbol. <br/> = line break.
-	 
-	$timezone = "'. date_default_timezone_get() .'"; //Gets the time zone for your website, from the server\'s location/timezone.
-	//Full list of supported timezones can be found here: http://php.net/manual/en/timezones.php
-	 
-	$core_expansion = '. $_SESSION['install']['web']['expansion'] .'; //The expansion of your server.
-	// 0 = Vanilla
-	// 1 = The Burning Crusade
-	// 2 = Wrath of The Lich King
-	// 3 = Cataclysm
-	// 4 = Mists Of Pandaria
-	// 5 = Legion
-
-	$adminPanel_enable = true; //Enable or disable the Administrator Panel. Default: true
-	$staffPanel_enable = true; //Enable or disable the Staff Panel. Default: true
-	 
-	$adminPanel_minlvl = 4; //Minimum gm level of which accounts are able to log in to the Admin Panel. Default: 4
-	$staffPanel_minlvl = 3; //Minimum gm level of which accounts are able to log in to the Staff Panel. Default: 3
-	 
-	$staffPanel_permissions[\'Pages\'] 					= false;
-	$staffPanel_permissions[\'News\'] 					= false;
-	$staffPanel_permissions[\'Shop\'] 					= false;
-	$staffPanel_permissions[\'Donations\'] 				= false;
-	$staffPanel_permissions[\'Logs\'] 					= true;
-	$staffPanel_permissions[\'Interface\'] 				= false;
-	$staffPanel_permissions[\'Users\'] 					= true;
-	$staffPanel_permissions[\'Realms\'] 				= false;
-	$staffPanel_permissions[\'Services\'] 				= false;
-	$staffPanel_permissions[\'Tools->Tickets\'] 		= true;
-	$staffPanel_permissions[\'Tools->Account Access\'] 	= false;
-	$staffPanel_permissions[\'editNewsComments\'] 		= true;
-	$staffPanel_permissions[\'editShopItems\'] 			= false;
-	 
-	//Pages 				= Disable/Enable pages & Create custom pages.
-	//News 					= Edit/Delete/Post news.
-	//Shop 					= Add/Edit/Remove shop items.
-	//Donations 			= View donations overview & log.
-	//Logs 					= View vote & donation shop logs.
-	//Interface 			= Edit the menu, template & slideshow.
-	//Users 				= View & edit user data.
-	//Realms 				= Edit/Delete/Add realms.
-	//Services 				= Edit voting links & character services.
-	//Tools->Tickets 		= View/Lock/Delete tickets.
-	//Tools->Account Access = Edit/Remove/Add account access.
-	//editNewsComments 		= Edit/Remove news comments.
-	//editShopItems 		= Edit/Remove shop items.
-	 
-	$enablePlugins = true; //Enable or disable the use of plugins. Plugins May slow down your site a bit.
-	 
-	#*************************#
-	# 	Slideshow settings 
-	#*************************#
-	$enableSlideShow = true; //Enable or Disable the slideshow. This will only be shown at the home page. 
-	
-	#*************************#
-	# 	Website compression settings    
-	#*************************#
-	
-	$compression[\'gzip\'] 				= true; //This is very hard to explain, but it may boost your website speed drastically.
-	$compression[\'sanitize_output\'] 	= true; //This will strip all the whitespaces on the HTML code written. This should increase the website speed slightly. 
-	//And "copycats" will have a hard time stealing your HTML code :>
-	
-	$useCache = false; //Enable / Disable the use of caching. It\'s in early developement and is currently only applied to very few things in the core at the moment.
-	//You will probably not notice any difference when enabling this, unless you have alot of visitors. Who knows, I havent tried.
-	
-	
-	#*************************#
-	# News settings   
-	#*************************#
-	$news[\'enable\'] 				= true;  // Enable/Disable the use of the news system at the homepage. 
-	$news[\'maxShown\'] 			= 5; 	 // Maximum amount of news posts that will be shown on the home page.
-							 				 // People can still view all posts by clicking the \"All news\" button.
-	$news[\'enableComments\'] 		= true;  // Make people able to comment on your news posts.
-	$news[\'limitHomeCharacters\'] 	= false; // This will limit the characters shown in the news post. People will have to click the \"Read more...\" button
-											 //to read the whole news post. 
-	
-	
-	#***** Server status ******#
-	$serverStatus[\'enable\']            = true;  //This will enable/disable the server status box.
-	$serverStatus[\'nextArenaFlush\']    = false; //This will display the next arena flush for your realm(s).
-	$serverStatus[\'uptime\']	         = true;  //This will display the uptime of your realm(s).
-	$serverStatus[\'playersOnline\']     = true;  //This will show current players online
-	$serverStatus[\'factionBar\']        = true;  //This will show the players online faction bar.
-	
-	
-	#*************************#
-	# Website MySQL connection settings
-	#*************************#
-	
-	$Databaseion[\'web\'][\'host\']        = "'. $_SESSION['install']['web']['database']['host'] .'";
-    $Databaseion[\'web\'][\'port\']        = "'. $_SESSION['install']['web']['database']['port'] .'";
-	$Databaseion[\'web\'][\'user\']        = "'. $_SESSION['install']['web']['database']['username'] .'";
-	$Databaseion[\'web\'][\'password\']    = "'. $_SESSION['install']['web']['database']['password'] .'";
-	$Databaseion[\'web\'][\'database\']    = "'. $_SESSION['install']['web']['database']['name'] .'";
-
-
-    #*************************#
-    # Logon MySQL connection settings
-    #*************************#
-    $Databaseion[\'logon\'][\'host\']        = "'. $_SESSION['install']['logon']['database']['host'] .'";
-    $Databaseion[\'logon\'][\'port\']        = "'. $_SESSION['install']['logon']['database']['port'] .'";
-    $Databaseion[\'logon\'][\'user\']        = "'. $_SESSION['install']['logon']['database']['username'] .'";
-    $Databaseion[\'logon\'][\'password\']    = "'. $_SESSION['install']['logon']['database']['password'] .'";
-    $Databaseion[\'logon\'][\'database\']    = "'. $_SESSION['install']['logon']['database']['name'] .'";
-
-    #*************************#
-    # Characters MySQL connection settings
-    #*************************#
-    $Databaseion[\'characters\'][\'host\']        = "'. $_SESSION['install']['characters']['database']['host'] .'";
-    $Databaseion[\'characters\'][\'port\']        = "'. $_SESSION['install']['characters']['database']['port'] .'";
-    $Databaseion[\'characters\'][\'user\']        = "'. $_SESSION['install']['characters']['database']['username'] .'";
-    $Databaseion[\'characters\'][\'password\']    = "'. $_SESSION['install']['characters']['database']['password'] .'";
-    $Databaseion[\'characters\'][\'database\']    = "'. $_SESSION['install']['characters']['database']['name'] .'";
-
-
-    #*************************#
-    # World MySQL connection settings
-    #*************************#
-    $Databaseion[\'world\'][\'host\']        = "'. $_SESSION['install']['world']['database']['host'] .'";
-    $Databaseion[\'world\'][\'port\']        = "'. $_SESSION['install']['world']['database']['port'] .'";
-    $Databaseion[\'world\'][\'user\']        = "'. $_SESSION['install']['world']['database']['username'] .'";
-    $Databaseion[\'world\'][\'password\']    = "'. $_SESSION['install']['world']['database']['password'] .'";
-    $Databaseion[\'world\'][\'database\']    = "'. $_SESSION['install']['world']['database']['name'] .'";
-
-
-
-    #*************************#
-    # Realmlist
-    #*************************#
-	$Databaseion[\'realmlist\']   = "'. $_SESSION['install']['web']['realmlist'] .'";
-	
-	// host 		= Either an IP address or a DNS address
-	// user 		= A mysqli user with access to view/write the entire database.
-	// password 	= The password for the user you specified
-	// logondb 		= The name of your \"auth\" or \"realmdb\" database name. Default: auth
-	// webdb 		= The name of the database with CraftedWeb data. Default: craftedweb
-	// worlddb 		= The name of your world database. Default: world
-	// realmlist 	= This could be your server IP or DNS. Ex: logon.yourserver.com
-	
-	#*************************#
-	# Registration settings
-	#*************************#
-	$registration[\'userMaxLength\'] = 16;
-	$registration[\'userMinLength\'] = 3;
-	$registration[\'passMaxLength\'] = 255;
-	$registration[\'passMinLength\'] = 5;
-	$registration[\'validateEmail\'] = false;
-	$registration[\'captcha\']       = true;
-	
-	//userMaxLength = Maximum length of usernames
-	//userMinLength = Minimum length of usernames
-	//passMaxLength = Maximum length of passwords
-	//passMinLength = Minimum length of passwords
-	//validateEmail = Validates if the email address is a correct email address. May not work on some PHP versions.
-	//captcha = Enables/Disables the use of the captcha (Anti-bot) 
-	
-	#*************************#
-	# Voting settings
-	#*************************#
-	$vote[\'timer\']         = 43200;
-	$vote[\'type\']          = "confirm";
-	$vote[\'multiplier\']    = 2;
-	
-	// timer = Timer between every vote on each link in seconds. Default: 43200 (12 hours)
-	// type = Voting system type. 
-	//         \"instant\" = Give vote points instantly when the user clicks the Vote button.
-	//         \"confirm\" = Give Vote Points when the user has returned to your website. (Hopefully through clicking on your banner on the topsite)
-	// multiplier = Multiply amount of Vote Points given for every vote. Useful for special holidays etc.
-	
-	#*************************#
-	# Donation settings
-	#*************************#
-	$donation[\'paypal_email\']      = "'. $_SESSION['install']['web']['paypal'] .'";
-	$donation[\'coins_name\']        = "Donations Coins";
-	$donation[\'currency\']          = "EUR";
-	$donation[\'emailResponse\']     = true;
-	$donation[\'sendResponseCopy\']  = true;
-	$donation[\'copyTo\']            = "'. $_SESSION['install']['web']['email'] .'";
-	$donation[\'responseSubject\']   = "Thanks for your support!";
-	$donation[\'donationType\']      = 2;
-	
-	// paypal_email 	= The PayPal email address of wich payment will be sent to.
-	// coins_name 		= The name of the donation coins that the user will buy.
-	// currency 		= The name of the currency that you want the user to pay with. Default: EUR
-	// emailResponse 	= Enabling this will make the donator to recieve a validation email after their donation, containing the donation information. 
-	// sendResponseCopy = Set this to "true" if you wish to recieve a copy of the email response mentioned above. 
-	// copyTo 			= Enable the sendResponseCopy to activate this function. Enter the email address of wich the payment copy will be sent to. 
-	// responseSubject 	= Enable the sendResponseCopy to activate this function. The subject of the email response sent to the donator.
-	// donationType 	= How the user will donate. 1 = They can enter how many coins they wish to buy, and the value can be increased with the multiplier.
-	// 2 				= A list of options will be shown, you may set the list below.
-	
-	#  EDITING THIS IS ONLY NECESSARY IF YOU HAVE "donationType" SET TO 2 
-	# Just follow the template and enter your custom values
-	# array(\'NAME/TITLE\', COINS TO ADD, PRICE) 
-	$donationList = array
-	(
-		array(\'10 Donation Coins - 5€\', 10, 5),
-		array(\'20 Donation Coins - 8€\', 20, 8),
-		array(\'50 Donation Coins - 20€\', 50, 20),
-		array(\'100 Donation Coins - 35€\', 100, 35 ),
-		array(\'200 Donation Coins - 70€\', 200, 70 )
-	);
-	
-	#*************************#
-	# Vote & Donation shop settings
-	#*************************#
-	$voteShop[\'enableShop\']            = true;
-	$voteShop[\'enableAdvancedSearch\']  = true;
-	$voteShop[\'shopType\']              = 1;
-	
-	// enableShop 				= Enables/disables the use of the Vote Shop. "true" = enable, "false" = disable.
-	// enableAdvancedSearch 	= Enabled/disables the use of the advanced search feature. "true" = enable, "false" = disable.
-	// shopType 				= The type of shop you wish to use. 1 = "Search". 2 = List all items available.
-	
-	
-	#*************************#
-	$donateShop[\'enableShop\']              = true;
-	$donateShop[\'enableAdvancedSearch\']    = true;
-	$donateShop[\'shopType\']	             = 1;
-	
-	// Explanations can be found above.
-	
-	#************************#
-	# Social plugins settings
-	#*************************#
-	$social[\'enableFacebookModule\']    = false;
-	$social[\'facebookGroupURL\']        = "http://www.facebook.com/YourServer";
-	
-	// enableFacebookModule = This will create a Facebook box to the left, below the server status. "true" = enable, "false" = disable.
-	// facebookGroupURL 	= The full URL to your facebook group.
-	// NOTE! This feature might be a little buggy due to the width of some themes. I wish you good luck though.
-	
-	#*************************#
-	# Forum settings
-	#*************************#
-	$forum[\'type\']                 = "phpbb";
-	$forum[\'autoAccountCreate\']    = false;
-	$forum[\'forum_path\']           = "/forum/";
-	$forum[\'forum_db\']             = "phpbb";
-	
-	// type = the type of forum you are using. (phpbb,vbulletin)
-	// autoAccountCreate = this function creates a forum account when the user register at the website. 
-	// forum_path = The path to the forum. Example: If you have it in YOURSITE.COM/forum/, then put /forum/. (Without "")
-	// forum_db = The database name of the forum. If you have the forum database on the same location as your logon database, 
-	// 			  this will enable "Latest Forum Activity" on your Admin Panel. 
-	######NOTE#######
-	// autoAccountCreate is only supported for phpBB, vBulletin will be supported in near future.
-	
-	#************************#
-	# Advanced settings, mostly used for further developement.
-	# DO NOT TOUCH THESE CONFIGS unless you know what you are doing!
-	#************************#
-	
-	$core_pages = array
-	(
-		\'Account Panel\'       => \'account.php\',
-        \'Shopping Cart\'       => \'cart.php\', 
-        \'Change Password\'     => \'changepass.php\',
-        \'Donate\'              => \'donate.php\',
-        \'Donation Shop\'       => \'donateshop.php\',
-        \'Forgot Password\'     => \'forgotpw.php\',
-        \'Home\'                => \'home.php\',
-        \'Logout\'              => \'logout.php\',
-        \'News\'                => \'news.php\',
-        \'Refer-A-Friend\'      => \'raf.php\',
-        \'Register\'            => \'register.php\', 
-        \'Character Revive\'    => \'revive.php\',
-        \'Change Email\'        => \'settings.php\',
-        \'Support\'             => \'support.php\', 
-        \'Character Teleport\'  => \'teleport.php\',    
-        \'Character Unstucker\' => \'unstuck.php\',
-        \'Vote\'                => \'vote.php\',
-        \'Vote Shop\'           => \'voteshop.php\',
-        \'Confirm Service\'     => \'confirmservice.php\'
-	);
-	
-	###LOAD MAXIMUM ITEM LEVEL DEPENDING ON EXPANSION###
-	switch( $GLOBALS[\'core_expansion\'] ) 
-	{
-		case(0):
-			$maxItemLevel = 100;
-			break;
-
-		case(1):
-			$maxItemLevel = 175;
-			break;
-
-		default:
-		case(2):
-			$maxItemLevel = 284;
-			break;
-
-		case(3):
-			$maxItemLevel = 416;
-			break;
-	}
-	
-	if( $GLOBALS[\'core_expansion\'] > 2 )
-	{
-		$tooltip_href = "www.wowhead.com/";
-	}
-	else
-	{
-		$tooltip_href = "www.openwow.com/?";
-	}
-	
-	//Set the error handling.
-	if( file_exists("core/includes/classes/error.php") )
-	{
-		require "core/includes/classes/error.php";
-	}		
-	elseif( file_exists("../core/classes/error.php") )
-	{
-		require "../core/includes/classes/error.php";
-	}		
-	elseif( file_exists("../core/includes/classes/error.php") )
-	{
-		require "../core/includes/classes/error.php";
-	}
-	
-	loadCustomErrors(); //Load custom errors
-
-?>';
+            "logon" => array
+                (
+                    "host" => $_SESSION['install']['logon']['database']['host'],
+                    "port" => $_SESSION['install']['logon']['database']['port'],
+                    "user" => $_SESSION['install']['logon']['database']['username'],
+                    "password" => $_SESSION['install']['logon']['database']['password'],
+                    "database" => $_SESSION['install']['logon']['database']['name']
+                ),
+            "characters" => array
+                (
+                    "host"        => $_SESSION['install']['characters']['database']['host'],
+                    "port"        => $_SESSION['install']['characters']['database']['port'],
+                    "user"        => $_SESSION['install']['characters']['database']['username'],
+                    "password"    => $_SESSION['install']['characters']['database']['password'],
+                    "database"    => $_SESSION['install']['characters']['database']['name']
+                ),
+            "world" => array
+                (
+                    "host"        => $_SESSION['install']['world']['database']['host'],
+                    "port"        => $_SESSION['install']['world']['database']['port'],
+                    "user"        => $_SESSION['install']['world']['database']['username'],
+                    "password"    => $_SESSION['install']['world']['database']['password'],
+                    "database"    => $_SESSION['install']['world']['database']['name']
+                ),
+        );
         
 
-        if ( !$fp = fopen("../core/includes/configuration.php", "w") )
+        if ( !$fp = fopen("../core/includes/configuration.json", "w") )
         {
             die("<br/>[FAILURE] Could not write Configuration file. Please <a href=\"./index.php\">restart</a> the installation.");;
         }
         else
         {
-            fwrite($fp, $config);
+            $json_config = json_encode($config);
+            fwrite($fp, $json_config);
             fclose($fp);
 
             echo "<br>[Success] Configuration file was written!";
@@ -778,29 +508,36 @@
 
     function step4()
     {
-        if ( !isset($_POST['submit']) || $_POST['submit'] != "step4" )
+        if ( $_POST['submit'] != "step4" )
         {
             return NULL;
             exit;
         }
 
         $files = scandir("sql/updates/");
+        if ( sizeof($files) === 3 )
+        {
+            echo "[Info] No Updated Avaiable. <a href=\"?step=5\">Click here to continue</a>";
+            exit;
+        }
 
         echo "[Info] Connecting to database...";
-        $conn = new mysqli(
+        $conn = mysqli_connect(
             $_SESSION['install']['web']['database']['host'], 
             $_SESSION['install']['web']['database']['username'], 
             $_SESSION['install']['web']['database']['password'],
             null,
             $_SESSION['install']['web']['database']['port']);
 
-        if ( $Database->conn->connect_errno != 0 )
+        if ( $conn->connect_errno != 0 )
+        {
             die("<br/>[FAILURE] Could not connect to the database. Please <a href=\"./index.php\">restart</a> the installation. ");
+        }
 
         echo "<br>[Success] Connected to database.
         <br>[Info] Connecting to Website database";
 
-        if ( !$Database->conn->select_db($_SESSION['install']['web']['database']['name']) )
+        if ( !$conn->select_db($_SESSION['install']['web']['database']['name']) )
         	die("<br>[FAILURE] Could not connect to the Website database. Please <a href=\"./index.php\">restart</a> the installation.");
 
         echo "<br>[Success] Connected to Website database
@@ -828,8 +565,10 @@
                             {
                                 if ( strlen($stmt) > 3 )
                                 {
-                                    if ( !$Database->conn->query($stmt) )
-                                        die("<br/>[FAILURE] Could not run SQL file for the Website database. (". $Database->conn->error .")");
+                                    if ( !$conn->query($stmt) )
+                                    {
+                                        die("<br/>[FAILURE] Could not run SQL file for the Website database. (". $conn->error .")");
+                                    }
                                 }
                             }
                             echo "<br>[Success] Update completed.";
@@ -886,19 +625,19 @@
                 null,
                 $_SESSION['install']['web']['database']['port']);
 
-            if ( $Database->conn->connect_errno != 0 )
+            if ( $conn->connect_errno != 0 )
                 die("<br/>[FAILURE] Could not connect to the database. Please <a href=\"./index.php\">restart</a> the installation. ");
 
-            $Database->conn->select_db($_SESSION['install']['web']['database']['name']);
+            $conn->select_db($_SESSION['install']['web']['database']['name']);
 
-            $realm_name     = $Database->conn->escape_string($step5['realm_name']);
-            $admin_username = $Database->conn->escape_string($step5['realm_access_username']);
-            $admin_password = $Database->conn->escape_string($step5['realm_access_password']);
-            $description    = $Database->conn->escape_string($step5['realm_description']);
-            $sendtype       = $Database->conn->escape_string($step5['realm_sendtype']);
-            $port           = $Database->conn->escape_string($step5['realm_port']);
+            $realm_name     = $conn->escape_string($step5['realm_name']);
+            $admin_username = $conn->escape_string($step5['realm_access_username']);
+            $admin_password = $conn->escape_string($step5['realm_access_password']);
+            $description    = $conn->escape_string($step5['realm_description']);
+            $sendtype       = $conn->escape_string($step5['realm_sendtype']);
+            $port           = $conn->escape_string($step5['realm_port']);
             
-            $Database->conn->query("INSERT INTO realms 
+            $conn->query("INSERT INTO realms 
             	(name, description, char_db, port, rank_user, rank_pass, ra_port, soap_port, host, sendType, mysqli_host, mysqli_user, mysqli_pass) 
             	VALUES
             	('". $realm_name ."', 
@@ -914,7 +653,7 @@
             	'". $_SESSION['install']['characters']['database']['host'] ."', 
             	'". $_SESSION['install']['characters']['database']['username'] ."', 
             	'". $_SESSION['install']['characters']['database']['password'] ."');")
-            or die("Could not insert realm into database. (". $Database->conn->error .")");
+            or die("Could not insert realm into database. (". $conn->error .")");
 
             echo "Realm successfully created. <a href=\"?step=6\">Finish Installation</a>";
             exit;

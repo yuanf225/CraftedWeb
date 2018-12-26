@@ -20,11 +20,12 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    if ($GLOBALS['showLoadTime'] == TRUE)
+    if ( DATA['website']['show_load_time'] == true )
     {
-        $end = number_format(( microtime(TRUE) - $GLOBALS['start']), 2);
+    	global $start;
+        $end = number_format(( microtime(true) - $start, 2);
         echo "Page loaded in ". $end ." seconds. <br/>";
     }
     echo "&copy <a href='http://forums.nomsoftware.com/'>Nomsoft</a> 2011-2012<br>";
-	echo $GLOBALS['footer_text'];
+	echo DATA['website']['footer'];
 ?>

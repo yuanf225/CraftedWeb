@@ -34,7 +34,7 @@
     {
         case "dshop":
         {
-            $result = $Database->select( * FROM shoplog WHERE account=". $Database->conn->escape_string($_POST['id']) ." AND shop='donate';");
+            $result = $Database->select("shoplog", null, null, "account=". $Database->conn->escape_string($_POST['id']) ." AND shop='donate'")->get_result();
             if ($result->num_rows == 0)
             {
                 echo "<b color='red'>No logs was found for this account.</b>";
@@ -52,7 +52,7 @@
                     { ?>
                     <tr>
                         <td>
-                            <a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
+                            <a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
                                 <?php echo $GameServer->getItemName($row['entry']); ?>
                             </a>
                         </td>
@@ -70,7 +70,7 @@
         
         case "payments":
         {
-            $result = $Database->select( paymentstatus, mc_gross, datecreation FROM payments_log WHERE userid=". $Database->conn->escape_string($_POST['id']) .";");
+            $result = $Database->select("payments_log", "paymentstatus, mc_gross, datecreation", null, "userid=". $Database->conn->escape_string($_POST['id']))->get_result();
             if ($result->num_rows == 0)
             {
                 echo "<b color='red'>No payments was found for this account.</b>";
@@ -114,16 +114,16 @@
 
                 <?php
                 //Search via character name...
-                $loopRealms = $Database->select( id FROM realms;");
+                $loopRealms = $Database->select("realms", "id")->get_result();
                 while ($row = $loopRealms->fetch_assoc())
                 {
                     $GameServer->realm($row['id']);
-                    $result = $Database->select( guid FROM characters WHERE name LIKE '%". $input ."%';");
+                    $result = $Database->select("characters", "guid", null, "name LIKE '%". $input ."%'")->get_result();
                     if ($result->num_rows > 0)
                     {
                         $row    = $result->fetch_assoc();
                         $GameServer->selectDB('webdb');
-                        $result = $Database->select( * FROM shoplog WHERE shop='". $shop ."' AND char_id=". $row['guid'] .";");
+                        $result = $Database->select("shoplog", null, null, "shop='". $shop ."' AND char_id=". $row['guid'] .";")->get_result();
 
                         while ($row = $result->fetch_assoc())
                         { ?>
@@ -132,7 +132,7 @@
                                 <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
                                 <td><?php echo $GameServer->getRealmName($row['realm_id']); ?></td>
                                 <td>
-                                    <a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
+                                    <a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
                                         <?php echo $GameServer->getItemName($row['entry']); ?>
                                     </a>
                                 </td>
@@ -144,12 +144,12 @@
                 }
                 //Search via account name
                 $GameServer->selectDB("logondb");
-                $result = $Database->select( id FROM account WHERE username LIKE '%". $input ."%';");
+                $result = $Database->select("account", "id", null, "username LIKE '%$input%'")->get_result();
                 if ($result->num_rows > 0)
                 {
                     $row    = $result->fetch_assoc();
                     $GameServer->selectDB("webdb");
-                    $result = $Database->select( * FROM shoplog WHERE shop='". $shop ."' AND account=". $row['id'] .";");
+                    $result = $Database->select("shoplog", null, null, "shop='$shop' AND account=". $row['id'])->get_result();
 
                     while ($row = $result->fetch_assoc())
                     { ?>
@@ -158,7 +158,7 @@
                             <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
                             <td><?php echo $GameServer->getRealmName($row['realm_id']); ?></td>
                             <td>
-                                <a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
+                                <a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
                                     <?php echo $GameServer->getItemName($row['entry']); ?>
                                 </a>
                             </td>
@@ -170,12 +170,12 @@
 
                 //Search via item name
                 $GameServer->selectDB('worlddb');
-                $result = $Database->select( entry FROM item_template WHERE name LIKE '%". $input ."%';");
+                $result = $Database->select("item_template", "entry", null, "name LIKE '%$input%'")->get_result();
                 if ($result->num_rows > 0)
                 {
                     $row    = $result->fetch_assoc();
                     $GameServer->selectDB('webdb');
-                    $result = $Database->select( * FROM shoplog WHERE shop='". $shop ."' AND entry=". $row['entry'] .";");
+                    $result = $Database->select("shoplog", null, null, "shop='$shop' AND entry=". $row['entry'])->get_result();
 
                     while ($row = $result->fetch_assoc())
                     { ?>
@@ -184,7 +184,7 @@
                             <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
                             <td><?php echo $GameServer->getRealmName($row['realm_id']); ?></td>
                             <td>
-                                <a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
+                                <a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
                                     <?php echo $GameServer->getItemName($row['entry']); ?>
                                 </a>
                             </td>
@@ -196,7 +196,7 @@
 
                 //Search via date
                 $GameServer->selectDB('webdb');
-                $result = $Database->select( * FROM shoplog WHERE shop='". $shop ."' AND date LIKE '%". $input ."%';");
+                $result = $Database->select("shoplog", null, null, "shop='". $shop ."' AND date LIKE '%". $input ."%'")->get_result();
 
                 while ($row = $result->fetch_assoc())
                 { ?>
@@ -205,7 +205,7 @@
                         <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
                         <td><?php echo $GameServer->getRealmName($row['realm_id']); ?></td>
                         <td>
-                            <a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
+                            <a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
                                 <?php echo $GameServer->getItemName($row['entry']); ?>
                             </a>
                         </td>
@@ -218,7 +218,7 @@
                 {
                     //View last 10 logs
                     $GameServer->selectDB('webdb');
-                    $result = $Database->select( * FROM shoplog WHERE shop='". $shop ."' ORDER BY id DESC LIMIT 10;");
+                    $result = $Database->select("shoplog", null, null, "shop='". $shop ."' ORDER BY id DESC LIMIT 10")->get_result();
 
                     while ($row = $result->fetch_assoc())
                     { ?>
@@ -227,7 +227,7 @@
                             <td><?php echo $GameAccount->getCharName($row['char_id'], $row['realm_id']); ?></td>
                             <td><?php echo $GameServer->getRealmName($row['realm_id']); ?></td>
                             <td>
-                                <a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
+                                <a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
                                     <?php echo $GameServer->getItemName($row['entry']); ?>
                                 </a>
                             </td>
@@ -244,7 +244,7 @@
 
         case "vshop":
         {
-            $result = $Database->select( * FROM shoplog WHERE account=". $Database->conn->escape_string($_POST['id']) ." AND shop='vote';");
+            $result = $Database->select("shoplog", null, null, "account=". $Database->conn->escape_string($_POST['id']) ." AND shop='vote'")->get_result();
             if ($result->num_rows == 0)
             {
                 echo "<b color='red'>No logs was found for this account.</b>";
@@ -262,7 +262,7 @@
                     { ?>
                         <tr>
                             <td>
-                                <a href="http://<?php echo $GLOBALS['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
+                                <a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $row['entry']; ?>" title="" target="_blank">
                                     <?php echo $GameServer->getItemName($row['entry']); ?>
                                 </a>
                             </td>

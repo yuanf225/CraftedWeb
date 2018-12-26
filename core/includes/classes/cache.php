@@ -25,7 +25,7 @@
 
         public function buildCache($filename, $content)
         {
-          if ($GLOBALS['useCache'] == TRUE)
+          if ( DATA['website']['use']['cache'] == TRUE )
           {
             if (!$fh = fopen('cache/' . $filename . '.cache.php', 'w+'))
             {
@@ -44,7 +44,7 @@
 
         public function loadCache($filename)
         {
-          if ($GLOBALS['useCache'] == TRUE)
+          if ( DATA['website']['use']['cache'] == TRUE )
           {
             if (file_exists('core/cache/' . $filename . '.cache.php'))
             {

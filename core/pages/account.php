@@ -43,7 +43,7 @@
         <td><span class='blue_text'>Account Status</span></td>
         <td><?php echo $Account->checkBanStatus($_SESSION['cw_user']); ?></td>
         
-        <td><span class='blue_text'><?php echo $GLOBALS['donation']['coins_name']; ?></span></td>
+        <td><span class='blue_text'><?php echo DATA['website']['donation']['coins_name']; ?></span></td>
         <td><?php echo $Account->loadDP($_SESSION['cw_user']); ?></td>
     </tr>
     <br/>
@@ -57,7 +57,7 @@
         <div class='account_func' onclick="acct_services('settings')">Settings</div>
 
         <div class='hidden_content' id='character'>
-            <?php if ($GLOBALS['service']['unstuck']['status'] == TRUE)
+            <?php if ( DATA['service']['unstuck']['status'] == TRUE )
                 { ?>
                     <div class='service' onclick='redirect("?page=unstuck")'>
                         <div class='service_icon'><img src='core/styles/global/images/icons/character_migration.png'></div>
@@ -66,7 +66,7 @@
                     </div>
                 <?php } ?>
 
-            <?php if ($GLOBALS['service']['revive']['status'] == 'TRUE')
+            <?php if (DATA['service']['revive']['status'] == true)
                 { ?>
                     <div class='service' onclick='redirect("?page=revive")'>
                         <div class='service_icon'><img src='core/styles/global/images/icons/revive.png'></div>
@@ -75,7 +75,7 @@
                     </div>
                 <?php } ?>
 
-<?php if ($GLOBALS['service']['teleport']['status'] == 'TRUE')
+<?php if ( DATA['service']['teleport']['status'] == true )
     { ?>
                     <div class='service' onclick='redirect("?page=teleport")'>
                         <div class='service_icon'><img src='core/styles/global/images/icons/transfer.png'></div>
@@ -84,7 +84,7 @@
                     </div>
                 <?php } ?>
 
-<?php if ($GLOBALS['service']['appearance']['status'] == 'TRUE')
+<?php if ( DATA['service']['appearance']['status'] == true )
     { ?>
                     <div class='service' onclick='redirect("?page=service&selected=appearance")'>
                         <div class='service_icon'><img src='core/styles/global/images/icons/appearance.png'></div>
@@ -93,7 +93,7 @@
                     </div>
     <?php } ?>
 
-<?php if ($GLOBALS['service']['race']['status'] == 'TRUE')
+<?php if ( DATA['service']['race']['status'] == true )
     { ?>
                     <div class='service' onclick='redirect("?page=service&selected=race")'>
                         <div class='service_icon'><img src='core/styles/global/images/icons/race_change.png'></div>
@@ -102,7 +102,7 @@
                     </div>
     <?php } ?>
 
-<?php if ($GLOBALS['service']['name']['status'] == 'TRUE')
+<?php if ( DATA['service']['name']['status'] == true )
     { ?>
                     <div class='service' onclick='redirect("?page=service&selected=name")'>
                         <div class='service_icon'><img src='core/styles/global/images/icons/name_change.png'></div>
@@ -111,7 +111,7 @@
                     </div>
     <?php } ?>
 
-            <?php if ($GLOBALS['service']['faction']['status'] == 'TRUE')
+            <?php if (DATA['service']['faction']['status'] == true)
                 { ?>
                     <div class='service' onclick='redirect("?page=service&selected=faction")'>
                         <div class='service_icon'><img src='core/styles/global/images/icons/factions.png'></div>

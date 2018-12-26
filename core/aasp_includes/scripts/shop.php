@@ -71,8 +71,7 @@
             }
 
             $GameServer->selectDB("worlddb", $conn);
-            $get = $Database->select( entry,name,displayid,ItemLevel,quality,class,AllowableRace,AllowableClass,subclass,Flags 
-                FROM item_template WHERE itemlevel>=". $il_from ."  AND itemlevel<=". $il_to ." ". $advanced .";") 
+            $get = $Database->select("item_template", null, null, "itemlevel>=$il_from AND itemlevel<=$il_to $advanced")->get_result() 
             or die('Error whilst getting item data from the database. Error message: ' . $Database->conn->error);
 
             $GameServer->selectDB("webdb", $conn);
@@ -130,7 +129,7 @@
             }
 
             $GameServer->selectDB("worlddb", $conn);
-            $get = $Database->select( name,displayid,ItemLevel,quality,AllowableRace,AllowableClass,class,subclass,Flags FROM item_template WHERE entry=". $entry ."")
+            $get = $Database->select("item_template", null, null, "entry=$entry")->get_result()
                 or die('Error whilst getting item data from the database. Error message: ' . $Database->conn->error);
             $row = $get->fetch_assoc();
 
@@ -224,7 +223,7 @@
             if ($quality != "all")
                 $advanced .= "AND quality='" . $quality . "'";
 
-            $count = $Database->select( COUNT(*) FROM shopitems WHERE itemlevel >=". $il_from ." AND itemlevel <=". $il_to ." ". $advanced .";");
+            $count = $Database->select("shopitems", "COUNT(*)", null, "itemlevel >=$il_from AND itemlevel <=$il_to $advanced")->get_result();
 
             $Database->conn->query("DELETE FROM shopitems WHERE itemlevel >=". $il_from ." AND itemlevel <=". $il_to ." ". $advanced .";");
             echo "Successfully removed ". $count ." items!";

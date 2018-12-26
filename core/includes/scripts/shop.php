@@ -73,7 +73,7 @@
 
         if ( $_POST['cart'] == "donateCart" )
         {
-            $curr = $GLOBALS['donation']['coins_name'];
+            $curr = DATA['website']['donation']['coins_name'];
         }
         else
         {
@@ -149,13 +149,13 @@
 
             if ( $Account->hasDP($_SESSION['cw_user'], $totalPrice) == FALSE )
             {
-                die("You do not have enough " . $GLOBALS['donation']['coins_name'] . "!");
+                die("You do not have enough " . DATA['website']['donation']['coins_name'] . "!");
             }
 
-            $host      = $GLOBALS['realms'][$values[1]]['host'];
-            $rank_user = $GLOBALS['realms'][$values[1]]['rank_user'];
-            $rank_pass = $GLOBALS['realms'][$values[1]]['rank_pass'];
-            $ra_port   = $GLOBALS['realms'][$values[1]]['ra_port'];
+            $host      = DATA['realms'][$values[1]]['host'];
+            $rank_user = DATA['realms'][$values[1]]['rank_user'];
+            $rank_pass = DATA['realms'][$values[1]]['rank_pass'];
+            $ra_port   = DATA['realms'][$values[1]]['ra_port'];
 
             if ( is_array($_SESSION['donateCart']) || is_object($_SESSION['donateCart']) )
             {
@@ -218,10 +218,10 @@
                 die("You do not have enough Vote Points!");
             }
 
-            $host      = $GLOBALS['realms'][$values[1]]['host'];
-            $rank_user = $GLOBALS['realms'][$values[1]]['rank_user'];
-            $rank_pass = $GLOBALS['realms'][$values[1]]['rank_pass'];
-            $ra_port   = $GLOBALS['realms'][$values[1]]['ra_port'];
+            $host      = DATA['realms'][$values[1]]['host'];
+            $rank_user = DATA['realms'][$values[1]]['rank_user'];
+            $rank_pass = DATA['realms'][$values[1]]['rank_pass'];
+            $ra_port   = DATA['realms'][$values[1]]['ra_port'];
 
             if ( is_array($_SESSION['voteCart']) || is_object($_SESSION['voteCart']) )
             {
