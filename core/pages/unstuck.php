@@ -25,19 +25,19 @@ Choose the character you wish to unstuck. The character will be teleported to yo
 <?php
     $service = "unstuck";
 
-    if ($GLOBALS['service'][$service]['price'] == 0)
+    if ( DATA['service'][$service]['price'] == 0 )
     {
         echo '<span class="attention">Unstuck is free of charge.</span>';
     }
     else
     { ?>
         <span class="attention">Unstuck costs 
-            <?php echo $GLOBALS['service'][$service]['price'] . ' ' . $Website->convertCurrency($GLOBALS['service'][$service]['currency']); ?></span>
+            <?php echo DATA['service'][$service]['price'] . ' ' . $Website->convertCurrency(DATA['service'][$service]['currency']); ?></span>
         <?php
-        if ($GLOBALS['service'][$service]['currency'] == "vp")
+        if (DATA['service'][$service]['currency'] == "vp")
             echo "<span class='currency'>Vote Points: " . $Account->loadVP($_SESSION['cw_user']) . "</span>";
-        elseif ($GLOBALS['service'][$service]['currency'] == "dp")
-            echo "<span class='currency'>" . $GLOBALS['donation']['coins_name'] . ": " . $Account->loadDP($_SESSION['cw_user']) . "</span>";
+        elseif (DATA['service'][$service]['currency'] == "dp")
+            echo "<span class='currency'>" . DATA['website']['donation']['coins_name'] . ": " . $Account->loadDP($_SESSION['cw_user']) . "</span>";
     }
 
     $Account->isNotLoggedIn();
@@ -60,7 +60,7 @@ Choose the character you wish to unstuck. The character will be teleported to yo
                         <td width="73">
                             <?php
                             if (!file_exists('styles/global/images/portraits/' . $row['gender'] . '-' . $row['race'] . '-' . $row['class'] . '.gif'))
-                                echo '<img src="styles/' . $GLOBALS['template']['path'] . '/images/unknown.png" />';
+                                echo '<img src="styles/' . DATA['website']['template']['path'] . '/images/unknown.png" />';
                             else
                             {
                                 ?>

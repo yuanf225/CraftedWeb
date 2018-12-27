@@ -228,9 +228,7 @@ INSERT INTO `site_links` VALUES
 (2,'Register',    '?page=register','notlogged'),
 (3,'My Account',  '?page=account', 'logged'),
 (4,'Vote',        '?page=vote',    'logged'),
-(5,'Donate',      '?page=donate',  'always'),
-(6,'Forum',       '/forum/',    'always');
-
+(5,'Donate',      '?page=donate',  'always');
 -- ----
 
 DROP TABLE IF EXISTS `slider_images`;

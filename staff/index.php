@@ -29,7 +29,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title><?php echo $GLOBALS['website_title']; ?> - Staff Panel</title>
+        <title><?php echo DATA['website']['title']; ?> - Staff Panel</title>
         <link rel="stylesheet" href="../core/aasp_includes/styles/default/style.css" />
         <link rel="stylesheet" href="../core/aasp_includes/styles/wysiwyg.css" />
         <script type="text/javascript" src="../core/javascript/jquery.js"></script>
@@ -47,7 +47,7 @@
             <ul class="hidden" <?php activeMenu('dashboard'); ?>>
                 <a href="?page=dashboard">Dashboard</a>
             </ul>
-            <?php if ($GLOBALS['staffPanel_permissions']['Pages'] == TRUE)
+            <?php if (DATA['staff']['permissions']['Pages'] == TRUE)
                 { ?>     
                     <li>Pages</li>
                     <ul class="hidden" <?php activeMenu('pages'); ?>>
@@ -55,7 +55,7 @@
                         <a href="?page=pages&selected=new">Add New</a>
                     </ul>
             <?php }
-                if ($GLOBALS['staffPanel_permissions']['News'] == TRUE)
+                if (DATA['staff']['permissions']['News'] == TRUE)
                 { ?>
                     <li>News</li>
                     <ul class="hidden" <?php activeMenu('news'); ?>>
@@ -63,7 +63,7 @@
                         <a href="?page=news&selected=manage">Manage news</a>
                     </ul>
                 <?php }
-                if ($GLOBALS['staffPanel_permissions']['Shop'] == TRUE)
+                if (DATA['staff']['permissions']['Shop'] == TRUE)
                 { ?>          
                     <li>Shop</li>
                     <ul class="hidden" <?php activeMenu('shop'); ?>>
@@ -73,7 +73,7 @@
                         <a href="?page=shop&selected=tools">Tools</a>
                     </ul> 
                 <?php }
-                if ($GLOBALS['staffPanel_permissions']['Donations'] == TRUE)
+                if (DATA['staff']['permissions']['Donations'] == TRUE)
                 {
                     ?>     
                     <li>Donations</li>
@@ -82,7 +82,7 @@
                         <a href="?page=donations&selected=browse">Browse</a>
                     </ul> 
                 <?php }
-                if ($GLOBALS['staffPanel_permissions']['Logs'] == TRUE)
+                if (DATA['staff']['permissions']['Logs'] == TRUE)
                 {
                     ?>     
                     <li>Logs</li>
@@ -91,7 +91,7 @@
                         <a href="?page=logs&selected=donateshop">Donation shop</a>
                     </ul> 
                 <?php }
-                if ($GLOBALS['staffPanel_permissions']['Interface'] == TRUE)
+                if (DATA['staff']['permissions']['Interface'] == TRUE)
                 {
                     ?>     
                     <li>Interface</li>
@@ -102,7 +102,7 @@
                         <a href="?page=interface&selected=plugins">Plugins</a>
                     </ul> 
                 <?php }
-                if ($GLOBALS['staffPanel_permissions']['Users'] == TRUE)
+                if (DATA['staff']['permissions']['Users'] == TRUE)
                 {
                     ?>     
                     <li>Users</li>
@@ -111,7 +111,7 @@
                         <a href="?page=users&selected=manage">Manage Users</a>
                     </ul> 
                 <?php }
-                if ($GLOBALS['staffPanel_permissions']['Realms'] == TRUE)
+                if (DATA['staff']['permissions']['Realms'] == TRUE)
                 {
                     ?>     
                     <li>Realms</li>
@@ -120,7 +120,7 @@
                         <a href="?page=realms&selected=manage">Manage realm(s)</a>
                     </ul> 
                 <?php }
-                if ($GLOBALS['staffPanel_permissions']['Services'] == TRUE)
+                if (DATA['staff']['permissions']['Services'] == TRUE)
                 {
                     ?>     
                     <li>Services</li>
@@ -129,17 +129,17 @@
                         <a href="?page=services&selected=charservice">Character Services</a>
                     </ul> 
                 <?php }
-                if ($GLOBALS['staffPanel_permissions']['Tools->Tickets'] == TRUE ||
-                        $GLOBALS['staffPanel_permissions']['Tools->Account Access'] == TRUE)
+                if (DATA['staff']['permissions']['Tools->Tickets'] == TRUE ||
+                        DATA['staff']['permissions']['Tools->Account Access'] == TRUE)
                 {
                     ?>    
                     <li>Tools</li>
                     <ul class="hidden" <?php activeMenu('tools'); ?>>
-                        <?php if ($GLOBALS['staffPanel_permissions']['Tools->Tickets'] == TRUE)
+                        <?php if (DATA['staff']['permissions']['Tools->Tickets'] == TRUE)
                         { ?>
                             <a href="?page=tools&selected=tickets">Tickets</a>
                         <?php } ?>
-                        <?php if ($GLOBALS['staffPanel_permissions']['Tools->Account Access'] == TRUE)
+                        <?php if (DATA['staff']['permissions']['Tools->Account Access'] == TRUE)
                         { ?>
                             <a href="?page=tools&selected=accountaccess">Account Access</a>
                     <?php } ?>
@@ -210,7 +210,7 @@
         <?php if (isset($_SESSION['cw_staff']))
             { ?>
             <div id="rightcontent">
-                <?php if ($GLOBALS['forum']['type'] == 'phpbb' && $GLOBALS['forum']['autoAccountCreate'] == TRUE && $page == 'dashboard')
+                <?php if (DATA['website']['forum']['type'] == 'phpbb' && DATA['website']['forum']['auto_account_create'] == true && $page == 'dashboard')
                 { ?>
                 <div class="box_right">
                 <div class="box_right_title">Recent forum activity</div>
@@ -221,7 +221,7 @@
                         <th>Topic</th>
                     </tr>
                     <?php
-                    $GameServer->selectDB($GLOBALS['forum']['forum_db'], $conn);
+                    $GameServer->selectDB(DATA['website']['forum']['forum_db']);
                     $result = $Database->select("phpbb_posts", "poster_id, post_text, post_time, topic_id", null, null, "ORDER BY post_id DESC LIMIT 10");
                     $result = $result->get_result();
                     while ($row = $result->fetch_assoc())
@@ -277,8 +277,8 @@
                     </td>
                     <td>
                     <tr style='font-weight: bold;'>
-                        <td><?php echo $GLOBALS['connection']['host']; ?></td>
-                        <td><?php echo $GLOBALS['connection']['user']; ?></td>
+                        <td><?php echo DATA['website']['connection']['host']; ?></td>
+                        <td><?php echo DATA['website']['connection']['userNAME']; ?></td>
                         <td>****<br/></td>
                     </tr>
                     </td>
@@ -292,11 +292,11 @@
                     </td>
                     <td>
                     <tr style="font-weight: bold;">
-                        <td><?php echo $GLOBALS['connection']['logondb']; ?></td>
-                        <td><?php echo $GLOBALS['connection']['webdb']; ?></td>
-                        <td><?php echo $GLOBALS['connection']['worlddb']; ?></td>
+                        <td><?php echo DATA['logon']['database']; ?></td>
+                        <td><?php echo DATA['website']['connection']['name']; ?></td>
+                        <td><?php echo DATA['world']['database']; ?></td>
                         <td><?php
-                            $GameServer->selectDB("webdb", $conn);
+                            $GameServer->selectDB("webdb");
                             $get = $Database->select("db_version", "version");
                             $row = $get->get_result()->fetch_assoc();
                             if ($row['version'] == null || empty($row['version'])) $row['version'] = '1.0';

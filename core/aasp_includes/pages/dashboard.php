@@ -54,7 +54,7 @@
 <div class="box_right">
     <div class="box_right_title">Admin Panel Log</div>
     <?php
-        $GameServer->selectDB("webdb", $conn);
+        $GameServer->selectDB("webdb");
         $result = $Database->select("admin_log", null, null, null, "ORDER BY id DESC LIMIT 25");
         if ($result->num_rows == 0)
         {

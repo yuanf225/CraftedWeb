@@ -26,10 +26,10 @@
 
     require "../core/includes/misc/headers.php"; //Load headers
 
-    define('INIT_SITE', TRUE);
+    define('INIT_SITE', true);
     include "../core/includes/configuration.php";
 
-    if ($GLOBALS['adminPanel_enable'] == FALSE) exit();
+    if ( DATA['admin']['enabled'] == false ) exit();
 
     require "../core/includes/misc/compress.php"; //Load compression file
     include "../core/aasp_includes/functions.php";
@@ -39,4 +39,6 @@
     $conn = $GameServer->connect();
 
     if (isset($_SESSION['cw_staff']) && !isset($_SESSION['cw_staff_id']) && $_GET['page'] != 'notice')
+    {
         header("Location: ?page=notice&error=It seems like a session was not created! You were logged out to prevent any threat against the site.");
+    }

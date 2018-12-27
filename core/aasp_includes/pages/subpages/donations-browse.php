@@ -22,7 +22,7 @@
 
 	global $GamePage, $GameServer, $GameAccount; 
 	$conn = $GameServer->connect();
-	$GameServer->selectDB("webdb", $conn);
+	$GameServer->selectDB("webdb");
 ?>
 	<div class="box_right_title"><?php echo $GamePage->titleLink(); ?> &raquo; Browse</div>
 <?php
@@ -49,7 +49,7 @@
 			<th>Status</th>
 			</tr>
 	<?php
-		$GameServer->selectDB("webdb", $conn);
+		$GameServer->selectDB("webdb");
 		$countDonators = 0;
 		$result = $Database->select("payments_log", null, null, null, "ORDER BY id DESC LIMIT $start, $per_page")->get_result();
 		while ( $row = $result->fetch_assoc() )

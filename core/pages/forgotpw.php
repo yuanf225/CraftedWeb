@@ -20,7 +20,6 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
     global $Account, $Database;
-    $conn = $Database->database();
 ?>
 <div class='box_two_title'>Forgot Password</div>
 <?php
@@ -34,10 +33,10 @@
             echo "<b class='red_text'>Link error, one or more required values are missing.</b>";
         else
         {
-            $Database->selectDB("webdb", $conn);
+            $Database->selectDB("webdb");
             $code    = $Database->conn->escape_string($_GET['code']);
             $account = $Database->conn->escape_string($_GET['account']);
-            $result  = $Database->select( COUNT('id') FROM password_reset WHERE code='" . $code . "' AND account_id=". $account .";");
+            $result  = $Database->select("password_reset", "COUNT('id')", null, "code='" . $code . "' AND account_id=". $account)->get_result();
             if ($result->data_seek(0) == 0)
                 echo "<b class='red_text'>The values specified does not match the ones in the database.</b>";
             else

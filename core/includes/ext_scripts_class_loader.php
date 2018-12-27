@@ -24,15 +24,11 @@
 
     define('INIT_SITE', TRUE); //Init config
 
-    require "../configuration.php";
     require "../misc/connect.php";
+    $Database = new Database();
+    
     require "../misc/func_lib.php";
     require "../classes/account.php";
     require "../classes/website.php";
     require "../classes/character.php";
     require "../classes/server.php";
-
-    global $Database;
-
-    $Database->connect();
-    

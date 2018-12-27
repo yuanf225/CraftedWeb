@@ -20,7 +20,6 @@
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
     global $Account, $Website, $Database, $Character;
-    $conn = $Database->database();
 
     $service  = $_GET['s'];
     $guid     = $Database->conn->escape_string($_GET['guid']);
@@ -70,10 +69,11 @@
         <div class="box_two_title">Confirm <?php echo $service_title; ?></div>
         <?php
         if ( DATA['service'][$service]['price'] == 0 )
-            echo '<span class="attention">' . $service_title . ' is free of charge.</span>';
-        else
         {
-            ?>
+            echo '<span class="attention">' . $service_title . ' is free of charge.</span>';
+        }
+        else
+        { ?>
             <span class="attention"><?php echo $service_title; ?> costs 
                 <?php echo DATA['service'][$service]['price'] . ' ' . $Website->convertCurrency(DATA['service'][$service]['currency']); ?></span>
                 <?php
@@ -83,7 +83,7 @@
 
         $Account->isNotLoggedIn();
 
-        $Database->selectDB("webdb", $conn);
+        $Database->selectDB("webdb");
         $result = $Database->select("realms", "name", null, "id=$realm_id")->get_result();
         $row    = $result->fetch_assoc();
         $realm  = $row['name'];

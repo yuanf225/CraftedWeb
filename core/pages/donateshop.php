@@ -20,7 +20,6 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
     global $Account, $Shop, $Database;
-    $conn = $Database->database();
     $Account->isNotLoggedIn();
 
     /* Declare some general variables */

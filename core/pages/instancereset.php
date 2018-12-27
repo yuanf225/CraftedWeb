@@ -20,7 +20,6 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
     global $Account, $Website, $Server, $Character, $Database;
-    $conn = $Database->database();
 ?>
 <div class='box_two_title'>Instance Reset</div>
 Let's you reset the instance on your characters.<hr/>
@@ -40,13 +39,19 @@ Let's you reset the instance on your characters.<hr/>
             <?php echo DATA['service'][$service]['price'] .' '. $Website->convertCurrency(DATA['service'][$service]['currency']); ?></span>
         <?php
         if (DATA['service'][$service]['currency'] == "vp")
+        {
             echo "<span class='currency'>Vote Points: " . $Account->loadVP($_SESSION['cw_user']) . "</span>";
+        }
         elseif (DATA['service'][$service]['currency'] == "dp")
+        {
             echo "<span class='currency'>" . DATA['website']['donation']['coins_name'] . ": " . $Account->loadDP($_SESSION['cw_user']) . "</span>";
+        }
     }
 
     if (isset($_POST['ir_step1']) || isset($_POST['ir_step2']))
+    {
         echo 'Selected Realm: <b>' . $Server->getRealmName($_POST['ir_realm']) . '</b><br/><br/>';
+    }
     else
     {
         ?>
@@ -54,29 +59,33 @@ Let's you reset the instance on your characters.<hr/>
         &nbsp;
         <form action="?page=instancereset" method="post">
             <table>
-                <tr>
-                    <td>
-                        <select name="ir_realm">
-                            <?php
-                            $result = $Database->select( name,char_db FROM realms;");
-                            while ($row    = $result->fetch_assoc())
-                            {
-                                if (isset($_POST['ir_realm']) && $_POST['ir_realm'] == $row['char_db'])
-                                    echo '<option value="' . $row['char_db'] . '" selected>';
-                                else
-                                    echo '<option value="' . $row['char_db'] . '">';
-                                echo $row['name'] . '</option>';
-                            }
-                            ?>
-                        </select>
-                    </td>
-                    <td>
-                        <?php
-                        if (!isset($_POST['ir_step1']) && !isset($_POST['ir_step2']) && !isset($_POST['ir_step3']))
-                            echo '<input type="submit" value="Continue" name="ir_step1">';
-                        ?>
-                    </td>
-                </tr>
+            <tr>
+            <td>
+                <select name="ir_realm">
+                    <?php
+                    $result = $Database->select("realms", "name,char_db")->get_result();
+                    while ($row = $result->fetch_assoc())
+                    {
+                        if (isset($_POST['ir_realm']) && $_POST['ir_realm'] == $row['char_db'])
+                        {
+                            echo '<option value="' . $row['char_db'] . '" selected>';
+                        }
+                        else
+                        {
+                            echo '<option value="' . $row['char_db'] . '">';
+                        }
+                        echo $row['name'] . '</option>';
+                    }
+                    ?>
+                </select>
+            </td>
+            <td>
+                <?php
+                if (!isset($_POST['ir_step1']) && !isset($_POST['ir_step2']) && !isset($_POST['ir_step3']))
+                    echo '<input type="submit" value="Continue" name="ir_step1">';
+                ?>
+            </td>
+            </tr>
             </table>
         </form>
         <?php
@@ -100,14 +109,18 @@ Let's you reset the instance on your characters.<hr/>
                                 <?php
                                 $acc_id = $Account->getAccountID($_SESSION['username']);
                                 $Database->selectDB($_POST['ir_realm']);
-                                $result = $Database->select( name, guid FROM characters WHERE account=". $acc_id .";");
+                                $result = $Database->select("characters", "name, guid", null, "account=$acc_id")->get_result();
 
                                 while ($row = $result->fetch_assoc())
                                 {
                                     if (isset($_POST['ir_char']) && $_POST['ir_char'] == $row['guid'])
+                                    {
                                         echo '<option value="' . $row['guid'] . '" selected>';
+                                    }
                                     else
+                                    {
                                         echo '<option value="' . $row['guid'] . '">';
+                                    }
 
                                     echo $row['name'] . '</option>';
                                 }
@@ -127,8 +140,7 @@ Let's you reset the instance on your characters.<hr/>
         }
     }
     if (isset($_POST['ir_step2']) || isset($_POST['ir_step3']))
-    {
-        ?>
+    { ?>
         Select instance: 
         &nbsp;
         <form action="?page=instancereset" method="post">
@@ -142,21 +154,21 @@ Let's you reset the instance on your characters.<hr/>
                             $guid = $Database->conn->escape_string($_POST['ir_char']);
                             $Database->selectDB($_POST['ir_realm']);
 
-                            $result = $Database->select( instance FROM character_instance WHERE guid=". $guid ." AND permanent=1;");
+                            $result = $Database->select("character_instance", "instance", null, "guid=$guid AND permanent=1")->get_result();
                             if ($result->num_rows == 0)
                             {
                                 echo "<option value='#'>No instance locks were found</option>";
-                                $nope = TRUE;
+                                $nope = true;
                             }
                             else
                             {
                                 while ($row = $result->fetch_assoc())
                                 {
-                                    $getI     = $Database->select( id, map, difficulty FROM instance WHERE id=". $row['instance'] .";");
+                                    $getI     = $Database->select("instance", "id, map, difficulty", null, "id=". $row['instance'])->get_result();
                                     $instance = $getI->fetch_assoc();
 
-                                    $Database->selectDB("webdb", $conn);
-                                    $getName = $Database->select( name FROM instance_data WHERE map='" . $instance['map'] . "';");
+                                    $Database->selectDB("webdb");
+                                    $getName = $Database->select("instance_data", "name", null, "map='". $instance['map'] ."'")->get_result();
                                     $name    = $getName->fetch_assoc();
 
                                     if (empty($name['name']))
@@ -206,7 +218,7 @@ Let's you reset the instance on your characters.<hr/>
 
         if (DATA['service'][$service]['currency'] == "vp")
         {
-            if ($Account->hasVP($_SESSION['cw_user'], DATA['service'][$service]['price']) == FALSE)
+            if ($Account->hasVP($_SESSION['cw_user'], DATA['service'][$service]['price']) == false)
                 echo '<span class="alert">You do not have enough Vote Points!';
             else
             {
@@ -217,10 +229,12 @@ Let's you reset the instance on your characters.<hr/>
                 echo '<span class="approved">The instance lock was removed!</span>';
             }
         }
-        elseif (DATA['service'][$service]['currency'] == "dp")
+        elseif ( DATA['service'][$service]['currency'] == "dp" )
         {
-            if ($Account->hasDP($_SESSION['cw_user'], DATA['service'][$service]['price']) == FALSE)
+            if ( $Account->hasDP($_SESSION['cw_user'], DATA['service'][$service]['price']) == false )
+            {
                 echo '<span class="alert">You do not have enough ' . DATA['website']['donation']['coins_name'];
+            }
             else
             {
                 $Database->selectDB($_POST['ir_realm']);

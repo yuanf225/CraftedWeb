@@ -21,25 +21,24 @@
 #                  © Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
     global $Database, $Plugins;
-    $conn = $Database->database();
-    $Database->selectDB("webdb", $conn);
+    $Database->selectDB("webdb");
 
     $pages = scandir('core/pages');
     unset($pages[0], $pages[1]);
     $page  = $Database->conn->escape_string($_GET['page']);
 
-    if (!isset($page))
+    if ( !isset($page) )
     {
         include "core/pages/home.php";
     }
-    elseif (isset($_SESSION['loaded_plugins_pages']) && DATA['website']['enable_plugins'] == TRUE && !in_array($page . '.php', $pages))
+    elseif ( isset($_SESSION['loaded_plugins_pages']) && DATA['website']['enable_plugins'] == true && !in_array($page . '.php', $pages) )
     {
         $Plugins->load("pages");
     }
-    elseif (in_array($page . ".php", $pages))
+    elseif ( in_array($page . ".php", $pages) )
     {
         $result = $Database->select("disabled_pages", "COUNT(filename) AS filename", null, "filename='$page'")->get_result();
-        if ($result->data_seek(0) == 1)
+        if ( $result->data_seek(0) == 1 )
         {
             include "core/pages/". $page .".php";
         }
@@ -50,11 +49,11 @@
     }
     else
     {
-        $result = $Database->select( * FROM custom_pages WHERE filename='". $page ."';");
-        if ($result->num_rows > 0)
+        $result = $Database->select("custom_pages", null, null, "filename='$page'")->get_result();
+        if ( $result->num_rows > 0 )
         {
-            $check = $Database->select( COUNT(filename) AS filename FROM disabled_pages WHERE filename='" . $page . "';");
-            if ($check->fetch_assoc()['filename'] == 0)
+            $check = $Database->select("disabled_pages", "COUNT(filename) AS filename", null, "filename='$page'")->get_result();
+            if ( $check->fetch_assoc()['filename'] == 0 )
             {
                 $row = $result->fetch_assoc();
                 echo html_entity_decode($row['content']);

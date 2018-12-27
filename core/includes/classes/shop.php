@@ -24,8 +24,7 @@
         public function search($value, $shop, $quality, $type, $ilevelfrom, $ilevelto, $results, $faction, $class, $subtype)
         {
             global $Database;
-            $conn = $Database->database();
-            $Database->selectDB("webdb", $conn);
+            $Database->selectDB("webdb");
 
             $value      = $Database->conn->escape_string($value);
             $shop       = $Database->conn->escape_string($shop);
@@ -267,8 +266,7 @@
         public function listAll($shop)
         {
             global $Database;
-            $conn = $Database->database();
-            $Database->selectDB("webdb", $conn);
+            $Database->selectDB("webdb");
 
             $shop = $Database->conn->escape_string($shop);
 
@@ -381,9 +379,8 @@
 
         public function logItem($shop, $entry, $char_id, $account, $realm_id, $amount)
         {
-            global $Database;
-            $conn = $Database->database();;
-            $Database->selectDB("webdb", $conn);
+            global $Database;;
+            $Database->selectDB("webdb");
 
             date_default_timezone_set(DATA['website']['timezone']);
 

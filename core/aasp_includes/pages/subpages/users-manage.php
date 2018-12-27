@@ -28,7 +28,7 @@
     if (isset($_GET['char']))
     {
         echo "Search Results For <b>" . $_GET['char'] . "</b><pre>";
-        $GameServer->selectDB("webdb", $conn);
+        $GameServer->selectDB("webdb");
 
         $character = $Database->conn->escape_string($_GET['char']);
 
@@ -55,7 +55,7 @@
 
     if (isset($_GET['user']))
     {
-        $GameServer->selectDB("logondb", $conn);
+        $GameServer->selectDB("logondb");
         $value  = $Database->conn->escape_string(strtoupper($_GET['user']));
         $result = $Database->select("account", null, null, "username='$value' OR id='$value'")->get_result();
         if ($result->num_rows == 0)
@@ -107,7 +107,7 @@
                     <th>Actions</th>
                 </tr>
                 <?php
-                $GameServer->selectDB("webdb", $conn);
+                $GameServer->selectDB("webdb");
                 $result = $Database->select("realms", "name, id")->get_result();
 
                 if (is_numeric($_GET['user']))
@@ -220,7 +220,7 @@
                 <th>Date</th>
             </tr>
             <?php
-            $GameServer->selectDB("webdb", $conn);
+            $GameServer->selectDB("webdb");
             $result = $Database->select("user_log", null, null, "account=$getLogs")->get_result();
             if ($result->num_rows == 0)
             {

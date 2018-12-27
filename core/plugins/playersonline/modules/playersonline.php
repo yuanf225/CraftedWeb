@@ -20,8 +20,8 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
     global $Database, $conn;
-    $Database->selectDB("webdb", $conn);
-    $result    = $Database->select("realms", "id,name", null, "id='" . $GLOBALS['playersOnline']['realm_id'] . "';")->get_result();
+    $Database->selectDB("webdb");
+    $result    = $Database->select("realms", "id,name", null, "id='" . DATA['website']['server_status']['realms'][$id] . "';")->get_result();
     $row       = $result->fetch_assoc();
     $rid       = $row['id'];
     $realmname = $row['name'];
@@ -48,7 +48,7 @@
                     <th>Level</th>
                 </tr>
                 <?php
-                if ($GLOBALS['playersOnline']['moduleResults'] > 0)
+                if ( DATA['modules']['players_online']['moduleResults'] > 0 )
                 {
                     $count = $count->fetch_assoc()['online'];
                     if ($count > 10)
@@ -58,7 +58,7 @@
 
                     $rand = rand(1, $count);
 
-                    $result = $Database->select("characters", "guid, name, totalKills, level, race, class, gender, account", null, "name!='' AND online=1 LIMIT " . $rand . "," . $GLOBALS['playersOnline']['moduleResults'])->get_result();
+                    $result = $Database->select("characters", "guid, name, totalKills, level, race, class, gender, account", null, "name!='' AND online=1 LIMIT " . $rand . "," . DATA['modules']['players_online']['moduleResults'])->get_result();
                 }
                 else
                 {
@@ -78,10 +78,10 @@
                         $guild    = '&lt; ' . $x['name'] . ' &gt;';
                     }
 
-                    if ($GLOBALS['playersOnline']['display_GMS'] == false)
+                    if (DATA['modules']['players_online']['display_GMS'] == false)
                     {
                         //Check if GM.
-                        $Database->selectDB("logondb", $conn);
+                        $Database->selectDB("logondb");
                         $checkGM = $Database->select("account_access", "COUNT(*)", null, "id='" . $row['account'] . "' AND gmlevel >0")->get_result();
                         if ($checkGM->data_seek(0) == 0)
                         {
@@ -108,7 +108,7 @@
                 ?>
             </table>
             <?php
-            if ($GLOBALS['playersOnline']['enablePage'] == TRUE)
+            if (DATA['modules']['players_online']['enablePage'] == true)
             {
                 ?>
                 <hr/>

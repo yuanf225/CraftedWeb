@@ -28,7 +28,7 @@
     global $GameServer, $GameAccount;
     $conn = $GameServer->connect();;
 
-    $GameServer->selectDB("webdb", $conn);
+    $GameServer->selectDB("webdb");
 
     # Organized Alphabeticaly
 
@@ -70,11 +70,11 @@
                 $advanced .= " AND quality='" . $quality . "'";
             }
 
-            $GameServer->selectDB("worlddb", $conn);
+            $GameServer->selectDB("worlddb");
             $get = $Database->select("item_template", null, null, "itemlevel>=$il_from AND itemlevel<=$il_to $advanced")->get_result() 
             or die('Error whilst getting item data from the database. Error message: ' . $Database->conn->error);
 
-            $GameServer->selectDB("webdb", $conn);
+            $GameServer->selectDB("webdb");
 
             $c   = 0;
             while ($row = $get->fetch_assoc())
@@ -128,12 +128,12 @@
                 die("Please enter all fields.");
             }
 
-            $GameServer->selectDB("worlddb", $conn);
+            $GameServer->selectDB("worlddb");
             $get = $Database->select("item_template", null, null, "entry=$entry")->get_result()
                 or die('Error whilst getting item data from the database. Error message: ' . $Database->conn->error);
             $row = $get->fetch_assoc();
 
-            $GameServer->selectDB("webdb", $conn);
+            $GameServer->selectDB("webdb");
 
             if ($row['AllowableRace'] == "-1")
             {

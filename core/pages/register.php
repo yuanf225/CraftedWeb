@@ -22,10 +22,9 @@
     global $Account;
 ?>
 <div class='box_two_title'>Register</div>
-It's free, join us today! <hr/>
-<?php
+It's free, join us today! <hr><?php
     $Account->isLoggedIn();
-    if (isset($_POST['register']))
+    if ( isset($_POST['register']) )
     {
         $Account->register($_POST['username'], $_POST['email'], $_POST['password'], $_POST['password_repeat'], $_POST['referer'], $_POST['captcha']);
     }
@@ -50,10 +49,9 @@ It's free, join us today! <hr/>
         <td><input type="password"  id="password_repeat" /></td>
     </tr>
     <?php
-        if ($GLOBALS['registration']['captcha'] == TRUE)
+        if ( DATA['website']['registration']['captcha'] == true )
         {
-            $_SESSION['captcha_numero'] = rand(0000, 9999);
-            ?>
+            $_SESSION['captcha_numero'] = rand(0000, 9999); ?>
             <tr>
                 <td align="right"></td>
                 <td><img src="../core/includes/misc/captcha.php" /></td>
@@ -72,14 +70,11 @@ It's free, join us today! <hr/>
     <tr>
         <td></td>
         <td>
-            <input type="submit" value="Register" onclick="register(<?php if ($GLOBALS['registration']['captcha'] == TRUE) echo 1;
-    else echo 0; ?>)" 
-                   id="register"/> 
+            <input type="submit" value="Register" onclick="register(<?php if ( DATA['website']['registration']['captcha'] == true ) echo 1; else echo 0; ?>)" id="register"/>
             <?php
                 include "documents/termsofservice.php";
-                if ($tos_enable == TRUE)
-                {
-                    ?>
+                if ($tos_enable == true)
+                { ?>
                     <br/>By registering, you accept our <a href="#" onclick="viewTos()">Terms of Service</a>
     <?php } ?>
     </tr>
@@ -91,8 +86,7 @@ It's free, join us today! <hr/>
         var key_code = event.keyCode;
         if (key_code == 13)
         {
-            register(<?php if ($GLOBALS['registration']['captcha'] == TRUE) echo 1;
-    else echo 0; ?>)
+            register(<?php if ( DATA['website']['registration']['captcha'] == true ) echo 1; else echo 0; ?>)
         }
     }
 </script>

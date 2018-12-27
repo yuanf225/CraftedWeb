@@ -33,7 +33,7 @@
       <th>Status</th>
     </tr>
     <?php
-      $GameServer->selectDB("webdb", $conn);
+      $GameServer->selectDB("webdb");
         $result = $Database->select("service_prices")->get_result();
         while ($row = $result->fetch_assoc())
         {

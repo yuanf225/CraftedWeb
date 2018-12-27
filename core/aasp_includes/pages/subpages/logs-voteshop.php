@@ -27,7 +27,7 @@
 <?php
     $per_page = 40;
 
-    $GameServer->selectDB("webdb", $conn);
+    $GameServer->selectDB("webdb");
 
     $pages_query = $Database->select("shoplog", "COUNT(*) AS voteLogs", null, "shop='vote'")->get_result();
     $pages       = ceil($pages_query->fetch_assoc()['voteLogs'] / $per_page);

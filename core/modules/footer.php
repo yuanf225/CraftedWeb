@@ -22,8 +22,8 @@
 
     if ( DATA['website']['show_load_time'] == true )
     {
-    	global $start;
-        $end = number_format(( microtime(true) - $start, 2);
+    	global $start_time;
+        $end = number_format(( microtime() - $start_time), 2, ",", " ");
         echo "Page loaded in ". $end ." seconds. <br/>";
     }
     echo "&copy <a href='http://forums.nomsoftware.com/'>Nomsoft</a> 2011-2012<br>";

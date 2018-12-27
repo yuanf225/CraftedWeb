@@ -1,90 +1,89 @@
 <?php
 
-    /* ___           __ _           _ __    __     _     
-      / __\ __ __ _ / _| |_ ___  __| / / /\ \ \___| |__
-      / / | '__/ _` | |_| __/ _ \/ _` \ \/  \/ / _ \ '_ \
-      / /__| | | (_| |  _| ||  __/ (_| |\  /\  /  __/ |_) |
-      \____/_|  \__,_|_|  \__\___|\__,_| \/  \/ \___|_.__/
 
-      -[ Created by �Nomsoft
-      `-[ Original core by Anthony (Aka. CraftedDev)
+class Cache
+{
+	private $prefered_values = null;
+	private $classes = null;
 
-      -CraftedWeb Generation II-
-      __                           __ _
-      /\ \ \___  _ __ ___  ___  ___  / _| |_
-      /  \/ / _ \| '_ ` _ \/ __|/ _ \| |_| __|
-      / /\  / (_) | | | | | \__ \ (_) |  _| |_
-      \_\ \/ \___/|_| |_| |_|___/\___/|_|  \__|	- www.Nomsoftware.com -
-      The policy of Nomsoftware states: Releasing our software
-      or any other files are protected. You cannot re-release
-      anywhere unless you were given permission.
-      � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved. */
+	public function __construct()
+	{
+		$this->prefered_values = array
+		(
+			"opcache.memory_consumption" 		=> 128,
+			"opcache.interned_strings_buffer" 	=> 8,
+			"opcache.max_accelerated_files" 	=> 4000,
+			"opcache.revalidate_freq" 			=> 15,
+			"opcache.enable_cli" 				=> 1
+		);
 
-    class Cache
-    {
+		foreach ($this->prefered_values as $name => $value)
+		{
+			if ( ini_get($name) != $value )
+			{
+				ini_set($name, $value);
+			}
+		}
 
-        public function buildCache($filename, $content)
-        {
-          if ( DATA['website']['use']['cache'] == TRUE )
-          {
-            if (!$fh = fopen('cache/' . $filename . '.cache.php', 'w+'))
-            {
-                buildError('<b>Cache error.</b> could not load the file (cache/' . $filename . '.cache.php)');
-            }
+		$files = scandir("core/includes/misc/");
+		array_splice($files, array_search(".", $files), 1);
+		array_splice($files, array_search("..", $files), 1);
+		array_splice($files, array_search("arial.ttf", $files), 1);
+		array_splice($files, array_search("index.html", $files), 1);
+		array_splice($files, array_search("connect.php", $files), 1);
 
-            fwrite($fh, $content);
-            fclose($fh);
-            unset($content, $filename);
-          }
-          else
-          {
-            $this->deleteCache($filename);
-          }
-        }
+		foreach ($files as $name)
+		{
+			if ( !opcache_compile_file("core/includes/misc/$name") )
+			{
+				die("error");
+			}
+		}
 
-        public function loadCache($filename)
-        {
-          if ( DATA['website']['use']['cache'] == TRUE )
-          {
-            if (file_exists('core/cache/' . $filename . '.cache.php'))
-            {
-              include "core/cache/". $filename .".cache.php";
-            }
-            else
-            {
-              buildError('<b>Cache error.</b> could not load the file (cache/' . $filename . '.cache.php)');
-            }
-          }
-          else
-          {
-            $this->deleteCache($filename);
-          }
-        }
+		$files = null;
+		$files = scandir("core/pages/");
+		array_splice($files, array_search(".", $files), 1);
+		array_splice($files, array_search("..", $files), 1);
+		array_splice($files, array_search(".htaccess", $files), 1);
+		array_splice($files, array_search("index.html", $files), 1);
 
-        public function deleteCache($filename)
-        {
-          if (file_exists('cache/' . $filename . '.cache.php'))
-          {
-            $del = unlink('cache/' . $filename . '.cache.php');
-            if (!$del)
-            {
-              buildError('<b>Cache error.</b> tried to delete non-existing cache file (cache/' . $filename . '.cache.php)');
-            }
-          }
-        }
+		foreach ($files as $name)
+		{
+			if ( !opcache_compile_file("core/pages/$name") )
+			{
+				die("error");
+			}
+		}
 
-        public function exists($filename)
-        {
-          if (file_exists('cache/' . $filename . '.cache.php'))
-          {
-            return TRUE;
-          }
-          else
-          {
-            return FALSE;
-          }
-        }
-    }
+		$files = null;
+		$files = scandir("core/modules/");
+		array_splice($files, array_search(".", $files), 1);
+		array_splice($files, array_search("..", $files), 1);
+		array_splice($files, array_search("index.html", $files), 1);
 
-    $Cache = new Cache();
-    
+		foreach ($files as $name)
+		{
+			if ( !opcache_compile_file("core/modules/$name") )
+			{
+				die("error");
+			}
+		}
+
+		//opcache_compile_file("../../../../index.php");
+	}
+
+	public function isCached($class)
+	{
+		$class .= ".php";
+		if ( array_search($class, $files) != false )
+		{
+			return opcache_is_script_cached($class);
+		}
+		else
+		{
+			return false;
+		}
+	}
+}
+
+$Cache = new Cache();

@@ -20,7 +20,8 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    require "core/includes/misc/headers.php"; //Load sessions, error reporting & ob.
+    require_once "core/includes/classes/cache.php";
+    //require_once "core/includes/misc/headers.php"; //Load sessions, error reporting & ob.
 
     if ( file_exists("install/index.php") )
     {
@@ -29,10 +30,9 @@
     }
 
     define('INIT_SITE', TRUE);
+    require "core/includes/misc/connect.php"; //Load connection class
 
-    require "core/includes/configuration.php"; //Load configuration file
-    $config_file = file_get_contents("core/includes/configuration.json");
-    define("DATA", json_decode($config_file, true));
+    $Database = new Database();
 
 
     ###LOAD MAXIMUM ITEM LEVEL DEPENDING ON EXPANSION###
@@ -72,25 +72,9 @@
     }
     
     //Set the error handling.
-    if(file_exists("core/includes/classes/error.php"))
+    if( file_exists("core/includes/classes/error.php") )
     {
         require "core/includes/classes/error.php";
-    }       
-    elseif(file_exists("../core/classes/error.php"))
-    {
-        require "../core/classes/error.php";
-    }       
-    elseif(file_exists("../core/includes/classes/error.php"))
-    {
-        require "../core/includes/classes/error.php";
-    }   
-    elseif(file_exists("../../core/includes/classes/error.php"))
-    {
-        require "../../core/includes/classes/error.php";
-    }   
-    elseif(file_exists("../../../core/includes/classes/error.php"))
-    {
-        require "../../../core/includes/classes/error.php";
     }
     
     loadCustomErrors(); //Load custom errors
@@ -100,24 +84,20 @@
         die("<center><h3>Website Maintainance</h3>". DATA['website']['title'] ." is currently undergoing some major maintainance and will be available as soon as possible.<br/><br/>Sincerely</center>");
     }
 
-    require "core/includes/misc/connect.php"; //Load connection class
-
-    $Database = new Database();
-
-    require "core/includes/misc/func_lib.php";
-    require "core/includes/misc/compress.php";
+    //require "core/includes/misc/func_lib.php";
+    //require "core/includes/misc/compress.php";
 
     require "core/includes/classes/account.php";
-    require "core/includes/classes/server.php";
-    require "core/includes/classes/website.php";
-    require "core/includes/classes/shop.php";
     require "core/includes/classes/character.php";
-    require "core/includes/classes/cache.php";
     require "core/includes/classes/plugins.php";
+    require "core/includes/classes/server.php";
+    require "core/includes/classes/shop.php";
+    require "core/includes/classes/website.php";
 
     global $Plugins, $Account, $Website;
+    $Plugins = new Plugins();
 
-    /*     * ***** LOAD PLUGINS ********** */
+    /********** LOAD PLUGINS ***********/
     $Plugins->globalInit();
 
     $Plugins->init("classes");

@@ -608,55 +608,44 @@
             "realm_port"                => $_POST['realm_port']
         );
 
+        $conn = new mysqli(
+            $_SESSION['install']['web']['database']['host'], 
+            $_SESSION['install']['web']['database']['username'], 
+            $_SESSION['install']['web']['database']['password'],
+            null,
+            (int)$_SESSION['install']['web']['database']['port']);
+
+        if ( $conn->connect_errno != 0 )
+            die("<br/>[FAILURE] Could not connect to the database. Please <a href=\"./index.php\">restart</a> the installation. ");
+
+        $conn->select_db($_SESSION['install']['web']['database']['name']);
+
+        $realm_name     = $conn->escape_string($step5['realm_name']);
+        $admin_username = $conn->escape_string($step5['realm_access_username']);
+        $admin_password = $conn->escape_string($step5['realm_access_password']);
+        $description    = $conn->escape_string($step5['realm_description']);
+        $sendtype       = $conn->escape_string($step5['realm_sendtype']);
+        $port           = $conn->escape_string($step5['realm_port']);
         
-        if ( file_exists("../core/includes/classes/validator.php") )
-        {
-        	include "../core/includes/classes/validator.php";
+        $conn->query("INSERT INTO realms 
+        	(name, description, char_db, port, rank_user, rank_pass, ra_port, soap_port, host, sendType, mysqli_host, mysqli_user, mysqli_pass) 
+        	VALUES
+        	('". $realm_name ."', 
+        	'". $description ."', 
+        	'". $_SESSION['install']['characters']['database']['name'] ."', 
+        	'". $port ."', 
+        	'". $admin_username ."', 
+        	'". $admin_password ."', 
+        	'". $port ."', 
+        	'". $port ."', 
+        	'". $_SESSION['install']['characters']['database']['host'] ."', 
+        	'". $sendtype ."', 
+        	'". $_SESSION['install']['characters']['database']['host'] ."', 
+        	'". $_SESSION['install']['characters']['database']['username'] ."', 
+        	'". $_SESSION['install']['characters']['database']['password'] ."');")
+        or die("Could not insert realm into database. (". $conn->error .")");
 
-        	$Validator = new Validator(null, $step5, $step5);
-
-            # $_POST has been sanatized.
-    		$_POST = $Validator->sanatize($_POST);
-
-            $conn = new mysqli(
-                $_SESSION['install']['web']['database']['host'], 
-                $_SESSION['install']['web']['database']['username'], 
-                $_SESSION['install']['web']['database']['password'],
-                null,
-                $_SESSION['install']['web']['database']['port']);
-
-            if ( $conn->connect_errno != 0 )
-                die("<br/>[FAILURE] Could not connect to the database. Please <a href=\"./index.php\">restart</a> the installation. ");
-
-            $conn->select_db($_SESSION['install']['web']['database']['name']);
-
-            $realm_name     = $conn->escape_string($step5['realm_name']);
-            $admin_username = $conn->escape_string($step5['realm_access_username']);
-            $admin_password = $conn->escape_string($step5['realm_access_password']);
-            $description    = $conn->escape_string($step5['realm_description']);
-            $sendtype       = $conn->escape_string($step5['realm_sendtype']);
-            $port           = $conn->escape_string($step5['realm_port']);
-            
-            $conn->query("INSERT INTO realms 
-            	(name, description, char_db, port, rank_user, rank_pass, ra_port, soap_port, host, sendType, mysqli_host, mysqli_user, mysqli_pass) 
-            	VALUES
-            	('". $realm_name ."', 
-            	'". $description ."', 
-            	'". $_SESSION['install']['characters']['database']['name'] ."', 
-            	'". $port ."', 
-            	'". $admin_username ."', 
-            	'". $admin_password ."', 
-            	'". $port ."', 
-            	'". $port ."', 
-            	'". $_SESSION['install']['characters']['database']['host'] ."', 
-            	'". $sendtype ."', 
-            	'". $_SESSION['install']['characters']['database']['host'] ."', 
-            	'". $_SESSION['install']['characters']['database']['username'] ."', 
-            	'". $_SESSION['install']['characters']['database']['password'] ."');")
-            or die("Could not insert realm into database. (". $conn->error .")");
-
-            echo "Realm successfully created. <a href=\"?step=6\">Finish Installation</a>";
-            exit;
-        }
+        echo "Realm successfully created. <a href=\"?step=6\">Finish Installation</a>";
+        exit;
     }
     

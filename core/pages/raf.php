@@ -23,8 +23,9 @@
     $Account->isNotLoggedIn();
 ?>
 <div class='box_two_title'>Refer-A-Friend</div>
-<b class='yellow_text'>Your referral link: </b> <div id="raf_box">
-<?php echo $GLOBALS['website_domain'] . "?page=register&id=" . $Account->getAccountID($_SESSION['cw_user']); ?>
+<b class='yellow_text'>Your referral link: </b>
+<div id="raf_box">
+	<?php echo DATA['website']['domain'] . "?page=register&id=" . $Account->getAccountID($_SESSION['cw_user']); ?>
 </div><br/>
 <h4 class='blue_text'>How does it work?</h4>
 

@@ -84,7 +84,7 @@
                             $Database->selectDB("webdb");
                             $folderName = $Database->conn->escape_string($folderName);
 
-                            $statement = $Database->select("disabled_plugins", "COUNT(*) AS plugins", null, "foldername=$folderName");
+                            $statement = $Database->select("disabled_plugins", "COUNT(*) AS plugins", null, "foldername='$folderName'");
                             $check = $statement->get_result();
                             if ($check->fetch_assoc()['plugins'] == 0 && file_exists('plugins/'. $folderName .'/'. $type .'/'))
                             {

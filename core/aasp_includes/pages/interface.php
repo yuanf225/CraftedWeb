@@ -21,7 +21,7 @@
 
     global $GameServer, $GamePage;
     $conn = $GameServer->connect();
-    $GameServer->selectDB("webdb", $conn);
+    $GameServer->selectDB("webdb");
 
     $GamePage->validatePageAccess('Interface');
 

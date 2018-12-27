@@ -20,75 +20,87 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 ?>
 <div class='box_two_title'>Character Reviver</div>
-Choose the character you wish to revive. The character will be revived with 1 health.<hr/>
+Choose the character you wish to revive. The character will be revived with 1 health.<hr>
 <?php
     global $Website, $Account, $Database, $Character;
-    $conn = $Database->database();
     $service = "revive";
 
-    if ($GLOBALS['service'][$service]['price'] == 0)
-        echo '<span class="attention">Revive is free of charge.</span>';
-    else
+    if ( DATA['service'][$service]['price'] == 0 )
     {
-        ?>
+        echo '<span class="attention">Revive is free of charge.</span>';
+    }
+    else
+    { ?>
         <span class="attention">Revive costs 
-            <?php echo $GLOBALS['service'][$service]['price'] . ' ' . $Website->convertCurrency($GLOBALS['service'][$service]['currency']); ?></span>
-        <?php
-        if ($GLOBALS['service'][$service]['currency'] == "vp")
-            echo "<span class='currency'>Vote Points: " . $Account->loadVP($_SESSION['cw_user']) . "</span>";
-        elseif ($GLOBALS['service'][$service]['currency'] == "dp")
-            echo "<span class='currency'>" . $GLOBALS['donation']['coins_name'] . ": " . $Account->loadDP($_SESSION['cw_user']) . "</span>";
+            <?php echo DATA['service'][$service]['price'] . ' ' . $Website->convertCurrency(DATA['service'][$service]['currency']); ?>
+        </span><?php
+        if ( DATA['service'][$service]['currency'] == "vp" )
+        {
+            echo "<span class='currency'>Vote Points: ". $Account->loadVP($_SESSION['cw_user']) ."</span>";
+        }
+        elseif ( DATA['service'][$service]['currency'] == "dp" )
+        {
+            echo "<span class='currency'>". DATA['donation']['coins_name'] .": ". $Account->loadDP($_SESSION['cw_user']) ."</span>";
+        }
     }
 
     $Account->isNotLoggedIn();
-    $Database->selectDB("webdb", $conn);
+    $Database->selectDB("webdb");
     $num    = 0;
-    $result = $Database->conn->query('SELECT char_db, name FROM realms ORDER BY id ASC;');
-    while ($row    = $result->fetch_assoc())
+    $result = $Database->select("realms", "char_db, name", null, "ORDER BY id ASC")->get_result();
+    while ($row = $result->fetch_assoc())
     {
         $acct_id = $Account->getAccountID($_SESSION['cw_user']);
         $realm   = $row['name'];
         $char_db = $row['char_db'];
 
         $Database->selectDB($char_db);
-        $result = $Database->select( name, guid, gender, class, race, level, online FROM characters WHERE account=". $acct_id .";");
+        $result = $Database->select("characters", "name, guid, gender, class, race, level, online", null, "account='$acct_id'")->get_result();
         while ($row = $result->fetch_assoc())
-        {
-            ?><div class='charBox'>
-                <table width="100%">
-                    <tr>
-                        <td width="73">
-                            <?php
-                            if (!file_exists('styles/global/images/portraits/' . $row['gender'] . '-' . $row['race'] . '-' . $row['class'] . '.gif'))
-                                echo '<img src="styles/' . $GLOBALS['template']['path'] . '/images/unknown.png" />';
-                            else
-                            {
-                                ?>
-                                <img src="styles/global/images/portraits/<?php echo $row['gender'] . '-' . $row['race'] . '-' . $row['class']; ?>.gif" border="none">
-                            <?php } ?>
-                        </td>
+        { ?>
+            <div class='charBox'>
+            <table width="100%">
+            <tr>
+                <td width="73">
+                    <?php
+                    if ( !file_exists("styles/global/images/portraits/". $row['gender'] ."-" .$row['race'] ."-". $row['class'] .".gif") )
+                    {
+                        echo "<img src=\"styles/" . DATA['template']['path'] . "/images/unknown.png\" />";
+                    }
+                    else
+                    { ?>
+                        <img src="styles/global/images/portraits/<?php echo $row['gender'] . "-" . $row['race'] . "-" . $row['class']; ?>.gif" border="none"><?php 
+                    } ?>
+                </td>
 
-                        <td width="160">
-                            <h3><?php echo $row['name']; ?></h3>
-                            <?php echo $row['level'] . " " . $Character->getRace($row['race']) . " " . $Character->getGender($row['gender']) ." " . $Character->getClass($row['class']);?>
-                        </td>
+                <td width="160">
+                    <h3><?php echo $row['name']; ?></h3>
+                    <?php echo $row['level'] ." ". $Character->getRace($row['race']) ." ". $Character->getGender($row['gender']) ." ". $Character->getClass($row['class']);?>
+                </td>
 
-                        <td>
-                            Realm: <?php echo $realm; ?>
-                            <?php if ($row['online'] == 1) echo "<br/><span class='red_text'>Please log out before trying to unstuck.</span>";?>
-                        </td>
+                <td>
+                    Realm: <?php echo $realm; 
+                    if ( $row['online'] == 1 ) echo "<br/><span class='red_text'>Please log out before trying to unstuck.</span>";?>
+                </td>
 
-                        <td align="right"> &nbsp; <input type="submit" value="Revive" <?php if ($row['online'] == 0){ ?> onclick='revive(<?php echo $row['guid']; ?>, "<?php echo $char_db; ?>")' <?php }
+                <td align="right">
+                    &nbsp;
+                    <input type="submit" value="Revive" 
+                        <?php if ( $row['online'] == 0 )
+                            { ?>
+                                onclick='revive(<?php 
+                                    echo $row['guid']; 
+                                    ?>, "<?php 
+                                    echo $char_db; ?>")' <?php 
+                            }
                             else
                             {
                                 echo 'disabled="disabled"';
-                            }
-                            ?>>
-                        </td>
-                    </tr>                         
-                </table>
-            </div> 
-            <?php
+                            } ?> >
+                </td>
+            </tr>                         
+            </table>
+            </div><?php
             $num++;
         }
     }

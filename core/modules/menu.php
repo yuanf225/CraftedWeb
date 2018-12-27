@@ -21,19 +21,18 @@
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
     global $Database;
-    $conn = $Database->database();
-    $Database->selectDB("webdb", $conn);
+    $Database->selectDB("webdb");
 
-    if (!isset($_SESSION['cw_user']))
+    if ( !isset($_SESSION['cw_user']) )
     {
-        $sql = "WHERE shownWhen = 'always' OR shownWhen = 'notlogged'";
+        $sql = "shownWhen LIKE('always') OR shownWhen LIKE('notlogged')";
     }
     else
     {
-        $sql = "WHERE shownWhen = 'always' OR shownWhen = 'logged'";
+        $sql = "shownWhen LIKE('always') OR shownWhen LIKE('logged')";
     }
-    $getMenuLinks = $Database->select( * FROM site_links ". $sql ." ORDER BY position ASC;");
-    if ($getMenuLinks->num_rows == 0)
+    $getMenuLinks = $Database->select("site_links", null, null, $sql." ORDER BY position ASC")->get_result();
+    if ( $getMenuLinks->num_rows == 0 )
     {
         buildError("<b>Template error:</b> No menu links was found in the CraftedWeb database!", NULL);
         echo "<br/>No menu links was found!";
@@ -42,7 +41,7 @@
     while ($row = $getMenuLinks->fetch_assoc())
     {
         $curr = substr($row['url'], 3);
-        if ($_GET['page'] == $curr)
+        if ( $_GET['page'] == $curr )
         {
             echo '<a href="' . $row['url'] . '" class="current">' . $row['title'] . '</a>';
         }

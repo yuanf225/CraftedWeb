@@ -20,16 +20,16 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    if ($compression['gzip'] == TRUE)
+    if ( DATA['website']['compression']['gzip'] == true )
     {
-        if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip"))
+        if ( substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], "gzip") )
         {
             ob_start("ob_gzhandler");
             ob_end_clean();
         }
     }
 
-    if ($compression['sanitize_output'] == TRUE)
+    if ( DATA['website']['compression']['sanitize_output'] == true )
     {
         function sanitize_output($buffer)
         {

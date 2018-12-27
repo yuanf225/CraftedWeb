@@ -24,6 +24,7 @@
 /**
  * Account Class 
  */
+
 class Account
 {
     public function logIn ($username, $password, $last_page, $remember)

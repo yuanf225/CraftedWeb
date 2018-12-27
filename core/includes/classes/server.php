@@ -55,10 +55,9 @@
         {
             global $Database;
 
-            $realmId = $Database->conn->escape_string($realm_id);
+            $realm_id = $Database->conn->escape_string($realm_id);
             //Get status
-            $server_response = fsockopen(DATA['characters']['host'], DATA['characters']['port'], $errno, $errstr, 1);
-            if ( $server_response === false )
+            if ( @(fsockopen(DATA['realms'][$realm_id]['host'], DATA['realms'][$realm_id]['port'], $errno, $errstr, 1)) === false )
             {
                 echo $status = "<h4 class='realm_status_title_offline'>Offline</h4>";
             }
@@ -71,7 +70,7 @@
                 /* Players online bar */
                 if ( DATA['website']['server_status']['faction_bar'] == true )
                 {
-                    $Database->selectDB('chardb', $realmId);
+                    $Database->selectDB('chardb', $realm_id);
 
                     $statement = $Database->select("characters", "COUNT(online) AS online", null, "online=1");
                     $result = $statement->get_result();
@@ -134,7 +133,7 @@
                 */
                 if ( DATA['website']['server_status']['players_online'] == true )
                 {
-                    $Database->selectDB('chardb', $conn, $realmId);
+                    $Database->selectDB('chardb', $realm_id);
 
                     $statement = $Database->select("characters", "COUNT(online) AS online", null, "online=1");
                     $getChars = $statement->get_result();
@@ -155,7 +154,7 @@
                 if ( DATA['website']['server_status']['uptime'] == true )
                 {
                     $Database->selectDB("logondb");
-                    $statement = $Database->select("uptime", "starttime", "realmid=$realmId ORDER BY starttime DESC LIMIT 1");
+                    $statement = $Database->select("uptime", "starttime", null, "realmid=$realm_id ORDER BY starttime DESC LIMIT 1");
                     $getUp = $statement->get_result();
                     $row   = $getUp->fetch_assoc();
                     $statement->close();
@@ -173,7 +172,7 @@
             if ( DATA['website']['server_status']['next_arena_flush'] == true )
             {
                 //Arena flush
-                $Database->selectDB('chardb', $realmId);
+                $Database->selectDB('chardb', $realm_id);
                 
                 $statement = $Database->select("worldstates", "value", null, "comment='NextArenaPointDistributionTime'");
                 $row      = $getFlush->fetch_assoc();

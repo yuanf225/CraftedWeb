@@ -25,7 +25,7 @@
 
     global $Account, $Database, $Server;
 
-    if (isset($_POST['element']) && $_POST['element'] == 'vote')
+    if ( isset($_POST['element']) && $_POST['element'] == 'vote' )
     {
         echo 'Vote Points: ' . $Account->loadVP($_POST['account']);
     }

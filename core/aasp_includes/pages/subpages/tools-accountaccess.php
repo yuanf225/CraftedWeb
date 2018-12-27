@@ -23,7 +23,7 @@
     global $GamePage, $GameServer, $GameAccount;
 
     $conn = $GameServer->connect();
-    $GameServer->selectDB("logondb", $conn);
+    $GameServer->selectDB("logondb");
 
     $GamePage->validatePageAccess("Tools->Account Access");
 ?>

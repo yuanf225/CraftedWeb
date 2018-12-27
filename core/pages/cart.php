@@ -27,24 +27,23 @@
     $Account->loadVP($_SESSION['cw_user']) . '<br/>' . 
     DATA['website']['donation']['coins_name'] . ': '. $Account->loadDP($_SESSION['cw_user']) . '</span>';
 
-    if (isset($_GET['return']) && $_GET['return'] == "TRUE")
+    if ( isset($_GET['return']) && $_GET['return'] == true )
     {
         echo "<span class='accept'>The item/s was/were sent to the selected character!</span>";
     }
-    elseif (isset($_GET['return']) && $_GET['return'] != "TRUE")
+    elseif ( isset($_GET['return']) && $_GET['return'] != true )
     {
         echo "<span class='alert'>" . $_GET['return'] . "</span>";
     }
 
-    $conn = $Database->database();
     $Account->isNotLoggedIn();
-    $Database->selectDB("webdb", $conn);
+    $Database->selectDB("webdb");
 
     $counter = 0;
     $totalDP = 0;
     $totalVP = 0;
 
-    if (isset($_SESSION['donateCart']) && !empty($_SESSION['donateCart']))
+    if ( isset($_SESSION['donateCart']) && !empty($_SESSION['donateCart']) )
     {
         $counter = 1;
 
@@ -61,8 +60,10 @@
 
                     $Database->selectDB(DATA['world']['database']);
                     $result = $Database->select("item_template", "maxcount", null, "entry=$entry AND maxcount>0")->get_result();
-                    if ($result->data_seek(0) != 0)
+                    if ( $result->data_seek(0) != 0 )
+                    {
                         $_SESSION['donateCart'][$entry]['quantity'] = 1;
+                    }
 
                     $Database->selectDB(DATA['website']['connection']['name']);
                 }
@@ -76,7 +77,7 @@
         <table width="100%" >
             <tr id="cartHead"><th>Name</th><th>Quantity</th><th>Price</th><th>Actions</th></tr>
             <?php
-            while ($row   = $query->fetch_array())
+            while ($row = $query->fetch_array())
             {
                 ?><tr align="center">
                     <td><a href="http://<?php echo DATA['website']['tooltip_href']; ?>item=<?php echo $row['entry']; ?>"><?php echo $row['name']; ?></a></td>
