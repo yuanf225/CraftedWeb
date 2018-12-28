@@ -18,10 +18,8 @@
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
-?>
-<?php
+
     define('INIT_SITE', TRUE);
-    require "configuration.php";
 
     if ( DATA['use_debug'] == false )
     {
@@ -35,7 +33,7 @@
 <hr/>
 
 <?php
-    if (isset($_GET['action']) && $_GET['action'] == 'clear')
+    if ( isset($_GET['action']) && $_GET['action'] == "clear" )
     {
         $errFile    = '../error.log';
         $fh         = fopen($errFile, 'w') or die("Can't open error file.");
@@ -46,9 +44,9 @@
         <meta http-equiv="Refresh" content="0; url=<?php echo $_SERVER['PHP_SELF']; ?>">
         <?php
     }
-    if (!$file = file_get_contents('../error.log'))
+    if ( !$file = file_get_contents('../error.log') )
     {
-        echo 'The script could not get any contents from the error.log file.';
+        echo "The script could not get any contents from the error.log file.";
     }
 
     echo str_replace('*', '<br/>', $file);

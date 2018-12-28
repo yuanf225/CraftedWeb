@@ -46,7 +46,7 @@
      */
     //The value is the Security Code generated from the IPN section of your AlertPay account. Please change it to yours.
     define("IPN_SECURITY_CODE", "NY86MQyPXGcUXJ2v");
-    define("MY_MERCHANT_EMAIL", "youremail@gmail.com");
+    define("MY_MERCHANT_EMAIL", DATA['website']['email']);
 
     //Setting information about the transaction
     $receivedSecurityCode         = $_POST['ap_securitycode'];
@@ -118,7 +118,7 @@
                     // DO NOT process this transaction as a real order.
                     global $Database;
 
-                    $Database->conn->select_db("craftedcms");
+                    $Database->conn->select_db("webdb");
 
                     $Database->conn->query("INSERT INTO paypal_payment_info (userid, paymentstatus, buyer_email, firstname, lastname) 
                       VALUES (". $myCustomField_1 .", '". $transactionStatus ."', '". $customerEmailAddress ."', '". $customerFirstName ."', '". $customerLastName ."');");

@@ -50,8 +50,7 @@ It's free, join us today! <hr><?php
     </tr>
     <?php
         if ( DATA['website']['registration']['captcha'] == true )
-        {
-            $_SESSION['captcha_numero'] = rand(0000, 9999); ?>
+        { ?>
             <tr>
                 <td align="right"></td>
                 <td><img src="../core/includes/misc/captcha.php" /></td>
@@ -59,9 +58,8 @@ It's free, join us today! <hr><?php
             <tr> 
                 <td align="right">Captcha:</td>
                 <td><input type="text" id="captcha" /></td>
-            </tr>
-    <?php }
-?>
+            </tr><?php 
+        } ?>
     <tr>
         <td></td>
         <td><hr/></td>
@@ -70,13 +68,13 @@ It's free, join us today! <hr><?php
     <tr>
         <td></td>
         <td>
-            <input type="submit" value="Register" onclick="register(<?php if ( DATA['website']['registration']['captcha'] == true ) echo 1; else echo 0; ?>)" id="register"/>
-            <?php
+            <input type="submit" value="Register" onclick="register(<?php if ( DATA['website']['registration']['captcha'] == true ) echo 1; else echo 0; ?>)" id="register"/><?php
                 include "documents/termsofservice.php";
                 if ($tos_enable == true)
                 { ?>
-                    <br/>By registering, you accept our <a href="#" onclick="viewTos()">Terms of Service</a>
-    <?php } ?>
+                    <br/>By registering, you accept our <a href="#" onclick="viewTos()">Terms of Service</a><?php
+                } ?>
+        </td>
     </tr>
 </table>
 <script type="text/javascript">
@@ -84,7 +82,7 @@ It's free, join us today! <hr><?php
     {
         var key_press = String.fromCharCode(event.keyCode);
         var key_code = event.keyCode;
-        if (key_code == 13)
+        if ( key_code == 13 )
         {
             register(<?php if ( DATA['website']['registration']['captcha'] == true ) echo 1; else echo 0; ?>)
         }

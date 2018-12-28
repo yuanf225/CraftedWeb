@@ -25,18 +25,18 @@
 
     global $Account, $Database, $Server;
 
-    if ( isset($_POST['element']) && $_POST['element'] == 'vote' )
+    if ( isset($_POST['element']) && $_POST['element'] == "vote" )
     {
-        echo 'Vote Points: ' . $Account->loadVP($_POST['account']);
+        echo "Vote Points: " . $Account->loadVP($_POST['account']);
     }
-    elseif (isset($_POST['element']) && $_POST['element'] == 'donate')
+    elseif ( isset($_POST['element']) && $_POST['element'] == "donate" )
     {
-        echo DATA['website']['donation']['coins_name'] . ': ' . $Account->loadDP($_POST['account']);
+        echo DATA['website']['donation']['coins_name'] . ": " . $Account->loadDP($_POST['account']);
     }
 ##
 #
 ##
-    if (isset($_POST['action']) && $_POST['action'] == 'removeComment')
+    if ( isset($_POST['action']) && $_POST['action'] == "removeComment" )
     {
         $Database->selectDB("webdb");
         $Database->conn->query("DELETE FROM news_comments WHERE id=". $Database->conn->escape_string($_POST['id']) .";");
@@ -62,7 +62,7 @@
 ##
     if ( isset($_POST['serverStatus']) )
     {
-        echo "<div class='box_one_title'>Server status</div>";
+        echo "<div class=\"box_one_title\">Server status</div>";
         $num = 0;
         if ( is_array(DATA['realms']) || is_object(DATA['realms']) )
         {
@@ -80,13 +80,10 @@
         {
             buildError("<b>No realms found: </b> Please setup your database and add your realm(s)!", NULL);
             echo "No realms found.";
-        }
-        unset($num);
-        ?>
+        } ?>
         <hr/>
         <span id="realmlist">set realmlist <?php echo DATA['website']['realmlist']; ?></span>
-        </div>
-        <?php
+        </div><?php
     }
 ##
 #   Donation List

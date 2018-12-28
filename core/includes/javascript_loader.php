@@ -26,39 +26,31 @@
 <?php
 
 ####SHOP CARTS####
-    if ($_GET['page'] == ' donateshop')
-    {
-        ?>
+    if ( $_GET['page'] == "donateshop" )
+    { ?>
         <script type="text/javascript">
             $(document).ready(function ()
             {
                 loadMiniCart("donateCart");
             });
-        </script>
-    <?php
-
+        </script><?php
     }
 
-    if ($_GET['page'] == 'voteshop')
-    {
-        ?>
+    if ( $_GET['page'] == "voteshop" )
+    { ?>
         <script type="text/javascript">
             $(document).ready(function ()
             {
                 loadMiniCart("voteCart");
             });
-        </script>
-    <?php
-
+        </script><?php
     }
 
     if ( DATA['use']['slideshow'] == TRUE )
-    {
-        ?>
-        <script type="text/javascript" src="core/javascript/slideshow.js"></script>
-        <?php
-
+    { ?>
+        <script type="text/javascript" src="core/javascript/slideshow.js"></script><?php
     }
+
     if ( DATA['website']['expansion'] > 2 )
     {
         echo '<script type="text/javascript" src="http://static.wowhead.com/widgets/power.js"></script>';
@@ -69,9 +61,8 @@
     }
 
 ####CURSOR TRACKER####
-    if ($_GET['page'] == 'donateshop' || $_GET['page'] == 'voteshop')
-    {
-        ?>
+    if ( $_GET['page'] == "donateshop" || $_GET['page'] == "voteshop" )
+    { ?>
         <script type="text/javascript">
             $(document).ready(function ()
             {
@@ -81,50 +72,42 @@
                 });
             });
         </script><?php
-
     }
 
 ####FACEBOOK####
     if ( DATA['social']['facebook_module'] == true )
-    {
-        ?>
+    { ?>
         <script type="text/javascript">
             $(document).ready(function ()
             {
                 var box_width_one = $(".box_one").width();
-                $("#fb").attr('width', box_width_one);
+                $("#fb").attr("width", box_width_one);
             });
-        </script>
-        <?php
-
+        </script> <?php
     }
 
 ####SERVER STATUS######
     if ( DATA['website']['server_status']['enable'] == true )
-    {
-        ?>
+    { ?>
         <script type="text/javascript">
             $(document).ready(function ()
             {
-                $.post("core/includes/scripts/misc.php", {serverStatus: true},
-                        function (data)
+                $.post("core/includes/scripts/misc.php", 
+                    {serverStatus: true},
+                    function (data)
+                    {
+                        $("#server_status").html(data);
+                        $(".srv_status_po").hover(function ()
                         {
-                            $("#server_status").html(data);
-                            $(".srv_status_po").hover(function ()
-                            {
-                                $(".srv_status_text").fadeIn("fast");
-                            },
-                                    function ()
-                                    {
-                                        $(".srv_status_text").fadeOut("fast");
-                                    });
+                            $(".srv_status_text").fadeIn("fast");
+                        },
+                        function ()
+                        {
+                            $(".srv_status_text").fadeOut("fast");
                         });
+                    });
             });
-        </script>
-        <?php
-
+        </script><?php
     }
-    global $Plugins;
-    $Plugins->load('javascript');
-?>
-
+global $Plugins;
+$Plugins->load('javascript');

@@ -29,7 +29,7 @@
 
     global $Database, $Server, $Character, $Account;
 
-    if ( $_POST['action'] == 'unstuck' )
+    if ( $_POST['action'] == "unstuck" )
     {
         $guid     = $Database->conn->escape_string($_POST['guid']);
         $realm_id = $Server->getRealmId($_POST['char_db']);
@@ -38,7 +38,7 @@
         $Character->unstuck($guid, $_POST['char_db']);
     }
 
-    if ( $_POST['action'] == 'revive' )
+    if ( $_POST['action'] == "revive" )
     {
         $guid     = $Database->conn->escape_string($_POST['guid']);
         $realm_id = $Server->getRealmId($_POST['char_db']);
@@ -47,7 +47,7 @@
         $Character->revive($guid, $_POST['char_db']);
     }
 
-    if ( $_POST['action'] == 'getLocations' )
+    if ( $_POST['action'] == "getLocations" )
     {
         $values = explode('*', $_POST['values']);
 
@@ -120,7 +120,7 @@
         }
     }
 
-    if ( $_POST['action'] == 'teleport' )
+    if ( $_POST['action'] == "teleport" )
     {
         $character = $Database->conn->escape_string($_POST['character']);
         $char_db   = $Database->conn->escape_string($_POST['char_db']);
@@ -128,11 +128,11 @@
 
         $realm_id = $Server->getRealmId($_POST['char_db']);
         $Database->realm($realm_id);
-        $statement   = $Database->select("characters", "race, account, level, online", null, "guid=$character");
+        $statement   = $Database->select("characters", "race, account, level, online", null, "guid='$character'");
         $result = $statement->get_result();
         if ( $result->num_rows == 0 )
         {
-            die("<span class='alert'>The character does not exist on that account!</span>");
+            die("<span class=\"alert\">The character does not exist on that account!</span>");
         }
         else
         {
@@ -163,7 +163,7 @@
                 }
             }
 
-            $map = $x   = $y   = $z   = null;
+            $map = $x = $y = $z = null;
 
             switch ($location)
             {
@@ -249,7 +249,7 @@
                 case 7:
                 case 11:
                     if ((($location >= 5) && ($location <= 8)) && ($location != 9))
-                        die("<span class='alert'>Alliance players can <b>NOT</b> Teleport to Horde areas!</span>");
+                        die("<span class=\"alert\">Alliance players can <b>NOT</b> Teleport to Horde areas!</span>");
                     break;
 
                 //horde
@@ -259,17 +259,17 @@
                 case 8:
                 case 10:
                     if ((($location >= 1) && ($location <= 4)) && ($location != 9))
-                        die("<span class='alert'>Horde Players can <b>NOT</b> Teleport to Alliance areas!</span>");
+                        die("<span class=\"alert\">Horde Players can <b>NOT</b> Teleport to Alliance areas!</span>");
                     break;
 
                 default:
-                    die("<span class='alert'>That is not a valid Race!</span>");
+                    die("<span class=\"alert\">That is not a valid Race!</span>");
                     break;
             }
 
             if ( $location == "Dalaran" && $level < 68 )
             {
-                die("Aborting...<br/><span class='alert'>Your character must be level 68 or higher to teleport to Northrend!</span>");
+                die("Aborting...<br/><span class=\"alert\">Your character must be level 68 or higher to teleport to Northrend!</span>");
             }
 
             if ( DATA['service']['teleport']['currency'] == "vp" )
@@ -284,7 +284,7 @@
             $Database->realm($realm_id);
 
             //get pos x, y etc for the logs.
-            $statement = $Database->select("characters", "position_x, position_y, position_z, map", null, "guid=$character";
+            $statement = $Database->select("characters", "position_x, position_y, position_z, map", null, "guid='$character'");
             $result = $statement->get_result();
             $pos    = $result->fetch_assoc();
             $statement->close();
@@ -293,15 +293,14 @@
             $char_y   = $pos['position_y'];
             $char_z   = $pos['position_z'];
             $char_map = $pos['map'];
-            $from     = "X: " . $char_x . " - Y: " . $char_y . " - Z: " . $char_z . " - MAP ID: " . $char_map;
+            $from     = "X: ". $char_x ." - Y: ". $char_y ." - Z: ". $char_z ." - MAP ID: ". $char_map;
 
-            $set = array
-            (
+            $set = [
                 "position_x" => $x, 
                 "position_y" => $y, 
                 "position_z" => $z, 
                 "map" => $map 
-            );
+            ];
             $Database->update("characters", $set, array("account" => $acct, "guid" => $character));
 
             if ( DATA['service']['teleport']['currency'] == "vp" )
@@ -310,14 +309,14 @@
             }
             elseif ( DATA['service']['teleport']['currency'] == "dp" )
             {
-                echo DATA['service']['teleport']['price'] . " " . DATA['website']['donation']['coins_name'] . " was taken from your account.";
+                echo DATA['service']['teleport']['price'] ." ". DATA['website']['donation']['coins_name'] ." was taken from your account.";
             }
-            $Account->logThis("Teleported " . $Character->getCharName($character, $realm_id) . " to " . $location, 'Teleport', $realm_id);
+            $Account->logThis("Teleported ". $Character->getCharName($character, $realm_id) ." to ". $location, "Teleport", $realm_id);
             echo TRUE;
         }
     }
 
-    if ( $_POST['action'] == 'service' )
+    if ( $_POST['action'] == "service" )
     {
         $guid     = $Database->conn->escape_string($_POST['guid']);
         $realm_id = $Database->conn->escape_string($_POST['realm_id']);
@@ -326,20 +325,22 @@
 
         if ( $Character->isOnline($guid) == TRUE )
         {
-            die('<b class="red_text">Please log out your character before proceeding.');
+            die("<b class=\"red_text\">Please log out your character before proceeding.");
         }
 
         if ( DATA['service'][$serviceX]['currency'] == 'vp' )
         {
-            if ($Account->hasVP($_SESSION['cw_user'], DATA['service'][$serviceX]['price']) == false)
-                die('<b class="red_text">Not enough Vote Points!</b>');
+            if ( $Account->hasVP($_SESSION['cw_user'], DATA['service'][$serviceX]['price']) == false )
+            {
+                die("<b class=\"red_text\">Not enough Vote Points!</b>");
+            }
         }
 
         if ( DATA['service'][$serviceX]['currency'] == 'dp' )
         {
-            if ($Account->hasDP($_SESSION['cw_user'], DATA['service'][$serviceX]['price']) == false)
+            if ( $Account->hasDP($_SESSION['cw_user'], DATA['service'][$serviceX]['price']) == false )
             {
-                die('<b class="red_text">Not enough ' . DATA['website']['donation']['coins_name'] . '</b>');
+                die("<b class=\"red_text\">Not enough ". DATA['website']['donation']['coins_name'] ."</b>");
             }
         }
 
@@ -371,34 +372,30 @@
         }
 
         $Database->selectDB("webdb", $Database->conn);
-        $statement = $Database->select("realms", null, null, "id=$realm_id");
+        $statement = $Database->select("realms", null, null, "id='$realm_id'");
         $result = $statement->get_result();
         $row   = $result->fetch_assoc();
 
-        if ( $row['sendType'] == 'ra' )
+        if ( $row['sendType'] == "ra" )
         {
-            require "../misc/ra.php";
-
-            sendRa("character " . $command . " " . $Character->getCharname($guid, $realm_id), $row['rank_user'], $row['rank_pass'], $row['host'], $row['ra_port']);
+            $Server->sendRA("character ". $command ." ". $Character->getCharname($guid, $realm_id), $row['rank_user'], $row['rank_pass'], $row['host'], $row['ra_port']);
         }
         elseif ( $row['sendType'] == "soap" )
         {
-            require "../misc/soap.php";
-
-            sendSoap("character " . $command . " " . $Character->getCharname($guid, $realm_id), $row['rank_user'], $row['rank_pass'], $row['host'], $row['soap_port']);
+            $Server->sendSoap("character ". $command ." ". $Character->getCharname($guid, $realm_id), $row['rank_user'], $row['rank_pass'], $row['host'], $row['soap_port']);
         }
 
-        if ( DATA['service'][$serviceX]['currency'] == 'vp' )
+        if ( DATA['service'][$serviceX]['currency'] == "vp" )
         {
             $Account->deductVP($Account->getAccountID($_SESSION['cw_user']), DATA['service'][$serviceX]['price']);
         }
 
-        if ( DATA['service'][$serviceX]['currency'] == 'dp' )
+        if ( DATA['service'][$serviceX]['currency'] == "dp" )
         {
             $Account->deductDP($Account->getAccountID($_SESSION['cw_user']), DATA['service'][$serviceX]['price']);
         }
 
-        $Account->logThis("Performed a " . $info . " on " . $Character->getCharName($guid, $realm_id), $serviceX, $realm_id);
+        $Account->logThis("Performed a $info on ". $Character->getCharName($guid, $realm_id), $serviceX, $realm_id);
 
         echo TRUE;
     }

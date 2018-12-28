@@ -29,11 +29,9 @@
         exit;
     }
 
-    define('INIT_SITE', TRUE);
+    define("INIT_SITE", TRUE);
     require "core/includes/misc/connect.php"; //Load connection class
-
     $Database = new Database();
-
 
     ###LOAD MAXIMUM ITEM LEVEL DEPENDING ON EXPANSION###
     switch(DATA['website']['expansion']) 
@@ -94,7 +92,7 @@
     require "core/includes/classes/shop.php";
     require "core/includes/classes/website.php";
 
-    global $Plugins, $Account, $Website;
+    global $Account, $Character, $Plugins, $Server, $Shop, $Website;
     $Plugins = new Plugins();
 
     /********** LOAD PLUGINS ***********/
@@ -126,10 +124,10 @@
 
     $Account->getRemember(); //Remember thingy.
     
-    //This is to prevent the error "Undefined index: p"
+    //This is to prevent the error "Undefined index: page"
     if ( !isset($_GET['page']) )
     {
-        $_GET['page'] = 'home';
+        $_GET['page'] = "home";
     }
 
 ###VOTING SYSTEM####
@@ -146,14 +144,14 @@
 
         $Database->selectDB("webdb");
 
-        $insert_values = array
-        (
+        $insert_values =
+        [
             "siteid" => $Database->conn->escape_string($_SESSION['votingUrlID']),
             "userid" => $accound_id,
             "timestamp" => time(),
             "next_vote" => $next_vote,
             "ip" => $_SERVER['REMOTE_ADDR']
-        );
+        ];
 
         $Database->insert("votelog", $insert_values);
 

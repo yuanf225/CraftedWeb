@@ -30,20 +30,20 @@
     </title>
 
     <?php
-        $content = new Page( "core/styles/". $template['path'] ."/template.html" );
+        $content = new Page("core/styles/". $template['path'] ."/template.html");
 
         $content->loadCustoms(); //Load custom modules
 
-        $content->replace_tags( array('content' 	=> 'core/modules/content.php') ); //Main content 
-        $content->replace_tags( array('menu' 		=> 'core/modules/menu.php') );
-        $content->replace_tags( array('login' 		=> 'core/modules/login.php') );
-        $content->replace_tags( array('account' 	=> 'core/modules/account.php') );
-        $content->replace_tags( array('serverstatus' => 'core/modules/server_status.php') );
-        $content->replace_tags( array('slideshow' 	=> 'core/modules/slideshow.php') );
-        $content->replace_tags( array('footer' 		=> 'core/modules/footer.php') );
-        $content->replace_tags( array('loadjava' 	=> 'core/includes/javascript_loader.php') );
-        $content->replace_tags( array('social' 		=> 'core/modules/social.php') );
-        $content->replace_tags( array('alert' 		=> 'core/modules/alert.php') );
+        $content->replace_tags( ['content'      => 'core/modules/content.php'] ); //Main content 
+        $content->replace_tags( ['menu'         => 'core/modules/menu.php'] );
+        $content->replace_tags( ['login'        => 'core/modules/login.php'] );
+        $content->replace_tags( ['account'      => 'core/modules/account.php'] );
+        $content->replace_tags( ['serverstatus' => 'core/modules/server_status.php'] );
+        $content->replace_tags( ['slideshow'    => 'core/modules/slideshow.php'] );
+        $content->replace_tags( ['footer'       => 'core/modules/footer.php'] );
+        $content->replace_tags( ['loadjava'     => 'core/includes/javascript_loader.php'] );
+        $content->replace_tags( ['social'       => 'core/modules/social.php'] );
+        $content->replace_tags( ['alert'        => 'core/modules/alert.php'] );
     ?>
 </head>
 
