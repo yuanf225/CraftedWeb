@@ -25,7 +25,9 @@
 Please log in to view this page. <hr/>
 <?php
     if (isset($_POST['x_login']))
+    {
         $Account->logIn($_POST['x_username'], $_POST['x_password'], $_POST['x_redirect'], $_POST['x_remember']);
+    }
 ?>
 <form action="?page=login" method="post">
     <table>

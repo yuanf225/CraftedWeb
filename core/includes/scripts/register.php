@@ -34,7 +34,7 @@
         $password        = $Database->conn->escape_string(trim($_POST['password']));
         $repeat_password = $Database->conn->escape_string(trim($_POST['password_repeat']));
         $captcha         = $Database->conn->escape_string($_POST['captcha']);
-        $raf             = $Database->conn->escape_string($_POST['raf']);
+        $raf             = @$Database->conn->escape_string($_POST['raf']);
 
         $Account->register($username, $email, $password, $repeat_password, $captcha, $raf);
         echo TRUE;
@@ -46,7 +46,7 @@
         {
             $username = $Database->conn->escape_string($_POST['value']);
 
-            $statement = $Database->select("account", null, null, "username=$username");
+            $statement = $Database->select("account", null, null, "username='$username'");
             $result = $statement->get_result();
             if ( $result->num_rows > 0 )
             {

@@ -27,7 +27,7 @@
 
 class Account
 {
-    public function logIn ($username, $password, $last_page, $remember)
+    public function logIn($username, $password, $last_page, $remember)
     {
         if ( empty($username) || empty($password) )
         {
@@ -41,7 +41,7 @@ class Account
 
         $Database->selectDB("logondb", $Database->conn);
         
-        $statement = $Database->select("account", "COUNT(ID) AS username", null, "username=$username");
+        $statement = $Database->select("account", "COUNT(id) AS username", null, "username='$username'");
         $checkForAccount = $statement->get_result();
 
         if ( $checkForAccount->fetch_assoc()['username'] == 0 )
@@ -55,12 +55,11 @@ class Account
                 $password = sha1( $username .":". $password );
             }
 
-            $statement = $Database->select("account", "id", null, "username=$username AND sha_pass_hash=$password");
+            $statement = $Database->select("account", "id", null, "username='$username' AND sha_pass_hash='$password'");
             $result = $statement->get_result();
             if ( $result->num_rows == 0 )
             {
                 echo "<span class=\"red_text\">Wrong password.</span>";
-                exit;
             }
             
             # Set "remember me" cookie. Expires in 1 week
@@ -79,7 +78,7 @@ class Account
 
             $Database->selectDB("webdb");
 
-            $statement = $Database->select("account_data", "COUNT(*)", null, "id=$id");
+            $statement = $Database->select("account_data", "COUNT(*)", null, "id='$id'");
             $count = $statement->get_result();
             if ( $count->data_seek(0) == 0 )
             {
@@ -107,7 +106,7 @@ class Account
         global $Database;
         $Database->selectDB("logondb");
 
-        $statement = $Database->select("account", "id,username,email,joindate,locked,last_ip,expansion", null, "username=".$_SESSION['cw_user']);
+        $statement = $Database->select("account", "id,username,email,joindate,locked,last_ip,expansion", null, "username='".$_SESSION['cw_user']."'");
         $account_info = $statement->get_result();
         while ($row = $account_info->fetch_array())
         {
@@ -194,7 +193,7 @@ class Account
         $Database->selectDB("logondb");
 
         # Check for existing user
-        $statement = $Database->select("account", "COUNT(id) AS user", null, "username=$username");
+        $statement = $Database->select("account", "COUNT(id) AS user", null, "username='$username'");
         $result = $statement->get_result();
 
         if ( $result->fetch_assoc()['user'] > 1 )
@@ -236,7 +235,7 @@ class Account
                 buildError("Could not create user!", null, $Database->conn->error);
             }
 
-            $statement = $Database->select("account", "id", null, "username=$username");
+            $statement = $Database->select("account", "id", null, "username='$username'");
             $getID = $statement->get_result();
             $row   = $getID->fetch_assoc();
 
@@ -244,7 +243,7 @@ class Account
             $Database->insert("account_data", "id", $row['id']);
 
             $Database->selectDB("logondb");
-            $result = $Database->select("account", "id", null, "username=$username_clean");
+            $result = $Database->select("account", "id", null, "username='$username_clean'");
             $id     = $result->fetch_assoc();
             $id     = $id['id'];
 
@@ -338,7 +337,7 @@ class Account
 
         $acct_id = $this->getAccountID($user);
 
-        $statement = $Database->select("account_banned", "bandate, unbandate, banreason", null, "id=$acct_id AND active=1");
+        $statement = $Database->select("account_banned", "bandate, unbandate, banreason", null, "id='$acct_id' AND active=1");
         $result = $statement->get_result();
         if ( $result->num_rows > 0 )
         {
@@ -374,7 +373,7 @@ class Account
 
         $Database->selectDB("logondb");
 
-        $statement = $Database->select("account", "id", null, "username=$user");
+        $statement = $Database->select("account", "id", null, "username='$user'");
         $result = $statement->get_result();
         $row    = $result->fetch_assoc();
 
@@ -388,7 +387,7 @@ class Account
 
         $Database->selectDB("logondb");
 
-        $statement = $Database->select("account", "username", "id=$id");
+        $statement = $Database->select("account", "username", "id='$id'");
         $result = $statement->get_result();
         $row    = $result->fetch_assoc();
 
@@ -421,7 +420,7 @@ class Account
 
         $Database->selectDB("webdb");
 
-        $statement = $Database->select("account_data", "vp", null, "id=$acct_id");
+        $statement = $Database->select("account_data", "vp", null, "id='$acct_id'");
         $result = $statement->get_result();
         if ( $result->num_rows == 0 )
         {
