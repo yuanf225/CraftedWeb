@@ -246,8 +246,14 @@
         echo "<br>[Success] Connected to Website database.
         <br>[Info] Creating tables & inserting data into Website database...";
 
-        $f        = fopen("sql/CraftedWeb_Base.sql", "r+");
-        $sqlFile  = fread($f, filesize("sql/CraftedWeb_Base.sql"));
+        $sql_folder = "sql/CraftedWeb_Base.sql";
+        if ( !is_readable($sql_folder) )
+        {
+            die("<br>[Warning] The $sql_folder folder is not readable or does not exist!");
+        }
+
+        $folder   = fopen($sql_folder, "r+");
+        $sqlFile  = fread($folder, filesize($sql_folder));
         $sqlArray = explode(";", $sqlFile);
 
         if ( is_array($sqlArray) || is_object($sqlArray) )
@@ -257,7 +263,9 @@
                 if ( strlen($stmt) > 3 )
                 {
                     if ( !$conn->query($stmt) )
+                    {
                         die("<br>[FAILURE] Could not run SQL file for the Website database. Please <a href=\"./index.php\"restart</a> the installation. (". $conn->error .")");
+                    }
                 }
             }
         }
@@ -265,9 +273,14 @@
         echo "<br>[Success] SQL file imported successfully!
         <br>[Info] (Optional) Trying to import <i>item_icons</i> into Website database.";
 
-        $f        = fopen("sql/item_icons.sql", "r+");
-        $sqlFile2 = fread($f, filesize("sql/item_icons.sql"));
-        $sqlArray = explode(";", $sqlFile2);
+        $item_icons_folder = "sql/item_icons.sql";
+        if ( !is_readable($item_icons_folder) )
+        {
+            die("<br>[Error] The $item_icons_folder folder is not readable or does not exist!");
+        }
+        $folder     = fopen($item_icons_folder, "r+");
+        $icons      = fread($folder, filesize($item_icons_folder));
+        $sqlArray   = explode(";", $icons);
 
         if ( is_array($sqlArray) || is_object($sqlArray) )
         {
@@ -487,22 +500,24 @@
                 ),
         );
         
-
-        if ( !$fp = fopen("../core/includes/configuration.json", "w") )
+        $config_file = "../core/includes/configuration.json";
+        if ( !is_writeable($config_file) )
+        {
+            die("<br>[Error] The file ($config_file) is not writable, cannot end website installation!");
+        }
+        if ( !$fp = fopen($config_file, "w") )
         {
             die("<br/>[FAILURE] Could not write Configuration file. Please <a href=\"./index.php\">restart</a> the installation.");;
         }
-        else
-        {
-            $json_config = json_encode($config);
-            fwrite($fp, $json_config);
-            fclose($fp);
+        
+        $json_config = json_encode($config);
+        fwrite($fp, $json_config);
+        fclose($fp);
 
-            echo "<br>[Success] Configuration file was written!";
+        echo "<br>[Success] Configuration file was written!";
 
-            echo "<hr>Installation proccess finished. <a href=\"?step=4\">Click here to continue</a>";
-            exit;
-        }
+        echo "<hr>Installation proccess finished. <a href=\"?step=4\">Click here to continue</a>";
+        exit;
     }
 
 

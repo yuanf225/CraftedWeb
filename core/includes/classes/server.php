@@ -59,11 +59,11 @@ class Server
         //Get status
         if ( @(fsockopen(DATA['realms'][$realm_id]['host'], DATA['realms'][$realm_id]['port'], $errno, $errstr, 1)) === false )
         {
-            echo $status = "<h4 class='realm_status_title_offline'>Offline</h4>";
+            echo "<h4 class=\"text-center\">Offline</h4>";
         }
         else
         {
-            echo $status = "<h4 class='realm_status_title_online'>Online</h4>";
+            echo $status = "<h4 class=\"text-center\">Online</h4>";
 
             echo "<span class='realm_status_text'>";
 

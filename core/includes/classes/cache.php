@@ -69,6 +69,8 @@ class Cache
 			}
 		}
 
+		opcache_compile_file("core/includes/javascript_loader.php");
+
 		//opcache_compile_file("../../../../index.php");
 	}
 

@@ -91,8 +91,9 @@
     require "core/includes/classes/server.php";
     require "core/includes/classes/shop.php";
     require "core/includes/classes/website.php";
+    require "core/includes/Messages.php";
 
-    global $Account, $Character, $Plugins, $Server, $Shop, $Website;
+    global $Account, $Character, $Plugins, $Server, $Shop, $Website, $Messages;
     $Plugins = new Plugins();
 
     /********** LOAD PLUGINS ***********/

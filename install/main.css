@@ -1,4 +1,4 @@
-::selection
+/*::selection
 { 
 	background-color: #06C; color: #fff; 
 }
@@ -92,4 +92,12 @@ input[type="submit"]:hover
 table
 {
 	empty-cells: show;
+}*/
+
+.centered
+{
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }

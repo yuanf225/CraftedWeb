@@ -36,6 +36,10 @@ CraftedWeb has a plethora of features, outlined below.
 > \* Feature exists, is not fully functional currently.
 
 ## How does CraftedWeb Look?
+### New
+![Installer](https://i.imgur.com/86ZJGUD.png)
+
+### Old
 ![Account Registration](https://i.imgur.com/XlPfzAo.jpg)
 
 ![Vote Shop, tooltips, and account management](https://i.imgur.com/dakZszR.jpg)

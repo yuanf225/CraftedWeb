@@ -64,15 +64,15 @@
     {
         echo "<div class=\"box_one_title\">Server status</div>";
         $num = 0;
-        if ( is_array(DATA['realms']) || is_object(DATA['realms']) )
+        if ( is_array(DATA['realms']) )
         {
-            foreach (DATA['realms'] as $k => $v)
+            foreach (array_keys(DATA['realms']) as $realm_id)
             {
-                if ($num != 0)
+                if ( $num != 0 )
                 {
-                    echo "<hr/>";
+                    echo "<hr>";
                 }
-                $Server->serverStatus($k);
+                $Server->serverStatus($realm_id);
                 $num++;
             }
         }
@@ -81,7 +81,7 @@
             buildError("<b>No realms found: </b> Please setup your database and add your realm(s)!", NULL);
             echo "No realms found.";
         } ?>
-        <hr/>
+        <hr>
         <span id="realmlist">set realmlist <?php echo DATA['website']['realmlist']; ?></span>
         </div><?php
     }

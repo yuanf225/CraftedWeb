@@ -23,7 +23,7 @@
 
     require "../ext_scripts_class_loader.php";
 
-    global $Database, $Account;
+    global $Database, $Account, $Messages;
 
     $Database->selectDB("logondb");
 
@@ -48,11 +48,11 @@
         $result = $statement->get_result();
         if ( $result->num_rows > 0 )
         {
-            echo "<i class=\"red_text\">This username is not available</i>";
+            $Messages->error("This username is not available", false);
         }
         else
         {
-            echo "<i class=\"green_text\">This username is available</i>";
+            $Messages->success("This username is available", false);
         }
         $statement->close();
     }

@@ -29,15 +29,16 @@ class Account
 {
     public function logIn($username, $password, $last_page, $remember)
     {
+        global $Messages;
         if ( empty($username) || empty($password) )
         {
-            echo "<span class=\"red_text\">Please enter both fields.</span>";
-            exit;
+            $Messages->error("Please enter both fields");
+            return null;
         }
         global $Database;
 
-        $username   = $Database->conn->escape_string( trim( strtoupper($username) ) );
-        $password   = $Database->conn->escape_string( trim( strtoupper($password) ) );
+        $username = $Database->conn->escape_string( strtoupper($username) );
+        $password = $Database->conn->escape_string( strtoupper($password) );
 
         $Database->selectDB("logondb", $Database->conn);
         
@@ -45,56 +46,56 @@ class Account
 
         if ( $checkForAccount->num_rows == 0 )
         {
-            echo "<span class=\"red_text\">Invalid username.</span>";
+            $Messages->error("username and password don't match");
+            return;
+        }
+        
+        if ( $remember != 835727313 )
+        {
+            $password = sha1( $username .":". $password );
+        }
+
+        $statement = $Database->select("account", "id", null, "username='$username' AND sha_pass_hash='$password'");
+        $result = $statement->get_result();
+        if ( $result->num_rows == 0 )
+        {
+            $Messages->error("Wrong password");
+            return;
+        }
+        
+        # Set "remember me" cookie. Expires in 1 week
+        if ( $remember == "on" )
+        {
+            setcookie("cw_rememberMe", $username ." * ". $password, time() + ( (60*60)*24)*7);
+        }
+
+        $id = $result->fetch_assoc()['id'];
+
+        $this->GMLogin($username);
+        $_SESSION['cw_user']    = ucfirst(strtolower($username));
+        $_SESSION['cw_user_id'] = $id;
+
+        $statement->close();
+
+        $Database->selectDB("webdb");
+
+        $statement = $Database->select("account_data", "COUNT(*)", null, "id='$id'");
+        $count = $statement->get_result();
+        if ( $count->data_seek(0) == 0 )
+        {
+            $Database->insert("account_data", "id", $id);
+        }
+        $statement->close();
+
+        if ( !empty($last_page) )
+        {
+            header("Location: $last_page");
+            exit;
         }
         else
         {
-            if ( $remember != 835727313 )
-            {
-                $password = sha1( $username .":". $password );
-            }
-
-            $statement = $Database->select("account", "id", null, "username='$username' AND sha_pass_hash='$password'");
-            $result = $statement->get_result();
-            if ( $result->num_rows == 0 )
-            {
-                echo "<span class=\"red_text\">Wrong password.</span>";
-            }
-            
-            # Set "remember me" cookie. Expires in 1 week
-            if ( $remember == "on" )
-            {
-                setcookie("cw_rememberMe", $username ." * ". $password, time() + ( (60*60)*24)*7);
-            }
-
-            $id = $result->fetch_assoc()['id'];
-
-            $this->GMLogin($username);
-            $_SESSION['cw_user']    = ucfirst(strtolower($username));
-            $_SESSION['cw_user_id'] = $id;
-
-            $statement->close();
-
-            $Database->selectDB("webdb");
-
-            $statement = $Database->select("account_data", "COUNT(*)", null, "id='$id'");
-            $count = $statement->get_result();
-            if ( $count->data_seek(0) == 0 )
-            {
-                $Database->insert("account_data", "id", $id);
-            }
-            $statement->close();
-
-            if ( !empty($last_page) )
-            {
-                header("Location: $last_page");
-                exit;
-            }
-            else
-            {
-                header("Location: index.php");
-                exit;
-            }
+            header("Location: index.php");
+            exit;
         }
     }
 
@@ -155,7 +156,7 @@ class Account
         }
         else
         {
-            session_start();
+            @session_start();
             if ( DATA['website']['registration']['captcha'] == TRUE && defined("CAPTCHA_VALUE") )
             {
                 if ( $captcha != CAPTCHA_VALUE )
@@ -233,11 +234,20 @@ class Account
 
             $Database->selectDB("logondb");
 
-            $result = $Database->insert("account", array("username", "email", "sha_pass_hash", "joindate", "expansion", "recruiter"), array($username, $email, $password, date("Y-m-d H:i:s"), DATA['website']['core_expansion']), $raf)->get_result();
-
-            if ( !$result )
+            $statement = $Database->insert("account", 
+                [
+                    "username" => $username, 
+                    "email" => $email, 
+                    "sha_pass_hash" => $password, 
+                    "joindate" => date("Y-m-d H:i:s"), 
+                    "expansion" => DATA['website']['expansion'], 
+                    "recruiter" => $raf
+                ]);
+            if ( !empty($statement->error) )
             {
-                buildError("Could not create user!", null, $Database->conn->error);
+                global $Messages;
+                $Messages->error("Error Contact An Admin!");
+                return;
             }
 
             $statement = $Database->select("account", "id", null, "username='$username'");
@@ -245,7 +255,7 @@ class Account
 
             $Database->selectDB("webdb");
 
-            $Database->insert("account_data", "id", $row['id']);
+            $Database->insert("account_data", ["id" => $row['id']]);
 
             $Database->selectDB("logondb");
             $result = $Database->select("account", "id", null, "username='$username_clean'");
@@ -495,11 +505,11 @@ class Account
         $result = $statement->get_result();
         if ( $result->fetch_assoc()['online'] == 0 )
         {
-            return '<b class="red_text">Offline</b>';
+            return "<b style=\"color:red;\">Offline</b>";
         }
         else
         {
-            return '<b class="green_text">Online</b>';
+            return "<b style=\"color:green;\">Online</b>";
         }
     }
 

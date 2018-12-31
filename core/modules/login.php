@@ -18,29 +18,30 @@
 #                  or any other files are protected. You cannot re-release    
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
-    if ( !isset($_SESSION['cw_user']) )
+if ( !isset($_SESSION['cw_user']) )
+{ ?>
+    <h4>Account Management</h4><?php
+    if ( isset($_POST['login']) )
     {
-        if ( isset($_POST['login']) )
-        {
-            global $Account;
-            $Account->logIn($_POST['login_username'], $_POST['login_password'], $_SERVER['REQUEST_URI'], $_POST['login_remember']);
-        } ?>
-        <div class="box_one">
-            <div class="box_one_title">Account Management</div> 
-            <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST">
-                <fieldset style="border: none; margin: 0; padding: 0;">
-                    <input type="text"      placeholder="Username..." name="login_username" class="login_input" /><br/>
-                    <input type="password"  placeholder="Password..." name="login_password" class="login_input" style="margin-top: -1px;" /><br/>
-                    <input type="submit" value="Log In" name="login" style="margin-top: 4px;" /> 
-                    <input type="checkbox" name="login_remember" checked="checked"/> Remember me
-                </fieldset>    
-            </form> 
-            <br/>
-            <table width="100%">
-                <tr>
-                    <td><a href="?page=register">Create an account</a></td>
-                    <td align="right"><a href="?page=forgotpw">Forgot your Password?</a></td>
-                </tr>
-            </table>
-        </div><?php
-    } ?>
+        global $Account;
+        $Account->logIn($_POST['login_username'], $_POST['login_password'], $_SERVER['REQUEST_URI'], $_POST['login_remember']);
+    }
+    ?><form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <input class="form-control" type="text" placeholder="Username..." name="login_username" /><br/>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+            <input class="form-control" type="password" placeholder="Password..." name="login_password" /><br/>
+        </div>
+        <div class="form-group">
+            <input class="form-control btn btn-default" type="submit" value="Log In" name="login" /> 
+        </div>
+        <div class="form-group">
+            <label><input type="checkbox" name="login_remember" checked="checked"/> Remember me</label>
+        </div>
+        <small><a href="?page=register">Create an account</a></small><br>
+        <small><a href="?page=forgotpw">Forgot your Password?</a></small>
+    </form><?php
+} ?>

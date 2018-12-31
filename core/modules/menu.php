@@ -20,34 +20,35 @@
 #                  anywhere unless you were given permission.                 
 #                  � Nomsoftware 'Nomsoft' 2011-2012. All rights reserved.    
 
-    global $Database;
-    $Database->selectDB("webdb");
+global $Database;
+$Database->selectDB("webdb");
 
-    if ( !isset($_SESSION['cw_user']) )
+if ( !isset($_SESSION['cw_user']) )
+{
+    $sql = "shownWhen LIKE('always') OR shownWhen LIKE('notlogged')";
+}
+else
+{
+    $sql = "shownWhen LIKE('always') OR shownWhen LIKE('logged')";
+}
+$getMenuLinks = $Database->select("site_links", null, null, $sql." ORDER BY position ASC")->get_result();
+if ( $getMenuLinks->num_rows == 0 )
+{
+    buildError("<b>Template error:</b> No menu links was found in the CraftedWeb database!", NULL);
+    echo "<br/>No menu links was found!";
+}
+
+while ($row = $getMenuLinks->fetch_assoc())
+{
+    $curr = substr($row['url'], 3);
+    echo "<li>";
+    if ( $_GET['page'] == $curr )
     {
-        $sql = "shownWhen LIKE('always') OR shownWhen LIKE('notlogged')";
+        echo "<a href=\"" . $row['url'] . "\" class=\"current\">" . $row['title'] . "</a>";
     }
     else
     {
-        $sql = "shownWhen LIKE('always') OR shownWhen LIKE('logged')";
+        echo "<a href=\"" . $row['url'] ."\">". $row['title'] ."</a>";
     }
-    $getMenuLinks = $Database->select("site_links", null, null, $sql." ORDER BY position ASC")->get_result();
-    if ( $getMenuLinks->num_rows == 0 )
-    {
-        buildError("<b>Template error:</b> No menu links was found in the CraftedWeb database!", NULL);
-        echo "<br/>No menu links was found!";
-    }
-
-    while ($row = $getMenuLinks->fetch_assoc())
-    {
-        $curr = substr($row['url'], 3);
-        if ( $_GET['page'] == $curr )
-        {
-            echo '<a href="' . $row['url'] . '" class="current">' . $row['title'] . '</a>';
-        }
-        else
-        {
-            echo '<a href="' . $row['url'] . '">' . $row['title'] . '</a>';
-        }
-    }
-?>
+    echo "</li>";
+}
