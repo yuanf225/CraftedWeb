@@ -257,7 +257,8 @@ CREATE TABLE IF NOT EXISTS `template`
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `template`(`name`, `path`, `applied`) VALUES ('default','default','1');
+INSERT INTO `template`(`name`, `path`, `applied`) VALUES 
+('default','default_bootstrap','1');
 
 -- ----
 
